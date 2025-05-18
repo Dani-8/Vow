@@ -198,9 +198,35 @@ export function useChallenges(user: User | null) {
 
             const updatedSprints = current.sprints.map((s) => {
                 if (s.id === sprintId) {
+                    return {
                         ...s,
                         status: 'completed' as const,
                         retrospective,
+                        updatedAt: new Date().toISOString(),
+                    };
+                }
+                return s;
+            });
+
+            const updates: Partial<Challenge> = {
+                sprints: updatedSprints,
+            };
+
+            if (markChallengeCompleted) {
+                updates.status = 'completed';
+            }
+
+            return await handleUpdateChallenge(challengeId, updates);
+        },
+        updateSprintRule: async (challengeId: string, sprintId: string, rule: string) => {
+            const current = challenges.find((c) => (c.id || c._id) === challengeId);
+            if (!current || !current.sprints) return;
+
+            const updatedSprints = current.sprints.map((s) => {
+                if (s.id === sprintId) {
+                    return {
+                        ...s,
+                        rule,
                         updatedAt: new Date().toISOString(),
                     };
                 }
