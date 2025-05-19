@@ -190,14 +190,14 @@ export function useChallenges(user: User | null) {
                 summary: string;
                 score?: number;
                 keyLearnings?: string;
-            }
+            },
+            markChallengeCompleted?: boolean
         ) => {
             const current = challenges.find((c) => (c.id || c._id) === challengeId);
             if (!current || !current.sprints) return;
 
             const updatedSprints = current.sprints.map((s) => {
                 if (s.id === sprintId) {
-                    return {
                         ...s,
                         status: 'completed' as const,
                         retrospective,
