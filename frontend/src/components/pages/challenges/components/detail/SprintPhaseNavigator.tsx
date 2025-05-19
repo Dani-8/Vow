@@ -78,14 +78,6 @@ export const SprintPhaseNavigator: React.FC<SprintPhaseNavigatorProps> = ({
                                 ) : (
                                     <span>P{sprint.phaseNumber || idx + 1}</span>
                                 )}
-                                        : undefined
-                                }
-                            >
-                                {isCompleted ? (
-                                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                                ) : (
-                                    <span>P{sprint.phaseNumber || idx + 1}</span>
-                                )}
                             </div>
 
                             <div className="min-w-0 flex-1">
