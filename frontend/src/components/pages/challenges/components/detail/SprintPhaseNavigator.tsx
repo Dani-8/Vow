@@ -48,36 +48,36 @@ export const SprintPhaseNavigator: React.FC<SprintPhaseNavigatorProps> = ({
                     const isCompleted = sprint.status === 'completed';
                     const completedDays = (sprint.logs || []).filter((l) => l.status === 'completed').length;
                     const progressPercent = Math.min(100, Math.round((completedDays / sprint.targetDays) * 100));
-                </div>
-            </div>
-
-            {/* Sprints Horizontal Scroll Pill Bar */}
-            <div className="flex items-center space-x-2.5 overflow-x-auto pb-1.5 pt-1">
-                {sprints.map((sprint, idx) => {
-                    const isSelected = sprint.id === activeSprintId || (!activeSprintId && idx === 0);
-                    const isCompleted = sprint.status === 'completed';
-                    const completedDays = (sprint.logs || []).filter((l) => l.status === 'completed').length;
-                    const progressPercent = Math.min(100, Math.round((completedDays / sprint.targetDays) * 100));
 
                     return (
                         <button
                             key={sprint.id}
                             onClick={() => onSelectSprint(sprint.id)}
-                            className={`px-3.5 py-2.5 rounded-xl text-left transition-all shrink-0 flex items-center space-x-3 min-w-[200px] ${isSelected
-                                ? 'neu-inset bg-white/70 shadow-sm border border-slate-300/80'
-                                : 'neu-button bg-[#E0E5EC] hover:bg-white/40'
-                                }`}
+                            className={`px-3.5 py-2.5 rounded-xl text-left transition-all shrink-0 flex items-center space-x-3 min-w-[200px] ${
+                                isSelected
+                                    ? 'neu-inset bg-white/70 shadow-sm border border-slate-300/80'
+                                    : 'neu-button bg-[#E0E5EC] hover:bg-white/40'
+                            }`}
                         >
                             <div
-                                className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 text-xs font-black ${isCompleted
-                                    ? 'bg-emerald-100 text-emerald-700'
-                                    : isSelected
-                                        ? 'text-white'
-                                        : 'bg-slate-200 text-slate-700'
-                                    }`}
+                                className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 text-xs font-black ${
+                                    isCompleted
+                                        ? 'bg-emerald-100 text-emerald-700'
+                                        : isSelected
+                                            ? 'text-white'
+                                            : 'bg-slate-200 text-slate-700'
+                                }`}
                                 style={
                                     isSelected && !isCompleted
                                         ? { backgroundColor: accentColor }
+                                        : undefined
+                                }
+                            >
+                                {isCompleted ? (
+                                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                                ) : (
+                                    <span>P{sprint.phaseNumber || idx + 1}</span>
+                                )}
                                         : undefined
                                 }
                             >
