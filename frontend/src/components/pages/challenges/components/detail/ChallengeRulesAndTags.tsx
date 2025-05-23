@@ -148,3 +148,25 @@ export const ChallengeRulesAndTags: React.FC<ChallengeRulesAndTagsProps> = ({
                 <div className="flex items-center space-x-3">
                     <div
                         className="w-9 h-9 rounded-xl neu-button flex items-center justify-center bg-amber-50 shrink-0"
+                        style={{ color: accentColor }}
+                    >
+                        <Lightbulb className="w-4 h-4" />
+                    </div>
+                    <div>
+                        <h5 className="text-xs font-bold text-slate-900">Consistency compounds.</h5>
+                        <p className="text-[11px] text-[#717699] font-medium">
+                            Small daily actions lead to massive results over time.
+                        </p>
+                    </div>
+                </div>
+                <span
+                    className="text-xs font-bold flex items-center space-x-1 cursor-pointer hover:underline"
+                    style={{ color: accentColor }}
+                >
+                    <span>Keep showing up</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                </span>
+            </div>
+        </div>
+    );
+};
