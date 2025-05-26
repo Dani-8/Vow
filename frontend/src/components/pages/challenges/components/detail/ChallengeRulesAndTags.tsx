@@ -1,53 +1,53 @@
-import React from 'react';
-import { ClipboardCheck, Tag, Edit3, Lightbulb, ChevronRight } from 'lucide-react';
-import { Challenge } from '../../../../../types';
+import React, { useState } from 'react';
+import { ClipboardCheck, Tag, Edit3, Lightbulb, ChevronRight, Layers, Check, X } from 'lucide-react';
+import { Challenge, ChallengeSprint } from '../../../../../types';
 
 interface ChallengeRulesAndTagsProps {
     challenge: Challenge;
+    activeSprint?: ChallengeSprint | null;
     accentColor: string;
     onEdit: () => void;
+    onUpdateSprintRule?: (newRule: string) => Promise<void>;
 }
 
 export const ChallengeRulesAndTags: React.FC<ChallengeRulesAndTagsProps> = ({
     challenge,
+    activeSprint,
     accentColor,
     onEdit,
+    onUpdateSprintRule,
 }) => {
+    const [isEditingRule, setIsEditingRule] = useState(false);
+    const [ruleInput, setRuleInput] = useState(activeSprint?.rule || challenge.rule || '');
+    const [isSaving, setIsSaving] = useState(false);
+
+    const activeRule = activeSprint?.rule || challenge.rule || 'Complete your core daily commitment for this challenge.';
+    const isPhaseSpecific = Boolean(activeSprint?.rule && activeSprint.rule !== challenge.rule);
+
+    const handleSaveRule = async () => {
+        if (!onUpdateSprintRule) {
+            setIsEditingRule(false);
+            return;
+        }
+        try {
+            setIsSaving(true);
+            await onUpdateSprintRule(ruleInput.trim());
+            setIsEditingRule(false);
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
     return (
         <div className="space-y-6">
             {/* Sub-cards: Challenge Rules & Tags */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Challenge Rules */}
                 <div className="neu-card p-5 bg-[#E0E5EC] space-y-2.5">
-                    <div className="flex items-center space-x-2" style={{ color: accentColor }}>
-                        <ClipboardCheck className="w-4 h-4" />
-                        <h4 className="text-xs font-black uppercase tracking-wider text-slate-800">
-                            Challenge Rules
-                        </h4>
-                    </div>
-                    <p className="text-[11px] font-bold text-[#717699]">
-                        What counts as a completed day
-                    </p>
-                    <div className="neu-inset p-3.5 rounded-xl bg-[#E0E5EC]/90 text-xs font-medium text-slate-700 leading-relaxed">
-                        {challenge.rule ||
-                            'Code for at least 1 hour and learn something new in AI or Software Engineering.'}
-                    </div>
-                </div>
-
-                {/* Challenge Tags */}
-                <div className="neu-card p-5 bg-[#E0E5EC] space-y-2.5">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2" style={{ color: accentColor }}>
-                            <Tag className="w-4 h-4" />
+                            <ClipboardCheck className="w-4 h-4" />
                             <h4 className="text-xs font-black uppercase tracking-wider text-slate-800">
-                                Challenge Tags
-                            </h4>
-                        </div>
-                        <button
-                            onClick={onEdit}
-                            className="text-[10px] font-bold flex items-center space-x-1 hover:cursor-pointer"
-                            style={{ color: accentColor }}
-                        >
                             <Edit3 className="w-3 h-3" />
                             <span>Edit</span>
                         </button>
