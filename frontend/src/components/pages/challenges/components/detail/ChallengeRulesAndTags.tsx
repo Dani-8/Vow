@@ -98,3 +98,53 @@ export const ChallengeRulesAndTags: React.FC<ChallengeRulesAndTagsProps> = ({
                                 >
                                     <Check className="w-3 h-3" />
                                     <span>{isSaving ? 'Saving...' : 'Save Rule'}</span>
+                                </button>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="neu-inset p-3.5 rounded-xl bg-[#E0E5EC]/90 text-xs font-medium text-slate-700 leading-relaxed">
+                            {activeRule}
+                        </div>
+                    )}
+                </div>
+
+                {/* Challenge Tags */}
+                <div className="neu-card p-5 bg-[#E0E5EC] space-y-2.5">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2" style={{ color: accentColor }}>
+                            <Tag className="w-4 h-4" />
+                            <h4 className="text-xs font-black uppercase tracking-wider text-slate-800">
+                                Challenge Tags
+                            </h4>
+                        </div>
+                        <button
+                            onClick={onEdit}
+                            className="text-[10px] font-bold flex items-center space-x-1 hover:cursor-pointer"
+                            style={{ color: accentColor }}
+                        >
+                            <Edit3 className="w-3 h-3" />
+                            <span>Edit</span>
+                        </button>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                        {challenge.tags && challenge.tags.length > 0 ? (
+                            challenge.tags.map((tag) => (
+                                <span
+                                    key={tag}
+                                    className="px-2.5 py-1 rounded-lg neu-inset text-[11px] font-bold text-slate-700 bg-white/40"
+                                >
+                                    {tag}
+                                </span>
+                            ))
+                        ) : (
+                            <span className="text-xs text-slate-400 font-medium italic">No tags</span>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            {/* Motivational Tip Banner */}
+            <div className="neu-card p-4 bg-[#E0E5EC] flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                    <div
+                        className="w-9 h-9 rounded-xl neu-button flex items-center justify-center bg-amber-50 shrink-0"
