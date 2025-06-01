@@ -148,22 +148,42 @@ export const CompleteSprintModal: React.FC<CompleteSprintModalProps> = ({
                         <textarea
                             rows={2}
                             value={keyLearnings}
+                            onChange={(e) => setKeyLearnings(e.target.value)}
+                            placeholder="e.g. Spaced repetition in the morning worked 10x better than studying late at night."
+                            className="w-full px-3.5 py-2.5 rounded-xl neu-input text-xs font-medium resize-none"
+                        />
+                    </div>
+
+                    {/* Footer Actions */}
+                    <div className="pt-4 border-t border-slate-300/70 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5">
+                        <button
                             type="button"
                             onClick={onClose}
-                            className="px-4 py-2 rounded-xl neu-button text-xs font-bold text-slate-600 hover:text-slate-900"
+                            className="px-4 py-2.5 rounded-xl neu-button text-xs font-bold text-slate-600 hover:text-slate-900 order-3 sm:order-1"
                         >
                             Cancel
                         </button>
                         <button
-                            type="submit"
+                            type="button"
                             disabled={isSubmitting}
-                            className="px-5 py-2.5 rounded-xl neu-button-primary text-xs font-bold text-white shadow-md disabled:opacity-50 flex items-center space-x-1.5"
+                            onClick={() => handleComplete('complete_challenge')}
+                            className="px-4 py-2.5 rounded-xl neu-button text-xs font-bold text-emerald-700 bg-emerald-50/70 hover:bg-emerald-100/70 flex items-center justify-center space-x-1.5 disabled:opacity-50 order-2"
                         >
-                            <CheckCircle2 className="w-4 h-4" />
-                            <span>{isSubmitting ? 'Recording...' : 'Record Result & Finish Sprint'}</span>
+                            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                            <span>Finish &amp; Mark Complete</span>
+                        </button>
+                        <button
+                            type="button"
+                            disabled={isSubmitting}
+                            onClick={() => handleComplete('start_next')}
+                            className="px-5 py-2.5 rounded-xl neu-button-primary text-xs font-bold text-white shadow-md disabled:opacity-50 flex items-center justify-center space-x-1.5 order-1 sm:order-3"
+                        >
+                            <Sparkles className="w-4 h-4" />
+                            <span>Save &amp; Start Next Phase</span>
+                            <ArrowRight className="w-3.5 h-3.5" />
                         </button>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     );
