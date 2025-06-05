@@ -48,6 +48,10 @@ export const CompleteSprintModal: React.FC<CompleteSprintModalProps> = ({
             };
             await onConfirmComplete(retro, actionAfter);
             onClose();
+            if (actionAfter === 'start_next') {
+                onStartNextSprintPrompt();
+            }
+        } catch (err: any) {
             setError(err.message || 'Failed to complete sprint');
         } finally {
             setIsSubmitting(false);
@@ -71,17 +75,21 @@ export const CompleteSprintModal: React.FC<CompleteSprintModalProps> = ({
                         className="w-11 h-11 rounded-2xl neu-button flex items-center justify-center shrink-0 shadow-sm"
                         style={{ color: accentColor, backgroundColor: `${accentColor}18` }}
                     >
-                        <Award className="w-6 h-6" style={{ color: accentColor }} />
+                        {isFinalSprint ? (
+                            <Trophy className="w-6 h-6 text-amber-500" />
+                        ) : (
+                            <Award className="w-6 h-6" style={{ color: accentColor }} />
+                        )}
                     </div>
                     <div>
                         <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full neu-inset text-emerald-700 bg-emerald-50">
-                            Sprint Milestone Completed
+                            {isFinalSprint ? 'Challenge Finale Milestone' : `Phase ${sprint.phaseNumber} Sprint Completed`}
                         </span>
                         <h3 className="text-lg font-black text-[#1a1c35] mt-1">
                             {sprint.title}
                         </h3>
                         <p className="text-xs font-bold text-[#717699]">
-                            {completedDaysCount} of {sprint.targetDays} Days Logged
+                            {completedDaysCount} of {sprint.targetDays} Days Logged Completed
                         </p>
                     </div>
                 </div>
@@ -90,14 +98,6 @@ export const CompleteSprintModal: React.FC<CompleteSprintModalProps> = ({
                     <div className="mb-4 p-3 rounded-xl bg-rose-100 border border-rose-200 text-rose-700 text-xs font-bold">
                         {error}
                     </div>
-                )}
-
-                <form onSubmit={handleSubmit} className="space-y-5">
-                    {/* Rating / Satisfaction */}
-                    <div className="space-y-1.5">
-                        <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
-                            How did this sprint go?
-                        </label>
                         <div className="flex items-center space-x-2">
                             {[1, 2, 3, 4, 5].map((val) => (
                                 <button
