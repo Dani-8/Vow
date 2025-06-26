@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Award, Star, CheckCircle2, Trophy, ArrowRight, Sparkles } from 'lucide-react';
+import { X, Award, Star, CheckCircle2 } from 'lucide-react';
 import { ChallengeSprint, SprintRetrospective } from '../../../../../types';
 
 interface CompleteSprintModalProps {
@@ -7,8 +7,7 @@ interface CompleteSprintModalProps {
     onClose: () => void;
     sprint: ChallengeSprint;
     accentColor: string;
-    isFinalSprint?: boolean;
-    onConfirmComplete: (retrospective: SprintRetrospective, actionAfter: 'start_next' | 'complete_challenge' | 'stay') => Promise<void>;
+    onConfirmComplete: (retrospective: SprintRetrospective) => Promise<void>;
     onStartNextSprintPrompt: () => void;
 }
 
@@ -17,13 +16,12 @@ export const CompleteSprintModal: React.FC<CompleteSprintModalProps> = ({
     onClose,
     sprint,
     accentColor,
-    isFinalSprint = false,
     onConfirmComplete,
     onStartNextSprintPrompt,
 }) => {
-    const [summary, setSummary] = useState(sprint.retrospective?.summary || '');
-    const [score, setScore] = useState<number>(sprint.retrospective?.score || 5);
-    const [keyLearnings, setKeyLearnings] = useState(sprint.retrospective?.keyLearnings || '');
+    const [summary, setSummary] = useState('');
+    const [score, setScore] = useState<number>(5);
+    const [keyLearnings, setKeyLearnings] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
 
@@ -31,7 +29,8 @@ export const CompleteSprintModal: React.FC<CompleteSprintModalProps> = ({
 
     const completedDaysCount = (sprint.logs || []).filter((l) => l.status === 'completed').length;
 
-    const handleComplete = async (actionAfter: 'start_next' | 'complete_challenge' | 'stay') => {
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
         if (!summary.trim()) {
             setError('Please write a brief summary of what you achieved during this sprint.');
             return;
@@ -40,17 +39,14 @@ export const CompleteSprintModal: React.FC<CompleteSprintModalProps> = ({
         try {
             setIsSubmitting(true);
             setError('');
-            const retro: SprintRetrospective = {
+            await onConfirmComplete({
                 completedAt: new Date().toISOString().split('T')[0],
                 summary: summary.trim(),
                 score,
                 keyLearnings: keyLearnings.trim() || undefined,
-            };
-            await onConfirmComplete(retro, actionAfter);
+            });
             onClose();
-            if (actionAfter === 'start_next') {
-                onStartNextSprintPrompt();
-            }
+            onStartNextSprintPrompt();
         } catch (err: any) {
             setError(err.message || 'Failed to complete sprint');
         } finally {
@@ -75,21 +71,17 @@ export const CompleteSprintModal: React.FC<CompleteSprintModalProps> = ({
                         className="w-11 h-11 rounded-2xl neu-button flex items-center justify-center shrink-0 shadow-sm"
                         style={{ color: accentColor, backgroundColor: `${accentColor}18` }}
                     >
-                        {isFinalSprint ? (
-                            <Trophy className="w-6 h-6 text-amber-500" />
-                        ) : (
-                            <Award className="w-6 h-6" style={{ color: accentColor }} />
-                        )}
+                        <Award className="w-6 h-6" style={{ color: accentColor }} />
                     </div>
                     <div>
                         <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full neu-inset text-emerald-700 bg-emerald-50">
-                            {isFinalSprint ? 'Challenge Finale Milestone' : `Phase ${sprint.phaseNumber} Sprint Completed`}
+                            Sprint Milestone Completed
                         </span>
                         <h3 className="text-lg font-black text-[#1a1c35] mt-1">
                             {sprint.title}
                         </h3>
                         <p className="text-xs font-bold text-[#717699]">
-                            {completedDaysCount} of {sprint.targetDays} Days Logged Completed
+                            {completedDaysCount} of {sprint.targetDays} Days Logged
                         </p>
                     </div>
                 </div>
@@ -98,6 +90,14 @@ export const CompleteSprintModal: React.FC<CompleteSprintModalProps> = ({
                     <div className="mb-4 p-3 rounded-xl bg-rose-100 border border-rose-200 text-rose-700 text-xs font-bold">
                         {error}
                     </div>
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-5">
+                    {/* Rating / Satisfaction */}
+                    <div className="space-y-1.5">
+                        <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
+                            How did this sprint go?
+                        </label>
                         <div className="flex items-center space-x-2">
                             {[1, 2, 3, 4, 5].map((val) => (
                                 <button
