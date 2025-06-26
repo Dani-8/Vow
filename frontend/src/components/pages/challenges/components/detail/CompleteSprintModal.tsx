@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Award, Star, CheckCircle2 } from 'lucide-react';
+import { X, Award, Star, CheckCircle2, Trophy, ArrowRight, Sparkles } from 'lucide-react';
 import { ChallengeSprint, SprintRetrospective } from '../../../../../types';
 
 interface CompleteSprintModalProps {
@@ -7,7 +7,8 @@ interface CompleteSprintModalProps {
     onClose: () => void;
     sprint: ChallengeSprint;
     accentColor: string;
-    onConfirmComplete: (retrospective: SprintRetrospective) => Promise<void>;
+    isFinalSprint?: boolean;
+    onConfirmComplete: (retrospective: SprintRetrospective, actionAfter: 'start_next' | 'complete_challenge' | 'stay') => Promise<void>;
     onStartNextSprintPrompt: () => void;
 }
 
@@ -16,12 +17,13 @@ export const CompleteSprintModal: React.FC<CompleteSprintModalProps> = ({
     onClose,
     sprint,
     accentColor,
+    isFinalSprint = false,
     onConfirmComplete,
     onStartNextSprintPrompt,
 }) => {
-    const [summary, setSummary] = useState('');
-    const [score, setScore] = useState<number>(5);
-    const [keyLearnings, setKeyLearnings] = useState('');
+    const [summary, setSummary] = useState(sprint.retrospective?.summary || '');
+    const [score, setScore] = useState<number>(sprint.retrospective?.score || 5);
+    const [keyLearnings, setKeyLearnings] = useState(sprint.retrospective?.keyLearnings || '');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
 
@@ -29,8 +31,7 @@ export const CompleteSprintModal: React.FC<CompleteSprintModalProps> = ({
 
     const completedDaysCount = (sprint.logs || []).filter((l) => l.status === 'completed').length;
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const handleComplete = async (actionAfter: 'start_next' | 'complete_challenge' | 'stay') => {
         if (!summary.trim()) {
             setError('Please write a brief summary of what you achieved during this sprint.');
             return;
@@ -39,15 +40,14 @@ export const CompleteSprintModal: React.FC<CompleteSprintModalProps> = ({
         try {
             setIsSubmitting(true);
             setError('');
-            await onConfirmComplete({
+            const retro: SprintRetrospective = {
                 completedAt: new Date().toISOString().split('T')[0],
                 summary: summary.trim(),
                 score,
                 keyLearnings: keyLearnings.trim() || undefined,
-            });
+            };
+            await onConfirmComplete(retro, actionAfter);
             onClose();
-            onStartNextSprintPrompt();
-        } catch (err: any) {
             setError(err.message || 'Failed to complete sprint');
         } finally {
             setIsSubmitting(false);
