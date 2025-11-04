@@ -48,6 +48,8 @@ export interface IChallenge {
 const inMemoryChallenges: Map<string, any> = new Map();
 
 export class ChallengeInstance implements IChallenge {
+    _id: string;
+    id?: string;
     userId: string;
     title: string;
     description: string;
@@ -61,6 +63,8 @@ export class ChallengeInstance implements IChallenge {
     tags: string[];
     status: 'active' | 'completed' | 'paused';
     logs: IChallengeLog[];
+    sprints?: any[];
+    currentSprintId?: string;
     createdAt?: string;
     updatedAt?: string;
 
@@ -80,6 +84,8 @@ export class ChallengeInstance implements IChallenge {
         this.tags = Array.isArray(data.tags) ? data.tags : [];
         this.status = data.status || 'active';
         this.logs = Array.isArray(data.logs) ? data.logs : [];
+        this.sprints = Array.isArray(data.sprints) ? data.sprints : [];
+        this.currentSprintId = data.currentSprintId || (this.sprints.length > 0 ? this.sprints[0].id : undefined);
         this.createdAt = data.createdAt || new Date().toISOString();
         this.updatedAt = data.updatedAt || new Date().toISOString();
     }
@@ -92,12 +98,6 @@ export class ChallengeInstance implements IChallenge {
             title: this.title,
             description: this.description,
             category: this.category,
-            color: this.color,
-            icon: this.icon,
-            targetDays: this.targetDays,
-            startDate: this.startDate,
-            targetEndDate: this.targetEndDate,
-            rule: this.rule,
             tags: this.tags,
             status: this.status,
             logs: this.logs,
