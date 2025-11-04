@@ -148,6 +148,10 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({
                         >
                             <MoreVertical className="w-4 h-4" />
                         </button>
+
+                        {isMenuOpen && (
+                            <div className="absolute right-0 mt-2 w-40 neu-card p-1.5 bg-[#E0E5EC] z-30 shadow-xl rounded-xl">
+                                <button
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         onEdit(challenge);
@@ -193,10 +197,6 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({
                                 key={tag}
                                 className="px-2 py-0.5 rounded-md neu-inset text-[10px] font-bold text-[#717699] bg-white/40"
                             >
-                                {tag}
-                            </span>
-                        ))}
-                    </div>
                 )}
 
                 {/* Title & Description */}
