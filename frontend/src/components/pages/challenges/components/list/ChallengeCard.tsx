@@ -130,6 +130,11 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({
                                     <span>{streak}d Streak</span>
                                 </span>
                             ) : null}
+                            {challenge.sprints && challenge.sprints.length > 0 && (
+                                <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full neu-inset text-slate-700 bg-slate-100/80">
+                                    {challenge.sprints.length} {challenge.sprints.length === 1 ? 'Phase' : 'Phases'}
+                                </span>
+                            )}
                         </div>
                     </div>
 
@@ -143,10 +148,6 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({
                         >
                             <MoreVertical className="w-4 h-4" />
                         </button>
-
-                        {isMenuOpen && (
-                            <div className="absolute right-0 mt-2 w-40 neu-card p-1.5 bg-[#E0E5EC] z-30 shadow-xl rounded-xl">
-                                <button
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         onEdit(challenge);
