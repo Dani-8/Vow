@@ -98,9 +98,17 @@ export class ChallengeInstance implements IChallenge {
             title: this.title,
             description: this.description,
             category: this.category,
+            color: this.color,
+            icon: this.icon,
+            targetDays: this.targetDays,
+            startDate: this.startDate,
+            targetEndDate: this.targetEndDate,
+            rule: this.rule,
             tags: this.tags,
             status: this.status,
             logs: this.logs,
+            sprints: this.sprints,
+            currentSprintId: this.currentSprintId,
             createdAt: this.createdAt,
             updatedAt: this.updatedAt,
         };
@@ -123,6 +131,8 @@ export class ChallengeInstance implements IChallenge {
             tags: this.tags,
             status: this.status,
             logs: this.logs,
+            sprints: this.sprints || [],
+            currentSprintId: this.currentSprintId,
             createdAt: this.createdAt,
             updatedAt: this.updatedAt,
         };
@@ -138,16 +148,6 @@ export class ChallengeInstance implements IChallenge {
                 console.warn('Challenge Firestore save fallback to memory:', e);
             }
         }
-
-        inMemoryChallenges.set(this._id, { ...payload, _id: this._id, id: this.id });
-        return this;
-    }
-}
-
-export const Challenge = {
-    async find(filter: { userId?: string; status?: string }): Promise<ChallengeInstance[]> {
-        const results: ChallengeInstance[] = [];
-
         if (isFirestoreActive()) {
             try {
                 const db = getFirebaseDb();
