@@ -299,6 +299,15 @@ export const Challenge = {
                 if (db) {
                     const docRef = doc(db, 'challenges', idToDelete);
                     await deleteDoc(docRef);
+                }
+            } catch (e) {
+                // Memory fallback
+            }
+        }
+
+        inMemoryChallenges.delete(idToDelete);
+        for (const [k, v] of inMemoryChallenges) {
+            if (v.id === idToDelete || v._id === idToDelete) {
                 inMemoryChallenges.delete(k);
             }
         }
