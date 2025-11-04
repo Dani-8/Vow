@@ -39,6 +39,8 @@ export interface IChallenge {
     tags: string[];
     status: 'active' | 'completed' | 'paused';
     logs: IChallengeLog[];
+    sprints?: any[];
+    currentSprintId?: string;
     createdAt?: string;
     updatedAt?: string;
 }
@@ -46,8 +48,6 @@ export interface IChallenge {
 const inMemoryChallenges: Map<string, any> = new Map();
 
 export class ChallengeInstance implements IChallenge {
-    _id: string;
-    id?: string;
     userId: string;
     title: string;
     description: string;
