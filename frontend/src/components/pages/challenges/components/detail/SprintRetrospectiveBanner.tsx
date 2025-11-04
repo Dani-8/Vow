@@ -83,4 +83,3 @@ export const SprintRetrospectiveBanner: React.FC<SprintRetrospectiveBannerProps>
         </div>
     );
 };
-</button>
