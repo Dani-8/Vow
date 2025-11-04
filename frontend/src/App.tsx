@@ -135,6 +135,8 @@ export default function App() {
         onDeleteChallenge={challengeState.deleteChallenge}
         onLogChallengeDay={challengeState.logDay}
         onDeleteChallengeLog={challengeState.deleteLog}
+        onStartNextSprint={challengeState.startNextSprint}
+        onCompleteSprint={challengeState.completeSprint}
       />
 
       <GlobalModals
@@ -147,8 +149,6 @@ export default function App() {
             data,
             modalState.editingTask?._id
           );
-          modalState.setIsTaskModalOpen(false);
-        }}
         editingTask={modalState.editingTask}
         isPinModalOpen={modalState.isPinModalOpen}
         onClosePinModal={() => modalState.setIsPinModalOpen(false)}
