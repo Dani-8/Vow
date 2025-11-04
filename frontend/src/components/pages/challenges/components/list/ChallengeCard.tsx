@@ -13,7 +13,7 @@ import {
     Coffee,
     Flame,
 } from 'lucide-react';
-import { Challenge } from '../../../../types';
+import { Challenge } from '../../../../../types';
 
 interface ChallengeCardProps {
     challenge: Challenge;
