@@ -197,6 +197,10 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({
                                 key={tag}
                                 className="px-2 py-0.5 rounded-md neu-inset text-[10px] font-bold text-[#717699] bg-white/40"
                             >
+                                {tag}
+                            </span>
+                        ))}
+                    </div>
                 )}
 
                 {/* Title & Description */}
