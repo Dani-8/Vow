@@ -48,4 +48,39 @@ export const SprintRetrospectiveBanner: React.FC<SprintRetrospectiveBannerProps>
                         <button
                             onClick={onEditRetrospectivePrompt}
                             className="px-3 py-1.5 rounded-xl neu-button text-xs font-bold text-slate-600 hover:text-slate-900"
-                        ></button>
+                        >
+                            Edit Takeaway
+                        </button>
+                    )}
+                    <button
+                        onClick={onStartNextSprintPrompt}
+                        className="px-4 py-2 rounded-xl neu-button-primary text-xs font-bold text-white flex items-center space-x-1.5 shadow-sm"
+                    >
+                        <span>Start Next Phase</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                </div>
+            </div>
+
+            {/* Retrospective Summary Text */}
+            {retro?.summary && (
+                <div className="neu-card p-3.5 rounded-xl bg-white/40 space-y-2">
+                    <div className="text-xs font-black text-slate-800 flex items-center space-x-1.5">
+                        <BookOpen className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>Milestone Achievement &amp; Result</span>
+                    </div>
+                    <p className="text-xs font-medium text-slate-700 leading-relaxed">
+                        &ldquo;{retro.summary}&rdquo;
+                    </p>
+                    {retro.keyLearnings && (
+                        <div className="pt-2 border-t border-slate-200/60 text-[11px] text-[#717699]">
+                            <strong className="font-extrabold text-slate-700">Takeaways: </strong>
+                            {retro.keyLearnings}
+                        </div>
+                    )}
+                </div>
+            )}
+        </div>
+    );
+};
+</button>
