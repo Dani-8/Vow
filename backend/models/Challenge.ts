@@ -248,6 +248,15 @@ export const Challenge = {
         const now = new Date().toISOString();
         const explicitId = data.id || data._id;
         const targetDays = Number(data.targetDays) || 30;
+        const startDate = data.startDate || now;
+        const targetEndDate = data.targetEndDate || new Date(new Date(startDate).getTime() + targetDays * 86400000).toISOString();
+
+        const payload = {
+            id: explicitId || `ch_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+            userId: String(data.userId || ''),
+            title: data.title || 'Untitled Challenge',
+            description: data.description || '',
+            category: data.category || 'engineering',
             color: data.color || 'purple',
             icon: data.icon || 'target',
             targetDays,
@@ -290,15 +299,6 @@ export const Challenge = {
                 if (db) {
                     const docRef = doc(db, 'challenges', idToDelete);
                     await deleteDoc(docRef);
-                }
-            } catch (e) {
-                // Memory fallback
-            }
-        }
-
-        inMemoryChallenges.delete(idToDelete);
-        for (const [k, v] of inMemoryChallenges) {
-            if (v.id === idToDelete || v._id === idToDelete) {
                 inMemoryChallenges.delete(k);
             }
         }
