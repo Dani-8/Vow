@@ -1,3 +1,3 @@
 # Vow
 
-### This is the MERN stack project for task manager + personal growth tracker called Vow.
+### Vow is a MERN stack application that combines task management with personal growth tracking to help users build better habits and stay productive.
