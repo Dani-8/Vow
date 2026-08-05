@@ -20,6 +20,7 @@ export function authenticateToken(req: AuthenticatedRequest, res: Response, next
     if (err || !decoded?.userId) {
       return res.status(403).json({ error: 'Invalid or expired authentication token' });
     }
+    
     req.userId = decoded.userId;
     next();
   });
