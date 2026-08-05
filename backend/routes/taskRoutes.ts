@@ -37,6 +37,7 @@ router.get('/', authenticateToken, async (req: AuthenticatedRequest, res: Respon
 
         const tasks = rawTasks.map((t) => {
             const streakInfo = calculateTaskEffectiveStreak(t);
+
             return {
                 ...t.toObject(),
                 effectiveCurrentStreak: streakInfo.currentStreak,
@@ -63,6 +64,7 @@ router.post('/private-list', authenticateToken, async (req: AuthenticatedRequest
 
         const tasks = rawTasks.map((t) => {
             const streakInfo = calculateTaskEffectiveStreak(t);
+            
             return {
                 ...t.toObject(),
                 effectiveCurrentStreak: streakInfo.currentStreak,
