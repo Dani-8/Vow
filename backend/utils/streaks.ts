@@ -94,6 +94,7 @@ export function registerTaskCompletion(task: ITask): {
     }
 
     let newCurrentStreak = 1;
+    
     if (task.lastCompletedDate) {
         const daysDiff = getDaysDifference(new Date(task.lastCompletedDate), now);
         if (daysDiff === 1) {
@@ -155,6 +156,7 @@ export function calculateMasterStreak(tasks: ITask[]): {
 
     while (true) {
         const checkStr = getFormattedDateString(checkDate);
+
         if (dateSet.has(checkStr)) {
             masterStreak++;
             checkDate.setDate(checkDate.getDate() - 1);
