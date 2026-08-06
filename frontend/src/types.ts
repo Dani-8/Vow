@@ -1,19 +1,45 @@
 export interface User {
   id: string;
-  username: string;
   email: string;
-  masterStreak: number;
-  longestMasterStreak: number;
+  name: string;
+  hasPinSet: boolean;
 }
 
 export interface Task {
-  id: string;
+  _id: string;
+  userId: string;
   title: string;
   description?: string;
-  category: string;
-  frequency: 'daily' | 'weekly';
+  tags: string[];
+  startTime?: string | null;
+  endTime?: string | null;
+  status: 'todo' | 'in_progress' | 'completed';
   isPrivate: boolean;
-  completedDates: string[];
+  isHabit: boolean;
   currentStreak: number;
   bestStreak: number;
+  effectiveCurrentStreak?: number;
+  effectiveBestStreak?: number;
+  completedToday?: boolean;
+  missedPreviousDays?: boolean;
+  lastCompletedDate?: string | null;
+  completionHistory?: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface MasterStreakStats {
+  masterStreak: number;
+  activeToday: boolean;
+  totalCheckIns: number;
+  completedDaysSet: string[];
+  totalTasks: number;
+  totalHabits: number;
+}
+
+export interface AIChatMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  text: string;
+  timestamp: string;
 }
