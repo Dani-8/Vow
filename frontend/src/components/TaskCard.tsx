@@ -82,10 +82,10 @@ export const TaskCard: React.FC<TaskCardProps> = ({
     return (
         <div
             className={`neu-card p-6 transition-all duration-300 relative group ${isCompleted
-                    ? 'opacity-85 bg-[#E0E5EC]/80 border-emerald-300/50'
-                    : isStruggling
-                        ? 'border-amber-300/80 neu-glow-orange'
-                        : ''
+                ? 'opacity-85 bg-[#E0E5EC]/80 border-emerald-300/50'
+                : isStruggling
+                    ? 'border-amber-300/80 neu-glow-orange'
+                    : ''
                 }`}
         >
             {/* Top Header Row */}
@@ -95,8 +95,8 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                     <button
                         onClick={() => onToggleComplete(task)}
                         className={`mt-0.5 w-7 h-7 rounded-xl neu-button flex items-center justify-center shrink-0 transition-transform ${isCompleted
-                                ? 'bg-emerald-500 text-white shadow-inner scale-105 border-emerald-500'
-                                : 'text-[#717699] hover:text-[#549acb] hover:scale-110'
+                            ? 'bg-emerald-500 text-white shadow-inner scale-105 border-emerald-500'
+                            : 'text-[#717699] hover:text-[#549acb] hover:scale-110'
                             }`}
                         title={isCompleted ? 'Mark as incomplete' : 'Mark complete today'}
                     >
@@ -141,8 +141,8 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                     <button
                         onClick={() => onOpenAIAssist(task)}
                         className={`px-2.5 py-1.5 rounded-xl neu-button flex items-center space-x-1.5 text-xs font-bold ${isStruggling
-                                ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white animate-pulse border-none shadow-md'
-                                : 'text-[#549acb] hover:bg-white/40'
+                            ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white animate-pulse border-none shadow-md'
+                            : 'text-[#549acb] hover:bg-white/40'
                             }`}
                         title="Ask Vow AI coach for micro-step breakdown or rescheduling"
                     >
@@ -201,8 +201,8 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                     {/* Current Streak */}
                     <div
                         className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-xl neu-badge ${currentStreak > 0
-                                ? 'text-[#549acb] bg-[#E0E5EC] font-bold border border-sky-200/50'
-                                : 'text-[#717699] font-medium'
+                            ? 'text-[#549acb] bg-[#E0E5EC] font-bold border border-sky-200/50'
+                            : 'text-[#717699] font-medium'
                             }`}
                     >
                         <Flame className={`w-3.5 h-3.5 ${currentStreak > 0 ? 'text-[#549acb] fill-[#549acb]' : 'text-[#717699]'}`} />
@@ -229,10 +229,10 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                 {timeLeftStr && (
                     <div
                         className={`flex items-center space-x-1 text-xs font-bold px-2.5 py-1 rounded-xl neu-badge ${timeLeftStr === 'Overdue'
-                                ? 'text-rose-700 bg-rose-50 border border-rose-200'
-                                : isStruggling
-                                    ? 'text-amber-700 bg-amber-50 border border-amber-200'
-                                    : 'text-[#717699]'
+                            ? 'text-rose-700 bg-rose-50 border border-rose-200'
+                            : isStruggling
+                                ? 'text-amber-700 bg-amber-50 border border-amber-200'
+                                : 'text-[#717699]'
                             }`}
                     >
                         {timeLeftStr === 'Overdue' ? (
