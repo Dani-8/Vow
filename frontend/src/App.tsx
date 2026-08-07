@@ -23,6 +23,7 @@ import { AuthPage } from './components/AuthPage';
 import { MasterStreakBanner } from './components/MasterStreakBanner';
 import { TaskCard } from './components/TaskCard';
 import { TaskModal } from './components/TaskModal';
+import { TaskDetailModal } from './components/TaskDetailModal';
 import { PrivatePinModal } from './components/PrivatePinModal';
 import { AIAssistModal } from './components/AIAssistModal';
 import { AuthModal } from './components/AuthModal';
@@ -80,8 +81,10 @@ export default function App() {
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [isPinModalOpen, setIsPinModalOpen] = useState(false);
   const [isAIAssistOpen, setIsAIAssistOpen] = useState(false);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
 
   const [selectedTaskForAI, setSelectedTaskForAI] = useState<Task | null>(null);
+  const [selectedTaskForDetail, setSelectedTaskForDetail] = useState<Task | null>(null);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
 
   const [loading, setLoading] = useState(true);
@@ -495,6 +498,10 @@ export default function App() {
                         setIsTaskModalOpen(true);
                       }}
                       onDeleteTask={handleDeleteTask}
+                      onViewDetails={(t) => {
+                        setSelectedTaskForDetail(t);
+                        setIsDetailModalOpen(true);
+                      }}
                     />
                   ))}
                 </div>
@@ -505,6 +512,20 @@ export default function App() {
       </div>
 
       {/* Modals */}
+      <TaskDetailModal
+        isOpen={isDetailModalOpen}
+        task={selectedTaskForDetail}
+        onClose={() => setIsDetailModalOpen(false)}
+        onToggleComplete={handleToggleComplete}
+        onTogglePrivate={handleTogglePrivate}
+        onOpenAIAssist={handleOpenAIAssist}
+        onEditTask={(t) => {
+          setEditingTask(t);
+          setIsTaskModalOpen(true);
+        }}
+        onDeleteTask={handleDeleteTask}
+      />
+
       <TaskModal
         isOpen={isTaskModalOpen}
         onClose={() => setIsTaskModalOpen(false)}
