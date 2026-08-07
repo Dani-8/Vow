@@ -405,41 +405,36 @@ export default function App() {
                 <div className="flex items-center neu-inset p-1.5 rounded-2xl space-x-1">
                   <button
                     onClick={() => setFilter('all')}
-                    className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${
-                      filter === 'all' ? 'neu-button text-[#549acb] bg-[#E0E5EC]' : 'text-[#717699] hover:text-[#1a1c35]'
-                    }`}
+                    className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${filter === 'all' ? 'neu-button text-[#549acb] bg-[#E0E5EC]' : 'text-[#717699] hover:text-[#1a1c35]'
+                      }`}
                   >
                     All
                   </button>
                   <button
                     onClick={() => setFilter('habits')}
-                    className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${
-                      filter === 'habits' ? 'neu-button text-[#549acb] bg-[#E0E5EC]' : 'text-[#717699] hover:text-[#1a1c35]'
-                    }`}
+                    className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${filter === 'habits' ? 'neu-button text-[#549acb] bg-[#E0E5EC]' : 'text-[#717699] hover:text-[#1a1c35]'
+                      }`}
                   >
                     Habits
                   </button>
                   <button
                     onClick={() => setFilter('tasks')}
-                    className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${
-                      filter === 'tasks' ? 'neu-button text-[#549acb] bg-[#E0E5EC]' : 'text-[#717699] hover:text-[#1a1c35]'
-                    }`}
+                    className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${filter === 'tasks' ? 'neu-button text-[#549acb] bg-[#E0E5EC]' : 'text-[#717699] hover:text-[#1a1c35]'
+                      }`}
                   >
                     Single Tasks
                   </button>
                   <button
                     onClick={() => setFilter('todo')}
-                    className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${
-                      filter === 'todo' ? 'neu-button text-[#549acb] bg-[#E0E5EC]' : 'text-[#717699] hover:text-[#1a1c35]'
-                    }`}
+                    className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${filter === 'todo' ? 'neu-button text-[#549acb] bg-[#E0E5EC]' : 'text-[#717699] hover:text-[#1a1c35]'
+                      }`}
                   >
                     Pending
                   </button>
                   <button
                     onClick={() => setFilter('completed')}
-                    className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${
-                      filter === 'completed' ? 'neu-button text-[#549acb] bg-[#E0E5EC]' : 'text-[#717699] hover:text-[#1a1c35]'
-                    }`}
+                    className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${filter === 'completed' ? 'neu-button text-[#549acb] bg-[#E0E5EC]' : 'text-[#717699] hover:text-[#1a1c35]'
+                      }`}
                   >
                     Completed
                   </button>
