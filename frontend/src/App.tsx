@@ -232,10 +232,31 @@ export default function App() {
   };
 
   const handleToggleComplete = async (task: Task) => {
+    const isComp = task.status === 'completed';
+    const newStatus = isComp ? 'in_progress' : 'completed';
+
+    const updateTaskList = (list: Task[]) =>
+      list.map((t) => (t._id === task._id ? { ...t, status: newStatus } : t));
+
+    // Optimistically update React state immediately for snappy response
+    setTasks(updateTaskList);
+    setPrivateTasks(updateTaskList);
+    if (selectedTaskForDetail && selectedTaskForDetail._id === task._id) {
+      setSelectedTaskForDetail((prev) => (prev ? { ...prev, status: newStatus } : null));
+    }
+
     try {
       await api.toggleTaskComplete(task._id);
-      await refreshData();
+      refreshData();
     } catch (err: any) {
+      // Revert if API fails
+      const revertTaskList = (list: Task[]) =>
+        list.map((t) => (t._id === task._id ? { ...t, status: task.status } : t));
+      setTasks(revertTaskList);
+      setPrivateTasks(revertTaskList);
+      if (selectedTaskForDetail && selectedTaskForDetail._id === task._id) {
+        setSelectedTaskForDetail(task);
+      }
       alert(err.message || 'Failed to update completion');
     }
   };
@@ -369,9 +390,11 @@ export default function App() {
           {activeView === 'task-detail' ? (
             <TaskDetailPage
               task={
-                selectedTaskForDetail ||
                 tasks.find((t) => t._id === location.pathname.replace('/app/task/', '')) ||
-                privateTasks.find((t) => t._id === location.pathname.replace('/app/task/', '')) || {
+                privateTasks.find((t) => t._id === location.pathname.replace('/app/task/', '')) ||
+                tasks.find((t) => t._id === selectedTaskForDetail?._id) ||
+                privateTasks.find((t) => t._id === selectedTaskForDetail?._id) ||
+                selectedTaskForDetail || {
                   _id: 'default',
                   userId: user?.id || 'demo',
                   title: 'Draft Q3 Personal Growth Blueprint',
