@@ -28,8 +28,8 @@ export const TaskDetailTabs: React.FC<TaskDetailTabsProps> = ({
                         key={tab.id}
                         onClick={() => onTabChange(tab.id)}
                         className={`pb-3 text-sm font-bold transition-all relative whitespace-nowrap ${isActive
-                                ? 'text-[#2563eb]'
-                                : 'text-[#717699] hover:text-[#1a1c35]'
+                            ? 'text-[#2563eb]'
+                            : 'text-[#717699] hover:text-[#1a1c35]'
                             }`}
                     >
                         <span>{tab.label}</span>
