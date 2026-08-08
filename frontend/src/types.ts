@@ -5,6 +5,30 @@ export interface User {
   hasPinSet: boolean;
 }
 
+export interface SubTask {
+  id: string;
+  taskId: string;
+  title: string;
+  description?: string;
+  dateLabel: string; // e.g. "Aug 14", "Aug 15"
+  dueDate?: string; // e.g. "Aug 17, 2026"
+  timeLeft?: string; // e.g. "Today", "2 days", "1h 34m"
+  status: 'completed' | 'in_progress' | 'pending';
+  priority?: 'High' | 'Medium' | 'Low';
+  assignee?: {
+    name: string;
+    avatar?: string;
+    email?: string;
+  };
+  masterStreak?: string;
+  attachments?: {
+    name: string;
+    size: string;
+    type?: string;
+    url?: string;
+  }[];
+}
+
 export interface Task {
   _id: string;
   userId: string;
@@ -14,6 +38,7 @@ export interface Task {
   startTime?: string | null;
   endTime?: string | null;
   status: 'todo' | 'in_progress' | 'completed';
+  priority?: 'High' | 'Medium' | 'Low';
   isPrivate: boolean;
   isHabit: boolean;
   currentStreak: number;
@@ -26,6 +51,7 @@ export interface Task {
   completionHistory?: string[];
   createdAt: string;
   updatedAt: string;
+  subTasks?: SubTask[];
 }
 
 export interface MasterStreakStats {
