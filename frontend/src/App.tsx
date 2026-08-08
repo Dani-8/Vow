@@ -23,7 +23,7 @@ import { AuthPage } from './components/AuthPage';
 import { MasterStreakBanner } from './components/MasterStreakBanner';
 import { TaskCard } from './components/TaskCard';
 import { TaskModal } from './components/TaskModal';
-import { TaskDetailModal } from './components/TaskDetailModal';
+import { TaskDetailPage } from './components/TaskDetailPage/TaskDetailPage';
 import { PrivatePinModal } from './components/PrivatePinModal';
 import { AIAssistModal } from './components/AIAssistModal';
 import { AuthModal } from './components/AuthModal';
@@ -39,10 +39,11 @@ export default function App() {
   const [stats, setStats] = useState<MasterStreakStats | null>(null);
 
   // Map URL pathname to active view
-  const getActiveViewFromPath = (path: string): 'landing' | 'visible' | 'private' | 'stats' | 'auth' => {
+  const getActiveViewFromPath = (path: string): 'landing' | 'visible' | 'private' | 'stats' | 'auth' | 'task-detail' => {
     if (path === '/auth') return 'auth';
     if (path === '/app/vault') return 'private';
     if (path === '/app/stats') return 'stats';
+    if (path.startsWith('/app/task/')) return 'task-detail';
     if (path.startsWith('/app')) return 'visible';
     return 'landing';
   };
@@ -365,7 +366,51 @@ export default function App() {
 
         {/* View Routing inside Workspace */}
         <main className="flex-1">
-          {activeView === 'stats' ? (
+          {activeView === 'task-detail' ? (
+            <TaskDetailPage
+              task={
+                selectedTaskForDetail ||
+                tasks.find((t) => t._id === location.pathname.replace('/app/task/', '')) ||
+                privateTasks.find((t) => t._id === location.pathname.replace('/app/task/', '')) || {
+                  _id: 'default',
+                  userId: user?.id || 'demo',
+                  title: 'Draft Q3 Personal Growth Blueprint',
+                  description:
+                    'Outline key milestones for skill acquisition and daily habit consistency for Q3.',
+                  tags: ['GROWTH', 'STRATEGY'],
+                  status: 'in_progress',
+                  priority: 'High',
+                  isPrivate: false,
+                  isHabit: false,
+                  currentStreak: 4,
+                  bestStreak: 12,
+                  createdAt: new Date().toISOString(),
+                  updatedAt: new Date().toISOString(),
+                }
+              }
+              onBack={() => {
+                if (selectedTaskForDetail?.isPrivate) {
+                  navigate('/app/vault');
+                } else {
+                  navigate('/app');
+                }
+              }}
+              onToggleComplete={handleToggleComplete}
+              onTogglePrivate={handleTogglePrivate}
+              onEditTask={(t) => {
+                setEditingTask(t);
+                setIsTaskModalOpen(true);
+              }}
+              onDeleteTask={(t) => {
+                handleDeleteTask(t._id);
+                if (t.isPrivate) {
+                  navigate('/app/vault');
+                } else {
+                  navigate('/app');
+                }
+              }}
+            />
+          ) : activeView === 'stats' ? (
             <StatsView stats={stats} tasks={tasks} privateTasks={privateTasks} />
           ) : activeView === 'private' && !isPrivateUnlocked ? (
             /* Locked Private Section Prompt */
@@ -500,7 +545,7 @@ export default function App() {
                       onDeleteTask={handleDeleteTask}
                       onViewDetails={(t) => {
                         setSelectedTaskForDetail(t);
-                        setIsDetailModalOpen(true);
+                        navigate(`/app/task/${t._id}`);
                       }}
                     />
                   ))}
@@ -512,19 +557,6 @@ export default function App() {
       </div>
 
       {/* Modals */}
-      <TaskDetailModal
-        isOpen={isDetailModalOpen}
-        task={selectedTaskForDetail}
-        onClose={() => setIsDetailModalOpen(false)}
-        onToggleComplete={handleToggleComplete}
-        onTogglePrivate={handleTogglePrivate}
-        onOpenAIAssist={handleOpenAIAssist}
-        onEditTask={(t) => {
-          setEditingTask(t);
-          setIsTaskModalOpen(true);
-        }}
-        onDeleteTask={handleDeleteTask}
-      />
 
       <TaskModal
         isOpen={isTaskModalOpen}
