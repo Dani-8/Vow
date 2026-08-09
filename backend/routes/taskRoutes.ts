@@ -53,6 +53,78 @@ router.get('/', authenticateToken, async (req: AuthenticatedRequest, res: Respon
     }
 });
 
+// Master Streak & Overall Stats
+router.get('/stats/master', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        const allTasks = await Task.find({ userId: req.userId });
+
+        const stats = calculateMasterStreak(allTasks);
+
+        return res.json({
+            masterStreak: stats.masterStreak,
+            activeToday: stats.activeToday,
+            totalCheckIns: stats.totalCheckIns,
+            completedDaysSet: stats.completedDaysSet,
+            totalTasks: allTasks.filter((t) => !t.isHabit).length,
+            totalHabits: allTasks.filter((t) => t.isHabit).length,
+        });
+    } catch (err: any) {
+        console.error('Error fetching master stats:', err);
+        return res.status(500).json({ error: 'Failed to compute stats' });
+    }
+});
+
+// Direct Daily Check-in from Master Streak banner
+router.post('/checkin-today', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        let defaultTask = await Task.findOne({
+            userId: req.userId,
+            title: 'Daily Vow Check-in',
+            isHabit: true,
+        });
+
+        if (!defaultTask) {
+            defaultTask = await Task.create({
+                userId: req.userId,
+                title: 'Daily Vow Check-in',
+                description: 'Daily operational commitment and streak check-in',
+                tags: ['Daily', 'Habit'],
+                isHabit: true,
+                isPrivate: false,
+                status: 'todo',
+                currentStreak: 0,
+                bestStreak: 0,
+                completionHistory: [],
+            });
+        }
+
+        if (defaultTask.status !== 'completed') {
+            defaultTask.status = 'completed';
+            const streakResult = registerTaskCompletion(defaultTask);
+
+            defaultTask.currentStreak = streakResult.currentStreak;
+            defaultTask.bestStreak = streakResult.bestStreak;
+            defaultTask.lastCompletedDate = streakResult.lastCompletedDate;
+
+            const today = new Date();
+            defaultTask.completionHistory.push(today);
+
+            await defaultTask.save();
+        }
+
+        const allTasks = await Task.find({ userId: req.userId });
+        const stats = calculateMasterStreak(allTasks);
+
+        return res.json({
+            message: 'Checked in successfully for today!',
+            stats,
+        });
+    } catch (err: any) {
+        console.error('Error logging check-in:', err);
+        return res.status(500).json({ error: 'Failed to log daily check-in' });
+    }
+});
+
 // Get private tasks (Locked behind PIN)
 router.post('/private-list', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
     try {
@@ -255,78 +327,6 @@ router.delete('/:id', authenticateToken, async (req: AuthenticatedRequest, res: 
     } catch (err: any) {
         console.error('Error deleting task:', err);
         return res.status(500).json({ error: 'Failed to delete task' });
-    }
-});
-
-// Direct Daily Check-in from Master Streak banner
-router.post('/checkin-today', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
-    try {
-        let defaultTask = await Task.findOne({
-            userId: req.userId,
-            title: 'Daily Vow Check-in',
-            isHabit: true,
-        });
-
-        if (!defaultTask) {
-            defaultTask = await Task.create({
-                userId: req.userId,
-                title: 'Daily Vow Check-in',
-                description: 'Daily operational commitment and streak check-in',
-                tags: ['Daily', 'Habit'],
-                isHabit: true,
-                isPrivate: false,
-                status: 'todo',
-                currentStreak: 0,
-                bestStreak: 0,
-                completionHistory: [],
-            });
-        }
-
-        if (defaultTask.status !== 'completed') {
-            defaultTask.status = 'completed';
-            const streakResult = registerTaskCompletion(defaultTask);
-
-            defaultTask.currentStreak = streakResult.currentStreak;
-            defaultTask.bestStreak = streakResult.bestStreak;
-            defaultTask.lastCompletedDate = streakResult.lastCompletedDate;
-
-            const today = new Date();
-            defaultTask.completionHistory.push(today);
-
-            await defaultTask.save();
-        }
-
-        const allTasks = await Task.find({ userId: req.userId });
-        const stats = calculateMasterStreak(allTasks);
-
-        return res.json({
-            message: 'Checked in successfully for today!',
-            stats,
-        });
-    } catch (err: any) {
-        console.error('Error logging check-in:', err);
-        return res.status(500).json({ error: 'Failed to log daily check-in' });
-    }
-});
-
-// Master Streak & Overall Stats
-router.get('/stats/master', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
-    try {
-        const allTasks = await Task.find({ userId: req.userId });
-
-        const stats = calculateMasterStreak(allTasks);
-
-        return res.json({
-            masterStreak: stats.masterStreak,
-            activeToday: stats.activeToday,
-            totalCheckIns: stats.totalCheckIns,
-            completedDaysSet: stats.completedDaysSet,
-            totalTasks: allTasks.filter((t) => !t.isHabit).length,
-            totalHabits: allTasks.filter((t) => t.isHabit).length,
-        });
-    } catch (err: any) {
-        console.error('Error fetching master stats:', err);
-        return res.status(500).json({ error: 'Failed to compute stats' });
     }
 });
 
