@@ -213,8 +213,8 @@ export const HomeView: React.FC<HomeViewProps> = ({
                                 <div
                                     key={idx}
                                     className={`flex flex-col items-center justify-between p-2 sm:p-3 rounded-2xl transition-all ${day.isToday
-                                            ? 'neu-button border-2 border-[#549acb] bg-sky-50/50 shadow-md scale-105 z-10'
-                                            : 'neu-card bg-[#E0E5EC]'
+                                        ? 'neu-button border-2 border-[#549acb] bg-sky-50/50 shadow-md scale-105 z-10'
+                                        : 'neu-card bg-[#E0E5EC]'
                                         }`}
                                 >
                                     <span className="text-[10px] sm:text-xs font-bold text-[#717699] uppercase">
@@ -364,8 +364,8 @@ export const HomeView: React.FC<HomeViewProps> = ({
                                             <div className="flex items-center space-x-2 shrink-0">
                                                 <span
                                                     className={`text-[9px] font-extrabold px-2 py-0.5 rounded-full ${isCompleted
-                                                            ? 'bg-emerald-100 text-emerald-700'
-                                                            : 'bg-sky-100 text-sky-700'
+                                                        ? 'bg-emerald-100 text-emerald-700'
+                                                        : 'bg-sky-100 text-sky-700'
                                                         }`}
                                                 >
                                                     {isCompleted ? 'Completed' : 'In Progress'}
