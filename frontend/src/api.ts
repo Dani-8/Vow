@@ -49,10 +49,18 @@ async function fetchAPI<T>(endpoint: string, options: RequestInit = {}): Promise
     headers,
   });
 
-  const data = await response.json();
+  const text = await response.text();
+  let data: any = {};
+  if (text) {
+    try {
+      data = JSON.parse(text);
+    } catch {
+      data = { error: text || 'Invalid response from server' };
+    }
+  }
 
   if (!response.ok) {
-    throw new Error(data.error || 'API Request failed');
+    throw new Error(data.error || `API Request failed with status ${response.status}`);
   }
 
   return data as T;
