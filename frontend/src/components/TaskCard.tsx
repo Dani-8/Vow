@@ -101,7 +101,8 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 
     return (
         <div
-            className={`neu-card p-4 transition-all duration-300 relative group ${isCompleted
+            onClick={() => onViewDetails && onViewDetails(task)}
+            className={`neu-card p-4 transition-all duration-300 relative group cursor-pointer hover:shadow-md ${isCompleted
                 ? 'opacity-85 bg-[#E0E5EC]/80 border-emerald-300/50'
                 : isStruggling
                     ? 'border-amber-300/80 neu-glow-orange'
@@ -113,7 +114,10 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                 {/* Completion Checkbox & Title Block */}
                 <div className="flex items-start space-x-3 flex-1 min-w-0">
                     <button
-                        onClick={() => onToggleComplete(task)}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onToggleComplete(task);
+                        }}
                         className={`mt-0.5 w-7 h-7 rounded-xl neu-button flex items-center justify-center shrink-0 transition-transform ${isCompleted
                             ? 'bg-emerald-500 text-white shadow-inner scale-105 border-emerald-500'
                             : 'text-[#717699] hover:text-[#549acb] hover:scale-110'
@@ -123,11 +127,8 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                         {isCompleted ? <CheckCircle2 className="w-5 h-5 text-white" /> : <Circle className="w-5 h-5 text-[#717699]" />}
                     </button>
 
-                    {/* Clickable Title & Description Area */}
-                    <div
-                        onClick={() => onViewDetails && onViewDetails(task)}
-                        className="flex-1 min-w-0 cursor-pointer hover:opacity-90 transition-opacity group/click"
-                    >
+                    {/* Title & Description Area */}
+                    <div className="flex-1 min-w-0 group/click">
                         <div className="flex items-center space-x-2 flex-wrap gap-1.5">
                             <h3
                                 className={`text-base font-bold text-[#1a1c35] group-hover/click:text-[#549acb] transition-colors break-words ${isCompleted ? 'line-through text-[#717699] font-normal' : ''
@@ -166,7 +167,10 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                 <div className="flex items-center space-x-1.5 shrink-0">
                     {/* AI Assist Button */}
                     <button
-                        onClick={() => onOpenAIAssist(task)}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onOpenAIAssist(task);
+                        }}
                         className={`px-2.5 py-1.5 rounded-xl neu-button flex items-center space-x-1.5 text-xs font-bold transition-all ${isStruggling
                             ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white animate-pulse border-none shadow-md'
                             : 'text-[#549acb] hover:bg-white/40'
@@ -180,7 +184,10 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                     {/* 3-Dot Dropdown Menu */}
                     <div className="relative" ref={menuRef}>
                         <button
-                            onClick={() => setIsMenuOpen(!isMenuOpen)}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setIsMenuOpen(!isMenuOpen);
+                            }}
                             className="p-1.5 rounded-xl neu-button text-[#717699] hover:text-[#1a1c35] transition-colors"
                             title="More options"
                         >
@@ -188,9 +195,13 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                         </button>
 
                         {isMenuOpen && (
-                            <div className="absolute right-0 mt-1.5 w-48 rounded-2xl bg-[#E0E5EC] border border-white/60 shadow-xl p-1.5 z-20 animate-in fade-in zoom-in-95 duration-150">
+                            <div
+                                onClick={(e) => e.stopPropagation()}
+                                className="absolute right-0 mt-1.5 w-48 rounded-2xl bg-[#E0E5EC] border border-white/60 shadow-xl p-1.5 z-20 animate-in fade-in zoom-in-95 duration-150"
+                            >
                                 <button
-                                    onClick={() => {
+                                    onClick={(e) => {
+                                        e.stopPropagation();
                                         setIsMenuOpen(false);
                                         onTogglePrivate(task);
                                     }}
