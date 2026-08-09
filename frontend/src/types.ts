@@ -1,3 +1,5 @@
+export type ActiveView = 'home' | 'visible' | 'private' | 'stats' | 'auth' | 'task-detail' | 'landing';
+
 export interface User {
   id: string;
   email: string;
