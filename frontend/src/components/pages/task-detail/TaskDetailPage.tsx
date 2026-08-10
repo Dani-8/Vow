@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Task, SubTask } from '../../types';
+import { Task, SubTask } from '../../../types';
 import { TaskDetailHeader } from './components/TaskDetailHeader';
 import { TaskDetailTabs, TaskTabType } from './components/TaskDetailTabs';
-import { SubTaskTimeline } from './SubTasksTab/SubTaskTimeline';
-import { SubTaskDetailPanel } from './SubTasksTab/SubTaskDetailPanel';
-import { AddSubTaskModal } from './SubTasksTab/AddSubTaskModal';
+import { SubTaskTimeline } from './subtasks/SubTaskTimeline';
+import { SubTaskDetailPanel } from './subtasks/SubTaskDetailPanel';
+import { AddSubTaskModal } from './subtasks/AddSubTaskModal';
 import { EmptyTabPlaceholder } from './components/EmptyTabPlaceholder';
 import { useSubTasks } from './hooks/useSubTasks';
 
