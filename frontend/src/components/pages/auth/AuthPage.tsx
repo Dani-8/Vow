@@ -13,8 +13,8 @@ import {
     Unlock,
     ArrowRight,
 } from 'lucide-react';
-import { api } from '../../api';
-import { User } from '../../types';
+import { api } from '../../../api';
+import { User } from '../../../types';
 
 interface AuthPageProps {
     onSuccess: (user: User, token: string) => void;

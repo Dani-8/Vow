@@ -1,7 +1,7 @@
 import React from 'react';
 import { Trophy, CheckCircle2, Check, Zap } from 'lucide-react';
-import { MasterStreakStats } from '../../types';
-import { WeekDay } from '../../hooks/useHomeData';
+import { MasterStreakStats } from '../../../../types';
+import { WeekDay } from '../../../../hooks/useHomeData';
 
 interface MasterStreakCardProps {
     stats: MasterStreakStats | null;

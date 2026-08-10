@@ -1,6 +1,6 @@
 import React from 'react';
 import { Flame, Calendar, Sparkles, CheckCircle2 } from 'lucide-react';
-import { MasterStreakStats } from '../../types';
+import { MasterStreakStats } from '../../../../types';
 
 interface MasterStreakBannerProps {
     stats: MasterStreakStats | null;
@@ -99,10 +99,10 @@ export const MasterStreakBanner: React.FC<MasterStreakBannerProps> = ({ stats, o
                                             }
                                         }}
                                         className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs transition-all ${dayItem.isCompleted
-                                                ? 'bg-[#549acb] text-white font-bold shadow-sm'
-                                                : dayItem.isToday
-                                                    ? 'neu-inset border-2 border-dashed border-[#549acb] text-[#549acb] font-bold animate-pulse cursor-pointer hover:bg-sky-100/50 hover:scale-110 shadow-md ring-2 ring-[#549acb]/30'
-                                                    : 'neu-inset text-[#717699] cursor-default'
+                                            ? 'bg-[#549acb] text-white font-bold shadow-sm'
+                                            : dayItem.isToday
+                                                ? 'neu-inset border-2 border-dashed border-[#549acb] text-[#549acb] font-bold animate-pulse cursor-pointer hover:bg-sky-100/50 hover:scale-110 shadow-md ring-2 ring-[#549acb]/30'
+                                                : 'neu-inset text-[#717699] cursor-default'
                                             }`}
                                         title={
                                             dayItem.isCompleted

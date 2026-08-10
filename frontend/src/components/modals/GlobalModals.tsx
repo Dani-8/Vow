@@ -1,10 +1,10 @@
 import React from 'react';
 import { Task, User } from '../../types';
 import { api } from '../../api';
-import { TaskModal } from '../TaskModal';
-import { PrivatePinModal } from '../PrivatePinModal';
-import { AIAssistModal } from '../AIAssistModal';
-import { AuthModal } from '../AuthModal';
+import { TaskModal } from '../tasks/components/TaskModal';
+import { PrivatePinModal } from './PrivatePinModal';
+import { AIAssistModal } from './AIAssistModal';
+import { AuthModal } from './AuthModal';
 
 interface GlobalModalsProps {
     user: User | null;

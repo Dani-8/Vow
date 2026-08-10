@@ -21,7 +21,6 @@ export const QuickActionsCard: React.FC<QuickActionsCardProps> = ({
                 </div>
                 <p className="text-[11px] text-[#717699] font-medium mb-4">Common actions</p>
 
-
                 <div className="grid grid-cols-3 gap-2">
                     <button
                         onClick={onOpenCreateModal}
