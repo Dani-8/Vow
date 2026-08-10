@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { SubTask } from '../../../types';
+import { SubTask } from '../../../../types';
 
 // Default sub-tasks matching the "Draft Q3 Personal Growth Blueprint" reference
 const DEFAULT_SUB_TASKS: SubTask[] = [

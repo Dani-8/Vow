@@ -1,6 +1,6 @@
 import React from 'react';
 import { Flame, Trophy, CheckCircle, Repeat, Target } from 'lucide-react';
-import { MasterStreakStats, Task } from '../../types';
+import { MasterStreakStats, Task } from '../../../types';
 
 interface StatsViewProps {
     stats: MasterStreakStats | null;

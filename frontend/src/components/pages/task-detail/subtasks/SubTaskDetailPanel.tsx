@@ -12,7 +12,7 @@ import {
     Trash2,
     PlayCircle,
 } from 'lucide-react';
-import { SubTask } from '../../../types';
+import { SubTask } from '../../../../types';
 
 interface SubTaskDetailPanelProps {
     subTask: SubTask;

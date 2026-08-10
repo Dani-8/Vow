@@ -1,16 +1,16 @@
 import React from 'react';
 import { Location, NavigateFunction } from 'react-router-dom';
 import { Unlock } from 'lucide-react';
-import { clearStoredPin } from '../../api';
-import { Task, User, MasterStreakStats, ActiveView } from '../../types';
+import { clearStoredPin } from '../../../api';
+import { Task, User, MasterStreakStats, ActiveView } from '../../../types';
 
-import { TaskDetailPage } from '../TaskDetailPage/TaskDetailPage';
-import { StatsView } from '../StatsView';
-import { HomeView } from './HomeView';
+import { TaskDetailPage } from '../task-detail/TaskDetailPage';
+import { StatsView } from '../stats/StatsView';
+import { HomeView } from '../home/HomeView';
 
-import { ControlsBar, FilterCategory } from '../Dashboard/ControlsBar';
-import { LockedVaultCard } from '../Dashboard/LockedVaultCard';
-import { TaskGrid } from '../Dashboard/TaskGrid';
+import { ControlsBar, FilterCategory } from '../../dashboard/ControlsBar';
+import { LockedVaultCard } from '../../dashboard/LockedVaultCard';
+import { TaskGrid } from '../../dashboard/TaskGrid';
 
 interface AppRouterProps {
     activeView: ActiveView;

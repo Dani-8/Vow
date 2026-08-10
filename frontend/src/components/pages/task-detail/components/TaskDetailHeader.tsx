@@ -14,7 +14,7 @@ import {
     Edit3,
     Trash2,
 } from 'lucide-react';
-import { Task } from '../../../types';
+import { Task } from '../../../../types';
 
 interface TaskDetailHeaderProps {
     task: Task;

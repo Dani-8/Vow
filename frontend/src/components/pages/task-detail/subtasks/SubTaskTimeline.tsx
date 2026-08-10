@@ -7,7 +7,7 @@ import {
     ChevronDown,
     Filter,
 } from 'lucide-react';
-import { SubTask } from '../../../types';
+import { SubTask } from '../../../../types';
 
 type FilterStatus = 'all' | 'in_progress' | 'completed' | 'pending';
 
@@ -103,8 +103,8 @@ export const SubTaskTimeline: React.FC<SubTaskTimelineProps> = ({
                     <button
                         onClick={() => setStatusFilter('all')}
                         className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${statusFilter === 'all'
-                                ? 'neu-inset text-[#2563eb] bg-[#eef4f9]'
-                                : 'text-[#717699] hover:text-[#1a1c35]'
+                            ? 'neu-inset text-[#2563eb] bg-[#eef4f9]'
+                            : 'text-[#717699] hover:text-[#1a1c35]'
                             }`}
                     >
                         All <span className="ml-1 opacity-75">({allCount})</span>
@@ -114,8 +114,8 @@ export const SubTaskTimeline: React.FC<SubTaskTimelineProps> = ({
                     <button
                         onClick={() => setStatusFilter('in_progress')}
                         className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${statusFilter === 'in_progress'
-                                ? 'neu-inset text-blue-600 bg-blue-50'
-                                : 'text-[#717699] hover:text-[#1a1c35]'
+                            ? 'neu-inset text-blue-600 bg-blue-50'
+                            : 'text-[#717699] hover:text-[#1a1c35]'
                             }`}
                     >
                         In Progress <span className="ml-1 opacity-75">({inProgressCount})</span>
@@ -125,8 +125,8 @@ export const SubTaskTimeline: React.FC<SubTaskTimelineProps> = ({
                     <button
                         onClick={() => setStatusFilter('completed')}
                         className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${statusFilter === 'completed'
-                                ? 'neu-inset text-emerald-600 bg-emerald-50'
-                                : 'text-[#717699] hover:text-[#1a1c35]'
+                            ? 'neu-inset text-emerald-600 bg-emerald-50'
+                            : 'text-[#717699] hover:text-[#1a1c35]'
                             }`}
                     >
                         Completed <span className="ml-1 opacity-75">({completedCount})</span>
@@ -136,8 +136,8 @@ export const SubTaskTimeline: React.FC<SubTaskTimelineProps> = ({
                     <button
                         onClick={() => setStatusFilter('pending')}
                         className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${statusFilter === 'pending'
-                                ? 'neu-inset text-purple-600 bg-purple-50'
-                                : 'text-[#717699] hover:text-[#1a1c35]'
+                            ? 'neu-inset text-purple-600 bg-purple-50'
+                            : 'text-[#717699] hover:text-[#1a1c35]'
                             }`}
                     >
                         Pending <span className="ml-1 opacity-75">({pendingCount})</span>
@@ -173,12 +173,12 @@ export const SubTaskTimeline: React.FC<SubTaskTimelineProps> = ({
                                 onDragEnd={handleDragEnd}
                                 onClick={() => onSelectSubTask(st)}
                                 className={`group flex items-center space-x-2 sm:space-x-3 p-3 rounded-2xl cursor-pointer transition-all ${isDragging
-                                        ? 'opacity-40 scale-98 bg-gray-200 border-2 border-dashed border-blue-400'
-                                        : isDragOver
-                                            ? 'border-2 border-blue-500 bg-blue-50/50'
-                                            : isSelected
-                                                ? 'neu-card bg-[#eef4f9] shadow-md border-l-4 border-l-[#2563eb]'
-                                                : 'hover:bg-[#e6ebf2]/60'
+                                    ? 'opacity-40 scale-98 bg-gray-200 border-2 border-dashed border-blue-400'
+                                    : isDragOver
+                                        ? 'border-2 border-blue-500 bg-blue-50/50'
+                                        : isSelected
+                                            ? 'neu-card bg-[#eef4f9] shadow-md border-l-4 border-l-[#2563eb]'
+                                            : 'hover:bg-[#e6ebf2]/60'
                                     }`}
                             >
                                 {/* 1. Arrow Reordering (Up / Down) */}
@@ -227,10 +227,10 @@ export const SubTaskTimeline: React.FC<SubTaskTimelineProps> = ({
                                 <div className="flex-1 min-w-0">
                                     <h4
                                         className={`text-sm sm:text-base font-bold truncate transition-colors ${isSelected
-                                                ? 'text-[#1a1c35]'
-                                                : isCompleted
-                                                    ? 'text-[#717699] line-through'
-                                                    : 'text-[#2d3748] group-hover:text-[#1a1c35]'
+                                            ? 'text-[#1a1c35]'
+                                            : isCompleted
+                                                ? 'text-[#717699] line-through'
+                                                : 'text-[#2d3748] group-hover:text-[#1a1c35]'
                                             }`}
                                     >
                                         {st.title}

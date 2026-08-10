@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Plus, Save } from 'lucide-react';
-import { SubTask } from '../../../types';
+import { SubTask } from '../../../../types';
 
 interface AddSubTaskModalProps {
     isOpen: boolean;
