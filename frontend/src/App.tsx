@@ -2,10 +2,10 @@ import React from 'react';
 import { useTaskData } from './hooks/useTaskData';
 import { useModalState } from './hooks/useModalState';
 
-import { LandingPage } from './components/LandingPage';
-import { AuthPage } from './components/AuthPage';
+import { LandingPage } from './components/pages/landing/LandingPage';
+import { AuthPage } from './components/pages/auth/AuthPage';
 import { MainLayout } from './components/layout/MainLayout';
-import { AppRouter } from './components/views/AppRouter';
+import { AppRouter } from './components/pages/router/AppRouter';
 import { GlobalModals } from './components/modals/GlobalModals';
 
 export default function App() {
@@ -32,7 +32,7 @@ export default function App() {
           if (!user) {
             handleBypassAuth();
           } else {
-            navigateToView('visible');
+            navigateToView('home');
           }
         }}
         onOpenAuth={() => navigateToView('auth')}
@@ -48,7 +48,7 @@ export default function App() {
         onSuccess={async (loggedUser) => {
           setUser(loggedUser);
           await refreshData();
-          navigateToView('visible');
+          navigateToView('home');
         }}
         onBypass={handleBypassAuth}
         onBackToHome={() => navigateToView('landing')}
