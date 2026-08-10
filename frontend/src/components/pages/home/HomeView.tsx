@@ -1,13 +1,13 @@
 import React from 'react';
-import { Task, MasterStreakStats } from '../../types';
-import { useHomeData } from '../../hooks/useHomeData';
-import { DigitalClockCard } from '../home/DigitalClockCard';
-import { MasterStreakCard } from '../home/MasterStreakCard';
-import { TodaysFocusCard } from '../home/TodaysFocusCard';
-import { TodaysTasksCard } from '../home/TodaysTasksCard';
-import { QuickProgressCard } from '../home/QuickProgressCard';
-import { UpcomingDeadlinesCard } from '../home/UpcomingDeadlinesCard';
-import { QuickActionsCard } from '../home/QuickActionsCard';
+import { Task, MasterStreakStats } from '../../../types';
+import { useHomeData } from '../../../hooks/useHomeData';
+import { DigitalClockCard } from './components/DigitalClockCard';
+import { MasterStreakCard } from './components/MasterStreakCard';
+import { TodaysFocusCard } from './components/TodaysFocusCard';
+import { TodaysTasksCard } from './components/TodaysTasksCard';
+import { QuickProgressCard } from './components/QuickProgressCard';
+import { UpcomingDeadlinesCard } from './components/UpcomingDeadlinesCard';
+import { QuickActionsCard } from './components/QuickActionsCard';
 
 interface HomeViewProps {
     tasks: Task[];

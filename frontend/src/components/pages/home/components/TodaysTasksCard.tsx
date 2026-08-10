@@ -1,6 +1,6 @@
 import React from 'react';
 import { CheckCircle2, Circle, Check } from 'lucide-react';
-import { Task } from '../../types';
+import { Task } from '../../../../types';
 
 interface TodaysTasksCardProps {
     todayTasks: Task[];

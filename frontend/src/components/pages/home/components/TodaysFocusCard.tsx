@@ -1,7 +1,7 @@
 import React from 'react';
 import { Target } from 'lucide-react';
-import { FocusItem } from '../../hooks/useHomeData';
-import { Task } from '../../types';
+import { FocusItem } from '../../../../hooks/useHomeData';
+import { Task } from '../../../../types';
 
 interface TodaysFocusCardProps {
     focusList: FocusItem[];

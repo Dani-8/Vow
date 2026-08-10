@@ -21,7 +21,6 @@ export const QuickProgressCard: React.FC<QuickProgressCardProps> = ({
                 </div>
                 <p className="text-[11px] text-[#717699] font-medium mb-4">Quick overview</p>
 
-
                 <div className="grid grid-cols-3 gap-2">
                     <div className="neu-inset p-2.5 rounded-2xl flex flex-col items-center justify-center text-center">
                         <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mb-1">
