@@ -143,8 +143,8 @@ export const AIAssistModal: React.FC<AIAssistModalProps> = ({ isOpen, task, onCl
 
                             <div
                                 className={`max-w-[80%] rounded-2xl p-4 text-sm ${msg.role === 'user'
-                                        ? 'neu-button-primary text-white rounded-tr-none'
-                                        : 'neu-card bg-[#eef2f7] text-slate-800 rounded-tl-none border border-white'
+                                    ? 'neu-button-primary text-white rounded-tr-none'
+                                    : 'neu-card bg-[#eef2f7] text-slate-800 rounded-tl-none border border-white'
                                     }`}
                             >
                                 <div className="whitespace-pre-wrap leading-relaxed">{msg.text}</div>

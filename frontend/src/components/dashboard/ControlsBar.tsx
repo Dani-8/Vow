@@ -14,7 +14,7 @@ export const ControlsBar: React.FC<ControlsBarProps> = ({
   searchQuery,
   onSearchChange,
   activeFilter,
-  onFilterChange,}) => {
+  onFilterChange, }) => {
   return (
     <div className="neu-card p-4 flex flex-wrap items-center justify-between gap-4">
       {/* Search Bar */}
@@ -33,51 +33,46 @@ export const ControlsBar: React.FC<ControlsBarProps> = ({
       <div className="flex items-center neu-inset p-1.5 rounded-2xl space-x-1">
         <button
           onClick={() => onFilterChange('all')}
-          className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${
-            activeFilter === 'all'
+          className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${activeFilter === 'all'
               ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
               : 'text-[#717699] hover:text-[#1a1c35]'
-          }`}
+            }`}
         >
           All
         </button>
         <button
           onClick={() => onFilterChange('habits')}
-          className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${
-            activeFilter === 'habits'
+          className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${activeFilter === 'habits'
               ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
               : 'text-[#717699] hover:text-[#1a1c35]'
-          }`}
+            }`}
         >
           Habits
         </button>
         <button
           onClick={() => onFilterChange('tasks')}
-          className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${
-            activeFilter === 'tasks'
+          className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${activeFilter === 'tasks'
               ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
               : 'text-[#717699] hover:text-[#1a1c35]'
-          }`}
+            }`}
         >
           Single Tasks
         </button>
         <button
           onClick={() => onFilterChange('todo')}
-          className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${
-            activeFilter === 'todo'
+          className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${activeFilter === 'todo'
               ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
               : 'text-[#717699] hover:text-[#1a1c35]'
-          }`}
+            }`}
         >
           Pending
         </button>
         <button
           onClick={() => onFilterChange('completed')}
-          className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${
-            activeFilter === 'completed'
+          className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${activeFilter === 'completed'
               ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
               : 'text-[#717699] hover:text-[#1a1c35]'
-          }`}
+            }`}
         >
           Completed
         </button>
