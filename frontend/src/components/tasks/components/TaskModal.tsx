@@ -1,7 +1,7 @@
 import React from 'react';
 import { X, Sparkles, Calendar, Tag, Lock, Unlock, Repeat, Check } from 'lucide-react';
-import { Task } from '../../types';
-import { useTaskForm } from '../../hooks/useTaskForm';
+import { Task } from '../../../types';
+import { useTaskForm } from '../hooks/useTaskForm';
 
 export interface TaskModalProps {
     isOpen: boolean;

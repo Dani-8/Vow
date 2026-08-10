@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FormEvent } from 'react';
-import { Task } from '../types';
+import { Task } from '../../../types';
 
 interface UseTaskFormProps {
     editingTask?: Task | null;

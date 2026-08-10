@@ -1,10 +1,10 @@
 import React from 'react';
 import { Tag } from 'lucide-react';
 import { Task } from '../../types';
-import { useTaskTimer } from '../../hooks/useTaskTimer';
-import { TaskCardHeader } from './TaskCardHeader';
-import { TaskCardMenu } from './TaskCardMenu';
-import { TaskCardFooter } from './TaskCardFooter';
+import { useTaskTimer } from './hooks/useTaskTimer';
+import { TaskCardHeader } from './components/TaskCardHeader';
+import { TaskCardMenu } from './components/TaskCardMenu';
+import { TaskCardFooter } from './components/TaskCardFooter';
 
 export interface TaskCardProps {
     task: Task;

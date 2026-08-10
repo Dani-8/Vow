@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Sparkles, MoreVertical, Lock, Unlock, Edit3, Trash2 } from 'lucide-react';
-import { Task } from '../../types';
+import { Task } from '../../../types';
 
 interface TaskCardMenuProps {
     task: Task;
