@@ -44,8 +44,8 @@ export const TaskCardMenu: React.FC<TaskCardMenuProps> = ({
                     onOpenAIAssist(task);
                 }}
                 className={`px-2.5 py-1.5 rounded-xl neu-button flex items-center space-x-1.5 text-xs font-bold transition-all ${isStruggling
-                        ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white animate-pulse border-none shadow-md'
-                        : 'text-[#549acb] hover:bg-white/40'
+                    ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white animate-pulse border-none shadow-md'
+                    : 'text-[#549acb] hover:bg-white/40'
                     }`}
                 title="Ask Vow AI coach for micro-step breakdown or rescheduling"
             >
