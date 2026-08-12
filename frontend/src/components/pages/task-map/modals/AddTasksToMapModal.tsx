@@ -120,8 +120,8 @@ export const AddTasksToMapModal: React.FC<AddTasksToMapModalProps> = ({
                                             <button
                                                 onClick={() => toggleSelect(task._id)}
                                                 className={`w-5 h-5 rounded-lg border flex items-center justify-center transition-colors shrink-0 ${isMainSelected
-                                                        ? 'bg-[#549acb] border-[#549acb] text-white'
-                                                        : 'border-[#717699]/40 hover:border-[#549acb]'
+                                                    ? 'bg-[#549acb] border-[#549acb] text-white'
+                                                    : 'border-[#717699]/40 hover:border-[#549acb]'
                                                     }`}
                                             >
                                                 {isMainSelected && <Check className="w-3.5 h-3.5" />}
@@ -174,8 +174,8 @@ export const AddTasksToMapModal: React.FC<AddTasksToMapModalProps> = ({
                                                         <button
                                                             onClick={() => toggleSelect(subKey)}
                                                             className={`w-4 h-4 rounded border flex items-center justify-center transition-colors shrink-0 ${isSubSelected
-                                                                    ? 'bg-purple-600 border-purple-600 text-white'
-                                                                    : 'border-[#717699]/40 hover:border-purple-600'
+                                                                ? 'bg-purple-600 border-purple-600 text-white'
+                                                                : 'border-[#717699]/40 hover:border-purple-600'
                                                                 }`}
                                                         >
                                                             {isSubSelected && <Check className="w-3 h-3" />}
@@ -211,8 +211,8 @@ export const AddTasksToMapModal: React.FC<AddTasksToMapModalProps> = ({
                             onClick={handleImport}
                             disabled={selectedCount === 0}
                             className={`px-6 py-2.5 rounded-2xl font-extrabold text-xs text-white shadow-lg flex items-center space-x-2 ${selectedCount > 0
-                                    ? 'neu-button-primary'
-                                    : 'bg-gray-400 cursor-not-allowed opacity-60'
+                                ? 'neu-button-primary'
+                                : 'bg-gray-400 cursor-not-allowed opacity-60'
                                 }`}
                         >
                             <Plus className="w-4 h-4" />
