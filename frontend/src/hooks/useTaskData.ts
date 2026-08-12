@@ -20,6 +20,7 @@ export function useTaskData() {
         if (path === '/app/tasks') return 'visible';
         if (path.startsWith('/app/task/')) return 'task-detail';
         if (path.startsWith('/app')) return 'home';
+        
         return 'landing';
     };
 
