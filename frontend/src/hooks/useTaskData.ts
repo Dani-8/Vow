@@ -13,20 +13,20 @@ export function useTaskData() {
     const [stats, setStats] = useState<MasterStreakStats | null>(null);
 
     // Map URL pathname to active view
-    const getActiveViewFromPath = (path: string): 'home' | 'landing' | 'visible' | 'private' | 'stats' | 'auth' | 'task-detail' => {
+    const getActiveViewFromPath = (path: string): 'home' | 'landing' | 'visible' | 'private' | 'stats' | 'auth' | 'task-detail' | 'task-map' => {
         if (path === '/auth') return 'auth';
         if (path === '/app/vault') return 'private';
         if (path === '/app/stats') return 'stats';
         if (path === '/app/tasks') return 'visible';
+        if (path.startsWith('/app/map')) return 'task-map';
         if (path.startsWith('/app/task/')) return 'task-detail';
         if (path.startsWith('/app')) return 'home';
-        
         return 'landing';
     };
 
     const activeView = getActiveViewFromPath(location.pathname);
 
-    const navigateToView = (view: 'home' | 'landing' | 'visible' | 'private' | 'stats' | 'auth') => {
+    const navigateToView = (view: 'home' | 'landing' | 'visible' | 'private' | 'stats' | 'auth' | 'task-map', param?: string) => {
         switch (view) {
             case 'home':
                 navigate('/app');
@@ -45,6 +45,13 @@ export function useTaskData() {
                 break;
             case 'stats':
                 navigate('/app/stats');
+                break;
+            case 'task-map':
+                if (param) {
+                    navigate(`/app/map/${param}`);
+                } else {
+                    navigate('/app/map');
+                }
                 break;
         }
     };

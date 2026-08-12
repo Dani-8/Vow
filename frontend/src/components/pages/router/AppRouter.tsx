@@ -7,6 +7,7 @@ import { Task, User, MasterStreakStats, ActiveView } from '../../../types';
 import { TaskDetailPage } from '../task-detail/TaskDetailPage';
 import { StatsView } from '../stats/StatsView';
 import { HomeView } from '../home/HomeView';
+import { TaskMapPage } from '../task-map/TaskMapPage';
 
 import { ControlsBar, FilterCategory } from '../../dashboard/ControlsBar';
 import { LockedVaultCard } from '../../dashboard/LockedVaultCard';
@@ -28,7 +29,7 @@ interface AppRouterProps {
     filter: FilterCategory;
     setFilter: (filter: FilterCategory) => void;
     navigate: NavigateFunction;
-    navigateToView: (view: 'home' | 'landing' | 'visible' | 'private' | 'stats' | 'auth') => void;
+    navigateToView: (view: 'home' | 'landing' | 'visible' | 'private' | 'stats' | 'auth' | 'task-map') => void;
     setIsPrivateUnlocked: (unlocked: boolean) => void;
     onCheckInToday: () => void;
     onToggleComplete: (task: Task) => void;
@@ -135,6 +136,10 @@ export const AppRouter: React.FC<AppRouterProps> = ({
 
     if (activeView === 'stats') {
         return <StatsView stats={stats} tasks={tasks} privateTasks={privateTasks} />;
+    }
+
+    if (activeView === 'task-map') {
+        return <TaskMapPage tasks={[...tasks, ...privateTasks]} onBackToHome={() => navigateToView('home')} />;
     }
 
     if (activeView === 'private' && !isPrivateUnlocked) {
