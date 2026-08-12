@@ -177,8 +177,8 @@ export const CanvasConnectionsOverlay: React.FC<CanvasConnectionsOverlayProps> =
                                 <div
                                     onClick={() => onSelectConnection?.(conn.id)}
                                     className={`px-2.5 py-0.5 rounded-full text-[10px] font-black text-center shadow-md border ${conn.isCritical
-                                            ? 'bg-rose-500 text-white border-rose-600'
-                                            : style.badgeBg
+                                        ? 'bg-rose-500 text-white border-rose-600'
+                                        : style.badgeBg
                                         } flex items-center justify-center space-x-1 cursor-pointer hover:scale-105 transition-transform`}
                                 >
                                     <span>{conn.relationship}</span>
