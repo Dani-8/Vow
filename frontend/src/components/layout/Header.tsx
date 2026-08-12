@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import { ShieldCheck, User as UserIcon, LogOut, LogIn } from 'lucide-react';
 import { User, MasterStreakStats, ActiveView } from '../../types';
 
@@ -20,6 +21,8 @@ export const Header: React.FC<HeaderProps> = ({
     onLogout,
     onBypassAuth,
 }) => {
+    const location = useLocation();
+
     const getViewTitle = () => {
         switch (activeView) {
             case 'home':
@@ -32,6 +35,11 @@ export const Header: React.FC<HeaderProps> = ({
                 return 'Analytics & Streak Records';
             case 'task-detail':
                 return 'Task Workspace & Sub-Task Timeline';
+            case 'task-map':
+                if (location.pathname.startsWith('/app/map/') && location.pathname.length > '/app/map/'.length) {
+                    return 'Task Map Canvas';
+                }
+                return 'Task Map Overview';
             default:
                 return 'Home';
         }
