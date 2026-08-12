@@ -194,8 +194,34 @@ export const TaskMapCanvasView: React.FC<TaskMapCanvasViewProps> = ({
                 ) : (
                     /* State 4 — Inside Map, Active Canvas Workspace */
                     <div
-                        style={{ transform: `scale(${zoom})`, transformOrigin: 'top left' }}
-                        className="relative w-full h-full min-h-[600px] transition-transform duration-100"
+                        onMouseDown={(e) => {
+                            if (isPanMode || e.button === 1) {
+                                e.preventDefault();
+                                const startX = e.clientX - panOffset.x;
+                                const startY = e.clientY - panOffset.y;
+
+                                const handleMouseMove = (moveEvent: MouseEvent) => {
+                                    setPanOffset({
+                                        x: moveEvent.clientX - startX,
+                                        y: moveEvent.clientY - startY,
+                                    });
+                                };
+
+                                const handleMouseUp = () => {
+                                    window.removeEventListener('mousemove', handleMouseMove);
+                                    window.removeEventListener('mouseup', handleMouseUp);
+                                };
+
+                                window.addEventListener('mousemove', handleMouseMove);
+                                window.addEventListener('mouseup', handleMouseUp);
+                            }
+                        }}
+                        style={{
+                            transform: `translate(${panOffset.x}px, ${panOffset.y}px) scale(${zoom})`,
+                            transformOrigin: 'top left',
+                        }}
+                        className={`relative w-full h-full min-h-[600px] transition-transform duration-75 ${isPanMode ? 'cursor-grab active:cursor-grabbing' : ''
+                            }`}
                     >
                         {/* SVG Connections Overlay */}
                         <CanvasConnectionsOverlay
@@ -226,6 +252,7 @@ export const TaskMapCanvasView: React.FC<TaskMapCanvasViewProps> = ({
                                     task={mainTask}
                                     subTask={subTask}
                                     isSelected={selectedNodeId === node.id}
+                                    zoom={zoom}
                                     onSelect={() => setSelectedNodeId(node.id)}
                                     onPositionChange={handlePositionChange}
                                     onDeleteNode={handleDeleteNode}

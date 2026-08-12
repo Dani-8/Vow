@@ -6,6 +6,7 @@ export interface TaskNodeCardProps {
     task?: Task;
     subTask?: SubTask;
     isSelected: boolean;
+    zoom?: number;
     onSelect: () => void;
     onPositionChange: (nodeId: string, x: number, y: number) => void;
     onDeleteNode: (nodeId: string) => void;

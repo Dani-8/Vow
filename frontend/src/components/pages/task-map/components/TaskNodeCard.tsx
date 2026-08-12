@@ -15,6 +15,7 @@ export const TaskNodeCard: React.FC<TaskNodeCardProps> = ({
     task,
     subTask,
     isSelected,
+    zoom = 1,
     onSelect,
     onPositionChange,
     onDeleteNode,
@@ -22,7 +23,6 @@ export const TaskNodeCard: React.FC<TaskNodeCardProps> = ({
 }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
-    const [dragStart, setDragStart] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
 
     const title = subTask?.title || task?.title || node.customTitle || 'Untitled Task';
     const status = subTask?.status || task?.status || node.customStatus || 'todo';
@@ -32,22 +32,45 @@ export const TaskNodeCard: React.FC<TaskNodeCardProps> = ({
     else if (status === 'in_progress') progress = node.customProgress || 50;
 
     const handleMouseDown = (e: React.MouseEvent) => {
-        // Only drag if left click and not clicking menu
+        // Only drag if left click
         if (e.button !== 0) return;
-        setIsDragging(true);
-        setDragStart({ x: e.clientX - node.x, y: e.clientY - node.y });
+
+        // Do not initiate node dragging when clicking interactive children (buttons, inputs, etc.)
+        const target = e.target as HTMLElement;
+        if (target.closest('button') || target.closest('a') || target.closest('select') || target.closest('input')) {
+            return;
+        }
+
+        e.preventDefault();
+        e.stopPropagation();
+
         onSelect();
-    };
+        setIsDragging(true);
 
-    const handleMouseMove = (e: React.MouseEvent) => {
-        if (!isDragging) return;
-        const newX = Math.max(20, e.clientX - dragStart.x);
-        const newY = Math.max(20, e.clientY - dragStart.y);
-        onPositionChange(node.id, newX, newY);
-    };
+        const startX = e.clientX;
+        const startY = e.clientY;
+        const initialNodeX = node.x;
+        const initialNodeY = node.y;
+        const currentZoom = zoom || 1;
 
-    const handleMouseUp = () => {
-        setIsDragging(false);
+        const handleMouseMove = (moveEvent: MouseEvent) => {
+            const deltaX = (moveEvent.clientX - startX) / currentZoom;
+            const deltaY = (moveEvent.clientY - startY) / currentZoom;
+
+            const newX = Math.max(10, Math.round(initialNodeX + deltaX));
+            const newY = Math.max(10, Math.round(initialNodeY + deltaY));
+
+            onPositionChange(node.id, newX, newY);
+        };
+
+        const handleMouseUp = () => {
+            setIsDragging(false);
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseup', handleMouseUp);
+        };
+
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('mouseup', handleMouseUp);
     };
 
     // Status badge styling
@@ -78,9 +101,8 @@ export const TaskNodeCard: React.FC<TaskNodeCardProps> = ({
         <div
             style={{ left: `${node.x}px`, top: `${node.y}px` }}
             onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            className={`absolute w-64 sm:w-72 neu-card p-4 rounded-2xl cursor-grab active:cursor-grabbing transition-shadow select-none z-10 ${isSelected ? 'ring-2 ring-[#549acb] shadow-2xl scale-[1.02]' : 'hover:scale-[1.01]'
+            className={`absolute w-64 sm:w-72 neu-card p-4 rounded-2xl cursor-grab active:cursor-grabbing transition-shadow select-none z-10 ${isDragging ? 'shadow-2xl z-30 opacity-90 scale-[1.02]' : ''
+                } ${isSelected ? 'ring-2 ring-[#549acb] shadow-2xl scale-[1.02]' : 'hover:scale-[1.01]'
                 }`}
         >
             <div className="flex items-start justify-between gap-2 mb-2">
