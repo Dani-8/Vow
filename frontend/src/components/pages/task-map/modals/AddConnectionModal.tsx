@@ -110,8 +110,8 @@ export const AddConnectionModal: React.FC<AddConnectionModalProps> = ({
                                     type="button"
                                     onClick={() => setRelationship(rel)}
                                     className={`py-2 px-3 rounded-xl text-xs font-extrabold transition-all ${relationship === rel
-                                            ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
-                                            : 'neu-inset text-[#717699]'
+                                        ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                                        : 'neu-inset text-[#717699]'
                                         }`}
                                 >
                                     {rel}
