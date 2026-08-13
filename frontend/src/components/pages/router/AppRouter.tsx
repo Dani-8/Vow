@@ -4,6 +4,17 @@ import { Unlock } from 'lucide-react';
 import { clearStoredPin } from '../../../api';
 import { Task, User, MasterStreakStats, ActiveView } from '../../../types';
 
+export const getTaskSlug = (task: Task): string => {
+    if (!task.title) return task._id;
+    const slug = task.title
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s-]/g, '')
+        .replace(/[\s_-]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    return slug || task._id;
+};
+
 import { TaskDetailPage } from '../task-detail/TaskDetailPage';
 import { StatsView } from '../stats/StatsView';
 import { HomeView } from '../home/HomeView';
@@ -69,13 +80,19 @@ export const AppRouter: React.FC<AppRouterProps> = ({
     onOpenPinModal,
 }) => {
     if (activeView === 'task-detail') {
-        const activeTaskId = location.pathname.replace('/app/task/', '');
+        const activeTaskParam = decodeURIComponent(location.pathname.replace('/app/task/', ''));
+        const paramLower = activeTaskParam.toLowerCase();
+
+        const allTasks = [...tasks, ...privateTasks];
         const currentTask =
-            tasks.find((t) => t._id === activeTaskId) ||
-            privateTasks.find((t) => t._id === activeTaskId) ||
-            tasks.find((t) => t._id === selectedTaskForDetail?._id) ||
-            privateTasks.find((t) => t._id === selectedTaskForDetail?._id) ||
-            selectedTaskForDetail || {
+            allTasks.find(
+                (t) =>
+                    t._id === activeTaskParam ||
+                    getTaskSlug(t).toLowerCase() === paramLower ||
+                    t.title.toLowerCase() === paramLower
+            ) ||
+            selectedTaskForDetail ||
+            allTasks[0] || {
                 _id: 'default',
                 userId: user?.id || 'demo',
                 title: 'Draft Q3 Personal Growth Blueprint',
@@ -128,7 +145,7 @@ export const AppRouter: React.FC<AppRouterProps> = ({
                 onOpenAIAssist={onOpenAIAssist}
                 onViewTaskDetail={(t) => {
                     setSelectedTaskForDetail(t);
-                    navigate(`/app/task/${t._id}`);
+                    navigate(`/app/task/${getTaskSlug(t)}`);
                 }}
             />
         );
@@ -194,7 +211,7 @@ export const AppRouter: React.FC<AppRouterProps> = ({
                 onDeleteTask={onDeleteTask}
                 onViewDetails={(t) => {
                     setSelectedTaskForDetail(t);
-                    navigate(`/app/task/${t._id}`);
+                    navigate(`/app/task/${getTaskSlug(t)}`);
                 }}
                 onCreateNewGoal={onOpenCreateModal}
             />
