@@ -7,6 +7,7 @@ import {
     AlertTriangle,
     GitFork,
     Briefcase,
+    Wand2,
 } from 'lucide-react';
 import { TaskMap } from '../types';
 
@@ -15,6 +16,7 @@ interface CanvasHeaderProps {
     maps: TaskMap[];
     onSelectMap: (mapId: string) => void;
     onBackToMaps: () => void;
+    onAutoLayout?: () => void;
     onOpenAddTasksModal: () => void;
     onCreateNewMap?: () => void;
     searchQuery: string;
@@ -26,6 +28,7 @@ export const CanvasHeader: React.FC<CanvasHeaderProps> = ({
     maps,
     onSelectMap,
     onBackToMaps,
+    onAutoLayout,
     onOpenAddTasksModal,
     searchQuery,
     onSearchChange,
@@ -83,6 +86,17 @@ export const CanvasHeader: React.FC<CanvasHeaderProps> = ({
                         </select>
                         <ChevronDown className="w-4 h-4 text-[#717699] absolute right-2.5 top-2.5 pointer-events-none" />
                     </div>
+
+                    {onAutoLayout && (
+                        <button
+                            onClick={onAutoLayout}
+                            className="neu-button px-3.5 py-2 rounded-2xl text-xs font-extrabold text-[#549acb] hover:text-[#1a1c35] flex items-center space-x-1.5 shadow-sm transition-transform hover:scale-105"
+                            title="Auto-arrange and tidy task nodes by dependency order"
+                        >
+                            <Wand2 className="w-3.5 h-3.5 text-[#549acb]" />
+                            <span>Auto-Tidy</span>
+                        </button>
+                    )}
 
                     <button
                         onClick={onOpenAddTasksModal}

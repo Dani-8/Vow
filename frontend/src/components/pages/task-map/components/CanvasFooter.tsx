@@ -6,6 +6,7 @@ import {
     ZoomOut,
     X,
     Compass,
+    Wand2,
 } from 'lucide-react';
 import { TaskMapNode } from '../types';
 
@@ -16,6 +17,7 @@ interface CanvasFooterProps {
     onResetZoom: () => void;
     isPanMode: boolean;
     onTogglePanMode: () => void;
+    onAutoLayout?: () => void;
     nodes: TaskMapNode[];
 }
 
@@ -26,6 +28,7 @@ export const CanvasFooter: React.FC<CanvasFooterProps> = ({
     onResetZoom,
     isPanMode,
     onTogglePanMode,
+    onAutoLayout,
     nodes,
 }) => {
     const [showMinimap, setShowMinimap] = useState(true);
@@ -50,6 +53,16 @@ export const CanvasFooter: React.FC<CanvasFooterProps> = ({
                 >
                     <Maximize2 className="w-4 h-4" />
                 </button>
+
+                {onAutoLayout && (
+                    <button
+                        onClick={onAutoLayout}
+                        className="p-2 rounded-xl neu-button text-[#549acb] hover:text-[#1a1c35] transition-all hover:scale-105"
+                        title="Auto-Tidy Node Layout"
+                    >
+                        <Wand2 className="w-4 h-4" />
+                    </button>
+                )}
 
                 <div className="h-4 w-px bg-[#717699]/30 my-auto" />
 

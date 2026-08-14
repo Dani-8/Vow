@@ -9,7 +9,7 @@ import {
     query,
     where,
 } from 'firebase/firestore';
-import { db } from '../db.js';
+import { getFirebaseDb, isFirestoreActive } from '../db.js';
 
 export interface ITask {
     _id: string;
@@ -26,6 +26,7 @@ export interface ITask {
     bestStreak: number;
     lastCompletedDate?: Date | string | null;
     completionHistory: (Date | string)[];
+    subTasks?: any[];
     createdAt?: string;
     updatedAt?: string;
 }
@@ -47,6 +48,7 @@ export class TaskInstance implements ITask {
     bestStreak: number;
     lastCompletedDate?: Date | string | null;
     completionHistory: (Date | string)[];
+    subTasks?: any[];
     createdAt?: string;
     updatedAt?: string;
 
@@ -67,6 +69,7 @@ export class TaskInstance implements ITask {
         this.completionHistory = Array.isArray(data.completionHistory)
             ? data.completionHistory.map((d: any) => new Date(d))
             : [];
+        this.subTasks = Array.isArray(data.subTasks) ? data.subTasks : [];
         this.createdAt = data.createdAt || new Date().toISOString();
         this.updatedAt = data.updatedAt || new Date().toISOString();
     }
@@ -91,14 +94,20 @@ export class TaskInstance implements ITask {
             bestStreak: this.bestStreak,
             lastCompletedDate: this.lastCompletedDate ? new Date(this.lastCompletedDate).toISOString() : null,
             completionHistory: this.completionHistory.map((d) => new Date(d).toISOString()),
+            subTasks: this.subTasks || [],
             updatedAt: this.updatedAt,
         };
 
-        try {
-            const taskRef = doc(db, 'tasks', this._id);
-            await updateDoc(taskRef, payload);
-        } catch (e) {
-            // Memory store fallback
+        if (isFirestoreActive()) {
+            try {
+                const db = getFirebaseDb();
+                if (db) {
+                    const taskRef = doc(db, 'tasks', this._id);
+                    await updateDoc(taskRef, payload);
+                }
+            } catch (e) {
+                // Memory store fallback
+            }
         }
 
         inMemoryTasks.set(this._id, this.toObject());
@@ -121,6 +130,7 @@ export class TaskInstance implements ITask {
             bestStreak: this.bestStreak,
             lastCompletedDate: this.lastCompletedDate ? new Date(this.lastCompletedDate).toISOString() : null,
             completionHistory: this.completionHistory.map((d) => new Date(d).toISOString()),
+            subTasks: this.subTasks || [],
             createdAt: this.createdAt,
             updatedAt: this.updatedAt,
         };
@@ -129,53 +139,65 @@ export class TaskInstance implements ITask {
 
 export const Task = {
     async find(filter: { userId?: string; isPrivate?: boolean; isHabit?: boolean; title?: string }) {
-        try {
-            const qConstraints: any[] = [];
-            if (filter.userId) qConstraints.push(where('userId', '==', String(filter.userId)));
-            if (filter.isPrivate !== undefined) qConstraints.push(where('isPrivate', '==', filter.isPrivate));
-            if (filter.isHabit !== undefined) qConstraints.push(where('isHabit', '==', filter.isHabit));
-            if (filter.title !== undefined) qConstraints.push(where('title', '==', filter.title));
+        if (isFirestoreActive()) {
+            try {
+                const db = getFirebaseDb();
+                if (db) {
+                    const qConstraints: any[] = [];
+                    if (filter.userId) qConstraints.push(where('userId', '==', String(filter.userId)));
+                    if (filter.isPrivate !== undefined) qConstraints.push(where('isPrivate', '==', filter.isPrivate));
+                    if (filter.isHabit !== undefined) qConstraints.push(where('isHabit', '==', filter.isHabit));
+                    if (filter.title !== undefined) qConstraints.push(where('title', '==', filter.title));
 
-            const q = query(collection(db, 'tasks'), ...qConstraints);
-            const snap = await getDocs(q);
-            const results: TaskInstance[] = [];
-            snap.forEach((docSnap) => {
-                const obj = new TaskInstance({ ...docSnap.data(), _id: docSnap.id });
-                inMemoryTasks.set(obj._id, obj.toObject());
-                results.push(obj);
-            });
+                    const q = query(collection(db, 'tasks'), ...qConstraints);
+                    const snap = await getDocs(q);
+                    const results: TaskInstance[] = [];
+                    snap.forEach((docSnap) => {
+                        const obj = new TaskInstance({ ...docSnap.data(), _id: docSnap.id });
+                        inMemoryTasks.set(obj._id, obj.toObject());
+                        results.push(obj);
+                    });
 
-            results.sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
-            return results;
-        } catch (e) {
-            // Memory fallback
-            let filtered = Array.from(inMemoryTasks.values());
-            if (filter.userId) filtered = filtered.filter((t) => String(t.userId) === String(filter.userId));
-            if (filter.isPrivate !== undefined) filtered = filtered.filter((t) => !!t.isPrivate === filter.isPrivate);
-            if (filter.isHabit !== undefined) filtered = filtered.filter((t) => !!t.isHabit === filter.isHabit);
-            if (filter.title !== undefined) filtered = filtered.filter((t) => t.title === filter.title);
-
-            const results = filtered.map((t) => new TaskInstance(t));
-            results.sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
-            return results;
+                    results.sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
+                    return results;
+                }
+            } catch (e) {
+                // Memory fallback
+            }
         }
+
+        // Memory fallback
+        let filtered = Array.from(inMemoryTasks.values());
+        if (filter.userId) filtered = filtered.filter((t) => String(t.userId) === String(filter.userId));
+        if (filter.isPrivate !== undefined) filtered = filtered.filter((t) => !!t.isPrivate === filter.isPrivate);
+        if (filter.isHabit !== undefined) filtered = filtered.filter((t) => !!t.isHabit === filter.isHabit);
+        if (filter.title !== undefined) filtered = filtered.filter((t) => t.title === filter.title);
+
+        const results = filtered.map((t) => new TaskInstance(t));
+        results.sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
+        return results;
     },
 
     async findOne(filter: { _id?: string; userId?: string; title?: string; isHabit?: boolean }) {
         if (filter._id) {
-            try {
-                const docRef = doc(db, 'tasks', filter._id);
-                const snap = await getDoc(docRef);
-                if (snap.exists()) {
-                    const data = snap.data();
-                    if (!filter.userId || String(data.userId) === String(filter.userId)) {
-                        const obj = new TaskInstance({ ...data, _id: snap.id });
-                        inMemoryTasks.set(obj._id, obj.toObject());
-                        return obj;
+            if (isFirestoreActive()) {
+                try {
+                    const db = getFirebaseDb();
+                    if (db) {
+                        const docRef = doc(db, 'tasks', filter._id);
+                        const snap = await getDoc(docRef);
+                        if (snap.exists()) {
+                            const data = snap.data();
+                            if (!filter.userId || String(data.userId) === String(filter.userId)) {
+                                const obj = new TaskInstance({ ...data, _id: snap.id });
+                                inMemoryTasks.set(obj._id, obj.toObject());
+                                return obj;
+                            }
+                        }
                     }
+                } catch (e) {
+                    // Memory fallback
                 }
-            } catch (e) {
-                // Memory fallback
             }
             const mem = inMemoryTasks.get(filter._id);
             if (mem) {
@@ -222,12 +244,17 @@ export const Task = {
         };
 
         let newId = 'task_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
-        try {
-            const tasksRef = collection(db, 'tasks');
-            const docRef = await addDoc(tasksRef, payload);
-            newId = docRef.id;
-        } catch (e) {
-            // Memory store fallback
+        if (isFirestoreActive()) {
+            try {
+                const db = getFirebaseDb();
+                if (db) {
+                    const tasksRef = collection(db, 'tasks');
+                    const docRef = await addDoc(tasksRef, payload);
+                    newId = docRef.id;
+                }
+            } catch (e) {
+                // Memory store fallback
+            }
         }
 
         const taskObj = { ...payload, _id: newId };
@@ -237,12 +264,18 @@ export const Task = {
 
     async deleteOne(filter: { _id: string }) {
         if (!filter._id) return;
-        try {
-            const docRef = doc(db, 'tasks', filter._id);
-            await deleteDoc(docRef);
-        } catch (e) {
-            // Memory fallback
+        if (isFirestoreActive()) {
+            try {
+                const db = getFirebaseDb();
+                if (db) {
+                    const docRef = doc(db, 'tasks', filter._id);
+                    await deleteDoc(docRef);
+                }
+            } catch (e) {
+                // Memory fallback
+            }
         }
         inMemoryTasks.delete(filter._id);
     },
 };
+

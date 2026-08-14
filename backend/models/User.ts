@@ -8,7 +8,7 @@ import {
     query,
     where,
 } from 'firebase/firestore';
-import { db } from '../db.js';
+import { getFirebaseDb, isFirestoreActive } from '../db.js';
 
 export interface IUser {
     _id: string;
@@ -46,17 +46,22 @@ export class UserInstance implements IUser {
             throw new Error('User ID missing for save');
         }
         this.updatedAt = new Date().toISOString();
-        try {
-            const userRef = doc(db, 'users', this._id);
-            await updateDoc(userRef, {
-                email: this.email,
-                passwordHash: this.passwordHash,
-                name: this.name,
-                pinHash: this.pinHash || null,
-                updatedAt: this.updatedAt,
-            });
-        } catch (e) {
-            console.warn('Firestore User.save fallback to in-memory store');
+        if (isFirestoreActive()) {
+            try {
+                const db = getFirebaseDb();
+                if (db) {
+                    const userRef = doc(db, 'users', this._id);
+                    await updateDoc(userRef, {
+                        email: this.email,
+                        passwordHash: this.passwordHash,
+                        name: this.name,
+                        pinHash: this.pinHash || null,
+                        updatedAt: this.updatedAt,
+                    });
+                }
+            } catch (e) {
+                console.warn('Firestore User.save fallback to in-memory store');
+            }
         }
         inMemoryUsers.set(this._id, this.toObject());
         return this;
@@ -81,17 +86,22 @@ export const User = {
             return this.findById(filter._id);
         }
         if (filter.email) {
-            try {
-                const q = query(collection(db, 'users'), where('email', '==', filter.email.toLowerCase()));
-                const snap = await getDocs(q);
-                if (!snap.empty) {
-                    const docData = snap.docs[0].data();
-                    const obj = new UserInstance({ ...docData, _id: snap.docs[0].id });
-                    inMemoryUsers.set(obj._id, obj.toObject());
-                    return obj;
+            if (isFirestoreActive()) {
+                try {
+                    const db = getFirebaseDb();
+                    if (db) {
+                        const q = query(collection(db, 'users'), where('email', '==', filter.email.toLowerCase()));
+                        const snap = await getDocs(q);
+                        if (!snap.empty) {
+                            const docData = snap.docs[0].data();
+                            const obj = new UserInstance({ ...docData, _id: snap.docs[0].id });
+                            inMemoryUsers.set(obj._id, obj.toObject());
+                            return obj;
+                        }
+                    }
+                } catch (e) {
+                    // Fall back to memory
                 }
-            } catch (e) {
-                // Fall back to memory
             }
             for (const u of inMemoryUsers.values()) {
                 if (u.email && u.email.toLowerCase() === filter.email.toLowerCase()) {
@@ -104,16 +114,21 @@ export const User = {
 
     async findById(id: string) {
         if (!id) return null;
-        try {
-            const docRef = doc(db, 'users', id);
-            const snap = await getDoc(docRef);
-            if (snap.exists()) {
-                const obj = new UserInstance({ ...snap.data(), _id: snap.id });
-                inMemoryUsers.set(obj._id, obj.toObject());
-                return obj;
+        if (isFirestoreActive()) {
+            try {
+                const db = getFirebaseDb();
+                if (db) {
+                    const docRef = doc(db, 'users', id);
+                    const snap = await getDoc(docRef);
+                    if (snap.exists()) {
+                        const obj = new UserInstance({ ...snap.data(), _id: snap.id });
+                        inMemoryUsers.set(obj._id, obj.toObject());
+                        return obj;
+                    }
+                }
+            } catch (e) {
+                // Fall back to memory
             }
-        } catch (e) {
-            // Fall back to memory
         }
         const mem = inMemoryUsers.get(id);
         return mem ? new UserInstance(mem) : null;
@@ -130,12 +145,17 @@ export const User = {
             updatedAt: now,
         };
         let newId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
-        try {
-            const usersRef = collection(db, 'users');
-            const docRef = await addDoc(usersRef, payload);
-            newId = docRef.id;
-        } catch (e) {
-            // Memory store fallback
+        if (isFirestoreActive()) {
+            try {
+                const db = getFirebaseDb();
+                if (db) {
+                    const usersRef = collection(db, 'users');
+                    const docRef = await addDoc(usersRef, payload);
+                    newId = docRef.id;
+                }
+            } catch (e) {
+                // Memory store fallback
+            }
         }
         const userObj = { ...payload, _id: newId };
         inMemoryUsers.set(newId, userObj);
@@ -143,11 +163,18 @@ export const User = {
     },
 
     async countDocuments() {
-        try {
-            const snap = await getDocs(collection(db, 'users'));
-            return snap.size;
-        } catch (e) {
-            return inMemoryUsers.size;
+        if (isFirestoreActive()) {
+            try {
+                const db = getFirebaseDb();
+                if (db) {
+                    const snap = await getDocs(collection(db, 'users'));
+                    return snap.size;
+                }
+            } catch (e) {
+                // Fallback
+            }
         }
+        return inMemoryUsers.size;
     },
 };
+

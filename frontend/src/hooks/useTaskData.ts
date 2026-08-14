@@ -2,15 +2,21 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { api, getToken, getStoredPin, clearStoredPin, removeToken } from '../api';
 import { Task, User, MasterStreakStats } from '../types';
+import {
+    DEFAULT_DEMO_USER,
+    DEFAULT_INITIAL_TASKS,
+    DEFAULT_INITIAL_PRIVATE_TASKS,
+    DEFAULT_INITIAL_STATS,
+} from '../data/defaultInitialData';
 
 export function useTaskData() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const [user, setUser] = useState<User | null>(null);
-    const [tasks, setTasks] = useState<Task[]>([]);
-    const [privateTasks, setPrivateTasks] = useState<Task[]>([]);
-    const [stats, setStats] = useState<MasterStreakStats | null>(null);
+    const [user, setUser] = useState<User | null>(DEFAULT_DEMO_USER);
+    const [tasks, setTasks] = useState<Task[]>(DEFAULT_INITIAL_TASKS);
+    const [privateTasks, setPrivateTasks] = useState<Task[]>(DEFAULT_INITIAL_PRIVATE_TASKS);
+    const [stats, setStats] = useState<MasterStreakStats | null>(DEFAULT_INITIAL_STATS);
 
     // Map URL pathname to active view
     const getActiveViewFromPath = (path: string): 'home' | 'landing' | 'visible' | 'private' | 'stats' | 'auth' | 'task-detail' | 'task-map' => {
@@ -75,16 +81,16 @@ export function useTaskData() {
                     setUser(res.user);
 
                     const tasksRes = await api.getTasks();
-                    setTasks(tasksRes.tasks);
+                    if (tasksRes?.tasks) setTasks(tasksRes.tasks);
 
                     const statsRes = await api.getMasterStats();
-                    setStats(statsRes);
+                    if (statsRes) setStats(statsRes);
 
                     const storedPin = getStoredPin();
                     if (storedPin) {
                         try {
                             const privRes = await api.getPrivateTasks(storedPin);
-                            setPrivateTasks(privRes.tasks);
+                            if (privRes?.tasks) setPrivateTasks(privRes.tasks);
                             setIsPrivateUnlocked(true);
                         } catch (err) {
                             clearStoredPin();
@@ -98,31 +104,50 @@ export function useTaskData() {
                 } catch (err) {
                     removeToken();
                     // Fallback to demo login if token expired
-                    const demoRes = await api.demoBypass();
-                    setUser(demoRes.user);
-                    const tasksRes = await api.getTasks();
-                    setTasks(tasksRes.tasks);
-                    const statsRes = await api.getMasterStats();
-                    setStats(statsRes);
-                    if (location.pathname === '/' || location.pathname === '') {
-                        navigate('/app', { replace: true });
+                    try {
+                        const demoRes = await api.demoBypass();
+                        setUser(demoRes.user);
+                        const tasksRes = await api.getTasks();
+                        if (tasksRes?.tasks) setTasks(tasksRes.tasks);
+                        const statsRes = await api.getMasterStats();
+                        if (statsRes) setStats(statsRes);
+                        if (location.pathname === '/' || location.pathname === '') {
+                            navigate('/app', { replace: true });
+                        }
+                    } catch (innerErr) {
+                        console.warn('API connection fallback to default initial state:', innerErr);
+                        setUser(DEFAULT_DEMO_USER);
+                        setTasks(DEFAULT_INITIAL_TASKS);
+                        setPrivateTasks(DEFAULT_INITIAL_PRIVATE_TASKS);
+                        setStats(DEFAULT_INITIAL_STATS);
                     }
                 }
             } else {
                 // Automatically populate demo data if unauthenticated
-                const demoRes = await api.demoBypass();
-                setUser(demoRes.user);
-                const tasksRes = await api.getTasks();
-                setTasks(tasksRes.tasks);
-                const statsRes = await api.getMasterStats();
-                setStats(statsRes);
-                if (location.pathname === '/' || location.pathname === '') {
-                    navigate('/app', { replace: true });
+                try {
+                    const demoRes = await api.demoBypass();
+                    setUser(demoRes.user);
+                    const tasksRes = await api.getTasks();
+                    if (tasksRes?.tasks) setTasks(tasksRes.tasks);
+                    const statsRes = await api.getMasterStats();
+                    if (statsRes) setStats(statsRes);
+                    if (location.pathname === '/' || location.pathname === '') {
+                        navigate('/app', { replace: true });
+                    }
+                } catch (innerErr) {
+                    console.warn('API connection fallback to default initial state:', innerErr);
+                    setUser(DEFAULT_DEMO_USER);
+                    setTasks(DEFAULT_INITIAL_TASKS);
+                    setPrivateTasks(DEFAULT_INITIAL_PRIVATE_TASKS);
+                    setStats(DEFAULT_INITIAL_STATS);
                 }
             }
         } catch (err: any) {
-            console.error('Failed to load initial data:', err);
-            setErrorMsg(err.message || 'Connection error');
+            console.warn('Recovered smoothly from initial data fetch notice:', err);
+            setUser((prev) => prev || DEFAULT_DEMO_USER);
+            setTasks((prev) => (prev && prev.length > 0 ? prev : DEFAULT_INITIAL_TASKS));
+            setPrivateTasks((prev) => (prev && prev.length > 0 ? prev : DEFAULT_INITIAL_PRIVATE_TASKS));
+            setStats((prev) => prev || DEFAULT_INITIAL_STATS);
         } finally {
             setLoading(false);
         }

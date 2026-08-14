@@ -119,6 +119,101 @@ export const TaskMapCanvasView: React.FC<TaskMapCanvasViewProps> = ({
         });
     };
 
+    // Auto-Layout: Calculate topological columns based on prerequisites
+    const handleAutoLayout = () => {
+        if (!currentMap.nodes.length) return;
+
+        // 1. Build adjacency graph and incoming degree count
+        const inDegree: Record<string, number> = {};
+        const outgoing: Record<string, string[]> = {};
+
+        currentMap.nodes.forEach((n) => {
+            inDegree[n.id] = 0;
+            outgoing[n.id] = [];
+        });
+
+        currentMap.connections.forEach((conn) => {
+            if (inDegree[conn.toNodeId] !== undefined) {
+                inDegree[conn.toNodeId] += 1;
+            }
+            if (outgoing[conn.fromNodeId]) {
+                outgoing[conn.fromNodeId].push(conn.toNodeId);
+            }
+        });
+
+        // 2. Assign column ranks (0 for roots, 1+ for dependencies)
+        const nodeRanks: Record<string, number> = {};
+        const queue: string[] = [];
+
+        currentMap.nodes.forEach((n) => {
+            if (inDegree[n.id] === 0) {
+                nodeRanks[n.id] = 0;
+                queue.push(n.id);
+            }
+        });
+
+        let safetyCounter = 0;
+        while (queue.length > 0 && safetyCounter < currentMap.nodes.length * 4) {
+            safetyCounter += 1;
+            const curr = queue.shift()!;
+            const currRank = nodeRanks[curr] ?? 0;
+
+            outgoing[curr]?.forEach((neighbor) => {
+                const nextRank = Math.max(nodeRanks[neighbor] ?? 0, currRank + 1);
+                nodeRanks[neighbor] = nextRank;
+                if (inDegree[neighbor] !== undefined) {
+                    inDegree[neighbor] -= 1;
+                }
+                if (!queue.includes(neighbor)) {
+                    queue.push(neighbor);
+                }
+            });
+        }
+
+        // Default fallback for any remaining cycles or unvisited nodes
+        currentMap.nodes.forEach((n) => {
+            if (nodeRanks[n.id] === undefined) {
+                nodeRanks[n.id] = 0;
+            }
+        });
+
+        // 3. Group nodes by rank column
+        const rankBuckets: Record<number, TaskMapNode[]> = {};
+        currentMap.nodes.forEach((n) => {
+            const r = nodeRanks[n.id];
+            if (!rankBuckets[r]) rankBuckets[r] = [];
+            rankBuckets[r].push(n);
+        });
+
+        // 4. Calculate spacious, neat coordinates
+        const START_X = 80;
+        const START_Y = 80;
+        const COL_GAP = 340;
+        const ROW_GAP = 190;
+
+        const updatedNodes = currentMap.nodes.map((node) => {
+            const rank = nodeRanks[node.id] ?? 0;
+            const bucket = rankBuckets[rank] || [node];
+            const indexInBucket = bucket.findIndex((item) => item.id === node.id);
+
+            return {
+                ...node,
+                x: START_X + rank * COL_GAP,
+                y: START_Y + (indexInBucket >= 0 ? indexInBucket : 0) * ROW_GAP,
+            };
+        });
+
+        onUpdateMap({
+            ...currentMap,
+            nodes: updatedNodes,
+            updatedAt: 'Just now',
+        });
+
+        // Reset pan & zoom to fit neatly
+        setPanOffset({ x: 0, y: 0 });
+        setZoom(1);
+    };
+
     const existingNodeTaskIds = new Set(currentMap.nodes.map((n) => n.taskId));
     const filteredNodes = currentMap.nodes.filter((n) => {
         if (!searchQuery.trim()) return true;
@@ -138,6 +233,7 @@ export const TaskMapCanvasView: React.FC<TaskMapCanvasViewProps> = ({
                 maps={maps}
                 onSelectMap={onSelectMap}
                 onBackToMaps={onBackToMaps}
+                onAutoLayout={handleAutoLayout}
                 onOpenAddTasksModal={() => setIsAddTasksOpen(true)}
                 onCreateNewMap={onCreateNewMap}
                 searchQuery={searchQuery}
@@ -266,7 +362,7 @@ export const TaskMapCanvasView: React.FC<TaskMapCanvasViewProps> = ({
                     </div>
                 )}
 
-                {/* Footer Canvas Controls (Zoom, Pan, Minimap) */}
+                {/* Footer Canvas Controls (Zoom, Pan, Minimap, Auto-Tidy) */}
                 <CanvasFooter
                     zoom={zoom}
                     onZoomIn={() => setZoom((z) => Math.min(z + 0.15, 2))}
@@ -277,6 +373,7 @@ export const TaskMapCanvasView: React.FC<TaskMapCanvasViewProps> = ({
                     }}
                     isPanMode={isPanMode}
                     onTogglePanMode={() => setIsPanMode(!isPanMode)}
+                    onAutoLayout={handleAutoLayout}
                     nodes={currentMap.nodes}
                 />
             </div>

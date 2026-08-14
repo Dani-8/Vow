@@ -4,9 +4,10 @@ import fs from 'fs';
 import path from 'path';
 
 let dbInstance: any = null;
+let isConfigValid = false;
 
 export function getFirebaseDb() {
-    if (dbInstance) return dbInstance;
+    if (dbInstance && isConfigValid) return dbInstance;
 
     let config: any = {};
     try {
@@ -29,29 +30,40 @@ export function getFirebaseDb() {
 
     try {
         if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
-            console.warn('Firebase config incomplete. Using in-memory store fallback.');
-            dbInstance = {} as any;
-            return dbInstance;
+            isConfigValid = false;
+            return null;
         }
         const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
         dbInstance = config.firestoreDatabaseId
             ? getFirestore(app, config.firestoreDatabaseId)
             : getFirestore(app);
+        isConfigValid = true;
+        return dbInstance;
     } catch (e) {
-        console.warn('Firebase initialization failed (will use in-memory store fallback):', e);
-        dbInstance = {} as any;
+        console.warn('Firebase initialization failed (using in-memory store):', e);
+        isConfigValid = false;
+        return null;
     }
+}
 
-    return dbInstance;
+export function isFirestoreActive(): boolean {
+    return isConfigValid && !!dbInstance;
 }
 
 export const db = getFirebaseDb();
 
 export async function connectDB(): Promise<string> {
-    console.log('Connected to Firebase Firestore database');
-    return 'firestore';
+    const activeDb = getFirebaseDb();
+    if (activeDb) {
+        console.log('Connected to Firebase Firestore database');
+        return 'firestore';
+    } else {
+        console.log('Using robust in-memory database store');
+        return 'in-memory';
+    }
 }
 
 export async function disconnectDB() {
-    console.log('Disconnected Firebase connection');
+    console.log('Disconnected database connection');
 }
+
