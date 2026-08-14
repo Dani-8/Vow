@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Network, Plus, HelpCircle, Sparkles, AlertCircle } from 'lucide-react';
 import { TaskMap, TaskMapNode, TaskMapConnection, MapAccentColor, RelationshipType } from '../types';
 import { Task } from '../../../../types';
@@ -9,6 +9,10 @@ import { CanvasConnectionsOverlay } from './CanvasConnectionsOverlay';
 import { AddTasksToMapModal } from '../modals/AddTasksToMapModal';
 import { AddConnectionModal } from '../modals/AddConnectionModal';
 import { CreateMapModal } from '../modals/CreateMapModal';
+import {
+    SUBTASKS_UPDATED_EVENT,
+    getNodeDynamicStatusAndProgress,
+} from '../../../../utils/subtaskStorage';
 
 interface TaskMapCanvasViewProps {
     currentMap: TaskMap;
@@ -40,6 +44,18 @@ export const TaskMapCanvasView: React.FC<TaskMapCanvasViewProps> = ({
     const [isAddConnectionOpen, setIsAddConnectionOpen] = useState(false);
     const [isCreateMapOpen, setIsCreateMapOpen] = useState(false);
     const [connectFromNodeId, setConnectFromNodeId] = useState<string | undefined>(undefined);
+    const [, setSubtasksTick] = useState(0);
+
+    // Subscribe to real-time subtask updates from Task Detail view
+    useEffect(() => {
+        const handleSubtaskUpdate = () => {
+            setSubtasksTick((t) => t + 1);
+        };
+        window.addEventListener(SUBTASKS_UPDATED_EVENT, handleSubtaskUpdate);
+        return () => {
+            window.removeEventListener(SUBTASKS_UPDATED_EVENT, handleSubtaskUpdate);
+        };
+    }, []);
 
     const taskMapById = new Map<string, Task>();
     tasks.forEach((t) => taskMapById.set(t._id, t));
@@ -336,17 +352,21 @@ export const TaskMapCanvasView: React.FC<TaskMapCanvasViewProps> = ({
 
                         {/* Task Nodes Grid */}
                         {filteredNodes.map((node) => {
-                            const mainTask = taskMapById.get(node.taskId);
-                            const subTask = node.subTaskId
-                                ? mainTask?.subTasks?.find((s) => s.id === node.subTaskId)
-                                : undefined;
+                            const dynamic = getNodeDynamicStatusAndProgress(node, tasks);
+                            const mainTask = dynamic.task || taskMapById.get(node.taskId);
+                            const dynamicNode: TaskMapNode = {
+                                ...node,
+                                customTitle: dynamic.title,
+                                customStatus: dynamic.status,
+                                customProgress: dynamic.progress,
+                            };
 
                             return (
                                 <TaskNodeCard
                                     key={node.id}
-                                    node={node}
+                                    node={dynamicNode}
                                     task={mainTask}
-                                    subTask={subTask}
+                                    subTask={dynamic.subTask}
                                     isSelected={selectedNodeId === node.id}
                                     zoom={zoom}
                                     onSelect={() => setSelectedNodeId(node.id)}

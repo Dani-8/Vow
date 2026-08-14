@@ -209,6 +209,7 @@ export const TaskMapPage: React.FC<TaskMapPageProps> = ({ tasks }) => {
                 /* State 2 — Task Maps Exist (Overview View) */
                 <SavedMapsView
                     maps={maps}
+                    tasks={tasks}
                     onOpenMap={(id) => navigateToMapById(id)}
                     onCreateMap={() => setIsCreateModalOpen(true)}
                     onDeleteMap={handleDeleteMap}

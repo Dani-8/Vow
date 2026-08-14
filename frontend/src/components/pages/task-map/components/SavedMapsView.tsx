@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Network,
     CheckSquare,
     GitFork,
     AlertTriangle,
-    Search,
-    Filter,
     Plus,
     LayoutGrid,
     List,
@@ -16,53 +14,64 @@ import {
     GraduationCap,
     Lightbulb,
     Clock,
-    Sparkles,
 } from 'lucide-react';
 import { TaskMap } from '../types';
+import { Task } from '../../../../types';
+import {
+    SUBTASKS_UPDATED_EVENT,
+    getNodeDynamicStatusAndProgress,
+} from '../../../../utils/subtaskStorage';
 
 interface SavedMapsViewProps {
     maps: TaskMap[];
+    tasks?: Task[];
     onOpenMap: (mapId: string) => void;
     onCreateMap: () => void;
     onDeleteMap?: (mapId: string) => void;
 }
 
-const COLOR_MAP: Record<string, { border: string; bg: string; text: string; iconBg: string }> = {
+const COLOR_MAP: Record<string, { border: string; bg: string; text: string; iconBg: string; bar: string }> = {
     purple: {
         border: 'border-l-purple-500',
         bg: 'bg-purple-500/10',
         text: 'text-purple-600',
         iconBg: 'bg-purple-100 text-purple-600',
+        bar: 'bg-purple-600',
     },
     emerald: {
         border: 'border-l-emerald-500',
         bg: 'bg-emerald-500/10',
         text: 'text-emerald-600',
         iconBg: 'bg-emerald-100 text-emerald-600',
+        bar: 'bg-emerald-600',
     },
     amber: {
         border: 'border-l-amber-500',
         bg: 'bg-amber-500/10',
         text: 'text-amber-600',
         iconBg: 'bg-amber-100 text-amber-600',
+        bar: 'bg-amber-600',
     },
     rose: {
         border: 'border-l-rose-500',
         bg: 'bg-rose-500/10',
         text: 'text-rose-600',
         iconBg: 'bg-rose-100 text-rose-600',
+        bar: 'bg-rose-600',
     },
     sky: {
         border: 'border-l-[#549acb]',
         bg: 'bg-[#549acb]/10',
         text: 'text-[#549acb]',
         iconBg: 'bg-sky-100 text-[#549acb]',
+        bar: 'bg-[#549acb]',
     },
     indigo: {
         border: 'border-l-indigo-500',
         bg: 'bg-indigo-500/10',
         text: 'text-indigo-600',
         iconBg: 'bg-indigo-100 text-indigo-600',
+        bar: 'bg-indigo-600',
     },
 };
 
@@ -81,13 +90,25 @@ const getMapIcon = (index: number) => {
 
 export const SavedMapsView: React.FC<SavedMapsViewProps> = ({
     maps,
+    tasks = [],
     onOpenMap,
     onCreateMap,
     onDeleteMap,
 }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-    const [sortBy, setSortBy] = useState<'updated' | 'tasks' | 'name'>('updated');
+    const [, setTick] = useState(0);
+
+    // Subscribe to real-time subtask changes
+    useEffect(() => {
+        const handleSubtaskUpdate = () => {
+            setTick((t) => t + 1);
+        };
+        window.addEventListener(SUBTASKS_UPDATED_EVENT, handleSubtaskUpdate);
+        return () => {
+            window.removeEventListener(SUBTASKS_UPDATED_EVENT, handleSubtaskUpdate);
+        };
+    }, []);
 
     const totalMaps = maps.length;
     const totalTasks = maps.reduce((acc, m) => acc + m.nodes.length, 0);
@@ -96,6 +117,16 @@ export const SavedMapsView: React.FC<SavedMapsViewProps> = ({
         (acc, m) => acc + m.connections.filter((c) => c.isCritical).length,
         0
     );
+
+    const calculateMapProgress = (map: TaskMap): number => {
+        if (!map.nodes || map.nodes.length === 0) return 0;
+        let sum = 0;
+        map.nodes.forEach((node) => {
+            const dynamic = getNodeDynamicStatusAndProgress(node, tasks);
+            sum += dynamic.progress;
+        });
+        return Math.round(sum / map.nodes.length);
+    };
 
     const filteredMaps = maps.filter((m) => {
         if (!searchQuery.trim()) return true;
@@ -125,7 +156,7 @@ export const SavedMapsView: React.FC<SavedMapsViewProps> = ({
                     </div>
                     <div>
                         <span className="text-[10px] font-extrabold text-[#717699] uppercase block">
-                            Total Tasks
+                            Total Nodes
                         </span>
                         <span className="text-xl font-black text-[#1a1c35]">{totalTasks}</span>
                     </div>
@@ -144,7 +175,7 @@ export const SavedMapsView: React.FC<SavedMapsViewProps> = ({
                 </div>
 
                 <div className="neu-card p-4 flex items-center space-x-3.5">
-                    <div className="w-10 h-10 rounded-2xl neu-inset flex items-center justify-center text-rose-600 bg-rose-50/50 shrink-0">
+                    <div className="w-10 h-10 rounded-2xl neu-inset flex items-center justify-center text-rose-500 bg-rose-50/50 shrink-0">
                         <AlertTriangle className="w-5 h-5" />
                     </div>
                     <div>
@@ -156,36 +187,20 @@ export const SavedMapsView: React.FC<SavedMapsViewProps> = ({
                 </div>
             </div>
 
-            {/* Controls Header Row */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-                {/* Search Input */}
-                <div className="relative flex-1 max-w-md">
-                    <Search className="w-4 h-4 text-[#717699] absolute left-3.5 top-3" />
+            {/* Action Header & Search Bar */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="w-full sm:w-80 relative">
                     <input
                         type="text"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search maps..."
-                        className="w-full pl-10 pr-4 py-2.5 rounded-2xl neu-input text-xs font-medium"
+                        placeholder="Search roadmaps..."
+                        className="w-full neu-input px-4 py-2.5 rounded-2xl text-xs font-bold text-[#1a1c35] placeholder:text-[#717699]"
                     />
                 </div>
 
-                {/* Filters & View Toggles */}
-                <div className="flex items-center space-x-2 shrink-0">
-                    <div className="neu-inset px-3 py-1.5 rounded-2xl flex items-center space-x-2 text-xs font-bold text-[#717699]">
-                        <span className="text-[11px] text-[#717699]">Sort by</span>
-                        <select
-                            value={sortBy}
-                            onChange={(e) => setSortBy(e.target.value as any)}
-                            className="bg-transparent text-[#1a1c35] font-bold focus:outline-none cursor-pointer"
-                        >
-                            <option value="updated">Last Updated</option>
-                            <option value="tasks">Most Tasks</option>
-                            <option value="name">Map Name</option>
-                        </select>
-                    </div>
-
-                    <div className="flex neu-inset p-1 rounded-2xl space-x-1">
+                <div className="flex items-center space-x-3 w-full sm:w-auto justify-end">
+                    <div className="neu-card p-1 rounded-2xl flex items-center space-x-1">
                         <button
                             onClick={() => setViewMode('grid')}
                             className={`p-1.5 rounded-xl transition-all ${viewMode === 'grid' ? 'neu-button text-[#549acb]' : 'text-[#717699]'
@@ -220,6 +235,7 @@ export const SavedMapsView: React.FC<SavedMapsViewProps> = ({
                     {filteredMaps.map((map, idx) => {
                         const theme = COLOR_MAP[map.color] || COLOR_MAP.purple;
                         const criticalCount = map.connections.filter((c) => c.isCritical).length;
+                        const progress = calculateMapProgress(map);
 
                         return (
                             <div
@@ -234,7 +250,7 @@ export const SavedMapsView: React.FC<SavedMapsViewProps> = ({
                                         </div>
 
                                         <div className="space-y-1">
-                                            <div className="flex items-center space-x-2">
+                                            <div className="flex items-center space-x-2 flex-wrap">
                                                 <span className={`w-2.5 h-2.5 rounded-full ${theme.bg}`} />
                                                 <h3 className="text-base font-black text-[#1a1c35] group-hover:text-[#549acb] transition-colors">
                                                     {map.name}
@@ -264,11 +280,25 @@ export const SavedMapsView: React.FC<SavedMapsViewProps> = ({
                                     )}
                                 </div>
 
+                                {/* Progress Bar */}
+                                <div className="space-y-1 pt-1">
+                                    <div className="flex items-center justify-between text-[10px] font-extrabold text-[#717699]">
+                                        <span>Roadmap Progress</span>
+                                        <span className="text-[#1a1c35]">{progress}%</span>
+                                    </div>
+                                    <div className="w-full h-1.5 bg-gray-200/80 rounded-full overflow-hidden">
+                                        <div
+                                            className={`h-full ${theme.bar} transition-all duration-500 rounded-full`}
+                                            style={{ width: `${progress}%` }}
+                                        />
+                                    </div>
+                                </div>
+
                                 <div className="pt-2 border-t border-white/60 grid grid-cols-4 gap-2 text-center text-xs">
                                     <div className="neu-inset p-2 rounded-xl">
                                         <span className="text-[10px] text-[#717699] font-bold block flex items-center justify-center space-x-1">
                                             <Briefcase className="w-3 h-3 text-[#549acb]" />
-                                            <span>Tasks</span>
+                                            <span>Nodes</span>
                                         </span>
                                         <span className="text-xs font-extrabold text-[#1a1c35]">
                                             {map.nodes.length}
@@ -313,6 +343,7 @@ export const SavedMapsView: React.FC<SavedMapsViewProps> = ({
                 <div className="space-y-3">
                     {filteredMaps.map((map, idx) => {
                         const theme = COLOR_MAP[map.color] || COLOR_MAP.purple;
+                        const progress = calculateMapProgress(map);
                         return (
                             <div
                                 key={map.id}
@@ -330,8 +361,9 @@ export const SavedMapsView: React.FC<SavedMapsViewProps> = ({
                                 </div>
 
                                 <div className="flex items-center space-x-6 text-xs font-extrabold shrink-0">
-                                    <span className="text-[#1a1c35]">{map.nodes.length} tasks</span>
-                                    <span className="text-emerald-600">{map.connections.length} connections</span>
+                                    <span className="text-purple-600">{progress}% complete</span>
+                                    <span className="text-[#1a1c35]">{map.nodes.length} nodes</span>
+                                    <span className="text-emerald-600">{map.connections.length} links</span>
                                     <span className="text-[#717699] text-[11px]">{map.updatedAt}</span>
                                 </div>
                             </div>
@@ -344,7 +376,7 @@ export const SavedMapsView: React.FC<SavedMapsViewProps> = ({
             <div className="w-full flex justify-center pt-2">
                 <div className="neu-inset px-6 py-3 rounded-full text-xs font-bold text-[#549acb] flex items-center space-x-2 border border-sky-200/50 bg-sky-50/40">
                     <Lightbulb className="w-4 h-4 text-amber-500 shrink-0" />
-                    <span>Click on any map to open it and start visualizing your tasks and connections.</span>
+                    <span>Completed sub-tasks dynamically advance the progress % and status rings across all Task Maps in real time.</span>
                 </div>
             </div>
         </div>

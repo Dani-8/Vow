@@ -68,6 +68,7 @@ async function seedDemoData() {
 
             await Task.create([
                 {
+                    _id: 'task_russian_mastery_r7u2k',
                     userId: demoUser._id,
                     title: 'Russian Language Learning: Daily Fluency & Grammar Path',
                     description: 'Master Cyrillic script, top 1,000 core vocabulary words, noun cases (Accusative/Genitive/Prepositional), and daily conversational shadowing.',
@@ -84,6 +85,7 @@ async function seedDemoData() {
                     subTasks: [
                         {
                             id: 'sub_ru_1',
+                            taskId: 'task_russian_mastery_r7u2k',
                             title: 'Cyrillic Alphabet & Phonetic Pronunciation Drills',
                             dateLabel: 'Completed',
                             status: 'completed',
@@ -91,6 +93,7 @@ async function seedDemoData() {
                         },
                         {
                             id: 'sub_ru_2',
+                            taskId: 'task_russian_mastery_r7u2k',
                             title: 'Top 500 High-Frequency Russian Vocabulary & Spaced Repetition',
                             dateLabel: 'Today',
                             status: 'in_progress',
@@ -98,6 +101,7 @@ async function seedDemoData() {
                         },
                         {
                             id: 'sub_ru_3',
+                            taskId: 'task_russian_mastery_r7u2k',
                             title: 'Russian Noun Cases & 1st/2nd Verb Conjugations',
                             dateLabel: 'Today',
                             status: 'in_progress',
@@ -105,6 +109,7 @@ async function seedDemoData() {
                         },
                         {
                             id: 'sub_ru_4',
+                            taskId: 'task_russian_mastery_r7u2k',
                             title: '20-Minute Daily Russian Podcast Listening (Slow Russian)',
                             dateLabel: 'Tomorrow',
                             status: 'pending',
@@ -112,6 +117,7 @@ async function seedDemoData() {
                         },
                         {
                             id: 'sub_ru_5',
+                            taskId: 'task_russian_mastery_r7u2k',
                             title: 'Conversational Dialogue Shadowing & Voice Journaling',
                             dateLabel: 'This Week',
                             status: 'pending',
@@ -120,6 +126,7 @@ async function seedDemoData() {
                     ],
                 },
                 {
+                    _id: 'task_ai_engineer_a8x4m',
                     userId: demoUser._id,
                     title: 'AI Engineering: Production Agents, RAG & LLM Workflows',
                     description: 'Build production-grade AI systems with Gemini API, Function Calling, Multi-agent orchestration, RAG vector pipelines, and evaluation metrics.',
@@ -136,6 +143,7 @@ async function seedDemoData() {
                     subTasks: [
                         {
                             id: 'sub_ai_1',
+                            taskId: 'task_ai_engineer_a8x4m',
                             title: 'Gemini 2.5 API Integration & Structured Schema Outputs',
                             dateLabel: 'Completed',
                             status: 'completed',
@@ -143,6 +151,7 @@ async function seedDemoData() {
                         },
                         {
                             id: 'sub_ai_2',
+                            taskId: 'task_ai_engineer_a8x4m',
                             title: 'Tool Calling & Autonomous Agent Execution Loop',
                             dateLabel: 'Today',
                             status: 'in_progress',
@@ -150,6 +159,7 @@ async function seedDemoData() {
                         },
                         {
                             id: 'sub_ai_3',
+                            taskId: 'task_ai_engineer_a8x4m',
                             title: 'Hybrid RAG Pipeline with Embeddings & Vector Search',
                             dateLabel: 'Tomorrow',
                             status: 'in_progress',
@@ -157,6 +167,7 @@ async function seedDemoData() {
                         },
                         {
                             id: 'sub_ai_4',
+                            taskId: 'task_ai_engineer_a8x4m',
                             title: 'Multi-Turn Context Management & Token Cost Optimization',
                             dateLabel: 'This Week',
                             status: 'pending',
@@ -164,6 +175,7 @@ async function seedDemoData() {
                         },
                         {
                             id: 'sub_ai_5',
+                            taskId: 'task_ai_engineer_a8x4m',
                             title: 'End-to-End Autonomous Agent Architecture Benchmark',
                             dateLabel: 'Next Week',
                             status: 'pending',
@@ -172,6 +184,7 @@ async function seedDemoData() {
                     ],
                 },
                 {
+                    _id: 'task_mern_project_m3k9p',
                     userId: demoUser._id,
                     title: 'Full-Stack MERN Project: Scalable App & Cloud Deployment',
                     description: 'Architect, build, and ship a modern MERN (MongoDB/Firestore, Express, React 18, Node.js) web application with secure authentication and real-time updates.',
@@ -188,6 +201,7 @@ async function seedDemoData() {
                     subTasks: [
                         {
                             id: 'sub_mern_1',
+                            taskId: 'task_mern_project_m3k9p',
                             title: 'Express RESTful API Architecture & JWT Auth Middleware',
                             dateLabel: 'Completed',
                             status: 'completed',
@@ -195,6 +209,7 @@ async function seedDemoData() {
                         },
                         {
                             id: 'sub_mern_2',
+                            taskId: 'task_mern_project_m3k9p',
                             title: 'Database Schema Models, Indexing & Validation',
                             dateLabel: 'Completed',
                             status: 'completed',
@@ -202,6 +217,7 @@ async function seedDemoData() {
                         },
                         {
                             id: 'sub_mern_3',
+                            taskId: 'task_mern_project_m3k9p',
                             title: 'React 18 Modular Components, Tailwind CSS & Motion',
                             dateLabel: 'Today',
                             status: 'in_progress',
@@ -209,6 +225,7 @@ async function seedDemoData() {
                         },
                         {
                             id: 'sub_mern_4',
+                            taskId: 'task_mern_project_m3k9p',
                             title: 'Global State Management & Optimistic CRUD Updates',
                             dateLabel: 'Tomorrow',
                             status: 'in_progress',
@@ -216,6 +233,7 @@ async function seedDemoData() {
                         },
                         {
                             id: 'sub_mern_5',
+                            taskId: 'task_mern_project_m3k9p',
                             title: 'Docker Containerization & Production Cloud Run Deploy',
                             dateLabel: 'Next Week',
                             status: 'pending',
@@ -224,6 +242,7 @@ async function seedDemoData() {
                     ],
                 },
                 {
+                    _id: 'task_private_clarity_9vbt1',
                     userId: demoUser._id,
                     title: 'Personal High-Performance Vow & Growth Tracker',
                     description: 'Long-range personal milestones, deep work discipline, and private reflections on focus.',

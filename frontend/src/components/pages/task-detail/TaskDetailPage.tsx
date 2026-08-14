@@ -43,7 +43,7 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
         completedCount,
         totalCount,
         progressPercent,
-    } = useSubTasks(task._id);
+    } = useSubTasks(task._id, task.subTasks);
 
     // Sync selected sub-task if updated in subTasks list
     const activeSelectedSubTask = selectedSubTask

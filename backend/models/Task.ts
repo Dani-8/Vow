@@ -239,18 +239,19 @@ export const Task = {
             completionHistory: Array.isArray(data.completionHistory)
                 ? data.completionHistory.map((d: any) => new Date(d).toISOString())
                 : [],
+            subTasks: Array.isArray(data.subTasks) ? data.subTasks : [],
             createdAt: now,
             updatedAt: now,
         };
 
-        let newId = 'task_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+        let newId = data._id || ('task_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5));
         if (isFirestoreActive()) {
             try {
                 const db = getFirebaseDb();
                 if (db) {
                     const tasksRef = collection(db, 'tasks');
                     const docRef = await addDoc(tasksRef, payload);
-                    newId = docRef.id;
+                    newId = data._id || docRef.id;
                 }
             } catch (e) {
                 // Memory store fallback

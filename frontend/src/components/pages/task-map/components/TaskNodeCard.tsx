@@ -6,7 +6,6 @@ import {
     MoreVertical,
     Trash2,
     Link2,
-    Sparkles,
 } from 'lucide-react';
 import { TaskNodeCardProps } from './nodeCardTypes';
 
@@ -75,11 +74,12 @@ export const TaskNodeCard: React.FC<TaskNodeCardProps> = ({
 
     // Status badge styling
     let statusBadge = (
-        <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-lg bg-gray-100 text-[#717699]">
+        <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-lg bg-gray-200/70 text-[#717699]">
             Not Started
         </span>
     );
-    let statusDot = <Circle className="w-4 h-4 text-purple-500 shrink-0" />;
+    let statusDot = <Circle className="w-4 h-4 text-[#717699] shrink-0" />;
+    let progressBarColor = 'bg-gray-300';
 
     if (status === 'completed') {
         statusBadge = (
@@ -88,6 +88,7 @@ export const TaskNodeCard: React.FC<TaskNodeCardProps> = ({
             </span>
         );
         statusDot = <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />;
+        progressBarColor = 'bg-emerald-500';
     } else if (status === 'in_progress') {
         statusBadge = (
             <span className="text-[10px] font-extrabold px-2.5 py-0.5 rounded-lg bg-sky-100 text-sky-800">
@@ -95,13 +96,14 @@ export const TaskNodeCard: React.FC<TaskNodeCardProps> = ({
             </span>
         );
         statusDot = <Clock className="w-4 h-4 text-[#549acb] shrink-0" />;
+        progressBarColor = 'bg-[#549acb]';
     }
 
     return (
         <div
             style={{ left: `${node.x}px`, top: `${node.y}px` }}
             onMouseDown={handleMouseDown}
-            className={`absolute w-64 sm:w-72 neu-card p-4 rounded-2xl cursor-grab active:cursor-grabbing transition-shadow select-none z-10 ${isDragging ? 'shadow-2xl z-30 opacity-90 scale-[1.02]' : ''
+            className={`absolute w-64 sm:w-72 neu-card p-4 rounded-2xl cursor-grab active:cursor-grabbing transition-all select-none z-10 ${isDragging ? 'shadow-2xl z-30 opacity-90 scale-[1.02]' : ''
                 } ${isSelected ? 'ring-2 ring-[#549acb] shadow-2xl scale-[1.02]' : 'hover:scale-[1.01]'
                 }`}
         >
@@ -113,8 +115,8 @@ export const TaskNodeCard: React.FC<TaskNodeCardProps> = ({
                             {title}
                         </h4>
                         {subTask && (
-                            <span className="text-[9px] font-bold text-purple-600 block mt-0.5">
-                                Sub-Task of {task?.title}
+                            <span className="text-[9px] font-bold text-purple-600 block mt-0.5 truncate">
+                                Sub-Task: {task?.title}
                             </span>
                         )}
                     </div>
@@ -128,6 +130,7 @@ export const TaskNodeCard: React.FC<TaskNodeCardProps> = ({
                             setIsMenuOpen(!isMenuOpen);
                         }}
                         className="p-1 rounded-lg neu-button text-[#717699] hover:text-[#1a1c35]"
+                        title="Options"
                     >
                         <MoreVertical className="w-3.5 h-3.5" />
                     </button>
@@ -163,8 +166,16 @@ export const TaskNodeCard: React.FC<TaskNodeCardProps> = ({
                 </div>
             </div>
 
+            {/* Progress Bar */}
+            <div className="w-full h-1.5 bg-gray-200/80 rounded-full overflow-hidden my-2.5">
+                <div
+                    className={`h-full ${progressBarColor} transition-all duration-500 rounded-full`}
+                    style={{ width: `${progress}%` }}
+                />
+            </div>
+
             {/* Footer status and progress row */}
-            <div className="flex items-center justify-between pt-2 border-t border-white/50">
+            <div className="flex items-center justify-between pt-1 border-t border-white/50">
                 {statusBadge}
                 <span className="text-xs font-extrabold text-[#717699]">{progress}%</span>
             </div>
