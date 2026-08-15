@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Network, Plus, HelpCircle, Sparkles, AlertCircle } from 'lucide-react';
 import { TaskMap, TaskMapNode, TaskMapConnection, MapAccentColor, RelationshipType } from '../types';
 import { Task } from '../../../../types';
+import { DEFAULT_INITIAL_TASKS } from '../../../../data/defaultInitialData';
 import { CanvasHeader } from './CanvasHeader';
 import { CanvasFooter } from './CanvasFooter';
 import { TaskNodeCard } from './TaskNodeCard';
@@ -12,6 +13,8 @@ import { CreateMapModal } from '../modals/CreateMapModal';
 import {
     SUBTASKS_UPDATED_EVENT,
     getNodeDynamicStatusAndProgress,
+    getSubTasksForTaskId,
+    saveSubTasksForTaskId,
 } from '../../../../utils/subtaskStorage';
 
 interface TaskMapCanvasViewProps {
@@ -44,7 +47,22 @@ export const TaskMapCanvasView: React.FC<TaskMapCanvasViewProps> = ({
     const [isAddConnectionOpen, setIsAddConnectionOpen] = useState(false);
     const [isCreateMapOpen, setIsCreateMapOpen] = useState(false);
     const [connectFromNodeId, setConnectFromNodeId] = useState<string | undefined>(undefined);
+    const [activeMenuNodeId, setActiveMenuNodeId] = useState<string | null>(null);
     const [, setSubtasksTick] = useState(0);
+
+    // Close any open action menu on outside click
+    useEffect(() => {
+        const handleGlobalClick = (e: MouseEvent) => {
+            const target = e.target as HTMLElement;
+            if (!target.closest('.node-action-menu')) {
+                setActiveMenuNodeId(null);
+            }
+        };
+        window.addEventListener('click', handleGlobalClick);
+        return () => {
+            window.removeEventListener('click', handleGlobalClick);
+        };
+    }, []);
 
     // Subscribe to real-time subtask updates from Task Detail view
     useEffect(() => {
@@ -66,6 +84,77 @@ export const TaskMapCanvasView: React.FC<TaskMapCanvasViewProps> = ({
             n.id === nodeId ? { ...n, x: newX, y: newY } : n
         );
         onUpdateMap({ ...currentMap, nodes: updatedNodes, updatedAt: 'Just now' });
+    };
+
+    // Node status change (full 2-way sync with Task Detail and Firestore)
+    const handleNodeStatusChange = (nodeId: string, newStatus: 'todo' | 'in_progress' | 'completed') => {
+        const targetNode = currentMap.nodes.find((n) => n.id === nodeId);
+        if (!targetNode) return;
+
+        // 1. If linked to a SubTask, search across task candidates and update the subtask
+        if (targetNode.subTaskId) {
+            let matchedTaskId = targetNode.taskId;
+            if (!matchedTaskId) {
+                if (nodeId.includes('ru')) matchedTaskId = 'task_russian_mastery_r7u2k';
+                else if (nodeId.includes('ai')) matchedTaskId = 'task_ai_engineer_a8x4m';
+                else if (nodeId.includes('mern')) matchedTaskId = 'task_mern_project_m3k9p';
+            }
+
+            // Check all candidate tasks to see which one owns this subtaskId
+            const allTaskCandidates = [...tasks, ...DEFAULT_INITIAL_TASKS];
+            for (const cand of allTaskCandidates) {
+                const subs = getSubTasksForTaskId(cand._id, cand.subTasks);
+                if (subs.some((s) => s.id === targetNode.subTaskId)) {
+                    matchedTaskId = cand._id;
+                    const subTaskStatus = newStatus === 'todo' ? 'pending' : newStatus;
+                    const updatedSubs = subs.map((s) =>
+                        s.id === targetNode.subTaskId
+                            ? {
+                                ...s,
+                                status: subTaskStatus as any,
+                                timeLeft: newStatus === 'completed' ? 'Completed' : s.timeLeft || 'In progress',
+                            }
+                            : s
+                    );
+                    saveSubTasksForTaskId(cand._id, updatedSubs);
+                    break;
+                }
+            }
+
+            if (matchedTaskId) {
+                const liveSubs = getSubTasksForTaskId(matchedTaskId);
+                const subTaskStatus = newStatus === 'todo' ? 'pending' : newStatus;
+                const updatedSubs = liveSubs.map((s) =>
+                    s.id === targetNode.subTaskId
+                        ? {
+                            ...s,
+                            status: subTaskStatus as any,
+                            timeLeft: newStatus === 'completed' ? 'Completed' : s.timeLeft || 'In progress',
+                        }
+                        : s
+                );
+                saveSubTasksForTaskId(matchedTaskId, updatedSubs);
+            }
+        }
+
+        // 2. Update the node on the task map as well
+        const progressVal = newStatus === 'completed' ? 100 : newStatus === 'in_progress' ? 50 : 0;
+        const updatedNodes = currentMap.nodes.map((n) =>
+            n.id === nodeId
+                ? {
+                    ...n,
+                    customStatus: newStatus,
+                    customProgress: progressVal,
+                }
+                : n
+        );
+
+        onUpdateMap({
+            ...currentMap,
+            nodes: updatedNodes,
+            updatedAt: 'Just now',
+        });
+        setSubtasksTick((t) => t + 1);
     };
 
     // Delete Node
@@ -247,6 +336,7 @@ export const TaskMapCanvasView: React.FC<TaskMapCanvasViewProps> = ({
             <CanvasHeader
                 currentMap={currentMap}
                 maps={maps}
+                tasks={tasks}
                 onSelectMap={onSelectMap}
                 onBackToMaps={onBackToMaps}
                 onAutoLayout={handleAutoLayout}
@@ -356,9 +446,9 @@ export const TaskMapCanvasView: React.FC<TaskMapCanvasViewProps> = ({
                             const mainTask = dynamic.task || taskMapById.get(node.taskId);
                             const dynamicNode: TaskMapNode = {
                                 ...node,
-                                customTitle: dynamic.title,
-                                customStatus: dynamic.status,
-                                customProgress: dynamic.progress,
+                                customTitle: node.customTitle || dynamic.title,
+                                customStatus: node.customStatus || dynamic.status,
+                                customProgress: node.customStatus ? (node.customStatus === 'completed' ? 100 : node.customStatus === 'in_progress' ? 50 : 0) : dynamic.progress,
                             };
 
                             return (
@@ -368,6 +458,8 @@ export const TaskMapCanvasView: React.FC<TaskMapCanvasViewProps> = ({
                                     task={mainTask}
                                     subTask={dynamic.subTask}
                                     isSelected={selectedNodeId === node.id}
+                                    isMenuOpen={activeMenuNodeId === node.id}
+                                    onToggleMenu={(isOpen) => setActiveMenuNodeId(isOpen ? node.id : null)}
                                     zoom={zoom}
                                     onSelect={() => setSelectedNodeId(node.id)}
                                     onPositionChange={handlePositionChange}
@@ -376,6 +468,7 @@ export const TaskMapCanvasView: React.FC<TaskMapCanvasViewProps> = ({
                                         setConnectFromNodeId(fromId);
                                         setIsAddConnectionOpen(true);
                                     }}
+                                    onStatusChange={handleNodeStatusChange}
                                 />
                             );
                         })}

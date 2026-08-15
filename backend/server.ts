@@ -10,7 +10,9 @@ import { Task } from './models/Task.js';
 
 import authRoutes from './routes/authRoutes.js';
 import taskRoutes from './routes/taskRoutes.js';
+import taskMapRoutes from './routes/taskMapRoutes.js';
 import aiRoutes from './routes/aiRoutes.js';
+import { TaskMap } from './models/TaskMap.js';
 
 dotenv.config();
 
@@ -22,6 +24,7 @@ app.use(express.json());
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
+app.use('/api/task-maps', taskMapRoutes);
 app.use('/api/ai', aiRoutes);
 
 app.get('/api/health', (req, res) => {
