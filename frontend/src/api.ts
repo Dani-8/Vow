@@ -202,4 +202,40 @@ export const api = {
       body: JSON.stringify(payload),
     });
   },
+
+  // Task Maps (Firestore cloud persistence)
+  async getTaskMaps() {
+    return fetchAPI<{ maps: any[] }>('/api/task-maps');
+  },
+
+  async getTaskMap(id: string) {
+    return fetchAPI<{ map: any }>(`/api/task-maps/${id}`);
+  },
+
+  async createTaskMap(mapData: any) {
+    return fetchAPI<{ map: any }>('/api/task-maps', {
+      method: 'POST',
+      body: JSON.stringify(mapData),
+    });
+  },
+
+  async updateTaskMap(id: string, updates: any) {
+    return fetchAPI<{ map: any }>(`/api/task-maps/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+    });
+  },
+
+  async bulkSyncTaskMaps(maps: any[]) {
+    return fetchAPI<{ maps: any[]; success: boolean }>('/api/task-maps/bulk-sync', {
+      method: 'POST',
+      body: JSON.stringify({ maps }),
+    });
+  },
+
+  async deleteTaskMap(id: string) {
+    return fetchAPI<{ success: boolean; message: string }>(`/api/task-maps/${id}`, {
+      method: 'DELETE',
+    });
+  },
 };

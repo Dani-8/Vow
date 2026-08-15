@@ -10,10 +10,13 @@ import {
     Wand2,
 } from 'lucide-react';
 import { TaskMap } from '../types';
+import { Task } from '../../../../types';
+import { getNodeDynamicStatusAndProgress } from '../../../../utils/subtaskStorage';
 
 interface CanvasHeaderProps {
     currentMap: TaskMap;
     maps: TaskMap[];
+    tasks?: Task[];
     onSelectMap: (mapId: string) => void;
     onBackToMaps: () => void;
     onAutoLayout?: () => void;
@@ -26,6 +29,7 @@ interface CanvasHeaderProps {
 export const CanvasHeader: React.FC<CanvasHeaderProps> = ({
     currentMap,
     maps,
+    tasks = [],
     onSelectMap,
     onBackToMaps,
     onAutoLayout,
@@ -36,6 +40,17 @@ export const CanvasHeader: React.FC<CanvasHeaderProps> = ({
     const taskCount = currentMap.nodes.length;
     const connectionCount = currentMap.connections.length;
     const criticalCount = currentMap.connections.filter((c) => c.isCritical).length;
+
+    // Calculate overall map progress based on node completions
+    let completedNodes = 0;
+    currentMap.nodes.forEach((n) => {
+        const dynamic = getNodeDynamicStatusAndProgress(n, tasks);
+        if (dynamic.status === 'completed' || dynamic.progress >= 100) {
+            completedNodes += 1;
+        }
+    });
+
+    const overallProgress = taskCount > 0 ? Math.round((completedNodes / taskCount) * 100) : 0;
 
     return (
         <div className="w-full flex flex-col gap-3 pb-4 border-b border-white/60">
@@ -108,13 +123,35 @@ export const CanvasHeader: React.FC<CanvasHeaderProps> = ({
                 </div>
             </div>
 
+            {/* Map Progress Bar Strip */}
+            <div className="neu-card p-3 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 bg-[#E0E5EC]/80 border border-white/60">
+                <div className="flex items-center space-x-3 w-full sm:w-auto">
+                    <span className="text-xs font-black text-[#1a1c35] shrink-0">Map Progress</span>
+                    <span className="text-xs font-extrabold text-purple-600 shrink-0">
+                        {completedNodes} / {taskCount} Completed
+                    </span>
+                </div>
+
+                <div className="flex items-center space-x-3 w-full sm:flex-1 sm:max-w-md">
+                    <div className="w-full h-2.5 bg-gray-300/80 rounded-full overflow-hidden neu-inset">
+                        <div
+                            className="h-full bg-gradient-to-r from-purple-600 via-indigo-600 to-emerald-500 transition-all duration-500 rounded-full"
+                            style={{ width: `${overallProgress}%` }}
+                        />
+                    </div>
+                    <span className="text-xs font-black text-[#1a1c35] shrink-0 w-9 text-right">
+                        {overallProgress}%
+                    </span>
+                </div>
+            </div>
+
             {/* Sub Bar: Stats, Search, Legend */}
             <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
                 {/* Stats Pills */}
                 <div className="flex items-center space-x-2 text-xs font-bold">
                     <span className="neu-inset px-3 py-1.5 rounded-xl text-[#717699] flex items-center space-x-1.5">
                         <Briefcase className="w-3.5 h-3.5 text-[#549acb]" />
-                        <span>{taskCount} Tasks</span>
+                        <span>{taskCount} Nodes</span>
                     </span>
 
                     <span className="neu-inset px-3 py-1.5 rounded-xl text-[#717699] flex items-center space-x-1.5">

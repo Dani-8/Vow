@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { TaskMap, MapAccentColor } from './types';
 import { INITIAL_TASK_MAPS } from './initialMaps';
 import { Task } from '../../../types';
+import { api, getToken } from '../../../api';
 
 import { EmptyTaskMapsState } from './components/EmptyTaskMapsState';
 import { SavedMapsView } from './components/SavedMapsView';
@@ -123,6 +124,31 @@ export const TaskMapPage: React.FC<TaskMapPageProps> = ({ tasks }) => {
 
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [isLearnModalOpen, setIsLearnModalOpen] = useState(false);
+    const saveTimeoutRef = useRef<Record<string, any>>({});
+
+    // Sync from backend Firestore on initial mount if authenticated
+    useEffect(() => {
+        const token = getToken();
+        if (!token) return;
+
+        api.getTaskMaps()
+            .then((res) => {
+                if (res.maps && Array.isArray(res.maps) && res.maps.length > 0) {
+                    const normalized = normalizeTaskMaps(res.maps);
+                    setMaps(normalized);
+                    try {
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
+                    } catch { }
+                } else {
+                    // If user has no maps on server yet, sync current local maps to server
+                    const currentMaps = maps.length > 0 ? maps : INITIAL_TASK_MAPS;
+                    api.bulkSyncTaskMaps(currentMaps).catch((e) => console.warn('Failed initial map sync:', e));
+                }
+            })
+            .catch((err) => {
+                console.warn('Could not fetch task maps from backend, using local cache:', err);
+            });
+    }, []);
 
     useEffect(() => {
         try {
@@ -183,16 +209,38 @@ export const TaskMapPage: React.FC<TaskMapPageProps> = ({ tasks }) => {
         };
         setMaps((prev) => [newMap, ...prev]);
         navigateToMap(newMap);
+
+        // Save to Firestore backend
+        if (getToken()) {
+            api.createTaskMap(newMap).catch((err) => console.warn('Failed to persist new map to cloud:', err));
+        }
     };
 
     const handleUpdateMap = (updatedMap: TaskMap) => {
         setMaps((prev) => prev.map((m) => (m.id === updatedMap.id ? updatedMap : m)));
+
+        // Debounced sync to Firestore backend
+        if (getToken()) {
+            if (saveTimeoutRef.current[updatedMap.id]) {
+                clearTimeout(saveTimeoutRef.current[updatedMap.id]);
+            }
+            saveTimeoutRef.current[updatedMap.id] = setTimeout(() => {
+                api.updateTaskMap(updatedMap.id, updatedMap).catch((err) => {
+                    console.warn('Failed to update task map in cloud:', err);
+                });
+            }, 500);
+        }
     };
 
     const handleDeleteMap = (mapId: string) => {
         setMaps((prev) => prev.filter((m) => m.id !== mapId));
         if (activeMap && activeMap.id === mapId) {
             navigate('/app/map');
+        }
+
+        // Delete on Firestore backend
+        if (getToken()) {
+            api.deleteTaskMap(mapId).catch((err) => console.warn('Failed to delete map from cloud:', err));
         }
     };
 

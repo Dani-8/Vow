@@ -6,6 +6,10 @@ import {
     MoreVertical,
     Trash2,
     Link2,
+    Calendar,
+    Check,
+    ChevronRight,
+    SlidersHorizontal,
 } from 'lucide-react';
 import { TaskNodeCardProps } from './nodeCardTypes';
 
@@ -14,29 +18,47 @@ export const TaskNodeCard: React.FC<TaskNodeCardProps> = ({
     task,
     subTask,
     isSelected,
+    isMenuOpen: controlledIsMenuOpen,
+    onToggleMenu,
     zoom = 1,
     onSelect,
     onPositionChange,
     onDeleteNode,
     onStartConnect,
+    onStatusChange,
 }) => {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [internalIsMenuOpen, setInternalIsMenuOpen] = useState(false);
+    const [isStatusSubmenuOpen, setIsStatusSubmenuOpen] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
 
-    const title = subTask?.title || task?.title || node.customTitle || 'Untitled Task';
-    const status = subTask?.status || task?.status || node.customStatus || 'todo';
+    const isMenuOpen = controlledIsMenuOpen !== undefined ? controlledIsMenuOpen : internalIsMenuOpen;
+    const setMenuOpen = (open: boolean) => {
+        if (onToggleMenu) {
+            onToggleMenu(open);
+        } else {
+            setInternalIsMenuOpen(open);
+        }
+    };
 
-    let progress = 0;
-    if (status === 'completed') progress = 100;
-    else if (status === 'in_progress') progress = node.customProgress || 50;
+    const title = node.customTitle || subTask?.title || task?.title || 'Untitled Milestone';
+    const status = node.customStatus || subTask?.status || task?.status || 'todo';
+
+    // Exact date from task or subtask
+    const exactDate = subTask?.dateLabel || subTask?.dueDate || task?.endTime || null;
 
     const handleMouseDown = (e: React.MouseEvent) => {
         // Only drag if left click
         if (e.button !== 0) return;
 
-        // Do not initiate node dragging when clicking interactive children (buttons, inputs, etc.)
+        // Do not initiate node dragging when clicking interactive children (buttons, inputs, menus)
         const target = e.target as HTMLElement;
-        if (target.closest('button') || target.closest('a') || target.closest('select') || target.closest('input')) {
+        if (
+            target.closest('button') ||
+            target.closest('a') ||
+            target.closest('select') ||
+            target.closest('input') ||
+            target.closest('.node-action-menu')
+        ) {
             return;
         }
 
@@ -72,32 +94,41 @@ export const TaskNodeCard: React.FC<TaskNodeCardProps> = ({
         window.addEventListener('mouseup', handleMouseUp);
     };
 
+    const handleSetStatus = (e: React.MouseEvent, newStatus: 'todo' | 'in_progress' | 'completed') => {
+        e.preventDefault();
+        e.stopPropagation();
+        setMenuOpen(false);
+        setIsStatusSubmenuOpen(false);
+        if (onStatusChange) {
+            onStatusChange(node.id, newStatus);
+        }
+    };
+
     // Status badge styling
     let statusBadge = (
-        <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-lg bg-gray-200/70 text-[#717699]">
-            Not Started
+        <span className="text-[10px] font-extrabold px-2.5 py-1 rounded-xl bg-gray-200/80 text-[#717699] flex items-center space-x-1.5 w-fit">
+            <Circle className="w-3 h-3 text-[#717699] shrink-0" />
+            <span>To Do</span>
         </span>
     );
-    let statusDot = <Circle className="w-4 h-4 text-[#717699] shrink-0" />;
-    let progressBarColor = 'bg-gray-300';
 
     if (status === 'completed') {
         statusBadge = (
-            <span className="text-[10px] font-extrabold px-2.5 py-0.5 rounded-lg bg-emerald-100 text-emerald-800">
-                Completed
+            <span className="text-[10px] font-extrabold px-2.5 py-1 rounded-xl bg-emerald-100/90 text-emerald-800 flex items-center space-x-1.5 w-fit shadow-xs">
+                <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
+                <span>Completed</span>
             </span>
         );
-        statusDot = <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />;
-        progressBarColor = 'bg-emerald-500';
     } else if (status === 'in_progress') {
         statusBadge = (
-            <span className="text-[10px] font-extrabold px-2.5 py-0.5 rounded-lg bg-sky-100 text-sky-800">
-                In Progress
+            <span className="text-[10px] font-extrabold px-2.5 py-1 rounded-xl bg-sky-100/90 text-sky-800 flex items-center space-x-1.5 w-fit shadow-xs">
+                <Clock className="w-3 h-3 text-[#549acb] shrink-0" />
+                <span>In Progress</span>
             </span>
         );
-        statusDot = <Clock className="w-4 h-4 text-[#549acb] shrink-0" />;
-        progressBarColor = 'bg-[#549acb]';
     }
+
+    const parentTrackName = task?.title || (node.taskId ? 'Core Track' : null);
 
     return (
         <div
@@ -107,27 +138,35 @@ export const TaskNodeCard: React.FC<TaskNodeCardProps> = ({
                 } ${isSelected ? 'ring-2 ring-[#549acb] shadow-2xl scale-[1.02]' : 'hover:scale-[1.01]'
                 }`}
         >
-            <div className="flex items-start justify-between gap-2 mb-2">
-                <div className="flex items-start space-x-2.5 min-w-0">
-                    <div className="mt-0.5">{statusDot}</div>
-                    <div className="min-w-0">
-                        <h4 className="text-xs sm:text-sm font-black text-[#1a1c35] leading-snug line-clamp-2">
-                            {title}
-                        </h4>
-                        {subTask && (
-                            <span className="text-[9px] font-bold text-purple-600 block mt-0.5 truncate">
-                                Sub-Task: {task?.title}
-                            </span>
-                        )}
-                    </div>
+            <div className="flex items-start justify-between gap-2 mb-2.5">
+                <div className="min-w-0 flex-1">
+                    {/* Milestone Title (Bold) */}
+                    <h4 className="text-xs sm:text-sm font-black text-[#1a1c35] leading-snug line-clamp-2">
+                        {title}
+                    </h4>
+
+                    {/* Parent Track Label */}
+                    {parentTrackName && (
+                        <span className="text-[10px] font-bold text-purple-600/90 block mt-1 truncate">
+                            Part of: {parentTrackName}
+                        </span>
+                    )}
                 </div>
 
                 {/* Options Button */}
-                <div className="relative shrink-0">
+                <div
+                    className="relative shrink-0 ml-1 node-action-menu"
+                    onMouseDown={(e) => e.stopPropagation()}
+                    onClick={(e) => e.stopPropagation()}
+                >
                     <button
+                        type="button"
                         onClick={(e) => {
+                            e.preventDefault();
                             e.stopPropagation();
-                            setIsMenuOpen(!isMenuOpen);
+                            const nextState = !isMenuOpen;
+                            setMenuOpen(nextState);
+                            if (!nextState) setIsStatusSubmenuOpen(false);
                         }}
                         className="p-1 rounded-lg neu-button text-[#717699] hover:text-[#1a1c35]"
                         title="Options"
@@ -137,48 +176,134 @@ export const TaskNodeCard: React.FC<TaskNodeCardProps> = ({
 
                     {isMenuOpen && (
                         <div
+                            onMouseDown={(e) => e.stopPropagation()}
                             onClick={(e) => e.stopPropagation()}
-                            className="absolute right-0 top-6 w-36 neu-card p-2 rounded-xl shadow-2xl z-50 bg-[#E0E5EC] space-y-1 text-xs font-bold border border-white"
+                            className="absolute right-0 top-6 w-48 neu-card p-2 rounded-xl shadow-2xl z-50 bg-[#E0E5EC] space-y-1 text-xs font-bold border border-white"
                         >
+                            {/* Button 1: Add Connection */}
                             <button
-                                onClick={() => {
-                                    setIsMenuOpen(false);
+                                type="button"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    setMenuOpen(false);
+                                    setIsStatusSubmenuOpen(false);
                                     onStartConnect(node.id);
                                 }}
-                                className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-[#549acb]/10 text-[#549acb] flex items-center space-x-1.5"
+                                className="w-full text-left px-2.5 py-2 rounded-lg hover:bg-[#549acb]/15 text-[#549acb] flex items-center space-x-2 transition-colors cursor-pointer"
                             >
-                                <Link2 className="w-3.5 h-3.5" />
+                                <Link2 className="w-3.5 h-3.5 shrink-0" />
                                 <span>Add Connection</span>
                             </button>
 
-                            <button
-                                onClick={() => {
-                                    setIsMenuOpen(false);
-                                    onDeleteNode(node.id);
-                                }}
-                                className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-rose-100 text-rose-600 flex items-center space-x-1.5"
+                            {/* Button 2: Hoverable Status Dropdown Trigger */}
+                            <div
+                                className="relative"
+                                onMouseEnter={() => setIsStatusSubmenuOpen(true)}
+                                onMouseLeave={() => setIsStatusSubmenuOpen(false)}
+                                onMouseDown={(e) => e.stopPropagation()}
                             >
-                                <Trash2 className="w-3.5 h-3.5" />
-                                <span>Remove Node</span>
-                            </button>
+                                <button
+                                    type="button"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        setIsStatusSubmenuOpen(!isStatusSubmenuOpen);
+                                    }}
+                                    className="w-full text-left px-2.5 py-2 rounded-lg hover:bg-purple-100/70 text-purple-700 flex items-center justify-between transition-colors cursor-pointer"
+                                >
+                                    <span className="flex items-center space-x-2">
+                                        <SlidersHorizontal className="w-3.5 h-3.5 shrink-0 text-purple-600" />
+                                        <span>Change Status</span>
+                                    </span>
+                                    <ChevronRight className="w-3.5 h-3.5 text-purple-500 shrink-0" />
+                                </button>
+
+                                {/* Submenu Dropdown on Hover */}
+                                {isStatusSubmenuOpen && (
+                                    <div
+                                        onMouseDown={(e) => e.stopPropagation()}
+                                        className="absolute right-0 top-0 sm:right-full sm:top-0 sm:mr-1 w-44 neu-card p-1.5 rounded-xl shadow-2xl z-50 bg-[#E0E5EC] space-y-1 text-xs font-bold border border-white animate-in fade-in duration-150"
+                                    >
+                                        <button
+                                            type="button"
+                                            onClick={(e) => handleSetStatus(e, 'completed')}
+                                            className={`w-full text-left px-2.5 py-1.5 rounded-lg flex items-center justify-between text-emerald-700 hover:bg-emerald-100 transition-colors cursor-pointer ${status === 'completed' ? 'bg-emerald-100/90 font-black' : ''
+                                                }`}
+                                        >
+                                            <span className="flex items-center space-x-1.5">
+                                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                                                <span>Completed</span>
+                                            </span>
+                                            {status === 'completed' && <Check className="w-3 h-3 text-emerald-700" />}
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            onClick={(e) => handleSetStatus(e, 'in_progress')}
+                                            className={`w-full text-left px-2.5 py-1.5 rounded-lg flex items-center justify-between text-sky-700 hover:bg-sky-100 transition-colors cursor-pointer ${status === 'in_progress' ? 'bg-sky-100/90 font-black' : ''
+                                                }`}
+                                        >
+                                            <span className="flex items-center space-x-1.5">
+                                                <Clock className="w-3.5 h-3.5 text-[#549acb]" />
+                                                <span>In Progress</span>
+                                            </span>
+                                            {status === 'in_progress' && <Check className="w-3 h-3 text-sky-700" />}
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            onClick={(e) => handleSetStatus(e, 'todo')}
+                                            className={`w-full text-left px-2.5 py-1.5 rounded-lg flex items-center justify-between text-gray-700 hover:bg-gray-200/80 transition-colors cursor-pointer ${status === 'todo' ? 'bg-gray-200/80 font-black' : ''
+                                                }`}
+                                        >
+                                            <span className="flex items-center space-x-1.5">
+                                                <Circle className="w-3.5 h-3.5 text-[#717699]" />
+                                                <span>To Do</span>
+                                            </span>
+                                            {status === 'todo' && <Check className="w-3 h-3 text-gray-700" />}
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Button 3: Remove Node */}
+                            <div className="border-t border-gray-300/60 pt-1">
+                                <button
+                                    type="button"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        setMenuOpen(false);
+                                        setIsStatusSubmenuOpen(false);
+                                        onDeleteNode(node.id);
+                                    }}
+                                    className="w-full text-left px-2.5 py-2 rounded-lg hover:bg-rose-100 text-rose-600 flex items-center space-x-2 transition-colors cursor-pointer"
+                                >
+                                    <Trash2 className="w-3.5 h-3.5 shrink-0" />
+                                    <span>Remove Node</span>
+                                </button>
+                            </div>
                         </div>
                     )}
                 </div>
             </div>
 
-            {/* Progress Bar */}
-            <div className="w-full h-1.5 bg-gray-200/80 rounded-full overflow-hidden my-2.5">
-                <div
-                    className={`h-full ${progressBarColor} transition-all duration-500 rounded-full`}
-                    style={{ width: `${progress}%` }}
-                />
-            </div>
-
-            {/* Footer status and progress row */}
-            <div className="flex items-center justify-between pt-1 border-t border-white/50">
+            {/* Clean Status Badge & Due Date Footer */}
+            <div className="pt-2.5 border-t border-white/60 flex items-center justify-between gap-2">
                 {statusBadge}
-                <span className="text-xs font-extrabold text-[#717699]">{progress}%</span>
+
+                {exactDate && (
+                    <div
+                        className="neu-inset px-2.5 py-1 rounded-xl text-[10px] font-bold text-[#717699] flex items-center space-x-1 shrink-0 bg-[#E0E5EC]"
+                        title={`Due Date: ${exactDate}`}
+                    >
+                        <Calendar className="w-3 h-3 text-[#549acb]" />
+                        <span className="truncate max-w-[90px]">{exactDate}</span>
+                    </div>
+                )}
             </div>
         </div>
     );
 };
+
