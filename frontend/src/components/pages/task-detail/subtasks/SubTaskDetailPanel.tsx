@@ -60,8 +60,8 @@ export const SubTaskDetailPanel: React.FC<SubTaskDetailPanelProps> = ({
                             type="button"
                             onClick={() => onSetStatus ? onSetStatus(subTask.id, 'pending') : onToggleStatus(subTask.id)}
                             className={`px-2.5 py-1 rounded-lg transition-all ${subTask.status === 'pending'
-                                    ? 'bg-purple-600 text-white shadow-xs font-black'
-                                    : 'text-[#717699] hover:text-[#1a1c35]'
+                                ? 'bg-purple-600 text-white shadow-xs font-black'
+                                : 'text-[#717699] hover:text-[#1a1c35]'
                                 }`}
                         >
                             Pending
@@ -70,8 +70,8 @@ export const SubTaskDetailPanel: React.FC<SubTaskDetailPanelProps> = ({
                             type="button"
                             onClick={() => onSetStatus ? onSetStatus(subTask.id, 'in_progress') : onToggleStatus(subTask.id)}
                             className={`px-2.5 py-1 rounded-lg transition-all ${subTask.status === 'in_progress'
-                                    ? 'bg-[#2563eb] text-white shadow-xs font-black'
-                                    : 'text-[#717699] hover:text-[#1a1c35]'
+                                ? 'bg-[#2563eb] text-white shadow-xs font-black'
+                                : 'text-[#717699] hover:text-[#1a1c35]'
                                 }`}
                         >
                             In Progress
@@ -80,8 +80,8 @@ export const SubTaskDetailPanel: React.FC<SubTaskDetailPanelProps> = ({
                             type="button"
                             onClick={() => onSetStatus ? onSetStatus(subTask.id, 'completed') : onToggleStatus(subTask.id)}
                             className={`px-2.5 py-1 rounded-lg transition-all ${subTask.status === 'completed'
-                                    ? 'bg-emerald-600 text-white shadow-xs font-black'
-                                    : 'text-[#717699] hover:text-[#1a1c35]'
+                                ? 'bg-emerald-600 text-white shadow-xs font-black'
+                                : 'text-[#717699] hover:text-[#1a1c35]'
                                 }`}
                         >
                             Completed
@@ -189,8 +189,8 @@ export const SubTaskDetailPanel: React.FC<SubTaskDetailPanelProps> = ({
                 <button
                     onClick={() => onToggleStatus(subTask.id)}
                     className={`flex-1 min-w-[120px] py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 transition-all ${isCompleted
-                            ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-                            : 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100'
+                        ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                        : 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100'
                         }`}
                 >
                     <CheckCircle className="w-4 h-4 text-emerald-600" />
