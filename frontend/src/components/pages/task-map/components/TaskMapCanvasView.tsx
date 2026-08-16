@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Network, Plus, HelpCircle, Sparkles, AlertCircle } from 'lucide-react';
 import { TaskMap, TaskMapNode, TaskMapConnection, MapAccentColor, RelationshipType } from '../types';
 import { Task } from '../../../../types';
-import { DEFAULT_INITIAL_TASKS } from '../../../../data/defaultInitialData';
 import { CanvasHeader } from './CanvasHeader';
 import { CanvasFooter } from './CanvasFooter';
 import { TaskNodeCard } from './TaskNodeCard';
@@ -94,15 +93,9 @@ export const TaskMapCanvasView: React.FC<TaskMapCanvasViewProps> = ({
         // 1. If linked to a SubTask, search across task candidates and update the subtask
         if (targetNode.subTaskId) {
             let matchedTaskId = targetNode.taskId;
-            if (!matchedTaskId) {
-                if (nodeId.includes('ru')) matchedTaskId = 'task_russian_mastery_r7u2k';
-                else if (nodeId.includes('ai')) matchedTaskId = 'task_ai_engineer_a8x4m';
-                else if (nodeId.includes('mern')) matchedTaskId = 'task_mern_project_m3k9p';
-            }
 
-            // Check all candidate tasks to see which one owns this subtaskId
-            const allTaskCandidates = [...tasks, ...DEFAULT_INITIAL_TASKS];
-            for (const cand of allTaskCandidates) {
+            // Check all real user tasks to see which one owns this subtaskId
+            for (const cand of tasks) {
                 const subs = getSubTasksForTaskId(cand._id, cand.subTasks);
                 if (subs.some((s) => s.id === targetNode.subTaskId)) {
                     matchedTaskId = cand._id;
