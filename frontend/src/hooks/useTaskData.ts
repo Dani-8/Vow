@@ -244,7 +244,8 @@ export function useTaskData() {
         editingTaskId?: string | null
     ) => {
         if (!user) {
-            await handleBypassAuth();
+            navigateToView('auth');
+            return;
         }
 
         if (editingTaskId) {

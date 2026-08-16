@@ -140,7 +140,6 @@ export const TaskMap = {
                         const data = d.data();
                         const obj = new TaskMapInstance({ ...data, _id: d.id, id: data.id || d.id });
                         results.push(obj);
-                        inMemoryTaskMaps.set(obj._id, obj.toObject());
                     });
                     return results;
                 }
