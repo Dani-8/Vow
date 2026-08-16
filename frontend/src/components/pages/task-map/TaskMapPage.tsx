@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { TaskMap, MapAccentColor } from './types';
 import { Task } from '../../../types';
 import { api, getToken } from '../../../api';
+import { INITIAL_DEMO_TASK_MAPS } from './initialMaps';
 
 import { EmptyTaskMapsState } from './components/EmptyTaskMapsState';
 import { SavedMapsView } from './components/SavedMapsView';
@@ -85,17 +86,19 @@ export const getMapSlug = (map: TaskMap): string => {
 };
 
 const normalizeTaskMaps = (loaded: TaskMap[]): TaskMap[] => {
-    return loaded.map((m) => {
-        const shortId = getMapShortId(m);
-        const hasProperId =
-            m.id.startsWith('map-') &&
-            /^[a-z0-9]{5}$/i.test(m.id.replace(/^map-/, '')) &&
-            !/^\d+$/.test(m.id.replace(/^map-/, ''));
-        return {
-            ...m,
-            id: hasProperId ? m.id : `map-${shortId}`,
-        };
-    });
+    return loaded
+        .filter((m) => !!m && !!m.name)
+        .map((m) => {
+            const shortId = getMapShortId(m);
+            const hasProperId =
+                m.id.startsWith('map-') &&
+                /^[a-z0-9]{5}$/i.test(m.id.replace(/^map-/, '')) &&
+                !/^\d+$/.test(m.id.replace(/^map-/, ''));
+            return {
+                ...m,
+                id: hasProperId ? m.id : `map-${shortId}`,
+            };
+        });
 };
 
 export const TaskMapPage: React.FC<TaskMapPageProps> = ({ tasks }) => {
@@ -117,7 +120,7 @@ export const TaskMapPage: React.FC<TaskMapPageProps> = ({ tasks }) => {
         if (token) {
             api.getTaskMaps()
                 .then((res) => {
-                    if (res.maps && Array.isArray(res.maps)) {
+                    if (res.maps && Array.isArray(res.maps) && res.maps.length > 0) {
                         const normalized = normalizeTaskMaps(res.maps);
                         setMaps(normalized);
                     } else {
@@ -129,8 +132,8 @@ export const TaskMapPage: React.FC<TaskMapPageProps> = ({ tasks }) => {
                     setMaps([]);
                 });
         } else {
-            // Unauthenticated - start completely clean
-            setMaps([]);
+            // Unauthenticated demo fallback preview
+            setMaps(INITIAL_DEMO_TASK_MAPS);
         }
     }, []);
 
