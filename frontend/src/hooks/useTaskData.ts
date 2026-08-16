@@ -14,10 +14,11 @@ export function useTaskData() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const [user, setUser] = useState<User | null>(DEFAULT_DEMO_USER);
-    const [tasks, setTasks] = useState<Task[]>(DEFAULT_INITIAL_TASKS);
-    const [privateTasks, setPrivateTasks] = useState<Task[]>(DEFAULT_INITIAL_PRIVATE_TASKS);
-    const [stats, setStats] = useState<MasterStreakStats | null>(DEFAULT_INITIAL_STATS);
+    // If user has a token, initialize with clean empty states; otherwise null
+    const [user, setUser] = useState<User | null>(null);
+    const [tasks, setTasks] = useState<Task[]>([]);
+    const [privateTasks, setPrivateTasks] = useState<Task[]>([]);
+    const [stats, setStats] = useState<MasterStreakStats | null>(null);
 
     // Map URL pathname to active view
     const getActiveViewFromPath = (path: string): 'home' | 'landing' | 'visible' | 'private' | 'stats' | 'auth' | 'task-detail' | 'task-map' => {
@@ -82,7 +83,7 @@ export function useTaskData() {
                     setUser(res.user);
 
                     const tasksRes = await api.getTasks();
-                    if (tasksRes?.tasks) setTasks(tasksRes.tasks);
+                    setTasks(tasksRes?.tasks || []);
 
                     const statsRes = await api.getMasterStats();
                     if (statsRes) setStats(statsRes);
@@ -91,7 +92,7 @@ export function useTaskData() {
                     if (storedPin) {
                         try {
                             const privRes = await api.getPrivateTasks(storedPin);
-                            if (privRes?.tasks) setPrivateTasks(privRes.tasks);
+                            setPrivateTasks(privRes?.tasks || []);
                             setIsPrivateUnlocked(true);
                         } catch (err) {
                             clearStoredPin();
@@ -104,51 +105,21 @@ export function useTaskData() {
                     }
                 } catch (err) {
                     removeToken();
-                    // Fallback to demo login if token expired
-                    try {
-                        const demoRes = await api.demoBypass();
-                        setUser(demoRes.user);
-                        const tasksRes = await api.getTasks();
-                        if (tasksRes?.tasks) setTasks(tasksRes.tasks);
-                        const statsRes = await api.getMasterStats();
-                        if (statsRes) setStats(statsRes);
-                        if (location.pathname === '/' || location.pathname === '') {
-                            navigate('/app', { replace: true });
-                        }
-                    } catch (innerErr) {
-                        console.warn('API connection fallback to default initial state:', innerErr);
-                        setUser(DEFAULT_DEMO_USER);
-                        setTasks(DEFAULT_INITIAL_TASKS);
-                        setPrivateTasks(DEFAULT_INITIAL_PRIVATE_TASKS);
-                        setStats(DEFAULT_INITIAL_STATS);
-                    }
+                    // User session expired or invalid
+                    setUser(null);
+                    setTasks([]);
+                    setPrivateTasks([]);
+                    setStats(null);
                 }
             } else {
-                // Automatically populate demo data if unauthenticated
-                try {
-                    const demoRes = await api.demoBypass();
-                    setUser(demoRes.user);
-                    const tasksRes = await api.getTasks();
-                    if (tasksRes?.tasks) setTasks(tasksRes.tasks);
-                    const statsRes = await api.getMasterStats();
-                    if (statsRes) setStats(statsRes);
-                    if (location.pathname === '/' || location.pathname === '') {
-                        navigate('/app', { replace: true });
-                    }
-                } catch (innerErr) {
-                    console.warn('API connection fallback to default initial state:', innerErr);
-                    setUser(DEFAULT_DEMO_USER);
-                    setTasks(DEFAULT_INITIAL_TASKS);
-                    setPrivateTasks(DEFAULT_INITIAL_PRIVATE_TASKS);
-                    setStats(DEFAULT_INITIAL_STATS);
-                }
+                // Unauthenticated visitor
+                setUser(null);
+                setTasks([]);
+                setPrivateTasks([]);
+                setStats(null);
             }
         } catch (err: any) {
-            console.warn('Recovered smoothly from initial data fetch notice:', err);
-            setUser((prev) => prev || DEFAULT_DEMO_USER);
-            setTasks((prev) => (prev && prev.length > 0 ? prev : DEFAULT_INITIAL_TASKS));
-            setPrivateTasks((prev) => (prev && prev.length > 0 ? prev : DEFAULT_INITIAL_PRIVATE_TASKS));
-            setStats((prev) => prev || DEFAULT_INITIAL_STATS);
+            console.warn('Initial data load notice:', err);
         } finally {
             setLoading(false);
         }
@@ -205,14 +176,14 @@ export function useTaskData() {
         if (!user) return;
         try {
             const tasksRes = await api.getTasks();
-            setTasks(tasksRes.tasks);
+            setTasks(tasksRes.tasks || []);
 
             const statsRes = await api.getMasterStats();
             setStats(statsRes);
 
             if (isPrivateUnlocked) {
                 const privRes = await api.getPrivateTasks();
-                setPrivateTasks(privRes.tasks);
+                setPrivateTasks(privRes.tasks || []);
             }
         } catch (err) {
             console.error('Refresh failed:', err);
@@ -226,7 +197,7 @@ export function useTaskData() {
             setUser(res.user);
 
             const tasksRes = await api.getTasks();
-            setTasks(tasksRes.tasks);
+            setTasks(tasksRes.tasks || []);
 
             const statsRes = await api.getMasterStats();
             setStats(statsRes);

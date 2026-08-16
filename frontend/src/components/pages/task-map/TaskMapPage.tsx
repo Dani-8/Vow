@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { TaskMap, MapAccentColor } from './types';
-import { INITIAL_TASK_MAPS } from './initialMaps';
 import { Task } from '../../../types';
 import { api, getToken } from '../../../api';
 
@@ -19,7 +18,7 @@ interface TaskMapPageProps {
 
 const STORAGE_KEY = 'vow_app_task_maps_v2';
 
-// Generates a clean random 5-character lowercase alphanumeric identifier (same as task detail id style)
+// Generates a clean random 5-character lowercase alphanumeric identifier
 export const generateRandom5CharId = (): string => {
     const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
     let id = '';
@@ -107,21 +106,7 @@ export const TaskMapPage: React.FC<TaskMapPageProps> = ({ tasks }) => {
     const match = location.pathname.match(/^\/app\/map\/(.+)$/);
     const activeMapSlugParam = match ? decodeURIComponent(match[1]) : null;
 
-    const [maps, setMaps] = useState<TaskMap[]>(() => {
-        try {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            if (stored) {
-                const parsed = JSON.parse(stored);
-                if (Array.isArray(parsed) && parsed.length > 0) {
-                    return normalizeTaskMaps(parsed);
-                }
-            }
-        } catch (e) {
-            console.error('Failed to parse task maps storage', e);
-        }
-        return INITIAL_TASK_MAPS;
-    });
-
+    const [maps, setMaps] = useState<TaskMap[]>([]);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [isLearnModalOpen, setIsLearnModalOpen] = useState(false);
     const saveTimeoutRef = useRef<Record<string, any>>({});
@@ -129,34 +114,25 @@ export const TaskMapPage: React.FC<TaskMapPageProps> = ({ tasks }) => {
     // Sync from backend Firestore on initial mount if authenticated
     useEffect(() => {
         const token = getToken();
-        if (!token) return;
-
-        api.getTaskMaps()
-            .then((res) => {
-                if (res.maps && Array.isArray(res.maps) && res.maps.length > 0) {
-                    const normalized = normalizeTaskMaps(res.maps);
-                    setMaps(normalized);
-                    try {
-                        localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
-                    } catch { }
-                } else {
-                    // If user has no maps on server yet, sync current local maps to server
-                    const currentMaps = maps.length > 0 ? maps : INITIAL_TASK_MAPS;
-                    api.bulkSyncTaskMaps(currentMaps).catch((e) => console.warn('Failed initial map sync:', e));
-                }
-            })
-            .catch((err) => {
-                console.warn('Could not fetch task maps from backend, using local cache:', err);
-            });
-    }, []);
-
-    useEffect(() => {
-        try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(maps));
-        } catch (e) {
-            console.error('Failed to save task maps', e);
+        if (token) {
+            api.getTaskMaps()
+                .then((res) => {
+                    if (res.maps && Array.isArray(res.maps)) {
+                        const normalized = normalizeTaskMaps(res.maps);
+                        setMaps(normalized);
+                    } else {
+                        setMaps([]);
+                    }
+                })
+                .catch((err) => {
+                    console.warn('Could not fetch task maps from backend:', err);
+                    setMaps([]);
+                });
+        } else {
+            // Unauthenticated - start completely clean
+            setMaps([]);
         }
-    }, [maps]);
+    }, []);
 
     const activeMap =
         maps.find((m) => {
@@ -168,23 +144,20 @@ export const TaskMapPage: React.FC<TaskMapPageProps> = ({ tasks }) => {
                 .replace(/[^\w\s-]/g, '')
                 .replace(/[\s_-]+/g, '-')
                 .replace(/^-+|-+$/g, '');
-            const mapSlug = getMapSlug(m).toLowerCase();
             const shortId = getMapShortId(m).toLowerCase();
-            const rawMapId = m.id.replace(/^map-/, '').toLowerCase();
+            const directSlug = `${titleSlug}-${shortId}`;
+
             return (
-                m.id === activeMapSlugParam ||
                 m.id.toLowerCase() === paramLower ||
-                mapSlug === paramLower ||
+                paramLower === directSlug ||
                 paramLower.endsWith(`-${shortId}`) ||
-                paramLower === shortId ||
-                titleSlug === paramLower ||
-                m.name.toLowerCase() === paramLower ||
-                paramLower === `${titleSlug}-${rawMapId}`
+                paramLower === shortId
             );
         }) || null;
 
     const navigateToMap = (map: TaskMap) => {
-        navigate(`/app/map/${getMapSlug(map)}`);
+        const slug = getMapSlug(map);
+        navigate(`/app/map/${encodeURIComponent(slug)}`);
     };
 
     const navigateToMapById = (mapId: string) => {
@@ -196,7 +169,11 @@ export const TaskMapPage: React.FC<TaskMapPageProps> = ({ tasks }) => {
         }
     };
 
-    const handleCreateMap = (name: string, description: string, color: MapAccentColor) => {
+    const handleCreateMap = (
+        name: string,
+        description?: string,
+        color: MapAccentColor = 'sky'
+    ) => {
         const shortId = generateRandom5CharId();
         const newMap: TaskMap = {
             id: `map-${shortId}`,
@@ -248,7 +225,7 @@ export const TaskMapPage: React.FC<TaskMapPageProps> = ({ tasks }) => {
         <div className="space-y-6 animate-in fade-in duration-300">
             {/* RENDER ACTIVE STATE */}
             {maps.length === 0 ? (
-                /* State 1 — No Task Maps */
+                /* State 1 — No Task Maps (Clean Fresh User State) */
                 <EmptyTaskMapsState
                     onCreateFirstMap={() => setIsCreateModalOpen(true)}
                     onOpenLearnModal={() => setIsLearnModalOpen(true)}

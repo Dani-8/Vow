@@ -77,7 +77,10 @@ export const HomeView: React.FC<HomeViewProps> = ({
                     remainingTodayCount={remainingTodayCount}
                     progressPercent={progressPercent}
                 />
-                <UpcomingDeadlinesCard />
+                <UpcomingDeadlinesCard
+                    tasks={tasks}
+                    onViewTaskDetail={onViewTaskDetail}
+                />
                 <QuickActionsCard
                     onOpenCreateModal={onOpenCreateModal}
                     onCheckInToday={onCheckInToday}

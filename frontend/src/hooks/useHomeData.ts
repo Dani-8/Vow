@@ -101,27 +101,6 @@ export function useHomeData(tasks: Task[], stats: MasterStreakStats | null) {
     // Focus Items
     const focusTasks = tasks.filter((t) => t.status !== 'completed').slice(0, 3);
 
-    const defaultFocusItems = [
-        {
-            _id: 'focus-1',
-            title: 'Draft Q3 Personal Growth Blueprint',
-            tag: 'IMPORTANT',
-            tagColor: 'bg-rose-100 text-rose-700',
-        },
-        {
-            _id: 'focus-2',
-            title: 'Read 20 pages of "Atomic Habits"',
-            tag: 'GROWTH',
-            tagColor: 'bg-sky-100 text-sky-700',
-        },
-        {
-            _id: 'focus-3',
-            title: '30-minute Morning Focus Meditation',
-            tag: 'WELLNESS',
-            tagColor: 'bg-emerald-100 text-emerald-700',
-        },
-    ];
-
     const focusList: FocusItem[] =
         focusTasks.length > 0
             ? focusTasks.map((t, idx) => ({
@@ -136,7 +115,7 @@ export function useHomeData(tasks: Task[], stats: MasterStreakStats | null) {
                             : 'bg-emerald-100 text-emerald-700',
                 originalTask: t,
             }))
-            : defaultFocusItems.map((item) => ({ ...item, originalTask: null }));
+            : [];
 
     return {
         formattedHoursMinutes,

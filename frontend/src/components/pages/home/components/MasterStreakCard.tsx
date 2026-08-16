@@ -46,8 +46,8 @@ export const MasterStreakCard: React.FC<MasterStreakCardProps> = ({
                         <div
                             key={idx}
                             className={`flex flex-col items-center justify-between p-2 sm:p-3 rounded-2xl transition-all ${day.isToday
-                                    ? 'neu-button border-2 border-[#549acb] bg-sky-50/50 shadow-md scale-105 z-10'
-                                    : 'neu-card bg-[#E0E5EC]'
+                                ? 'neu-button border-2 border-[#549acb] bg-sky-50/50 shadow-md scale-105 z-10'
+                                : 'neu-card bg-[#E0E5EC]'
                                 }`}
                         >
                             <span className="text-[10px] sm:text-xs font-bold text-[#717699] uppercase">
@@ -89,7 +89,7 @@ export const MasterStreakCard: React.FC<MasterStreakCardProps> = ({
                 <div className="flex items-center space-x-2">
                     <Trophy className="w-4 h-4 text-amber-500" />
                     <span className="text-xs font-bold text-[#717699]">
-                        Best: {Math.max(stats?.masterStreak || 0, 12)} Days
+                        Best: {stats?.bestMasterStreak ?? (stats?.masterStreak || 0)} Days
                     </span>
                 </div>
             </div>

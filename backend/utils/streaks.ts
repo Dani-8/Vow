@@ -94,7 +94,6 @@ export function registerTaskCompletion(task: ITask): {
     }
 
     let newCurrentStreak = 1;
-    
     if (task.lastCompletedDate) {
         const daysDiff = getDaysDifference(new Date(task.lastCompletedDate), now);
         if (daysDiff === 1) {
@@ -124,6 +123,7 @@ export function registerTaskCompletion(task: ITask): {
  */
 export function calculateMasterStreak(tasks: ITask[]): {
     masterStreak: number;
+    bestMasterStreak: number;
     activeToday: boolean;
     totalCheckIns: number;
     completedDaysSet: string[];
@@ -156,7 +156,6 @@ export function calculateMasterStreak(tasks: ITask[]): {
 
     while (true) {
         const checkStr = getFormattedDateString(checkDate);
-
         if (dateSet.has(checkStr)) {
             masterStreak++;
             checkDate.setDate(checkDate.getDate() - 1);
@@ -165,8 +164,43 @@ export function calculateMasterStreak(tasks: ITask[]): {
         }
     }
 
+    // Calculate best master streak from sorted dates or task records
+    let bestMasterStreak = masterStreak;
+    const sortedDates = Array.from(dateSet).sort();
+    if (sortedDates.length > 0) {
+        let currentConsecutive = 0;
+        let maxConsecutive = 0;
+        let prevDate: Date | null = null;
+
+        for (const dStr of sortedDates) {
+            const d = new Date(dStr);
+            if (!prevDate) {
+                currentConsecutive = 1;
+            } else {
+                const diff = getDaysDifference(prevDate, d);
+                if (diff === 1) {
+                    currentConsecutive++;
+                } else if (diff > 1) {
+                    currentConsecutive = 1;
+                }
+            }
+            if (currentConsecutive > maxConsecutive) {
+                maxConsecutive = currentConsecutive;
+            }
+            prevDate = d;
+        }
+        bestMasterStreak = Math.max(maxConsecutive, masterStreak);
+    }
+
+    tasks.forEach((t) => {
+        if (t.bestStreak && t.bestStreak > bestMasterStreak) {
+            bestMasterStreak = t.bestStreak;
+        }
+    });
+
     return {
         masterStreak,
+        bestMasterStreak,
         activeToday,
         totalCheckIns: dateSet.size,
         completedDaysSet: Array.from(dateSet),
