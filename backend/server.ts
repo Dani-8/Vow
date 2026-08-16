@@ -29,46 +29,46 @@ app.use('/api/task-maps', taskMapRoutes);
 app.use('/api/ai', aiRoutes);
 
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', app: 'Vow', time: new Date().toISOString() });
+    res.json({ status: 'ok', app: 'Vow', time: new Date().toISOString() });
 });
 
 async function startServer() {
-  try {
-    await connectDB();
-  } catch (err) {
-    console.warn('Database initialization warning (server will continue with fallback):', err);
-  }
+    try {
+        await connectDB();
+    } catch (err) {
+        console.warn('Database initialization warning (server will continue with fallback):', err);
+    }
 
-  if (process.env.NODE_ENV !== 'production') {
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: 'spa',
-      configFile: path.resolve(process.cwd(), 'frontend/vite.config.ts'),
-      root: path.resolve(process.cwd(), 'frontend'),
-    });
-    app.use(vite.middlewares);
-    app.use('*', async (req, res, next) => {
-      const url = req.originalUrl;
-      try {
-        let template = fs.readFileSync(path.resolve(process.cwd(), 'frontend/index.html'), 'utf-8');
-        template = await vite.transformIndexHtml(url, template);
-        res.status(200).set({ 'Content-Type': 'text/html' }).end(template);
-      } catch (e) {
-        vite.ssrFixStacktrace(e as Error);
-        next(e);
-      }
-    });
-  } else {
-    const distPath = path.resolve(process.cwd(), 'frontend/dist');
-    app.use(express.static(distPath));
-    app.get('*', (req, res) => {
-      res.sendFile(path.join(distPath, 'index.html'));
-    });
-  }
+    if (process.env.NODE_ENV !== 'production') {
+        const vite = await createViteServer({
+            server: { middlewareMode: true },
+            appType: 'spa',
+            configFile: path.resolve(process.cwd(), '../frontend/vite.config.ts'),
+            root: path.resolve(process.cwd(), '../frontend'),
+        });
+        app.use(vite.middlewares);
+        app.use('*', async (req, res, next) => {
+            const url = req.originalUrl;
+            try {
+                let template = fs.readFileSync(path.resolve(process.cwd(), '../frontend/index.html'), 'utf-8');
+                template = await vite.transformIndexHtml(url, template);
+                res.status(200).set({ 'Content-Type': 'text/html' }).end(template);
+            } catch (e) {
+                vite.ssrFixStacktrace(e as Error);
+                next(e);
+            }
+        });
+    } else {
+        const distPath = path.resolve(process.cwd(), 'frontend/dist');
+        app.use(express.static(distPath));
+        app.get('*', (req, res) => {
+            res.sendFile(path.join(distPath, 'index.html'));
+        });
+    }
 
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Vow server running at http://0.0.0.0:${PORT}`);
-  });
+    app.listen(PORT, '0.0.0.0', () => {
+        console.log(`Vow server running at http://0.0.0.0:${PORT}`);
+    });
 }
 
 startServer();
