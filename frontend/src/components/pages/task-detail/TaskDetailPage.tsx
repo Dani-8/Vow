@@ -38,6 +38,7 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
         addSubTask,
         updateSubTask,
         toggleSubTaskStatus,
+        setSubTaskStatus,
         deleteSubTask,
         reorderSubTasks,
         completedCount,
@@ -80,6 +81,7 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
                             subTasks={subTasks}
                             selectedSubTaskId={activeSelectedSubTask?.id || null}
                             onSelectSubTask={(st) => setSelectedSubTask(st)}
+                            onToggleStatus={toggleSubTaskStatus}
                             onOpenAddModal={() => {
                                 setEditingSubTask(null);
                                 setIsAddModalOpen(true);
@@ -95,6 +97,7 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
                                 subTask={activeSelectedSubTask}
                                 onClose={() => setSelectedSubTask(null)}
                                 onToggleStatus={toggleSubTaskStatus}
+                                onSetStatus={setSubTaskStatus}
                                 onEdit={(st) => {
                                     setEditingSubTask(st);
                                     setIsAddModalOpen(true);

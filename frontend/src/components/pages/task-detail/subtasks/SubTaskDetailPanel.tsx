@@ -18,6 +18,7 @@ interface SubTaskDetailPanelProps {
     subTask: SubTask;
     onClose: () => void;
     onToggleStatus: (id: string) => void;
+    onSetStatus?: (id: string, status: SubTask['status']) => void;
     onEdit: (subTask: SubTask) => void;
     onDelete: (id: string) => void;
 }
@@ -26,6 +27,7 @@ export const SubTaskDetailPanel: React.FC<SubTaskDetailPanelProps> = ({
     subTask,
     onClose,
     onToggleStatus,
+    onSetStatus,
     onEdit,
     onDelete,
 }) => {
@@ -46,23 +48,51 @@ export const SubTaskDetailPanel: React.FC<SubTaskDetailPanelProps> = ({
                 </button>
             </div>
 
-            {/* Badges: Status & Priority */}
-            <div className="flex flex-wrap items-center gap-2">
-                <span className="px-3 py-1 rounded-xl text-xs font-bold text-blue-700 bg-blue-100/80 border border-blue-200 flex items-center space-x-1.5">
-                    <PlayCircle className="w-3.5 h-3.5" />
-                    <span>
-                        {subTask.status === 'completed'
-                            ? 'Completed'
-                            : subTask.status === 'in_progress'
-                                ? 'In Progress'
-                                : 'Pending'}
-                    </span>
-                </span>
+            {/* Interactive Status Switcher & Priority Badge */}
+            <div className="space-y-2">
+                <label className="text-[11px] font-extrabold text-[#717699] uppercase tracking-wider">
+                    Status & Priority
+                </label>
+                <div className="flex flex-wrap items-center gap-2">
+                    {/* Status Buttons */}
+                    <div className="flex items-center p-1 rounded-xl bg-slate-200/70 neu-inset text-xs font-bold gap-1">
+                        <button
+                            type="button"
+                            onClick={() => onSetStatus ? onSetStatus(subTask.id, 'pending') : onToggleStatus(subTask.id)}
+                            className={`px-2.5 py-1 rounded-lg transition-all ${subTask.status === 'pending'
+                                ? 'bg-purple-600 text-white shadow-xs font-black'
+                                : 'text-[#717699] hover:text-[#1a1c35]'
+                                }`}
+                        >
+                            Pending
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => onSetStatus ? onSetStatus(subTask.id, 'in_progress') : onToggleStatus(subTask.id)}
+                            className={`px-2.5 py-1 rounded-lg transition-all ${subTask.status === 'in_progress'
+                                ? 'bg-[#2563eb] text-white shadow-xs font-black'
+                                : 'text-[#717699] hover:text-[#1a1c35]'
+                                }`}
+                        >
+                            In Progress
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => onSetStatus ? onSetStatus(subTask.id, 'completed') : onToggleStatus(subTask.id)}
+                            className={`px-2.5 py-1 rounded-lg transition-all ${subTask.status === 'completed'
+                                ? 'bg-emerald-600 text-white shadow-xs font-black'
+                                : 'text-[#717699] hover:text-[#1a1c35]'
+                                }`}
+                        >
+                            Completed
+                        </button>
+                    </div>
 
-                <span className="px-3 py-1 rounded-xl text-xs font-bold text-amber-700 bg-amber-100/80 border border-amber-200 flex items-center space-x-1.5">
-                    <Flame className="w-3.5 h-3.5 text-amber-600" />
-                    <span>{subTask.priority || 'High'}</span>
-                </span>
+                    <span className="px-3 py-1.5 rounded-xl text-xs font-bold text-amber-700 bg-amber-100/80 border border-amber-200 flex items-center space-x-1.5 ml-auto">
+                        <Flame className="w-3.5 h-3.5 text-amber-600" />
+                        <span>{subTask.priority || 'High'}</span>
+                    </span>
+                </div>
             </div>
 
             {/* Info Grid 2x2 */}
@@ -159,8 +189,8 @@ export const SubTaskDetailPanel: React.FC<SubTaskDetailPanelProps> = ({
                 <button
                     onClick={() => onToggleStatus(subTask.id)}
                     className={`flex-1 min-w-[120px] py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 transition-all ${isCompleted
-                            ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-                            : 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100'
+                        ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                        : 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100'
                         }`}
                 >
                     <CheckCircle className="w-4 h-4 text-emerald-600" />

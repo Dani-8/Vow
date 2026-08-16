@@ -17,6 +17,7 @@ interface SubTaskTimelineProps {
     onSelectSubTask: (subTask: SubTask) => void;
     onOpenAddModal: () => void;
     onReorderSubTasks?: (newOrder: SubTask[]) => void;
+    onToggleStatus?: (id: string) => void;
 }
 
 export const SubTaskTimeline: React.FC<SubTaskTimelineProps> = ({
@@ -25,6 +26,7 @@ export const SubTaskTimeline: React.FC<SubTaskTimelineProps> = ({
     onSelectSubTask,
     onOpenAddModal,
     onReorderSubTasks,
+    onToggleStatus,
 }) => {
     const [statusFilter, setStatusFilter] = useState<FilterStatus>('all');
     const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
@@ -211,10 +213,14 @@ export const SubTaskTimeline: React.FC<SubTaskTimelineProps> = ({
                                     type="button"
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        if (onSelectSubTask) onSelectSubTask(st);
+                                        if (onToggleStatus) {
+                                            onToggleStatus(st.id);
+                                        } else if (onSelectSubTask) {
+                                            onSelectSubTask(st);
+                                        }
                                     }}
                                     className="relative z-1 flex-shrink-0 flex items-center justify-center ml-1 sm:ml-2 mr-1 cursor-pointer group/node"
-                                    title="Click to view details or toggle status"
+                                    title="Click to toggle status (Pending -> Completed)"
                                 >
                                     {isCompleted ? (
                                         <div className="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-sm hover:scale-110 transition-transform">

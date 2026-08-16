@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { api, getToken, getStoredPin, clearStoredPin, removeToken } from '../api';
-import { Task, User, MasterStreakStats } from '../types';
+import { Task, User, MasterStreakStats, SubTask } from '../types';
+import { SUBTASKS_UPDATED_EVENT } from '../utils/subtaskStorage';
 import {
     DEFAULT_DEMO_USER,
     DEFAULT_INITIAL_TASKS,
@@ -155,6 +156,49 @@ export function useTaskData() {
 
     useEffect(() => {
         loadInitialData();
+    }, []);
+
+    // Listen to live subtasks updates to keep tasks state in sync everywhere
+    useEffect(() => {
+        const handleSubTasksUpdated = (e: Event) => {
+            const customEvent = e as CustomEvent<{ taskId: string; subTasks: SubTask[] }>;
+            if (customEvent.detail && customEvent.detail.taskId) {
+                const { taskId, subTasks } = customEvent.detail;
+                setTasks((prevTasks) =>
+                    prevTasks.map((t) => {
+                        if (t._id === taskId) {
+                            const allDone = subTasks.length > 0 && subTasks.every((s) => s.status === 'completed');
+                            const anyActive = subTasks.some((s) => s.status === 'in_progress' || s.status === 'completed');
+                            return {
+                                ...t,
+                                subTasks,
+                                status: allDone ? 'completed' : anyActive ? 'in_progress' : t.status,
+                            };
+                        }
+                        return t;
+                    })
+                );
+                setPrivateTasks((prevPrivate) =>
+                    prevPrivate.map((t) => {
+                        if (t._id === taskId) {
+                            const allDone = subTasks.length > 0 && subTasks.every((s) => s.status === 'completed');
+                            const anyActive = subTasks.some((s) => s.status === 'in_progress' || s.status === 'completed');
+                            return {
+                                ...t,
+                                subTasks,
+                                status: allDone ? 'completed' : anyActive ? 'in_progress' : t.status,
+                            };
+                        }
+                        return t;
+                    })
+                );
+            }
+        };
+
+        window.addEventListener(SUBTASKS_UPDATED_EVENT, handleSubTasksUpdated);
+        return () => {
+            window.removeEventListener(SUBTASKS_UPDATED_EVENT, handleSubTasksUpdated);
+        };
     }, []);
 
     const refreshData = async () => {
