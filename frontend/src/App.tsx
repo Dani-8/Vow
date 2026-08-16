@@ -30,7 +30,7 @@ export default function App() {
       <LandingPage
         onEnterApp={() => {
           if (!user) {
-            handleBypassAuth();
+            navigateToView('auth');
           } else {
             navigateToView('home');
           }
