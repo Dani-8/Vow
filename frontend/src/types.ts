@@ -58,6 +58,7 @@ export interface Task {
 
 export interface MasterStreakStats {
   masterStreak: number;
+  bestMasterStreak?: number;
   activeToday: boolean;
   totalCheckIns: number;
   completedDaysSet: string[];
