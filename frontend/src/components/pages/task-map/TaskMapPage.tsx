@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { TaskMap, MapAccentColor } from './types';
 import { Task } from '../../../types';
 import { api, getToken } from '../../../api';
-import { INITIAL_DEMO_TASK_MAPS } from './initialMaps';
 
 import { EmptyTaskMapsState } from './components/EmptyTaskMapsState';
 import { SavedMapsView } from './components/SavedMapsView';
@@ -114,7 +113,7 @@ export const TaskMapPage: React.FC<TaskMapPageProps> = ({ tasks }) => {
     const [isLearnModalOpen, setIsLearnModalOpen] = useState(false);
     const saveTimeoutRef = useRef<Record<string, any>>({});
 
-    // Sync from backend Firestore on initial mount if authenticated
+    // Sync from backend on initial mount if authenticated
     useEffect(() => {
         const token = getToken();
         if (token) {
@@ -132,8 +131,8 @@ export const TaskMapPage: React.FC<TaskMapPageProps> = ({ tasks }) => {
                     setMaps([]);
                 });
         } else {
-            // Unauthenticated demo fallback preview
-            setMaps(INITIAL_DEMO_TASK_MAPS);
+            // Unauthenticated / Clean default state - start empty
+            setMaps([]);
         }
     }, []);
 
