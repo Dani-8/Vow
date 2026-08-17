@@ -21,12 +21,14 @@ export function useTaskData() {
     const [stats, setStats] = useState<MasterStreakStats | null>(null);
 
     // Map URL pathname to active view
-    const getActiveViewFromPath = (path: string): 'home' | 'landing' | 'visible' | 'private' | 'stats' | 'auth' | 'task-detail' | 'task-map' => {
+    const getActiveViewFromPath = (path: string): 'home' | 'landing' | 'visible' | 'private' | 'stats' | 'auth' | 'task-detail' | 'task-map' | 'challenges' | 'challenge-detail' => {
         if (path === '/auth') return 'auth';
         if (path === '/app/vault') return 'private';
         if (path === '/app/stats') return 'stats';
         if (path === '/app/tasks') return 'visible';
         if (path.startsWith('/app/map')) return 'task-map';
+        if (path.startsWith('/app/challenges/') && path !== '/app/challenges') return 'challenge-detail';
+        if (path === '/app/challenges' || path.startsWith('/app/challenges')) return 'challenges';
         if (path.startsWith('/app/task/')) return 'task-detail';
         if (path.startsWith('/app')) return 'home';
         return 'landing';
@@ -34,7 +36,7 @@ export function useTaskData() {
 
     const activeView = getActiveViewFromPath(location.pathname);
 
-    const navigateToView = (view: 'home' | 'landing' | 'visible' | 'private' | 'stats' | 'auth' | 'task-map', param?: string) => {
+    const navigateToView = (view: 'home' | 'landing' | 'visible' | 'private' | 'stats' | 'auth' | 'task-map' | 'challenges' | 'challenge-detail', param?: string) => {
         switch (view) {
             case 'home':
                 navigate('/app');
@@ -59,6 +61,16 @@ export function useTaskData() {
                     navigate(`/app/map/${param}`);
                 } else {
                     navigate('/app/map');
+                }
+                break;
+            case 'challenges':
+                navigate('/app/challenges');
+                break;
+            case 'challenge-detail':
+                if (param) {
+                    navigate(`/app/challenges/${param}`);
+                } else {
+                    navigate('/app/challenges');
                 }
                 break;
         }

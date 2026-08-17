@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTaskData } from './hooks/useTaskData';
 import { useModalState } from './hooks/useModalState';
+import { useChallenges } from './hooks/useChallenges';
 
 import { LandingPage } from './components/pages/landing/LandingPage';
 import { AuthPage } from './components/pages/auth/AuthPage';
@@ -11,6 +12,7 @@ import { GlobalModals } from './components/modals/GlobalModals';
 export default function App() {
   const taskData = useTaskData();
   const modalState = useModalState();
+  const challengeState = useChallenges(taskData.user);
 
   const {
     user,
@@ -125,6 +127,14 @@ export default function App() {
           modalState.setIsPinModalOpen(true);
           navigateToView('private');
         }}
+        challenges={challengeState.challenges}
+        selectedChallenge={challengeState.selectedChallenge}
+        setSelectedChallenge={challengeState.setSelectedChallenge}
+        onCreateChallenge={challengeState.createChallenge}
+        onUpdateChallenge={challengeState.updateChallenge}
+        onDeleteChallenge={challengeState.deleteChallenge}
+        onLogChallengeDay={challengeState.logDay}
+        onDeleteChallengeLog={challengeState.deleteLog}
       />
 
       <GlobalModals

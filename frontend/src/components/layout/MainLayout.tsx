@@ -10,7 +10,7 @@ interface MainLayoutProps {
     sidebarCollapsed: boolean;
     onToggleSidebarCollapse: () => void;
     isPrivateUnlocked: boolean;
-    onNavigate: (view: 'home' | 'landing' | 'visible' | 'private' | 'stats' | 'auth') => void;
+    onNavigate: (view: 'home' | 'landing' | 'visible' | 'private' | 'stats' | 'auth' | 'task-map' | 'challenges' | 'challenge-detail', param?: string) => void;
     onOpenCreateModal: () => void;
     onOpenAuthModal: () => void;
     onOpenPinModal: () => void;
