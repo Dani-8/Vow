@@ -1,4 +1,36 @@
-export type ActiveView = 'home' | 'visible' | 'private' | 'stats' | 'auth' | 'task-detail' | 'landing' | 'task-map';
+export type ActiveView = 'home' | 'visible' | 'private' | 'stats' | 'auth' | 'task-detail' | 'landing' | 'task-map' | 'challenges' | 'challenge-detail';
+
+export interface ChallengeLog {
+  id: string;
+  dayNumber: number;
+  date: string;
+  status: 'completed' | 'rest' | 'missed';
+  note: string;
+  timeSpent?: string;
+  imageUrl?: string;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface Challenge {
+  _id: string;
+  id?: string;
+  userId: string;
+  title: string;
+  description: string;
+  category: string;
+  color: string;
+  icon?: string;
+  targetDays: number;
+  startDate: string;
+  targetEndDate: string;
+  rule?: string;
+  tags: string[];
+  status: 'active' | 'completed' | 'paused';
+  logs: ChallengeLog[];
+  createdAt?: string;
+  updatedAt?: string;
+}
 
 export interface User {
   id: string;

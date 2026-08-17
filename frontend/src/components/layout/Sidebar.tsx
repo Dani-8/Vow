@@ -6,6 +6,7 @@ import {
     Unlock,
     BarChart3,
     Network,
+    Target,
     Plus,
     ChevronLeft,
     ChevronRight,
@@ -20,7 +21,7 @@ interface SidebarProps {
     collapsed: boolean;
     onToggleCollapse: () => void;
     activeView: ActiveView;
-    onNavigate: (view: 'home' | 'landing' | 'visible' | 'private' | 'stats' | 'auth' | 'task-map') => void;
+    onNavigate: (view: 'home' | 'landing' | 'visible' | 'private' | 'stats' | 'auth' | 'task-map' | 'challenges') => void;
     user: User | null;
     isPrivateUnlocked: boolean;
     stats: MasterStreakStats | null;
@@ -179,6 +180,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     >
                         <Network className="w-4 h-4 shrink-0 text-[#549acb]" />
                         {!collapsed && <span>Task Map</span>}
+                    </button>
+
+                    <button
+                        onClick={() => onNavigate('challenges')}
+                        className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${activeView === 'challenges' || activeView === 'challenge-detail'
+                            ? 'neu-inset text-indigo-600 bg-indigo-50/50 shadow-inner'
+                            : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
+                            }`}
+                    >
+                        <Target className="w-4 h-4 shrink-0 text-indigo-600" />
+                        {!collapsed && <span>Challenges</span>}
                     </button>
                 </nav>
             </div>
