@@ -207,8 +207,8 @@ export const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
                                             setColor(cat.color);
                                         }}
                                         className={`flex items-center space-x-2 p-2.5 rounded-xl text-xs font-bold transition-all ${isSelected
-                                                ? 'neu-inset text-indigo-700 bg-indigo-50/60 font-black'
-                                                : 'neu-button text-slate-600 hover:text-slate-900'
+                                            ? 'neu-inset text-indigo-700 bg-indigo-50/60 font-black'
+                                            : 'neu-button text-slate-600 hover:text-slate-900'
                                             }`}
                                     >
                                         <IconComponent className="w-4 h-4 shrink-0" />
@@ -236,8 +236,8 @@ export const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
                                             setTargetDays(preset.days);
                                         }}
                                         className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${isSelected
-                                                ? 'neu-button-primary text-white'
-                                                : 'neu-button text-slate-600 hover:text-slate-900'
+                                            ? 'neu-button-primary text-white'
+                                            : 'neu-button text-slate-600 hover:text-slate-900'
                                             }`}
                                     >
                                         {preset.label}
@@ -248,8 +248,8 @@ export const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
                                 type="button"
                                 onClick={() => setIsCustomDays(true)}
                                 className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${isCustomDays
-                                        ? 'neu-button-primary text-white'
-                                        : 'neu-button text-slate-600 hover:text-slate-900'
+                                    ? 'neu-button-primary text-white'
+                                    : 'neu-button text-slate-600 hover:text-slate-900'
                                     }`}
                             >
                                 Custom Days
