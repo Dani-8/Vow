@@ -238,4 +238,53 @@ export const api = {
       method: 'DELETE',
     });
   },
+
+  // Challenges (N-day Target Challenges & Habits)
+  async getChallenges() {
+    return fetchAPI<{ challenges: any[] }>('/api/challenges');
+  },
+
+  async getChallenge(id: string) {
+    return fetchAPI<{ challenge: any }>(`/api/challenges/${id}`);
+  },
+
+  async createChallenge(challengeData: any) {
+    return fetchAPI<{ challenge: any }>('/api/challenges', {
+      method: 'POST',
+      body: JSON.stringify(challengeData),
+    });
+  },
+
+  async updateChallenge(id: string, updates: any) {
+    return fetchAPI<{ challenge: any }>(`/api/challenges/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+    });
+  },
+
+  async logChallengeDay(id: string, logData: {
+    dayNumber: number;
+    date?: string;
+    status?: 'completed' | 'rest' | 'missed';
+    note?: string;
+    timeSpent?: string;
+    imageUrl?: string;
+  }) {
+    return fetchAPI<{ challenge: any; log: any }>(`/api/challenges/${id}/log`, {
+      method: 'POST',
+      body: JSON.stringify(logData),
+    });
+  },
+
+  async deleteChallengeLog(id: string, logId: string) {
+    return fetchAPI<{ challenge: any }>(`/api/challenges/${id}/log/${logId}`, {
+      method: 'DELETE',
+    });
+  },
+
+  async deleteChallenge(id: string) {
+    return fetchAPI<{ success: boolean }>(`/api/challenges/${id}`, {
+      method: 'DELETE',
+    });
+  },
 };
