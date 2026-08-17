@@ -370,8 +370,8 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                 )
                             }
                             className={`px-5 py-3 rounded-2xl font-bold text-xs flex items-center justify-center space-x-2 shadow-md transition-all shrink-0 ${todayLog?.status === 'completed'
-                                    ? 'neu-button bg-emerald-50 text-emerald-700 border border-emerald-300'
-                                    : 'neu-button-primary text-white hover:scale-105'
+                                ? 'neu-button bg-emerald-50 text-emerald-700 border border-emerald-300'
+                                : 'neu-button-primary text-white hover:scale-105'
                                 }`}
                         >
                             <Calendar className="w-4 h-4" />
@@ -477,14 +477,14 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                                                 )
                                                             }
                                                             title={`Day ${dayItem.dayNumber} (${dayItem.dateStr}): ${isCompleted
-                                                                    ? `Completed${dayItem.log?.note ? ` - ${dayItem.log.note}` : ''}`
-                                                                    : isRest
-                                                                        ? 'Rest Day'
-                                                                        : isMissed
-                                                                            ? 'Missed'
-                                                                            : isToday
-                                                                                ? "Today's Target Day"
-                                                                                : 'Upcoming Day'
+                                                                ? `Completed${dayItem.log?.note ? ` - ${dayItem.log.note}` : ''}`
+                                                                : isRest
+                                                                    ? 'Rest Day'
+                                                                    : isMissed
+                                                                        ? 'Missed'
+                                                                        : isToday
+                                                                            ? "Today's Target Day"
+                                                                            : 'Upcoming Day'
                                                                 }`}
                                                             className={`w-6 h-6 sm:w-7 sm:h-7 rounded-lg text-[9px] sm:text-[10px] font-black flex items-center justify-center transition-all cursor-pointer hover:scale-110 shrink-0 ${bgClass}`}
                                                         >
@@ -662,10 +662,10 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                             {/* Timeline Dot */}
                                             <div
                                                 className={`absolute left-2 top-1.5 w-3.5 h-3.5 rounded-full ring-4 ring-[#E0E5EC] transition-transform group-hover:scale-125 ${isLogCompleted
-                                                        ? 'bg-emerald-500'
-                                                        : isLogRest
-                                                            ? 'bg-amber-400'
-                                                            : 'bg-slate-400'
+                                                    ? 'bg-emerald-500'
+                                                    : isLogRest
+                                                        ? 'bg-amber-400'
+                                                        : 'bg-slate-400'
                                                     }`}
                                             />
 
