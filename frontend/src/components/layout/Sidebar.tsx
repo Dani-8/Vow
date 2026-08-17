@@ -113,8 +113,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     <button
                         onClick={() => onNavigate('home')}
                         className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${activeView === 'home'
-                                ? 'neu-inset text-[#549acb]'
-                                : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
+                            ? 'neu-inset text-[#549acb]'
+                            : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
                             }`}
                     >
                         <Home className="w-4 h-4 shrink-0" />
@@ -124,8 +124,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     <button
                         onClick={() => onNavigate('visible')}
                         className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${activeView === 'visible' || activeView === 'task-detail'
-                                ? 'neu-inset text-[#549acb]'
-                                : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
+                            ? 'neu-inset text-[#549acb]'
+                            : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
                             }`}
                     >
                         <CheckSquare className="w-4 h-4 shrink-0" />
@@ -141,8 +141,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             }
                         }}
                         className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${activeView === 'private'
-                                ? 'neu-inset text-purple-600'
-                                : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
+                            ? 'neu-inset text-purple-600'
+                            : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
                             }`}
                     >
                         {isPrivateUnlocked ? (
@@ -163,8 +163,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     <button
                         onClick={() => onNavigate('stats')}
                         className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${activeView === 'stats'
-                                ? 'neu-inset text-[#549acb]'
-                                : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
+                            ? 'neu-inset text-[#549acb]'
+                            : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
                             }`}
                     >
                         <BarChart3 className="w-4 h-4 shrink-0" />
@@ -174,8 +174,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     <button
                         onClick={() => onNavigate('task-map')}
                         className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${activeView === 'task-map'
-                                ? 'neu-inset text-[#549acb]'
-                                : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
+                            ? 'neu-inset text-[#549acb]'
+                            : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
                             }`}
                     >
                         <Network className="w-4 h-4 shrink-0 text-[#549acb]" />
@@ -185,8 +185,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     <button
                         onClick={() => onNavigate('challenges')}
                         className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${activeView === 'challenges' || activeView === 'challenge-detail'
-                                ? 'neu-inset text-indigo-600 bg-indigo-50/50 shadow-inner'
-                                : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
+                            ? 'neu-inset text-indigo-600 bg-indigo-50/50 shadow-inner'
+                            : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
                             }`}
                     >
                         <Target className="w-4 h-4 shrink-0 text-indigo-600" />
