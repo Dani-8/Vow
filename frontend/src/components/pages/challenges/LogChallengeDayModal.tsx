@@ -125,8 +125,8 @@ export const LogChallengeDayModal: React.FC<LogChallengeDayModalProps> = ({
                                 type="button"
                                 onClick={() => setStatus('completed')}
                                 className={`p-2.5 rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 transition-all ${status === 'completed'
-                                        ? 'neu-inset text-emerald-700 bg-emerald-50/70 border border-emerald-300'
-                                        : 'neu-button text-slate-600 hover:text-slate-900'
+                                    ? 'neu-inset text-emerald-700 bg-emerald-50/70 border border-emerald-300'
+                                    : 'neu-button text-slate-600 hover:text-slate-900'
                                     }`}
                             >
                                 <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
@@ -137,8 +137,8 @@ export const LogChallengeDayModal: React.FC<LogChallengeDayModalProps> = ({
                                 type="button"
                                 onClick={() => setStatus('rest')}
                                 className={`p-2.5 rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 transition-all ${status === 'rest'
-                                        ? 'neu-inset text-amber-700 bg-amber-50/70 border border-amber-300'
-                                        : 'neu-button text-slate-600 hover:text-slate-900'
+                                    ? 'neu-inset text-amber-700 bg-amber-50/70 border border-amber-300'
+                                    : 'neu-button text-slate-600 hover:text-slate-900'
                                     }`}
                             >
                                 <Coffee className="w-4 h-4 text-amber-600 shrink-0" />
@@ -149,8 +149,8 @@ export const LogChallengeDayModal: React.FC<LogChallengeDayModalProps> = ({
                                 type="button"
                                 onClick={() => setStatus('missed')}
                                 className={`p-2.5 rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 transition-all ${status === 'missed'
-                                        ? 'neu-inset text-rose-700 bg-rose-50/70 border border-rose-300'
-                                        : 'neu-button text-slate-600 hover:text-slate-900'
+                                    ? 'neu-inset text-rose-700 bg-rose-50/70 border border-rose-300'
+                                    : 'neu-button text-slate-600 hover:text-slate-900'
                                     }`}
                             >
                                 <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
