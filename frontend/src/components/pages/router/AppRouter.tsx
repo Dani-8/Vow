@@ -20,10 +20,13 @@ import { TaskDetailPage } from '../task-detail/TaskDetailPage';
 import { StatsView } from '../stats/StatsView';
 import { HomeView } from '../home/HomeView';
 import { TaskMapPage } from '../task-map/TaskMapPage';
+import { ChallengesPage } from '../challenges/ChallengesPage';
+import { ChallengeDetailPage } from '../challenges/ChallengeDetailPage';
 
 import { ControlsBar, FilterCategory } from '../../dashboard/ControlsBar';
 import { LockedVaultCard } from '../../dashboard/LockedVaultCard';
 import { TaskGrid } from '../../dashboard/TaskGrid';
+import { Challenge } from '../../../types';
 
 interface AppRouterProps {
   activeView: ActiveView;
@@ -41,7 +44,7 @@ interface AppRouterProps {
   filter: FilterCategory;
   setFilter: (filter: FilterCategory) => void;
   navigate: NavigateFunction;
-  navigateToView: (view: 'home' | 'landing' | 'visible' | 'private' | 'stats' | 'auth' | 'task-map') => void;
+  navigateToView: (view: 'home' | 'landing' | 'visible' | 'private' | 'stats' | 'auth' | 'task-map' | 'challenges' | 'challenge-detail', param?: string) => void;
   setIsPrivateUnlocked: (unlocked: boolean) => void;
   onCheckInToday: () => void;
   onToggleComplete: (task: Task) => void;
@@ -51,6 +54,24 @@ interface AppRouterProps {
   onOpenAIAssist: (task?: Task) => void;
   onOpenCreateModal: () => void;
   onOpenPinModal: () => void;
+  challenges: Challenge[];
+  selectedChallenge: Challenge | null;
+  setSelectedChallenge: (challenge: Challenge | null) => void;
+  onCreateChallenge: (data: Partial<Challenge>) => Promise<void>;
+  onUpdateChallenge: (id: string, updates: Partial<Challenge>) => Promise<void>;
+  onDeleteChallenge: (id: string) => Promise<void>;
+  onLogChallengeDay: (
+    id: string,
+    logData: {
+      dayNumber: number;
+      date?: string;
+      status?: 'completed' | 'rest' | 'missed';
+      note?: string;
+      timeSpent?: string;
+      imageUrl?: string;
+    }
+  ) => Promise<void>;
+  onDeleteChallengeLog: (challengeId: string, logId: string) => Promise<void>;
 }
 
 export const AppRouter: React.FC<AppRouterProps> = ({
@@ -79,6 +100,14 @@ export const AppRouter: React.FC<AppRouterProps> = ({
   onOpenAIAssist,
   onOpenCreateModal,
   onOpenPinModal,
+  challenges,
+  selectedChallenge,
+  setSelectedChallenge,
+  onCreateChallenge,
+  onUpdateChallenge,
+  onDeleteChallenge,
+  onLogChallengeDay,
+  onDeleteChallengeLog,
 }) => {
   if (activeView === 'task-detail') {
     const activeTaskParam = decodeURIComponent(location.pathname.replace('/app/task/', ''));
@@ -164,6 +193,50 @@ export const AppRouter: React.FC<AppRouterProps> = ({
 
   if (activeView === 'task-map') {
     return <TaskMapPage tasks={[...tasks, ...privateTasks]} onBackToHome={() => navigateToView('home')} />;
+  }
+
+  if (activeView === 'challenge-detail' || (selectedChallenge && activeView === 'challenges' && location.pathname.startsWith('/app/challenges/'))) {
+    const challengeParam = decodeURIComponent(location.pathname.replace('/app/challenges/', ''));
+    const currentChallenge =
+      challenges.find(
+        (c) =>
+          (c.id && c.id.toLowerCase() === challengeParam.toLowerCase()) ||
+          c._id === challengeParam ||
+          (c.title && c.title.toLowerCase().replace(/[^a-z0-9]+/g, '-') === challengeParam.toLowerCase())
+      ) ||
+      selectedChallenge ||
+      challenges[0];
+
+    if (currentChallenge) {
+      return (
+        <ChallengeDetailPage
+          challenge={currentChallenge}
+          onBack={() => {
+            setSelectedChallenge(null);
+            navigateToView('challenges');
+          }}
+          onUpdateChallenge={onUpdateChallenge}
+          onDeleteChallenge={onDeleteChallenge}
+          onLogDay={onLogChallengeDay}
+          onDeleteLog={onDeleteChallengeLog}
+        />
+      );
+    }
+  }
+
+  if (activeView === 'challenges') {
+    return (
+      <ChallengesPage
+        challenges={challenges}
+        onSelectChallenge={(ch) => {
+          setSelectedChallenge(ch);
+          navigateToView('challenge-detail', ch.id || ch._id);
+        }}
+        onCreateChallenge={onCreateChallenge}
+        onUpdateChallenge={onUpdateChallenge}
+        onDeleteChallenge={onDeleteChallenge}
+      />
+    );
   }
 
   if (activeView === 'private' && !isPrivateUnlocked) {
