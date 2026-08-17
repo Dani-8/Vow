@@ -3,7 +3,9 @@ import bcrypt from 'bcryptjs';
 import { User } from '../models/User.js';
 import { Task } from '../models/Task.js';
 import { TaskMap } from '../models/TaskMap.js';
+import { Challenge } from '../models/Challenge.js';
 import { INITIAL_DEMO_TASK_MAPS_SERVER } from '../data/demoTaskMaps.js';
+import { INITIAL_DEMO_CHALLENGES_SERVER } from '../data/demoChallenges.js';
 import { authenticateToken, generateToken, AuthenticatedRequest } from '../middleware/auth.js';
 
 const router = Router();
@@ -311,6 +313,17 @@ router.post('/demo-bypass', async (req: AuthenticatedRequest, res: Response) => 
             for (const mapData of INITIAL_DEMO_TASK_MAPS_SERVER) {
                 await TaskMap.create({
                     ...mapData,
+                    userId: user._id,
+                });
+            }
+        }
+
+        // Ensure demo challenges exist for demo user
+        const existingChallenges = await Challenge.find({ userId: user._id });
+        if (existingChallenges.length === 0) {
+            for (const chData of INITIAL_DEMO_CHALLENGES_SERVER) {
+                await Challenge.create({
+                    ...chData,
                     userId: user._id,
                 });
             }
