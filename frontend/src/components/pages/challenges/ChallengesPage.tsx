@@ -22,7 +22,7 @@ import {
     Flame,
 } from 'lucide-react';
 import { Challenge } from '../../../types';
-import { CreateChallengeModal } from './CreateChallengeModal';
+import { CreateChallengeModal } from './components/CreateChallengeModal';
 import { HowChallengesWorkModal } from './components/HowChallengesWorkModal';
 
 interface ChallengesPageProps {
