@@ -1,8 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
     ArrowLeft,
     Share2,
-    Settings,
     MoreVertical,
     Calendar,
     Clock,
@@ -27,6 +26,7 @@ import {
 import { Challenge, ChallengeLog } from '../../../types';
 import { LogChallengeDayModal } from './components/LogChallengeDayModal';
 import { CreateChallengeModal } from './components/CreateChallengeModal';
+import { DeleteChallengeModal } from './components/DeleteChallengeModal';
 
 interface ChallengeDetailPageProps {
     challenge: Challenge;
@@ -75,9 +75,20 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
     const [showShareToast, setShowShareToast] = useState(false);
     const [activeTabLogs, setActiveTabLogs] = useState<'all' | 'completed' | 'notes'>('all');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    // Close header menu on outside click
+    useEffect(() => {
+        const handleClickOutside = () => setIsMenuOpen(false);
+        if (isMenuOpen) {
+            window.addEventListener('click', handleClickOutside);
+        }
+        return () => window.removeEventListener('click', handleClickOutside);
+    }, [isMenuOpen]);
 
     // Calculate current elapsed days since startDate
-    const { currentDayNumber, startDateObj, targetEndDateObj, completedDaysCount, successRate, remainingDays } =
+    const { currentDayNumber, startDateObj, targetEndDateObj, completedDaysCount, successRate, remainingDays, streak } =
         useMemo(() => {
             const start = new Date(challenge.startDate || new Date());
             const now = new Date();
@@ -91,6 +102,22 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
             const rate = Math.round((completed / challenge.targetDays) * 100);
             const remaining = Math.max(0, challenge.targetDays - completed);
 
+            // Calculate consecutive completed streak
+            let currentStreak = 0;
+            const todayLog = challenge.logs.find((l) => Number(l.dayNumber) === currentDay);
+            let checkDay = todayLog?.status === 'completed' ? currentDay : currentDay - 1;
+            while (checkDay >= 1) {
+                const log = challenge.logs.find((l) => Number(l.dayNumber) === checkDay);
+                if (log?.status === 'completed') {
+                    currentStreak++;
+                    checkDay--;
+                } else if (log?.status === 'rest') {
+                    checkDay--;
+                } else {
+                    break;
+                }
+            }
+
             return {
                 currentDayNumber: currentDay,
                 startDateObj: start,
@@ -98,6 +125,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                 completedDaysCount: completed,
                 successRate: rate,
                 remainingDays: remaining,
+                streak: currentStreak,
             };
         }, [challenge]);
 
@@ -227,24 +255,23 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                         <span>Share</span>
                     </button>
 
-                    <button
-                        onClick={() => setIsEditModalOpen(true)}
-                        className="neu-button p-2 rounded-xl text-[#717699] hover:text-[#1a1c35]"
-                        title="Edit Challenge"
-                    >
-                        <Settings className="w-4 h-4" />
-                    </button>
-
                     <div className="relative">
                         <button
-                            onClick={() => setIsMenuOpen(!isMenuOpen)}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setIsMenuOpen((prev) => !prev);
+                            }}
                             className="neu-button p-2 rounded-xl text-[#717699] hover:text-[#1a1c35]"
+                            title="More Options"
                         >
                             <MoreVertical className="w-4 h-4" />
                         </button>
 
                         {isMenuOpen && (
-                            <div className="absolute right-0 mt-2 w-44 neu-card p-1.5 bg-[#E0E5EC] z-30 shadow-xl rounded-xl">
+                            <div
+                                onClick={(e) => e.stopPropagation()}
+                                className="absolute right-0 mt-2 w-44 neu-card p-1.5 bg-[#E0E5EC] z-30 shadow-xl rounded-xl"
+                            >
                                 <button
                                     onClick={() => {
                                         setIsMenuOpen(false);
@@ -268,12 +295,9 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                 </button>
                                 <div className="my-1 border-t border-slate-300/60" />
                                 <button
-                                    onClick={async () => {
+                                    onClick={() => {
                                         setIsMenuOpen(false);
-                                        if (window.confirm(`Delete challenge "${challenge.title}"?`)) {
-                                            await onDeleteChallenge(challenge.id || challenge._id);
-                                            onBack();
-                                        }
+                                        setIsDeleteModalOpen(true);
                                     }}
                                     className="w-full text-left px-3 py-2 text-xs font-bold text-rose-600 hover:bg-rose-50 rounded-lg flex items-center space-x-2"
                                 >
@@ -332,27 +356,42 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                     </div>
 
                     {/* Metric Stats & Check-In Action Button */}
-                    <div className="flex flex-col sm:flex-row lg:flex-col xl:flex-row items-start sm:items-center lg:items-end xl:items-center gap-4">
-                        <div className="grid grid-cols-4 gap-3 text-center">
+                    <div className="flex flex-col sm:flex-row lg:flex-col xl:flex-row items-stretch sm:items-center lg:items-end xl:items-center gap-4">
+                        {/* 5-Card Stats Grid */}
+                        <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-2.5 text-center">
+                            {/* Day */}
                             <div className="neu-inset px-3 py-2 rounded-xl">
                                 <span className="text-[9px] font-extrabold text-[#717699] uppercase block">Day</span>
-                                <span className="text-lg font-black text-[#1a1c35]">{currentDayNumber}</span>
-                                <span className="text-[9px] text-[#717699] block">of {challenge.targetDays}</span>
+                                <span className="text-lg font-black text-[#1a1c35]">#{currentDayNumber}</span>
+                                <span className="text-[9px] text-[#717699] block font-semibold">of {challenge.targetDays}</span>
                             </div>
 
+                            {/* Completed */}
                             <div className="neu-inset px-3 py-2 rounded-xl">
                                 <span className="text-[9px] font-extrabold text-[#717699] uppercase block">Completed</span>
                                 <span className="text-lg font-black text-emerald-600">{completedDaysCount}</span>
-                                <span className="text-[9px] text-emerald-700 block">Days</span>
+                                <span className="text-[9px] text-emerald-700 block font-semibold">Days</span>
                             </div>
 
+                            {/* Streak */}
+                            <div className="neu-inset px-3 py-2 rounded-xl bg-amber-50/30">
+                                <span className="text-[9px] font-extrabold text-amber-700 uppercase flex items-center justify-center space-x-0.5">
+                                    <Flame className="w-2.5 h-2.5 text-amber-500 fill-amber-500" />
+                                    <span>Streak</span>
+                                </span>
+                                <span className="text-lg font-black text-amber-600">{streak}</span>
+                                <span className="text-[9px] text-amber-700 block font-semibold">Days</span>
+                            </div>
+
+                            {/* Remaining */}
                             <div className="neu-inset px-3 py-2 rounded-xl">
                                 <span className="text-[9px] font-extrabold text-[#717699] uppercase block">Remaining</span>
                                 <span className="text-lg font-black text-slate-700">{remainingDays}</span>
-                                <span className="text-[9px] text-[#717699] block">Days</span>
+                                <span className="text-[9px] text-[#717699] block font-semibold">Days</span>
                             </div>
 
-                            <div className="neu-inset px-3 py-2 rounded-xl">
+                            {/* Success Rate */}
+                            <div className="neu-inset px-3 py-2 rounded-xl col-span-2 sm:col-span-1">
                                 <span className="text-[9px] font-extrabold text-[#717699] uppercase block">Success Rate</span>
                                 <span className="text-lg font-black text-[#1a1c35]">{successRate}%</span>
                                 <span className="text-[9px] font-bold text-emerald-600 flex items-center justify-center">
@@ -485,7 +524,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                                                         : isToday
                                                                             ? "Today's Target Day (Click to log)"
                                                                             : 'Upcoming Day'
-                                                                }`}
+                                                            }`}
                                                             className={`w-5 h-5 rounded-md text-[8px] sm:text-[9px] font-black flex items-center justify-center transition-all cursor-pointer hover:scale-115 shrink-0 ${bgClass}`}
                                                         >
                                                             {isToday ? (
@@ -652,7 +691,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                 </button>
                             </div>
                         ) : (
-                            <div className="space-y-4 relative before:absolute before:top-2 before:bottom-2 before:left-3.5 before:w-0.5 before:bg-slate-300/80">
+                            <div className="max-h-[560px] overflow-y-auto pr-2 space-y-4 relative before:absolute before:top-2 before:bottom-2 before:left-3.5 before:w-0.5 before:bg-slate-300/80">
                                 {displayLogs.map((log) => {
                                     const isLogCompleted = log.status === 'completed';
                                     const isLogRest = log.status === 'rest';
@@ -752,6 +791,26 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                     onSubmit={async (updates) => {
                         await onUpdateChallenge(challenge.id || challenge._id, updates);
                         setIsEditModalOpen(false);
+                    }}
+                />
+            )}
+
+            {/* Delete Challenge Modal */}
+            {isDeleteModalOpen && (
+                <DeleteChallengeModal
+                    isOpen={isDeleteModalOpen}
+                    onClose={() => setIsDeleteModalOpen(false)}
+                    challengeTitle={challenge.title}
+                    isDeleting={isDeleting}
+                    onConfirm={async () => {
+                        try {
+                            setIsDeleting(true);
+                            await onDeleteChallenge(challenge.id || challenge._id);
+                            setIsDeleteModalOpen(false);
+                            onBack();
+                        } finally {
+                            setIsDeleting(false);
+                        }
                     }}
                 />
             )}
