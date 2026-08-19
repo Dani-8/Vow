@@ -450,7 +450,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
 
                                                     const isCompleted = dayItem.log?.status === 'completed';
                                                     const isRest = dayItem.log?.status === 'rest';
-                                                    const isMissed = dayItem.log?.status === 'missed';
+                                                    const isMissed = !isCompleted && !isRest && (dayItem.log?.status === 'missed' || (dayItem.isPast && !dayItem.log));
                                                     const isToday = dayItem.isToday;
                                                     const isUpcoming = dayItem.isFuture && !dayItem.log;
 
@@ -460,7 +460,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                                     } else if (isRest) {
                                                         bgClass = 'bg-amber-400 text-slate-900';
                                                     } else if (isMissed) {
-                                                        bgClass = 'bg-[#8A95A5] text-white';
+                                                        bgClass = 'bg-[#8A95A5] text-white hover:ring-1 hover:ring-slate-400';
                                                     } else if (isToday) {
                                                         bgClass = 'bg-purple-600 text-white ring-2 ring-purple-400 ring-offset-1 animate-pulse';
                                                     }
@@ -481,11 +481,11 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                                                 : isRest
                                                                     ? 'Rest Day'
                                                                     : isMissed
-                                                                        ? 'Missed'
+                                                                        ? 'Missed Day (Click to log)'
                                                                         : isToday
-                                                                            ? "Today's Target Day"
+                                                                            ? "Today's Target Day (Click to log)"
                                                                             : 'Upcoming Day'
-                                                                }`}
+                                                            }`}
                                                             className={`w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-[3px] text-[7px] font-black flex items-center justify-center transition-all cursor-pointer hover:scale-125 shrink-0 ${bgClass}`}
                                                         >
                                                             {isToday ? (
