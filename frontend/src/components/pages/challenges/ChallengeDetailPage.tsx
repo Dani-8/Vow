@@ -524,7 +524,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                                                         : isToday
                                                                             ? "Today's Target Day (Click to log)"
                                                                             : 'Upcoming Day'
-                                                            }`}
+                                                                }`}
                                                             className={`w-5 h-5 rounded-md text-[8px] sm:text-[9px] font-black flex items-center justify-center transition-all cursor-pointer hover:scale-115 shrink-0 ${bgClass}`}
                                                         >
                                                             {isToday ? (
