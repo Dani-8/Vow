@@ -9,7 +9,7 @@ import {
     Camera,
     Calendar,
 } from 'lucide-react';
-import { ChallengeLog } from '../../../types';
+import { ChallengeLog } from '../../../../types';
 
 interface LogChallengeDayModalProps {
     isOpen: boolean;

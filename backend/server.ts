@@ -43,14 +43,14 @@ async function startServer() {
         const vite = await createViteServer({
             server: { middlewareMode: true },
             appType: 'spa',
-            configFile: path.resolve(process.cwd(), '../frontend/vite.config.ts'),
-            root: path.resolve(process.cwd(), '../frontend'),
+            configFile: path.resolve(process.cwd(), 'frontend/vite.config.ts'),
+            root: path.resolve(process.cwd(), 'frontend'),
         });
         app.use(vite.middlewares);
         app.use('*', async (req, res, next) => {
             const url = req.originalUrl;
             try {
-                let template = fs.readFileSync(path.resolve(process.cwd(), '../frontend/index.html'), 'utf-8');
+                let template = fs.readFileSync(path.resolve(process.cwd(), 'frontend/index.html'), 'utf-8');
                 template = await vite.transformIndexHtml(url, template);
                 res.status(200).set({ 'Content-Type': 'text/html' }).end(template);
             } catch (e) {
