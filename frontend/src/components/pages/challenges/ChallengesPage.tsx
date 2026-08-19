@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
     Target,
     Plus,
@@ -24,6 +24,7 @@ import {
 import { Challenge } from '../../../types';
 import { CreateChallengeModal } from './components/CreateChallengeModal';
 import { HowChallengesWorkModal } from './components/HowChallengesWorkModal';
+import { DeleteChallengeModal } from './components/DeleteChallengeModal';
 
 interface ChallengesPageProps {
     challenges: Challenge[];
@@ -90,6 +91,17 @@ export const ChallengesPage: React.FC<ChallengesPageProps> = ({
     const [isGuideModalOpen, setIsGuideModalOpen] = useState(false);
     const [editingChallenge, setEditingChallenge] = useState<Challenge | null>(null);
     const [cardMenuOpenId, setCardMenuOpenId] = useState<string | null>(null);
+    const [challengeToDelete, setChallengeToDelete] = useState<Challenge | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    // Close card menu on outside click
+    useEffect(() => {
+        const handleClickOutside = () => setCardMenuOpenId(null);
+        if (cardMenuOpenId) {
+            window.addEventListener('click', handleClickOutside);
+        }
+        return () => window.removeEventListener('click', handleClickOutside);
+    }, [cardMenuOpenId]);
 
     // Counts by status
     const counts = useMemo(() => {
@@ -290,6 +302,22 @@ export const ChallengesPage: React.FC<ChallengesPageProps> = ({
 
                             const completedDays = challenge.logs.filter((l) => l.status === 'completed').length;
 
+                            // Calculate consecutive streak
+                            let streak = 0;
+                            const todayLog = challenge.logs.find((l) => Number(l.dayNumber) === currentDay);
+                            let checkDay = todayLog?.status === 'completed' ? currentDay : currentDay - 1;
+                            while (checkDay >= 1) {
+                                const log = challenge.logs.find((l) => Number(l.dayNumber) === checkDay);
+                                if (log?.status === 'completed') {
+                                    streak++;
+                                    checkDay--;
+                                } else if (log?.status === 'rest') {
+                                    checkDay--;
+                                } else {
+                                    break;
+                                }
+                            }
+
                             return (
                                 <div
                                     key={challenge.id || challenge._id}
@@ -304,12 +332,18 @@ export const ChallengesPage: React.FC<ChallengesPageProps> = ({
                                                 >
                                                     <IconComponent className="w-6 h-6" />
                                                 </div>
-                                                <div>
+                                                <div className="flex items-center space-x-2">
                                                     <span
                                                         className={`text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full neu-inset ${theme.badgeColor}`}
                                                     >
                                                         {challenge.category || 'Engineering'}
                                                     </span>
+                                                    {streak > 0 && (
+                                                        <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full neu-inset text-amber-700 bg-amber-50/70 flex items-center space-x-1">
+                                                            <Flame className="w-3 h-3 text-amber-500 fill-amber-500" />
+                                                            <span>{streak}d Streak</span>
+                                                        </span>
+                                                    )}
                                                 </div>
                                             </div>
 
@@ -361,14 +395,10 @@ export const ChallengesPage: React.FC<ChallengesPageProps> = ({
                                                         </button>
                                                         <div className="my-1 border-t border-slate-300/60" />
                                                         <button
-                                                            onClick={async (e) => {
+                                                            onClick={(e) => {
                                                                 e.stopPropagation();
                                                                 setCardMenuOpenId(null);
-                                                                if (
-                                                                    window.confirm(`Delete challenge "${challenge.title}"?`)
-                                                                ) {
-                                                                    await onDeleteChallenge(challenge.id || challenge._id);
-                                                                }
+                                                                setChallengeToDelete(challenge);
                                                             }}
                                                             className="w-full text-left px-3 py-2 text-xs font-bold text-rose-600 hover:bg-rose-50 rounded-lg flex items-center space-x-2"
                                                         >
@@ -505,6 +535,25 @@ export const ChallengesPage: React.FC<ChallengesPageProps> = ({
                 isOpen={isGuideModalOpen}
                 onClose={() => setIsGuideModalOpen(false)}
             />
+
+            {/* Delete Confirmation Modal */}
+            {challengeToDelete && (
+                <DeleteChallengeModal
+                    isOpen={!!challengeToDelete}
+                    onClose={() => setChallengeToDelete(null)}
+                    challengeTitle={challengeToDelete.title}
+                    isDeleting={isDeleting}
+                    onConfirm={async () => {
+                        try {
+                            setIsDeleting(true);
+                            await onDeleteChallenge(challengeToDelete.id || challengeToDelete._id);
+                            setChallengeToDelete(null);
+                        } finally {
+                            setIsDeleting(false);
+                        }
+                    }}
+                />
+            )}
         </div>
     );
 };
