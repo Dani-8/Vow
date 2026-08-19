@@ -36,6 +36,7 @@ const ACCENT_COLORS = [
     { id: 'rose', label: 'Rose', hex: '#f43f5e' },
     { id: 'amber', label: 'Amber', hex: '#f59e0b' },
     { id: 'violet', label: 'Violet', hex: '#8b5cf6' },
+    { id: 'orange', label: 'Orange', hex: '#f0784b' },
     { id: 'cyan', label: 'Cyan', hex: '#06b6d4' },
     { id: 'pink', label: 'Pink', hex: '#e45c97' },
 ];
@@ -269,8 +270,8 @@ export const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
                                                     }
                                                 }}
                                                 className={`flex items-center space-x-2 p-2.5 rounded-xl text-xs font-bold transition-all ${isSelected
-                                                    ? 'neu-inset text-[#1a1c35] font-black'
-                                                    : 'neu-button text-slate-600 hover:text-slate-900'
+                                                        ? 'neu-inset text-[#1a1c35] font-black'
+                                                        : 'neu-button text-slate-600 hover:text-slate-900'
                                                     }`}
                                             >
                                                 <IconComponent className="w-3.5 h-3.5 shrink-0" />
@@ -291,7 +292,7 @@ export const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
                                         Active matrix & badge
                                     </span>
                                 </div>
-                                <div className="flex items-center space-x-3.5 p-3 rounded-xl neu-inset bg-[#E0E5EC]/60">
+                                <div className="flex items-center space-x-3 p-2.5 rounded-xl neu-inset bg-[#E0E5EC]/60 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden flex-nowrap">
                                     {ACCENT_COLORS.map((c) => {
                                         const isSelected = color === c.hex || color === c.id;
                                         return (
@@ -300,9 +301,9 @@ export const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
                                                 type="button"
                                                 onClick={() => setColor(c.hex)}
                                                 title={c.label}
-                                                className={`w-7 h-7 rounded-full flex items-center justify-center transition-all cursor-pointer ${isSelected
-                                                    ? 'ring-2 ring-offset-2 ring-slate-600 scale-110 shadow-sm'
-                                                    : 'opacity-75 hover:opacity-100 hover:scale-105'
+                                                className={`w-7 h-7 shrink-0 rounded-full flex items-center justify-center transition-all cursor-pointer ${isSelected
+                                                        ? 'ring-2 ring-offset-2 ring-slate-600 scale-110 shadow-sm'
+                                                        : 'opacity-75 hover:opacity-100 hover:scale-105'
                                                     }`}
                                                 style={{ backgroundColor: c.hex }}
                                             >
@@ -356,8 +357,8 @@ export const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
                                                     setTargetDays(preset.days);
                                                 }}
                                                 className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${isSelected
-                                                    ? 'neu-button-primary text-white shadow-sm'
-                                                    : 'neu-button text-slate-600 hover:text-slate-900'
+                                                        ? 'neu-button-primary text-white shadow-sm'
+                                                        : 'neu-button text-slate-600 hover:text-slate-900'
                                                     }`}
                                             >
                                                 {preset.label}
@@ -368,8 +369,8 @@ export const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
                                         type="button"
                                         onClick={() => setIsCustomDays(true)}
                                         className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${isCustomDays
-                                            ? 'neu-button-primary text-white shadow-sm'
-                                            : 'neu-button text-slate-600 hover:text-slate-900'
+                                                ? 'neu-button-primary text-white shadow-sm'
+                                                : 'neu-button text-slate-600 hover:text-slate-900'
                                             }`}
                                     >
                                         Custom
