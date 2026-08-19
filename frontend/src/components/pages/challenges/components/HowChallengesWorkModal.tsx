@@ -63,9 +63,9 @@ export const HowChallengesWorkModal: React.FC<HowChallengesWorkModalProps> = ({
                             <CheckCircle2 className="w-4 h-4" />
                         </div>
                         <div>
-                            <h3 className="font-bold text-slate-900 text-sm mb-1">2. 7-Day Row GitHub-Style Heatmap</h3>
+                            <h3 className="font-bold text-slate-900 text-sm mb-1">2. Interactive Progress Matrix</h3>
                             <p className="leading-relaxed text-[#515777]">
-                                Your progress is mapped into a compact 7-row weekly contribution matrix (Monday to Sunday). Completed days glow emerald green, while today pulses in active purple.
+                                A custom day-by-day matrix is dynamically created for your exact target days. Click any day square to check in, review past notes, or update your daily status at your own pace.
                             </p>
                         </div>
                     </div>
