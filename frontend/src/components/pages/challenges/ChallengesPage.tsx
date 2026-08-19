@@ -145,7 +145,7 @@ export const ChallengesPage: React.FC<ChallengesPageProps> = ({
             {/* Top Header Section */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="flex items-center space-x-3.5">
-                    <div className="w-12 h-12 rounded-2xl neu-button flex items-center justify-center text-purple-600 bg-purple-50/70 shadow-sm shrink-0">
+                    <div className="w-12 h-12 rounded-2xl neu-button flex items-center justify-center text-[#549acb] bg-sky-50/70 shadow-sm shrink-0">
                         <Target className="w-6 h-6" />
                     </div>
                     <div>

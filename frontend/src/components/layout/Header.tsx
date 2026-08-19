@@ -39,8 +39,15 @@ export const Header: React.FC<HeaderProps> = ({
                 if (location.pathname.startsWith('/app/map/') && location.pathname.length > '/app/map/'.length) {
                     return 'Task Map Canvas';
                 }
-                return 'Task Map Overview';
+                return 'Task Map';
+            case 'challenges':
+                return 'Challenges';
+            case 'challenge-detail':
+                return 'Challenge Workspace';
             default:
+                if (location.pathname.startsWith('/app/challenges')) {
+                    return location.pathname === '/app/challenges' ? 'Challenges' : 'Challenge Workspace';
+                }
                 return 'Home';
         }
     };

@@ -78,7 +78,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             <div className="w-10 h-10 rounded-2xl neu-button flex items-center justify-center bg-[#549acb] text-white shadow-md group-hover:scale-105 transition-transform shrink-0">
                                 <span className="font-black text-lg italic">V</span>
                             </div>
-                            <div>
+                            <div className="whitespace-nowrap overflow-hidden">
                                 <h1 className="text-lg font-black text-[#1a1c35] tracking-tight">Vow App</h1>
                                 <p className="text-[9px] font-bold text-[#717699] uppercase tracking-wider">Workspace</p>
                             </div>
@@ -101,12 +101,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         }
                         onOpenCreateModal();
                     }}
-                    className={`w-full py-3 rounded-2xl neu-button-primary font-bold text-xs flex items-center justify-center space-x-2 ${collapsed ? 'px-0' : 'px-4'
+                    className={`w-full py-3 rounded-2xl neu-button-primary font-bold text-xs flex items-center justify-center space-x-2 transition-all duration-300 ${collapsed ? 'px-0' : 'px-4'
                         }`}
                     title="Create New Goal / Habit"
                 >
                     <Plus className="w-4 h-4 shrink-0" />
-                    {!collapsed && <span>New Goal</span>}
+                    <span
+                        className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[120px]'
+                            }`}
+                    >
+                        New Goal
+                    </span>
                 </button>
 
                 <nav className="space-y-2 pt-2">
@@ -118,7 +123,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             }`}
                     >
                         <Home className="w-4 h-4 shrink-0" />
-                        {!collapsed && <span>Home</span>}
+                        <span
+                            className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
+                                }`}
+                        >
+                            Home
+                        </span>
                     </button>
 
                     <button
@@ -129,7 +139,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             }`}
                     >
                         <CheckSquare className="w-4 h-4 shrink-0" />
-                        {!collapsed && <span>Tasks & Habits</span>}
+                        <span
+                            className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
+                                }`}
+                        >
+                            Tasks & Habits
+                        </span>
                     </button>
 
                     <button
@@ -150,14 +165,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         ) : (
                             <Lock className="w-4 h-4 shrink-0 text-purple-500" />
                         )}
-                        {!collapsed && (
-                            <div className="flex items-center justify-between flex-1">
-                                <span>Growth Vault</span>
-                                <span className="text-[9px] px-1.5 py-0.5 rounded neu-inset font-bold text-purple-600">
-                                    {isPrivateUnlocked ? 'OPEN' : 'PIN'}
-                                </span>
-                            </div>
-                        )}
+                        <div
+                            className={`flex items-center justify-between flex-1 min-w-0 whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
+                                }`}
+                        >
+                            <span className="truncate">Growth Vault</span>
+                            <span className="text-[9px] px-1.5 py-0.5 rounded neu-inset font-bold text-purple-600 ml-2 shrink-0">
+                                {isPrivateUnlocked ? 'OPEN' : 'PIN'}
+                            </span>
+                        </div>
                     </button>
 
                     <button
@@ -168,7 +184,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             }`}
                     >
                         <BarChart3 className="w-4 h-4 shrink-0" />
-                        {!collapsed && <span>Analytics & Streaks</span>}
+                        <span
+                            className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
+                                }`}
+                        >
+                            Analytics & Streaks
+                        </span>
                     </button>
 
                     <button
@@ -179,7 +200,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             }`}
                     >
                         <Network className="w-4 h-4 shrink-0 text-[#549acb]" />
-                        {!collapsed && <span>Task Map</span>}
+                        <span
+                            className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
+                                }`}
+                        >
+                            Task Map
+                        </span>
                     </button>
 
                     <button
@@ -190,23 +216,29 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             }`}
                     >
                         <Target className="w-4 h-4 shrink-0 text-indigo-600" />
-                        {!collapsed && <span>Challenges</span>}
+                        <span
+                            className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
+                                }`}
+                        >
+                            Challenges
+                        </span>
                     </button>
                 </nav>
             </div>
 
             <div className="space-y-4">
-                {stats && !collapsed && (
+                {stats && (
                     <div
                         onClick={() => onNavigate('stats')}
-                        className="neu-inset p-3 rounded-2xl cursor-pointer hover:border-[#549acb] transition-all"
+                        className={`neu-inset rounded-2xl cursor-pointer hover:border-[#549acb] transition-all duration-300 overflow-hidden ${collapsed ? 'opacity-0 max-h-0 p-0 m-0 pointer-events-none' : 'opacity-100 p-3 max-h-24'
+                            }`}
                     >
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <span className="text-[10px] font-extrabold text-[#717699] uppercase block">Master Streak</span>
+                        <div className="flex items-center justify-between whitespace-nowrap">
+                            <div className="min-w-0">
+                                <span className="text-[10px] font-extrabold text-[#717699] uppercase block truncate">Master Streak</span>
                                 <span className="text-sm font-black text-[#549acb]">{stats.masterStreak} Days</span>
                             </div>
-                            <div className="w-8 h-8 rounded-full master-streak-ring flex items-center justify-center p-0.5">
+                            <div className="w-8 h-8 rounded-full master-streak-ring flex items-center justify-center p-0.5 shrink-0">
                                 <div className="w-full h-full rounded-full bg-[#E0E5EC] flex items-center justify-center font-bold text-xs text-[#44476A]">
                                     🔥
                                 </div>
@@ -217,47 +249,53 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
                 <div className="pt-2 border-t border-white/40">
                     {user ? (
-                        <div className={`flex items-center ${collapsed ? 'justify-center' : 'justify-between'} neu-inset p-2 rounded-2xl`}>
+                        <div className={`flex items-center ${collapsed ? 'justify-center' : 'justify-between'} neu-inset p-2 rounded-2xl transition-all duration-300`}>
                             <div className="flex items-center space-x-2 min-w-0">
                                 <div className="w-8 h-8 rounded-xl neu-button flex items-center justify-center text-[#549acb] font-bold shrink-0">
                                     <UserIcon className="w-4 h-4" />
                                 </div>
-                                {!collapsed && (
-                                    <div className="min-w-0">
-                                        <p className="text-xs font-bold text-[#1a1c35] truncate">{user.name}</p>
-                                        <p className="text-[10px] text-[#717699] truncate">{user.email}</p>
-                                    </div>
-                                )}
-                            </div>
-                            {!collapsed && (
-                                <button
-                                    onClick={onLogout}
-                                    className="p-1.5 rounded-xl neu-button text-[#717699] hover:text-rose-600"
-                                    title="Sign Out"
+                                <div
+                                    className={`min-w-0 whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0 pointer-events-none' : 'opacity-100 max-w-[110px]'
+                                        }`}
                                 >
-                                    <LogOut className="w-3.5 h-3.5" />
-                                </button>
-                            )}
+                                    <p className="text-xs font-bold text-[#1a1c35] truncate">{user.name}</p>
+                                    <p className="text-[10px] text-[#717699] truncate">{user.email}</p>
+                                </div>
+                            </div>
+                            <button
+                                onClick={onLogout}
+                                className={`p-1.5 rounded-xl neu-button text-[#717699] hover:text-rose-600 transition-all duration-300 shrink-0 ${collapsed ? 'hidden opacity-0 max-w-0' : 'opacity-100'
+                                    }`}
+                                title="Sign Out"
+                            >
+                                <LogOut className="w-3.5 h-3.5" />
+                            </button>
                         </div>
                     ) : (
                         <div className="space-y-2">
                             <button
                                 onClick={onOpenAuthModal}
-                                className={`w-full py-2.5 rounded-xl neu-button text-[#549acb] font-bold text-xs flex items-center justify-center space-x-2 ${collapsed ? 'px-0' : 'px-3'
+                                className={`w-full py-2.5 rounded-xl neu-button text-[#549acb] font-bold text-xs flex items-center justify-center space-x-2 transition-all duration-300 ${collapsed ? 'px-0' : 'px-3'
                                     }`}
                             >
                                 <LogIn className="w-4 h-4 shrink-0" />
-                                {!collapsed && <span>Sign In / Demo</span>}
+                                <span
+                                    className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[120px]'
+                                        }`}
+                                >
+                                    Sign In / Demo
+                                </span>
                             </button>
 
-                            {onBypassAuth && !collapsed && (
+                            {onBypassAuth && (
                                 <button
                                     onClick={onBypassAuth}
-                                    className="w-full py-1.5 text-[10px] font-bold text-emerald-700 bg-emerald-100/70 rounded-xl hover:bg-emerald-200/80 flex items-center justify-center space-x-1"
+                                    className={`w-full py-1.5 text-[10px] font-bold text-emerald-700 bg-emerald-100/70 rounded-xl hover:bg-emerald-200/80 flex items-center justify-center space-x-1 transition-all duration-300 overflow-hidden ${collapsed ? 'opacity-0 max-h-0 p-0 m-0 pointer-events-none' : 'opacity-100 max-h-10'
+                                        }`}
                                     title="Testing bypass: auto login demo account"
                                 >
-                                    <ShieldCheck className="w-3 h-3" />
-                                    <span>Instant Dev Bypass</span>
+                                    <ShieldCheck className="w-3 h-3 shrink-0" />
+                                    <span className="whitespace-nowrap">Instant Dev Bypass</span>
                                 </button>
                             )}
                         </div>
