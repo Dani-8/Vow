@@ -47,10 +47,10 @@ const CATEGORY_THEMES: Record<
     { iconBg: string; iconColor: string; badgeColor: string; borderColor: string }
 > = {
     engineering: {
-        iconBg: 'bg-purple-100/70',
-        iconColor: 'text-purple-600',
-        badgeColor: 'text-purple-700 bg-purple-50',
-        borderColor: 'border-purple-200/50',
+        iconBg: 'bg-indigo-100/70',
+        iconColor: 'text-indigo-600',
+        badgeColor: 'text-indigo-700 bg-indigo-50',
+        borderColor: 'border-indigo-200/50',
     },
     fitness: {
         iconBg: 'bg-emerald-100/70',
@@ -76,6 +76,21 @@ const CATEGORY_THEMES: Record<
         badgeColor: 'text-blue-700 bg-blue-50',
         borderColor: 'border-blue-200/50',
     },
+};
+
+const getAccentColor = (challenge?: Partial<Challenge>): string => {
+    if (!challenge?.color) return '#549acb';
+    if (challenge.color.startsWith('#')) return challenge.color;
+    const map: Record<string, string> = {
+        purple: '#8b5cf6',
+        blue: '#549acb',
+        indigo: '#6366f1',
+        emerald: '#10b981',
+        amber: '#f59e0b',
+        rose: '#f43f5e',
+        cyan: '#06b6d4',
+    };
+    return map[challenge.color] || '#549acb';
 };
 
 export const ChallengesPage: React.FC<ChallengesPageProps> = ({
@@ -290,11 +305,17 @@ export const ChallengesPage: React.FC<ChallengesPageProps> = ({
                             const theme = CATEGORY_THEMES[challenge.category] || CATEGORY_THEMES.engineering;
                             const IconComponent = CATEGORY_ICONS[challenge.category] || Code;
 
-                            // Calculate current day number
+                            // Calculate current day number & upcoming status
                             const start = new Date(challenge.startDate || new Date());
-                            const now = new Date();
-                            const diffDays = Math.max(0, Math.floor((now.getTime() - start.getTime()) / 86400000)) + 1;
-                            const currentDay = Math.min(challenge.targetDays, Math.max(1, diffDays));
+                            const startMidnight = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+                            const nowMidnight = new Date();
+                            nowMidnight.setHours(0, 0, 0, 0);
+
+                            const diffMs = nowMidnight.getTime() - startMidnight.getTime();
+                            const daysDiff = Math.floor(diffMs / 86400000);
+                            const isUpcoming = daysDiff < 0;
+                            const daysUntilStart = isUpcoming ? Math.abs(daysDiff) : 0;
+                            const currentDay = isUpcoming ? 0 : Math.min(challenge.targetDays, daysDiff + 1);
 
                             const targetEnd = new Date(
                                 challenge.targetEndDate || start.getTime() + challenge.targetDays * 86400000
@@ -304,19 +325,23 @@ export const ChallengesPage: React.FC<ChallengesPageProps> = ({
 
                             // Calculate consecutive streak
                             let streak = 0;
-                            const todayLog = challenge.logs.find((l) => Number(l.dayNumber) === currentDay);
-                            let checkDay = todayLog?.status === 'completed' ? currentDay : currentDay - 1;
-                            while (checkDay >= 1) {
-                                const log = challenge.logs.find((l) => Number(l.dayNumber) === checkDay);
-                                if (log?.status === 'completed') {
-                                    streak++;
-                                    checkDay--;
-                                } else if (log?.status === 'rest') {
-                                    checkDay--;
-                                } else {
-                                    break;
+                            if (!isUpcoming && currentDay >= 1) {
+                                const todayLog = challenge.logs.find((l) => Number(l.dayNumber) === currentDay);
+                                let checkDay = todayLog?.status === 'completed' ? currentDay : currentDay - 1;
+                                while (checkDay >= 1) {
+                                    const log = challenge.logs.find((l) => Number(l.dayNumber) === checkDay);
+                                    if (log?.status === 'completed') {
+                                        streak++;
+                                        checkDay--;
+                                    } else if (log?.status === 'rest') {
+                                        checkDay--;
+                                    } else {
+                                        break;
+                                    }
                                 }
                             }
+
+                            const cardAccent = getAccentColor(challenge);
 
                             return (
                                 <div
@@ -328,22 +353,28 @@ export const ChallengesPage: React.FC<ChallengesPageProps> = ({
                                         <div className="flex items-center justify-between mb-4">
                                             <div className="flex items-center space-x-3">
                                                 <div
-                                                    className={`w-12 h-12 rounded-2xl neu-button flex items-center justify-center ${theme.iconBg} ${theme.iconColor} shrink-0`}
+                                                    className="w-12 h-12 rounded-2xl neu-button flex items-center justify-center shrink-0 shadow-sm"
+                                                    style={{ color: cardAccent, backgroundColor: `${cardAccent}18` }}
                                                 >
-                                                    <IconComponent className="w-6 h-6" />
+                                                    <IconComponent className="w-6 h-6" style={{ color: cardAccent }} />
                                                 </div>
                                                 <div className="flex items-center space-x-2">
                                                     <span
-                                                        className={`text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full neu-inset ${theme.badgeColor}`}
+                                                        className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full neu-inset"
+                                                        style={{ color: cardAccent, backgroundColor: `${cardAccent}18` }}
                                                     >
                                                         {challenge.category || 'Engineering'}
                                                     </span>
-                                                    {streak > 0 && (
+                                                    {isUpcoming ? (
+                                                        <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full neu-inset text-indigo-700 bg-indigo-50/70">
+                                                            Starts in {daysUntilStart} {daysUntilStart === 1 ? 'day' : 'days'}
+                                                        </span>
+                                                    ) : streak > 0 ? (
                                                         <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full neu-inset text-amber-700 bg-amber-50/70 flex items-center space-x-1">
                                                             <Flame className="w-3 h-3 text-amber-500 fill-amber-500" />
                                                             <span>{streak}d Streak</span>
                                                         </span>
-                                                    )}
+                                                    ) : null}
                                                 </div>
                                             </div>
 
@@ -439,7 +470,7 @@ export const ChallengesPage: React.FC<ChallengesPageProps> = ({
 
                                         {/* Date Span */}
                                         <div className="flex items-center space-x-1.5 text-[11px] font-bold text-[#717699] mt-3">
-                                            <Calendar className="w-3.5 h-3.5 text-purple-500" />
+                                            <Calendar className="w-3.5 h-3.5" style={{ color: cardAccent }} />
                                             <span>
                                                 {start.toLocaleDateString('en-US', {
                                                     month: 'short',
@@ -461,18 +492,26 @@ export const ChallengesPage: React.FC<ChallengesPageProps> = ({
                                         className="mt-5 pt-3.5 border-t border-slate-200/60 flex items-center justify-between cursor-pointer"
                                     >
                                         <div className="flex items-center space-x-2">
-                                            <div className="w-7 h-7 rounded-lg neu-inset flex items-center justify-center text-purple-600 font-extrabold text-[10px]">
+                                            <div
+                                                className="w-7 h-7 rounded-lg neu-inset flex items-center justify-center font-extrabold text-[10px]"
+                                                style={{ color: cardAccent }}
+                                            >
                                                 {challenge.targetDays}
                                             </div>
                                             <div className="text-xs font-bold text-slate-800">
                                                 <span>{challenge.targetDays} Days Challenge</span>
-                                                <span className="text-[10px] text-purple-700 font-extrabold block">
-                                                    Day {currentDay} Today ({completedDays} logged)
+                                                <span
+                                                    className="text-[10px] font-extrabold block"
+                                                    style={{ color: cardAccent }}
+                                                >
+                                                    {isUpcoming
+                                                        ? `Starts in ${daysUntilStart} ${daysUntilStart === 1 ? 'day' : 'days'}`
+                                                        : `Day ${currentDay} Today (${completedDays} logged)`}
                                                 </span>
                                             </div>
                                         </div>
 
-                                        <div className="w-8 h-8 rounded-xl neu-button flex items-center justify-center text-slate-500 group-hover:text-purple-600 group-hover:scale-110 transition-transform">
+                                        <div className="w-8 h-8 rounded-xl neu-button flex items-center justify-center text-slate-500 group-hover:scale-110 transition-transform">
                                             <ChevronRight className="w-4 h-4" />
                                         </div>
                                     </div>

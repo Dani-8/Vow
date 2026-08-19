@@ -55,6 +55,21 @@ const CATEGORY_ICONS: Record<string, any> = {
     mindfulness: Sparkles,
 };
 
+const getAccentColor = (challenge?: Partial<Challenge>): string => {
+    if (!challenge?.color) return '#549acb';
+    if (challenge.color.startsWith('#')) return challenge.color;
+    const map: Record<string, string> = {
+        purple: '#8b5cf6',
+        blue: '#549acb',
+        indigo: '#6366f1',
+        emerald: '#10b981',
+        amber: '#f59e0b',
+        rose: '#f43f5e',
+        cyan: '#06b6d4',
+    };
+    return map[challenge.color] || '#549acb';
+};
+
 const DAYS_OF_WEEK = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
@@ -65,6 +80,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
     onLogDay,
     onDeleteLog,
 }) => {
+    const accentColor = getAccentColor(challenge);
     const [selectedDayForModal, setSelectedDayForModal] = useState<{
         dayNumber: number;
         dateStr: string;
@@ -88,22 +104,37 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
     }, [isMenuOpen]);
 
     // Calculate current elapsed days since startDate
-    const { currentDayNumber, startDateObj, targetEndDateObj, completedDaysCount, successRate, remainingDays, streak } =
-        useMemo(() => {
-            const start = new Date(challenge.startDate || new Date());
-            const now = new Date();
-            const diffTime = Math.max(0, now.getTime() - start.getTime());
-            const elapsed = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
-            const currentDay = Math.min(challenge.targetDays, Math.max(1, elapsed));
+    const {
+        currentDayNumber,
+        isUpcoming,
+        daysUntilStart,
+        startDateObj,
+        targetEndDateObj,
+        completedDaysCount,
+        successRate,
+        remainingDays,
+        streak,
+    } = useMemo(() => {
+        const start = new Date(challenge.startDate || new Date());
+        const startMidnight = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+        const nowMidnight = new Date();
+        nowMidnight.setHours(0, 0, 0, 0);
 
-            const targetEnd = new Date(challenge.targetEndDate || start.getTime() + challenge.targetDays * 86400000);
+        const diffMs = nowMidnight.getTime() - startMidnight.getTime();
+        const daysDiff = Math.floor(diffMs / 86400000);
+        const upcoming = daysDiff < 0;
+        const untilStart = upcoming ? Math.abs(daysDiff) : 0;
+        const currentDay = upcoming ? 0 : Math.min(challenge.targetDays, daysDiff + 1);
 
-            const completed = challenge.logs.filter((l) => l.status === 'completed').length;
-            const rate = Math.round((completed / challenge.targetDays) * 100);
-            const remaining = Math.max(0, challenge.targetDays - completed);
+        const targetEnd = new Date(challenge.targetEndDate || start.getTime() + challenge.targetDays * 86400000);
 
-            // Calculate consecutive completed streak
-            let currentStreak = 0;
+        const completed = challenge.logs.filter((l) => l.status === 'completed').length;
+        const rate = Math.round((completed / challenge.targetDays) * 100);
+        const remaining = Math.max(0, challenge.targetDays - completed);
+
+        // Calculate consecutive completed streak
+        let currentStreak = 0;
+        if (!upcoming && currentDay >= 1) {
             const todayLog = challenge.logs.find((l) => Number(l.dayNumber) === currentDay);
             let checkDay = todayLog?.status === 'completed' ? currentDay : currentDay - 1;
             while (checkDay >= 1) {
@@ -117,17 +148,20 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                     break;
                 }
             }
+        }
 
-            return {
-                currentDayNumber: currentDay,
-                startDateObj: start,
-                targetEndDateObj: targetEnd,
-                completedDaysCount: completed,
-                successRate: rate,
-                remainingDays: remaining,
-                streak: currentStreak,
-            };
-        }, [challenge]);
+        return {
+            currentDayNumber: currentDay,
+            isUpcoming: upcoming,
+            daysUntilStart: untilStart,
+            startDateObj: start,
+            targetEndDateObj: targetEnd,
+            completedDaysCount: completed,
+            successRate: rate,
+            remainingDays: remaining,
+            streak: currentStreak,
+        };
+    }, [challenge]);
 
     // Build the 7-row calendar grid for the total challenge duration
     const gridWeeks = useMemo(() => {
@@ -162,9 +196,9 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
             const dateStr = dayDate.toISOString().split('T')[0];
             const log = challenge.logs.find((l) => Number(l.dayNumber) === dayNum);
 
-            const isToday = dayNum === currentDayNumber;
-            const isPast = dayNum < currentDayNumber;
-            const isFuture = dayNum > currentDayNumber;
+            const isToday = !isUpcoming && dayNum === currentDayNumber;
+            const isPast = !isUpcoming && dayNum < currentDayNumber;
+            const isFuture = isUpcoming || dayNum > currentDayNumber;
 
             currentWeekDays.push({
                 dayNumber: dayNum,
@@ -198,7 +232,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
         }
 
         return weeks;
-    }, [challenge, startDateObj, currentDayNumber]);
+    }, [challenge, startDateObj, currentDayNumber, isUpcoming]);
 
     const CategoryIcon = CATEGORY_ICONS[challenge.category] || Code;
 
@@ -320,19 +354,29 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
             <div className="neu-card p-6 sm:p-8 bg-[#E0E5EC]">
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                     <div className="flex items-start space-x-4">
-                        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl neu-button flex items-center justify-center text-purple-600 bg-purple-50/70 shadow-sm shrink-0">
-                            <CategoryIcon className="w-8 h-8 sm:w-10 sm:h-10 text-purple-600" />
+                        <div
+                            className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl neu-button flex items-center justify-center shadow-sm shrink-0"
+                            style={{ color: accentColor, backgroundColor: `${accentColor}18` }}
+                        >
+                            <CategoryIcon className="w-8 h-8 sm:w-10 sm:h-10" style={{ color: accentColor }} />
                         </div>
                         <div className="space-y-1.5">
                             <div className="flex items-center space-x-2">
-                                <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full neu-inset text-purple-700 bg-purple-50/50">
+                                <span
+                                    className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full neu-inset"
+                                    style={{ color: accentColor, backgroundColor: `${accentColor}18` }}
+                                >
                                     {challenge.category || 'Engineering'}
                                 </span>
-                                {challenge.status === 'paused' && (
+                                {isUpcoming ? (
+                                    <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full neu-inset text-indigo-700 bg-indigo-50">
+                                        Upcoming • Starts in {daysUntilStart} {daysUntilStart === 1 ? 'day' : 'days'}
+                                    </span>
+                                ) : challenge.status === 'paused' ? (
                                     <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full neu-inset text-amber-700 bg-amber-50">
                                         Paused
                                     </span>
-                                )}
+                                ) : null}
                             </div>
                             <h1 className="text-xl sm:text-2xl font-black text-[#1a1c35] tracking-tight">
                                 {challenge.title}
@@ -341,7 +385,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                 {challenge.description || 'Ship code. Learn AI. Build in public.'}
                             </p>
                             <div className="flex items-center space-x-2 pt-1 text-[11px] font-bold text-[#515777]">
-                                <Calendar className="w-3.5 h-3.5 text-purple-500" />
+                                <Calendar className="w-3.5 h-3.5" style={{ color: accentColor }} />
                                 <span>
                                     {startDateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} –{' '}
                                     {targetEndDateObj.toLocaleDateString('en-US', {
@@ -362,8 +406,12 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                             {/* Day */}
                             <div className="neu-inset px-3 py-2 rounded-xl">
                                 <span className="text-[9px] font-extrabold text-[#717699] uppercase block">Day</span>
-                                <span className="text-lg font-black text-[#1a1c35]">#{currentDayNumber}</span>
-                                <span className="text-[9px] text-[#717699] block font-semibold">of {challenge.targetDays}</span>
+                                <span className="text-lg font-black text-[#1a1c35]">
+                                    {isUpcoming ? '—' : `#${currentDayNumber}`}
+                                </span>
+                                <span className="text-[9px] text-[#717699] block font-semibold">
+                                    {isUpcoming ? `In ${daysUntilStart}d` : `of ${challenge.targetDays}`}
+                                </span>
                             </div>
 
                             {/* Completed */}
@@ -395,31 +443,47 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                 <span className="text-[9px] font-extrabold text-[#717699] uppercase block">Success Rate</span>
                                 <span className="text-lg font-black text-[#1a1c35]">{successRate}%</span>
                                 <span className="text-[9px] font-bold text-emerald-600 flex items-center justify-center">
-                                    On Track ↗
+                                    {isUpcoming ? 'Ready' : 'On Track ↗'}
                                 </span>
                             </div>
                         </div>
 
-                        <button
-                            onClick={() =>
-                                handleOpenDayModal(
-                                    currentDayNumber,
-                                    new Date().toISOString().split('T')[0],
-                                    todayLog
-                                )
-                            }
-                            className={`px-5 py-3 rounded-2xl font-bold text-xs flex items-center justify-center space-x-2 shadow-md transition-all shrink-0 ${todayLog?.status === 'completed'
-                                ? 'neu-button bg-emerald-50 text-emerald-700 border border-emerald-300'
-                                : 'neu-button-primary text-white hover:scale-105'
-                                }`}
-                        >
-                            <Calendar className="w-4 h-4" />
-                            <span>
-                                {todayLog?.status === 'completed'
-                                    ? `Day ${currentDayNumber} Logged ✓`
-                                    : `Log Day ${currentDayNumber} Check-In`}
-                            </span>
-                        </button>
+                        {isUpcoming ? (
+                            <button
+                                onClick={() =>
+                                    handleOpenDayModal(
+                                        1,
+                                        startDateObj.toISOString().split('T')[0],
+                                        challenge.logs.find((l) => Number(l.dayNumber) === 1)
+                                    )
+                                }
+                                className="px-5 py-3 rounded-2xl font-bold text-xs flex items-center justify-center space-x-2 neu-button text-indigo-700 bg-indigo-50/60 hover:bg-indigo-50 shadow-sm transition-all shrink-0"
+                            >
+                                <Clock className="w-4 h-4 text-indigo-600" />
+                                <span>Starts in {daysUntilStart} {daysUntilStart === 1 ? 'Day' : 'Days'}</span>
+                            </button>
+                        ) : (
+                            <button
+                                onClick={() =>
+                                    handleOpenDayModal(
+                                        currentDayNumber,
+                                        new Date().toISOString().split('T')[0],
+                                        todayLog
+                                    )
+                                }
+                                className={`px-5 py-3 rounded-2xl font-bold text-xs flex items-center justify-center space-x-2 shadow-md transition-all shrink-0 ${todayLog?.status === 'completed'
+                                    ? 'neu-button bg-emerald-50 text-emerald-700 border border-emerald-300'
+                                    : 'neu-button-primary text-white hover:scale-105'
+                                    }`}
+                            >
+                                <Calendar className="w-4 h-4" />
+                                <span>
+                                    {todayLog?.status === 'completed'
+                                        ? `Day ${currentDayNumber} Logged ✓`
+                                        : `Log Day ${currentDayNumber} Check-In`}
+                                </span>
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>
@@ -432,18 +496,21 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                     <div className="neu-card p-6 bg-[#E0E5EC]">
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
                             <div className="flex items-center space-x-2">
-                                <TrendingUp className="w-4 h-4 text-purple-600" />
+                                <TrendingUp className="w-4 h-4" style={{ color: accentColor }} />
                                 <h3 className="text-sm font-black text-[#1a1c35]">Your Progress</h3>
                             </div>
 
-                            {/* Legend matching Image 3 */}
+                            {/* Legend */}
                             <div className="flex flex-wrap items-center gap-3 text-[11px] font-bold text-[#515777]">
                                 <div className="flex items-center space-x-1.5">
                                     <div className="w-3 h-3 rounded-[3px] bg-emerald-500" />
                                     <span>Completed</span>
                                 </div>
                                 <div className="flex items-center space-x-1.5">
-                                    <div className="w-3 h-3 rounded-[3px] bg-purple-600 ring-2 ring-purple-400 ring-offset-1" />
+                                    <div
+                                        className="w-3 h-3 rounded-[3px] ring-2 ring-offset-1"
+                                        style={{ backgroundColor: accentColor, borderColor: accentColor }}
+                                    />
                                     <span>Today</span>
                                 </div>
                                 <div className="flex items-center space-x-1.5">
@@ -490,24 +557,30 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                                     const isCompleted = dayItem.log?.status === 'completed';
                                                     const isRest = dayItem.log?.status === 'rest';
                                                     const isMissed = !isCompleted && !isRest && (dayItem.log?.status === 'missed' || (dayItem.isPast && !dayItem.log));
-                                                    const isToday = dayItem.isToday;
-                                                    const isUpcoming = dayItem.isFuture && !dayItem.log;
+                                                    const isCellToday = dayItem.isToday;
 
-                                                    let bgClass = 'bg-[#D1D9E6] hover:border-purple-400';
+                                                    let bgClass = 'bg-[#D1D9E6] hover:border-slate-400';
+                                                    let cellStyle: React.CSSProperties | undefined = undefined;
+
                                                     if (isCompleted) {
                                                         bgClass = 'bg-emerald-500 text-white shadow-sm';
                                                     } else if (isRest) {
                                                         bgClass = 'bg-amber-400 text-slate-900';
                                                     } else if (isMissed) {
                                                         bgClass = 'bg-[#8A95A5] text-white hover:ring-1 hover:ring-slate-400';
-                                                    } else if (isToday) {
-                                                        bgClass = 'bg-purple-600 text-white ring-2 ring-purple-400 ring-offset-1 animate-pulse';
+                                                    } else if (isCellToday) {
+                                                        bgClass = 'text-white ring-2 ring-offset-1 animate-pulse';
+                                                        cellStyle = {
+                                                            backgroundColor: accentColor,
+                                                            borderColor: accentColor,
+                                                        };
                                                     }
 
                                                     return (
                                                         <button
                                                             key={dayItem.dayNumber}
                                                             type="button"
+                                                            style={cellStyle}
                                                             onClick={() =>
                                                                 handleOpenDayModal(
                                                                     dayItem.dayNumber,
@@ -521,13 +594,13 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                                                     ? 'Rest Day'
                                                                     : isMissed
                                                                         ? 'Missed Day (Click to log)'
-                                                                        : isToday
+                                                                        : isCellToday
                                                                             ? "Today's Target Day (Click to log)"
                                                                             : 'Upcoming Day'
                                                                 }`}
                                                             className={`w-5 h-5 rounded-md text-[8px] sm:text-[9px] font-black flex items-center justify-center transition-all cursor-pointer hover:scale-115 shrink-0 ${bgClass}`}
                                                         >
-                                                            {isToday ? (
+                                                            {isCellToday ? (
                                                                 <span className="font-extrabold text-[8px] leading-none">{dayItem.dayNumber}</span>
                                                             ) : isCompleted ? (
                                                                 <span className="leading-none text-[9px]">✓</span>
@@ -560,7 +633,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                             </span>
                             <span>
                                 Today:{' '}
-                                <strong className="text-purple-700">
+                                <strong style={{ color: accentColor }}>
                                     {new Date().toLocaleDateString('en-US', {
                                         month: 'short',
                                         day: 'numeric',
@@ -585,7 +658,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {/* Challenge Rules */}
                         <div className="neu-card p-5 bg-[#E0E5EC] space-y-2.5">
-                            <div className="flex items-center space-x-2 text-purple-700">
+                            <div className="flex items-center space-x-2" style={{ color: accentColor }}>
                                 <ClipboardCheck className="w-4 h-4" />
                                 <h4 className="text-xs font-black uppercase tracking-wider text-slate-800">
                                     Challenge Rules
@@ -659,10 +732,13 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                     <div className="neu-card p-5 sm:p-6 bg-[#E0E5EC]">
                         <div className="flex items-center justify-between mb-4 pb-2 border-b border-slate-200/60">
                             <div className="flex items-center space-x-2">
-                                <BookOpen className="w-4 h-4 text-purple-600" />
+                                <BookOpen className="w-4 h-4" style={{ color: accentColor }} />
                                 <h3 className="text-sm font-black text-[#1a1c35]">Daily Reflection Logs</h3>
                             </div>
-                            <span className="text-xs font-extrabold px-2 py-0.5 rounded-full neu-inset text-purple-700 bg-purple-50">
+                            <span
+                                className="text-xs font-extrabold px-2 py-0.5 rounded-full neu-inset"
+                                style={{ color: accentColor, backgroundColor: `${accentColor}18` }}
+                            >
                                 {challenge.logs.length}
                             </span>
                         </div>
@@ -670,7 +746,10 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                         {/* Reflection Logs Feed */}
                         {displayLogs.length === 0 ? (
                             <div className="text-center py-10 space-y-3">
-                                <div className="w-12 h-12 mx-auto rounded-2xl neu-button flex items-center justify-center text-purple-500">
+                                <div
+                                    className="w-12 h-12 mx-auto rounded-2xl neu-button flex items-center justify-center shadow-sm"
+                                    style={{ color: accentColor }}
+                                >
                                     <BookOpen className="w-5 h-5" />
                                 </div>
                                 <p className="text-xs font-bold text-slate-700">No reflections logged yet</p>
@@ -746,7 +825,10 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                                 )}
 
                                                 {log.timeSpent && log.timeSpent !== '—' && (
-                                                    <div className="flex items-center space-x-1 text-[10px] font-bold text-purple-700 w-fit px-2 py-0.5 rounded neu-inset bg-purple-50/50">
+                                                    <div
+                                                        className="flex items-center space-x-1 text-[10px] font-bold w-fit px-2 py-0.5 rounded neu-inset"
+                                                        style={{ color: accentColor, backgroundColor: `${accentColor}18` }}
+                                                    >
                                                         <Clock className="w-3 h-3" />
                                                         <span>{log.timeSpent}</span>
                                                     </div>
