@@ -37,6 +37,7 @@ const ACCENT_COLORS = [
     { id: 'amber', label: 'Amber', hex: '#f59e0b' },
     { id: 'violet', label: 'Violet', hex: '#8b5cf6' },
     { id: 'cyan', label: 'Cyan', hex: '#06b6d4' },
+    { id: 'pink', label: 'Pink', hex: '#e45c97' },
 ];
 
 const PRESET_DURATIONS = [
