@@ -55,6 +55,21 @@ const CATEGORY_ICONS: Record<string, any> = {
     mindfulness: Sparkles,
 };
 
+const getAccentColor = (challenge?: Partial<Challenge>): string => {
+    if (!challenge?.color) return '#549acb';
+    if (challenge.color.startsWith('#')) return challenge.color;
+    const map: Record<string, string> = {
+        purple: '#8b5cf6',
+        blue: '#549acb',
+        indigo: '#6366f1',
+        emerald: '#10b981',
+        amber: '#f59e0b',
+        rose: '#f43f5e',
+        cyan: '#06b6d4',
+    };
+    return map[challenge.color] || '#549acb';
+};
+
 const DAYS_OF_WEEK = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
@@ -65,6 +80,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
     onLogDay,
     onDeleteLog,
 }) => {
+    const accentColor = getAccentColor(challenge);
     const [selectedDayForModal, setSelectedDayForModal] = useState<{
         dayNumber: number;
         dateStr: string;
@@ -338,12 +354,18 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
             <div className="neu-card p-6 sm:p-8 bg-[#E0E5EC]">
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                     <div className="flex items-start space-x-4">
-                        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl neu-button flex items-center justify-center text-purple-600 bg-purple-50/70 shadow-sm shrink-0">
-                            <CategoryIcon className="w-8 h-8 sm:w-10 sm:h-10 text-purple-600" />
+                        <div
+                            className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl neu-button flex items-center justify-center shadow-sm shrink-0"
+                            style={{ color: accentColor, backgroundColor: `${accentColor}18` }}
+                        >
+                            <CategoryIcon className="w-8 h-8 sm:w-10 sm:h-10" style={{ color: accentColor }} />
                         </div>
                         <div className="space-y-1.5">
                             <div className="flex items-center space-x-2">
-                                <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full neu-inset text-purple-700 bg-purple-50/50">
+                                <span
+                                    className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full neu-inset"
+                                    style={{ color: accentColor, backgroundColor: `${accentColor}18` }}
+                                >
                                     {challenge.category || 'Engineering'}
                                 </span>
                                 {isUpcoming ? (
@@ -363,7 +385,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                 {challenge.description || 'Ship code. Learn AI. Build in public.'}
                             </p>
                             <div className="flex items-center space-x-2 pt-1 text-[11px] font-bold text-[#515777]">
-                                <Calendar className="w-3.5 h-3.5 text-purple-500" />
+                                <Calendar className="w-3.5 h-3.5" style={{ color: accentColor }} />
                                 <span>
                                     {startDateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} –{' '}
                                     {targetEndDateObj.toLocaleDateString('en-US', {
@@ -474,18 +496,21 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                     <div className="neu-card p-6 bg-[#E0E5EC]">
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
                             <div className="flex items-center space-x-2">
-                                <TrendingUp className="w-4 h-4 text-purple-600" />
+                                <TrendingUp className="w-4 h-4" style={{ color: accentColor }} />
                                 <h3 className="text-sm font-black text-[#1a1c35]">Your Progress</h3>
                             </div>
 
-                            {/* Legend matching Image 3 */}
+                            {/* Legend */}
                             <div className="flex flex-wrap items-center gap-3 text-[11px] font-bold text-[#515777]">
                                 <div className="flex items-center space-x-1.5">
                                     <div className="w-3 h-3 rounded-[3px] bg-emerald-500" />
                                     <span>Completed</span>
                                 </div>
                                 <div className="flex items-center space-x-1.5">
-                                    <div className="w-3 h-3 rounded-[3px] bg-purple-600 ring-2 ring-purple-400 ring-offset-1" />
+                                    <div
+                                        className="w-3 h-3 rounded-[3px] ring-2 ring-offset-1"
+                                        style={{ backgroundColor: accentColor, borderColor: accentColor }}
+                                    />
                                     <span>Today</span>
                                 </div>
                                 <div className="flex items-center space-x-1.5">
@@ -534,7 +559,9 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                                     const isMissed = !isCompleted && !isRest && (dayItem.log?.status === 'missed' || (dayItem.isPast && !dayItem.log));
                                                     const isCellToday = dayItem.isToday;
 
-                                                    let bgClass = 'bg-[#D1D9E6] hover:border-purple-400';
+                                                    let bgClass = 'bg-[#D1D9E6] hover:border-slate-400';
+                                                    let cellStyle: React.CSSProperties | undefined = undefined;
+
                                                     if (isCompleted) {
                                                         bgClass = 'bg-emerald-500 text-white shadow-sm';
                                                     } else if (isRest) {
@@ -542,13 +569,18 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                                     } else if (isMissed) {
                                                         bgClass = 'bg-[#8A95A5] text-white hover:ring-1 hover:ring-slate-400';
                                                     } else if (isCellToday) {
-                                                        bgClass = 'bg-purple-600 text-white ring-2 ring-purple-400 ring-offset-1 animate-pulse';
+                                                        bgClass = 'text-white ring-2 ring-offset-1 animate-pulse';
+                                                        cellStyle = {
+                                                            backgroundColor: accentColor,
+                                                            borderColor: accentColor,
+                                                        };
                                                     }
 
                                                     return (
                                                         <button
                                                             key={dayItem.dayNumber}
                                                             type="button"
+                                                            style={cellStyle}
                                                             onClick={() =>
                                                                 handleOpenDayModal(
                                                                     dayItem.dayNumber,
@@ -565,7 +597,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                                                         : isCellToday
                                                                             ? "Today's Target Day (Click to log)"
                                                                             : 'Upcoming Day'
-                                                                }`}
+                                                            }`}
                                                             className={`w-5 h-5 rounded-md text-[8px] sm:text-[9px] font-black flex items-center justify-center transition-all cursor-pointer hover:scale-115 shrink-0 ${bgClass}`}
                                                         >
                                                             {isCellToday ? (
@@ -601,7 +633,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                             </span>
                             <span>
                                 Today:{' '}
-                                <strong className="text-purple-700">
+                                <strong style={{ color: accentColor }}>
                                     {new Date().toLocaleDateString('en-US', {
                                         month: 'short',
                                         day: 'numeric',
@@ -626,7 +658,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {/* Challenge Rules */}
                         <div className="neu-card p-5 bg-[#E0E5EC] space-y-2.5">
-                            <div className="flex items-center space-x-2 text-purple-700">
+                            <div className="flex items-center space-x-2" style={{ color: accentColor }}>
                                 <ClipboardCheck className="w-4 h-4" />
                                 <h4 className="text-xs font-black uppercase tracking-wider text-slate-800">
                                     Challenge Rules
@@ -700,10 +732,13 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                     <div className="neu-card p-5 sm:p-6 bg-[#E0E5EC]">
                         <div className="flex items-center justify-between mb-4 pb-2 border-b border-slate-200/60">
                             <div className="flex items-center space-x-2">
-                                <BookOpen className="w-4 h-4 text-purple-600" />
+                                <BookOpen className="w-4 h-4" style={{ color: accentColor }} />
                                 <h3 className="text-sm font-black text-[#1a1c35]">Daily Reflection Logs</h3>
                             </div>
-                            <span className="text-xs font-extrabold px-2 py-0.5 rounded-full neu-inset text-purple-700 bg-purple-50">
+                            <span
+                                className="text-xs font-extrabold px-2 py-0.5 rounded-full neu-inset"
+                                style={{ color: accentColor, backgroundColor: `${accentColor}18` }}
+                            >
                                 {challenge.logs.length}
                             </span>
                         </div>
@@ -711,7 +746,10 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                         {/* Reflection Logs Feed */}
                         {displayLogs.length === 0 ? (
                             <div className="text-center py-10 space-y-3">
-                                <div className="w-12 h-12 mx-auto rounded-2xl neu-button flex items-center justify-center text-purple-500">
+                                <div
+                                    className="w-12 h-12 mx-auto rounded-2xl neu-button flex items-center justify-center shadow-sm"
+                                    style={{ color: accentColor }}
+                                >
                                     <BookOpen className="w-5 h-5" />
                                 </div>
                                 <p className="text-xs font-bold text-slate-700">No reflections logged yet</p>
@@ -787,7 +825,10 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                                 )}
 
                                                 {log.timeSpent && log.timeSpent !== '—' && (
-                                                    <div className="flex items-center space-x-1 text-[10px] font-bold text-purple-700 w-fit px-2 py-0.5 rounded neu-inset bg-purple-50/50">
+                                                    <div
+                                                        className="flex items-center space-x-1 text-[10px] font-bold w-fit px-2 py-0.5 rounded neu-inset"
+                                                        style={{ color: accentColor, backgroundColor: `${accentColor}18` }}
+                                                    >
                                                         <Clock className="w-3 h-3" />
                                                         <span>{log.timeSpent}</span>
                                                     </div>
