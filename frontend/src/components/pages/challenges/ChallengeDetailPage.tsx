@@ -398,21 +398,21 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                             </div>
 
                             {/* Legend matching Image 3 */}
-                            <div className="flex items-center space-x-3 text-[11px] font-bold text-[#515777]">
+                            <div className="flex flex-wrap items-center gap-3 text-[11px] font-bold text-[#515777]">
                                 <div className="flex items-center space-x-1.5">
-                                    <div className="w-3 h-3 rounded-sm bg-emerald-500" />
+                                    <div className="w-2.5 h-2.5 rounded-[2px] bg-emerald-500" />
                                     <span>Completed</span>
                                 </div>
                                 <div className="flex items-center space-x-1.5">
-                                    <div className="w-3 h-3 rounded-sm bg-purple-600 ring-2 ring-purple-400" />
+                                    <div className="w-2.5 h-2.5 rounded-[2px] bg-purple-600 ring-2 ring-purple-400 ring-offset-1" />
                                     <span>Today</span>
                                 </div>
                                 <div className="flex items-center space-x-1.5">
-                                    <div className="w-3 h-3 rounded-sm bg-[#8A95A5]" />
+                                    <div className="w-2.5 h-2.5 rounded-[2px] bg-[#8A95A5]" />
                                     <span>Missed</span>
                                 </div>
                                 <div className="flex items-center space-x-1.5">
-                                    <div className="w-3 h-3 rounded-sm bg-[#D1D9E6] border border-slate-300/40" />
+                                    <div className="w-2.5 h-2.5 rounded-[2px] bg-[#D1D9E6] border border-slate-300/40" />
                                     <span>Upcoming</span>
                                 </div>
                             </div>
@@ -422,30 +422,30 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                         <div className="neu-inset p-4 rounded-2xl overflow-x-auto bg-[#E0E5EC]/80">
                             <div className="min-w-fit">
                                 {/* Week Header Labels */}
-                                <div className="flex ml-8 mb-2 space-x-1.5">
+                                <div className="flex ml-7 mb-1.5 space-x-1">
                                     {gridWeeks.map((week, idx) => (
                                         <div
                                             key={week.weekIndex}
-                                            className="w-6 sm:w-7 text-[8px] sm:text-[9px] font-black text-[#717699] text-center uppercase tracking-tight shrink-0"
+                                            className="w-3.5 sm:w-4 text-[7px] sm:text-[8px] font-black text-[#717699] text-center uppercase tracking-tight shrink-0"
                                         >
-                                            {idx === 0 || idx % 2 === 0 ? `W${week.weekIndex}` : ''}
+                                            {idx === 0 || (idx + 1) % 2 === 0 ? `W${week.weekIndex}` : ''}
                                         </div>
                                     ))}
                                 </div>
 
                                 {/* 7 Day Rows (Mon - Sun) */}
-                                <div className="space-y-1.5">
+                                <div className="space-y-1">
                                     {DAYS_OF_WEEK.map((dayLabel, rowIndex) => (
-                                        <div key={dayLabel} className="flex items-center space-x-1.5">
-                                            <span className="w-6 text-[10px] font-extrabold text-[#717699] shrink-0">
+                                        <div key={dayLabel} className="flex items-center space-x-1">
+                                            <span className="w-6 text-[9px] font-extrabold text-[#717699] shrink-0">
                                                 {dayLabel}
                                             </span>
 
-                                            <div className="flex space-x-1.5">
+                                            <div className="flex space-x-1">
                                                 {gridWeeks.map((week) => {
                                                     const dayItem = week.days[rowIndex];
                                                     if (!dayItem) {
-                                                        return <div key={`${week.weekIndex}-${rowIndex}`} className="w-6 h-6 sm:w-7 sm:h-7 opacity-0" />;
+                                                        return <div key={`${week.weekIndex}-${rowIndex}`} className="w-3.5 h-3.5 sm:w-4 sm:h-4 opacity-0" />;
                                                     }
 
                                                     const isCompleted = dayItem.log?.status === 'completed';
@@ -462,7 +462,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                                     } else if (isMissed) {
                                                         bgClass = 'bg-[#8A95A5] text-white';
                                                     } else if (isToday) {
-                                                        bgClass = 'bg-purple-600 text-white ring-2 ring-purple-400 ring-offset-2 animate-pulse';
+                                                        bgClass = 'bg-purple-600 text-white ring-2 ring-purple-400 ring-offset-1 animate-pulse';
                                                     }
 
                                                     return (
@@ -485,15 +485,15 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                                                         : isToday
                                                                             ? "Today's Target Day"
                                                                             : 'Upcoming Day'
-                                                                }`}
-                                                            className={`w-6 h-6 sm:w-7 sm:h-7 rounded-lg text-[9px] sm:text-[10px] font-black flex items-center justify-center transition-all cursor-pointer hover:scale-110 shrink-0 ${bgClass}`}
+                                                            }`}
+                                                            className={`w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-[3px] text-[7px] font-black flex items-center justify-center transition-all cursor-pointer hover:scale-125 shrink-0 ${bgClass}`}
                                                         >
                                                             {isToday ? (
-                                                                <span className="font-extrabold">{dayItem.dayNumber}</span>
+                                                                <span className="font-extrabold text-[7px] leading-none">{dayItem.dayNumber}</span>
                                                             ) : isCompleted ? (
-                                                                '✓'
+                                                                <span className="leading-none">✓</span>
                                                             ) : isRest ? (
-                                                                '☕'
+                                                                <span className="leading-none text-[6px]">☕</span>
                                                             ) : (
                                                                 ''
                                                             )}
