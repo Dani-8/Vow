@@ -341,7 +341,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                         <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl neu-button flex items-center justify-center text-purple-600 bg-purple-50/70 shadow-sm shrink-0">
                             <CategoryIcon className="w-8 h-8 sm:w-10 sm:h-10 text-purple-600" />
                         </div>
-                            <div className="space-y-1.5">
+                        <div className="space-y-1.5">
                             <div className="flex items-center space-x-2">
                                 <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full neu-inset text-purple-700 bg-purple-50/50">
                                     {challenge.category || 'Engineering'}
@@ -565,7 +565,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                                                         : isCellToday
                                                                             ? "Today's Target Day (Click to log)"
                                                                             : 'Upcoming Day'
-                                                            }`}
+                                                                }`}
                                                             className={`w-5 h-5 rounded-md text-[8px] sm:text-[9px] font-black flex items-center justify-center transition-all cursor-pointer hover:scale-115 shrink-0 ${bgClass}`}
                                                         >
                                                             {isCellToday ? (
