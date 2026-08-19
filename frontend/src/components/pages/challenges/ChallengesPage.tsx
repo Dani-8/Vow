@@ -290,11 +290,17 @@ export const ChallengesPage: React.FC<ChallengesPageProps> = ({
                             const theme = CATEGORY_THEMES[challenge.category] || CATEGORY_THEMES.engineering;
                             const IconComponent = CATEGORY_ICONS[challenge.category] || Code;
 
-                            // Calculate current day number
+                            // Calculate current day number & upcoming status
                             const start = new Date(challenge.startDate || new Date());
-                            const now = new Date();
-                            const diffDays = Math.max(0, Math.floor((now.getTime() - start.getTime()) / 86400000)) + 1;
-                            const currentDay = Math.min(challenge.targetDays, Math.max(1, diffDays));
+                            const startMidnight = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+                            const nowMidnight = new Date();
+                            nowMidnight.setHours(0, 0, 0, 0);
+
+                            const diffMs = nowMidnight.getTime() - startMidnight.getTime();
+                            const daysDiff = Math.floor(diffMs / 86400000);
+                            const isUpcoming = daysDiff < 0;
+                            const daysUntilStart = isUpcoming ? Math.abs(daysDiff) : 0;
+                            const currentDay = isUpcoming ? 0 : Math.min(challenge.targetDays, daysDiff + 1);
 
                             const targetEnd = new Date(
                                 challenge.targetEndDate || start.getTime() + challenge.targetDays * 86400000
@@ -304,17 +310,19 @@ export const ChallengesPage: React.FC<ChallengesPageProps> = ({
 
                             // Calculate consecutive streak
                             let streak = 0;
-                            const todayLog = challenge.logs.find((l) => Number(l.dayNumber) === currentDay);
-                            let checkDay = todayLog?.status === 'completed' ? currentDay : currentDay - 1;
-                            while (checkDay >= 1) {
-                                const log = challenge.logs.find((l) => Number(l.dayNumber) === checkDay);
-                                if (log?.status === 'completed') {
-                                    streak++;
-                                    checkDay--;
-                                } else if (log?.status === 'rest') {
-                                    checkDay--;
-                                } else {
-                                    break;
+                            if (!isUpcoming && currentDay >= 1) {
+                                const todayLog = challenge.logs.find((l) => Number(l.dayNumber) === currentDay);
+                                let checkDay = todayLog?.status === 'completed' ? currentDay : currentDay - 1;
+                                while (checkDay >= 1) {
+                                    const log = challenge.logs.find((l) => Number(l.dayNumber) === checkDay);
+                                    if (log?.status === 'completed') {
+                                        streak++;
+                                        checkDay--;
+                                    } else if (log?.status === 'rest') {
+                                        checkDay--;
+                                    } else {
+                                        break;
+                                    }
                                 }
                             }
 
@@ -338,12 +346,16 @@ export const ChallengesPage: React.FC<ChallengesPageProps> = ({
                                                     >
                                                         {challenge.category || 'Engineering'}
                                                     </span>
-                                                    {streak > 0 && (
+                                                    {isUpcoming ? (
+                                                        <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full neu-inset text-indigo-700 bg-indigo-50/70">
+                                                            Starts in {daysUntilStart} {daysUntilStart === 1 ? 'day' : 'days'}
+                                                        </span>
+                                                    ) : streak > 0 ? (
                                                         <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full neu-inset text-amber-700 bg-amber-50/70 flex items-center space-x-1">
                                                             <Flame className="w-3 h-3 text-amber-500 fill-amber-500" />
                                                             <span>{streak}d Streak</span>
                                                         </span>
-                                                    )}
+                                                    ) : null}
                                                 </div>
                                             </div>
 
@@ -467,7 +479,9 @@ export const ChallengesPage: React.FC<ChallengesPageProps> = ({
                                             <div className="text-xs font-bold text-slate-800">
                                                 <span>{challenge.targetDays} Days Challenge</span>
                                                 <span className="text-[10px] text-purple-700 font-extrabold block">
-                                                    Day {currentDay} Today ({completedDays} logged)
+                                                    {isUpcoming
+                                                        ? `Starts in ${daysUntilStart} ${daysUntilStart === 1 ? 'day' : 'days'}`
+                                                        : `Day ${currentDay} Today (${completedDays} logged)`}
                                                 </span>
                                             </div>
                                         </div>
