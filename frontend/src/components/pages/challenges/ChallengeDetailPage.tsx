@@ -25,7 +25,7 @@ import {
     ExternalLink,
 } from 'lucide-react';
 import { Challenge, ChallengeLog } from '../../../types';
-import { LogChallengeDayModal } from './LogChallengeDayModal';
+import { LogChallengeDayModal } from './components/LogChallengeDayModal';
 import { CreateChallengeModal } from './CreateChallengeModal';
 
 interface ChallengeDetailPageProps {

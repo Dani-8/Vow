@@ -23,7 +23,7 @@ import {
 } from 'lucide-react';
 import { Challenge } from '../../../types';
 import { CreateChallengeModal } from './CreateChallengeModal';
-import { HowChallengesWorkModal } from './HowChallengesWorkModal';
+import { HowChallengesWorkModal } from './components/HowChallengesWorkModal';
 
 interface ChallengesPageProps {
     challenges: Challenge[];
