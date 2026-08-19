@@ -1,13 +1,10 @@
 import React from 'react';
 import {
-    Sparkles,
     Target,
     Calendar,
     CheckCircle2,
     BookOpen,
-    Zap,
     Flame,
-    HelpCircle,
     X,
 } from 'lucide-react';
 
@@ -15,6 +12,41 @@ interface HowChallengesWorkModalProps {
     isOpen: boolean;
     onClose: () => void;
 }
+
+const GUIDE_STEPS = [
+    {
+        id: 'duration',
+        icon: Calendar,
+        iconColor: 'text-indigo-600',
+        title: '1. Pick Any Custom Duration',
+        description:
+            'Whether it is a 21-day habit builder, a 60-day fitness transformation, 100 days of code, or any custom number (e.g. 31, 75, 250 days), Vow dynamically builds an exact calendar grid for your commitment.',
+    },
+    {
+        id: 'matrix',
+        icon: CheckCircle2,
+        iconColor: 'text-emerald-600',
+        title: '2. Interactive Progress Matrix',
+        description:
+            'A custom day-by-day matrix is dynamically created for your exact target days. Click any day square to check in, review past notes, or update your daily status at your own pace.',
+    },
+    {
+        id: 'reflections',
+        icon: BookOpen,
+        iconColor: 'text-purple-600',
+        title: '3. Daily Micro-Reflection Logs',
+        description:
+            'Log a quick 1-line note and time spent each day (e.g., "Day 33: Built RAG pipeline with Gemini API"). It builds an inspiring chronological portfolio of your journey.',
+    },
+    {
+        id: 'momentum',
+        icon: Flame,
+        iconColor: 'text-amber-600',
+        title: '4. Non-Punitive Momentum',
+        description:
+            'Need a planned rest day or missed one? Mark it as a rest day without destroying your challenge. Vow focuses on high completion rate and steady long-term compounding.',
+    },
+];
 
 export const HowChallengesWorkModal: React.FC<HowChallengesWorkModalProps> = ({
     isOpen,
@@ -46,53 +78,25 @@ export const HowChallengesWorkModal: React.FC<HowChallengesWorkModalProps> = ({
                 </div>
 
                 <div className="space-y-4 text-xs font-medium text-slate-700">
-                    <div className="neu-inset p-4 rounded-2xl flex items-start space-x-3.5 bg-[#E0E5EC]/80">
-                        <div className="w-8 h-8 rounded-xl neu-button flex items-center justify-center text-indigo-600 shrink-0 mt-0.5">
-                            <Calendar className="w-4 h-4" />
-                        </div>
-                        <div>
-                            <h3 className="font-bold text-slate-900 text-sm mb-1">1. Pick Any Custom Duration</h3>
-                            <p className="leading-relaxed text-[#515777]">
-                                Whether it is a 21-day habit builder, a 60-day fitness transformation, 100 days of code, or any custom number (e.g. 31, 75, 250 days), Vow dynamically builds an exact calendar grid for your commitment.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="neu-inset p-4 rounded-2xl flex items-start space-x-3.5 bg-[#E0E5EC]/80">
-                        <div className="w-8 h-8 rounded-xl neu-button flex items-center justify-center text-emerald-600 shrink-0 mt-0.5">
-                            <CheckCircle2 className="w-4 h-4" />
-                        </div>
-                        <div>
-                            <h3 className="font-bold text-slate-900 text-sm mb-1">2. Interactive Progress Matrix</h3>
-                            <p className="leading-relaxed text-[#515777]">
-                                A custom day-by-day matrix is dynamically created for your exact target days. Click any day square to check in, review past notes, or update your daily status at your own pace.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="neu-inset p-4 rounded-2xl flex items-start space-x-3.5 bg-[#E0E5EC]/80">
-                        <div className="w-8 h-8 rounded-xl neu-button flex items-center justify-center text-purple-600 shrink-0 mt-0.5">
-                            <BookOpen className="w-4 h-4" />
-                        </div>
-                        <div>
-                            <h3 className="font-bold text-slate-900 text-sm mb-1">3. Daily Micro-Reflection Logs</h3>
-                            <p className="leading-relaxed text-[#515777]">
-                                Log a quick 1-line note and time spent each day (e.g., &quot;Day 33: Built RAG pipeline with Gemini API&quot;). It builds an inspiring chronological portfolio of your journey.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="neu-inset p-4 rounded-2xl flex items-start space-x-3.5 bg-[#E0E5EC]/80">
-                        <div className="w-8 h-8 rounded-xl neu-button flex items-center justify-center text-amber-600 shrink-0 mt-0.5">
-                            <Flame className="w-4 h-4" />
-                        </div>
-                        <div>
-                            <h3 className="font-bold text-slate-900 text-sm mb-1">4. Non-Punitive Momentum</h3>
-                            <p className="leading-relaxed text-[#515777]">
-                                Need a planned rest day or missed one? Mark it as a rest day without destroying your challenge. Vow focuses on high completion rate and steady long-term compounding.
-                            </p>
-                        </div>
-                    </div>
+                    {GUIDE_STEPS.map((step) => {
+                        const IconComponent = step.icon;
+                        return (
+                            <div
+                                key={step.id}
+                                className="neu-inset p-4 rounded-2xl flex items-start space-x-3.5 bg-[#E0E5EC]/80"
+                            >
+                                <div
+                                    className={`w-8 h-8 rounded-xl neu-button flex items-center justify-center ${step.iconColor} shrink-0 mt-0.5`}
+                                >
+                                    <IconComponent className="w-4 h-4" />
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-slate-900 text-sm mb-1">{step.title}</h3>
+                                    <p className="leading-relaxed text-[#515777]">{step.description}</p>
+                                </div>
+                            </div>
+                        );
+                    })}
                 </div>
 
                 <div className="mt-6 pt-4 border-t border-slate-200/60 flex justify-end">
