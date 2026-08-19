@@ -400,19 +400,19 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                             {/* Legend matching Image 3 */}
                             <div className="flex flex-wrap items-center gap-3 text-[11px] font-bold text-[#515777]">
                                 <div className="flex items-center space-x-1.5">
-                                    <div className="w-2.5 h-2.5 rounded-[2px] bg-emerald-500" />
+                                    <div className="w-3 h-3 rounded-[3px] bg-emerald-500" />
                                     <span>Completed</span>
                                 </div>
                                 <div className="flex items-center space-x-1.5">
-                                    <div className="w-2.5 h-2.5 rounded-[2px] bg-purple-600 ring-2 ring-purple-400 ring-offset-1" />
+                                    <div className="w-3 h-3 rounded-[3px] bg-purple-600 ring-2 ring-purple-400 ring-offset-1" />
                                     <span>Today</span>
                                 </div>
                                 <div className="flex items-center space-x-1.5">
-                                    <div className="w-2.5 h-2.5 rounded-[2px] bg-[#8A95A5]" />
+                                    <div className="w-3 h-3 rounded-[3px] bg-[#8A95A5]" />
                                     <span>Missed</span>
                                 </div>
                                 <div className="flex items-center space-x-1.5">
-                                    <div className="w-2.5 h-2.5 rounded-[2px] bg-[#D1D9E6] border border-slate-300/40" />
+                                    <div className="w-3 h-3 rounded-[3px] bg-[#D1D9E6] border border-slate-300/40" />
                                     <span>Upcoming</span>
                                 </div>
                             </div>
@@ -422,11 +422,11 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                         <div className="neu-inset p-4 rounded-2xl overflow-x-auto bg-[#E0E5EC]/80">
                             <div className="min-w-fit">
                                 {/* Week Header Labels */}
-                                <div className="flex ml-7 mb-1.5 space-x-1">
+                                <div className="flex ml-8 mb-2 space-x-1.5">
                                     {gridWeeks.map((week, idx) => (
                                         <div
                                             key={week.weekIndex}
-                                            className="w-3.5 sm:w-4 text-[7px] sm:text-[8px] font-black text-[#717699] text-center uppercase tracking-tight shrink-0"
+                                            className="w-5 text-[8px] sm:text-[9px] font-black text-[#717699] text-center uppercase tracking-tight shrink-0"
                                         >
                                             {idx === 0 || (idx + 1) % 2 === 0 ? `W${week.weekIndex}` : ''}
                                         </div>
@@ -434,18 +434,18 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                 </div>
 
                                 {/* 7 Day Rows (Mon - Sun) */}
-                                <div className="space-y-1">
+                                <div className="space-y-1.5">
                                     {DAYS_OF_WEEK.map((dayLabel, rowIndex) => (
-                                        <div key={dayLabel} className="flex items-center space-x-1">
-                                            <span className="w-6 text-[9px] font-extrabold text-[#717699] shrink-0">
+                                        <div key={dayLabel} className="flex items-center space-x-1.5">
+                                            <span className="w-6 text-[10px] font-extrabold text-[#717699] shrink-0">
                                                 {dayLabel}
                                             </span>
 
-                                            <div className="flex space-x-1">
+                                            <div className="flex space-x-1.5">
                                                 {gridWeeks.map((week) => {
                                                     const dayItem = week.days[rowIndex];
                                                     if (!dayItem) {
-                                                        return <div key={`${week.weekIndex}-${rowIndex}`} className="w-3.5 h-3.5 sm:w-4 sm:h-4 opacity-0" />;
+                                                        return <div key={`${week.weekIndex}-${rowIndex}`} className="w-5 h-5 opacity-0" />;
                                                     }
 
                                                     const isCompleted = dayItem.log?.status === 'completed';
@@ -485,15 +485,15 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                                                         : isToday
                                                                             ? "Today's Target Day (Click to log)"
                                                                             : 'Upcoming Day'
-                                                            }`}
-                                                            className={`w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-[3px] text-[7px] font-black flex items-center justify-center transition-all cursor-pointer hover:scale-125 shrink-0 ${bgClass}`}
+                                                                }`}
+                                                            className={`w-5 h-5 rounded-md text-[8px] sm:text-[9px] font-black flex items-center justify-center transition-all cursor-pointer hover:scale-115 shrink-0 ${bgClass}`}
                                                         >
                                                             {isToday ? (
-                                                                <span className="font-extrabold text-[7px] leading-none">{dayItem.dayNumber}</span>
+                                                                <span className="font-extrabold text-[8px] leading-none">{dayItem.dayNumber}</span>
                                                             ) : isCompleted ? (
-                                                                <span className="leading-none">✓</span>
+                                                                <span className="leading-none text-[9px]">✓</span>
                                                             ) : isRest ? (
-                                                                <span className="leading-none text-[6px]">☕</span>
+                                                                <span className="leading-none text-[8px]">☕</span>
                                                             ) : (
                                                                 ''
                                                             )}
