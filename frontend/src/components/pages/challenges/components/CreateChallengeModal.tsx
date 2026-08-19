@@ -33,8 +33,8 @@ const ACCENT_COLORS = [
     { id: 'blue', label: 'Brand Blue', hex: '#549acb' },
     { id: 'indigo', label: 'Indigo', hex: '#6366f1' },
     { id: 'emerald', label: 'Emerald', hex: '#10b981' },
-    { id: 'amber', label: 'Amber', hex: '#f59e0b' },
     { id: 'rose', label: 'Rose', hex: '#f43f5e' },
+    { id: 'amber', label: 'Amber', hex: '#f59e0b' },
     { id: 'violet', label: 'Violet', hex: '#8b5cf6' },
     { id: 'cyan', label: 'Cyan', hex: '#06b6d4' },
 ];
