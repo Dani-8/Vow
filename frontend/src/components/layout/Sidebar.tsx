@@ -32,6 +32,55 @@ interface SidebarProps {
     onBypassAuth?: () => void;
 }
 
+interface NavItemConfig {
+    id: 'home' | 'visible' | 'challenges' | 'task-map' | 'stats';
+    label: string;
+    icon: React.ComponentType<{ className?: string }>;
+    activeViews: ActiveView[];
+    activeClass: string;
+    iconColor?: string;
+}
+
+const NAV_ITEMS: NavItemConfig[] = [
+    {
+        id: 'home',
+        label: 'Home',
+        icon: Home,
+        activeViews: ['home'],
+        activeClass: 'neu-inset text-[#549acb]',
+    },
+    {
+        id: 'visible',
+        label: 'Tasks & Habits',
+        icon: CheckSquare,
+        activeViews: ['visible', 'task-detail'],
+        activeClass: 'neu-inset text-[#549acb]',
+    },
+    {
+        id: 'challenges',
+        label: 'Challenges',
+        icon: Target,
+        activeViews: ['challenges', 'challenge-detail'],
+        activeClass: 'neu-inset text-indigo-600 bg-indigo-50/50 shadow-inner',
+        iconColor: 'text-indigo-600',
+    },
+    {
+        id: 'task-map',
+        label: 'Task Map',
+        icon: Network,
+        activeViews: ['task-map'],
+        activeClass: 'neu-inset text-[#549acb]',
+        iconColor: 'text-[#549acb]',
+    },
+    {
+        id: 'stats',
+        label: 'Analytics & Streaks',
+        icon: BarChart3,
+        activeViews: ['stats'],
+        activeClass: 'neu-inset text-[#549acb]',
+    },
+];
+
 export const Sidebar: React.FC<SidebarProps> = ({
     collapsed,
     onToggleCollapse,
@@ -48,8 +97,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
     return (
         <aside
-            className={`neu-card flex flex-col justify-between py-6 transition-all duration-300 z-30 shrink-0 sticky top-4 h-[calc(100vh-2rem)] ${collapsed ? 'w-20 px-3' : 'w-64 px-5'
-                }`}
+            className={`neu-card flex flex-col justify-between py-6 transition-all duration-300 z-30 shrink-0 sticky top-4 h-[calc(100vh-2rem)] ${
+                collapsed ? 'w-20 px-3' : 'w-64 px-5'
+            }`}
         >
             <div className="space-y-6">
                 {collapsed ? (
@@ -101,99 +151,47 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         }
                         onOpenCreateModal();
                     }}
-                    className={`w-full py-3 rounded-2xl neu-button-primary font-bold text-xs flex items-center justify-center space-x-2 transition-all duration-300 ${collapsed ? 'px-0' : 'px-4'
-                        }`}
+                    className={`w-full py-3 rounded-2xl neu-button-primary font-bold text-xs flex items-center justify-center space-x-2 transition-all duration-300 ${
+                        collapsed ? 'px-0' : 'px-4'
+                    }`}
                     title="Create New Goal / Habit"
                 >
                     <Plus className="w-4 h-4 shrink-0" />
                     <span
-                        className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[120px]'
-                            }`}
+                        className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${
+                            collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[120px]'
+                        }`}
                     >
                         New Goal
                     </span>
                 </button>
 
+                {/* Main Navigation */}
                 <nav className="space-y-2 pt-2">
-                    <button
-                        onClick={() => onNavigate('home')}
-                        className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${activeView === 'home'
-                            ? 'neu-inset text-[#549acb]'
-                            : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
-                            }`}
-                    >
-                        <Home className="w-4 h-4 shrink-0" />
-                        <span
-                            className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
+                    {NAV_ITEMS.map((item) => {
+                        const Icon = item.icon;
+                        const isActive = item.activeViews.includes(activeView);
+                        return (
+                            <button
+                                key={item.id}
+                                onClick={() => onNavigate(item.id)}
+                                className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${
+                                    isActive
+                                        ? item.activeClass
+                                        : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
                                 }`}
-                        >
-                            Home
-                        </span>
-                    </button>
-
-                    <button
-                        onClick={() => onNavigate('visible')}
-                        className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${activeView === 'visible' || activeView === 'task-detail'
-                            ? 'neu-inset text-[#549acb]'
-                            : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
-                            }`}
-                    >
-                        <CheckSquare className="w-4 h-4 shrink-0" />
-                        <span
-                            className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
-                                }`}
-                        >
-                            Tasks & Habits
-                        </span>
-                    </button>
-
-                    <button
-                        onClick={() => onNavigate('challenges')}
-                        className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${activeView === 'challenges' || activeView === 'challenge-detail'
-                            ? 'neu-inset text-indigo-600 bg-indigo-50/50 shadow-inner'
-                            : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
-                            }`}
-                    >
-                        <Target className="w-4 h-4 shrink-0 text-indigo-600" />
-                        <span
-                            className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
-                                }`}
-                        >
-                            Challenges
-                        </span>
-                    </button>
-
-                    <button
-                        onClick={() => onNavigate('task-map')}
-                        className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${activeView === 'task-map'
-                            ? 'neu-inset text-[#549acb]'
-                            : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
-                            }`}
-                    >
-                        <Network className="w-4 h-4 shrink-0 text-[#549acb]" />
-                        <span
-                            className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
-                                }`}
-                        >
-                            Task Map
-                        </span>
-                    </button>
-
-                    <button
-                        onClick={() => onNavigate('stats')}
-                        className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${activeView === 'stats'
-                            ? 'neu-inset text-[#549acb]'
-                            : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
-                            }`}
-                    >
-                        <BarChart3 className="w-4 h-4 shrink-0" />
-                        <span
-                            className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
-                                }`}
-                        >
-                            Analytics & Streaks
-                        </span>
-                    </button>
+                            >
+                                <Icon className={`w-4 h-4 shrink-0 ${item.iconColor || ''}`} />
+                                <span
+                                    className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${
+                                        collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
+                                    }`}
+                                >
+                                    {item.label}
+                                </span>
+                            </button>
+                        );
+                    })}
 
                     <button
                         onClick={() => {
@@ -203,10 +201,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                 onNavigate('private');
                             }
                         }}
-                        className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${activeView === 'private'
-                            ? 'neu-inset text-purple-600'
-                            : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
-                            }`}
+                        className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${
+                            activeView === 'private'
+                                ? 'neu-inset text-purple-600'
+                                : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
+                        }`}
                     >
                         {isPrivateUnlocked ? (
                             <Unlock className="w-4 h-4 shrink-0 text-purple-600" />
@@ -214,8 +213,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             <Lock className="w-4 h-4 shrink-0 text-purple-500" />
                         )}
                         <div
-                            className={`flex items-center justify-between flex-1 min-w-0 whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
-                                }`}
+                            className={`flex items-center justify-between flex-1 min-w-0 whitespace-nowrap overflow-hidden transition-all duration-300 ${
+                                collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
+                            }`}
                         >
                             <span className="truncate">Growth Vault</span>
                             <span className="text-[9px] px-1.5 py-0.5 rounded neu-inset font-bold text-purple-600 ml-2 shrink-0">
@@ -230,8 +230,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 {stats && (
                     <div
                         onClick={() => onNavigate('stats')}
-                        className={`neu-inset rounded-2xl cursor-pointer hover:border-[#549acb] transition-all duration-300 overflow-hidden ${collapsed ? 'opacity-0 max-h-0 p-0 m-0 pointer-events-none' : 'opacity-100 p-3 max-h-24'
-                            }`}
+                        className={`neu-inset rounded-2xl cursor-pointer hover:border-[#549acb] transition-all duration-300 overflow-hidden ${
+                            collapsed ? 'opacity-0 max-h-0 p-0 m-0 pointer-events-none' : 'opacity-100 p-3 max-h-24'
+                        }`}
                     >
                         <div className="flex items-center justify-between whitespace-nowrap">
                             <div className="min-w-0">
@@ -255,8 +256,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                     <UserIcon className="w-4 h-4" />
                                 </div>
                                 <div
-                                    className={`min-w-0 whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0 pointer-events-none' : 'opacity-100 max-w-[110px]'
-                                        }`}
+                                    className={`min-w-0 whitespace-nowrap overflow-hidden transition-all duration-300 ${
+                                        collapsed ? 'opacity-0 max-w-0 pointer-events-none' : 'opacity-100 max-w-[110px]'
+                                    }`}
                                 >
                                     <p className="text-xs font-bold text-[#1a1c35] truncate">{user.name}</p>
                                     <p className="text-[10px] text-[#717699] truncate">{user.email}</p>
@@ -264,8 +266,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             </div>
                             <button
                                 onClick={onLogout}
-                                className={`p-1.5 rounded-xl neu-button text-[#717699] hover:text-rose-600 transition-all duration-300 shrink-0 ${collapsed ? 'hidden opacity-0 max-w-0' : 'opacity-100'
-                                    }`}
+                                className={`p-1.5 rounded-xl neu-button text-[#717699] hover:text-rose-600 transition-all duration-300 shrink-0 ${
+                                    collapsed ? 'hidden opacity-0 max-w-0' : 'opacity-100'
+                                }`}
                                 title="Sign Out"
                             >
                                 <LogOut className="w-3.5 h-3.5" />
@@ -275,13 +278,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         <div className="space-y-2">
                             <button
                                 onClick={onOpenAuthModal}
-                                className={`w-full py-2.5 rounded-xl neu-button text-[#549acb] font-bold text-xs flex items-center justify-center space-x-2 transition-all duration-300 ${collapsed ? 'px-0' : 'px-3'
-                                    }`}
+                                className={`w-full py-2.5 rounded-xl neu-button text-[#549acb] font-bold text-xs flex items-center justify-center space-x-2 transition-all duration-300 ${
+                                    collapsed ? 'px-0' : 'px-3'
+                                }`}
                             >
                                 <LogIn className="w-4 h-4 shrink-0" />
                                 <span
-                                    className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[120px]'
-                                        }`}
+                                    className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${
+                                        collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[120px]'
+                                    }`}
                                 >
                                     Sign In / Demo
                                 </span>
@@ -290,8 +295,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             {onBypassAuth && (
                                 <button
                                     onClick={onBypassAuth}
-                                    className={`w-full py-1.5 text-[10px] font-bold text-emerald-700 bg-emerald-100/70 rounded-xl hover:bg-emerald-200/80 flex items-center justify-center space-x-1 transition-all duration-300 overflow-hidden ${collapsed ? 'opacity-0 max-h-0 p-0 m-0 pointer-events-none' : 'opacity-100 max-h-10'
-                                        }`}
+                                    className={`w-full py-1.5 text-[10px] font-bold text-emerald-700 bg-emerald-100/70 rounded-xl hover:bg-emerald-200/80 flex items-center justify-center space-x-1 transition-all duration-300 overflow-hidden ${
+                                        collapsed ? 'opacity-0 max-h-0 p-0 m-0 pointer-events-none' : 'opacity-100 max-h-10'
+                                    }`}
                                     title="Testing bypass: auto login demo account"
                                 >
                                     <ShieldCheck className="w-3 h-3 shrink-0" />
