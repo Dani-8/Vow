@@ -26,11 +26,10 @@ export const ChallengesActionBar: React.FC<ChallengesActionBarProps> = ({
             <div className="flex items-center space-x-2 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden shrink-0">
                 <button
                     onClick={() => onFilterChange('active')}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0 ${
-                        activeFilter === 'active'
-                            ? 'neu-inset text-indigo-700 bg-indigo-50/70 font-black'
-                            : 'neu-button text-[#717699] hover:text-[#1a1c35]'
-                    }`}
+                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0 ${activeFilter === 'active'
+                        ? 'neu-inset text-indigo-700 bg-indigo-50/70 font-black'
+                        : 'neu-button text-[#717699] hover:text-[#1a1c35]'
+                        }`}
                 >
                     <span>Active</span>
                     <span className="text-[10px] px-1.5 py-0.2 rounded-full neu-inset text-indigo-700">
@@ -40,11 +39,10 @@ export const ChallengesActionBar: React.FC<ChallengesActionBarProps> = ({
 
                 <button
                     onClick={() => onFilterChange('completed')}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0 ${
-                        activeFilter === 'completed'
-                            ? 'neu-inset text-emerald-700 bg-emerald-50/70 font-black'
-                            : 'neu-button text-[#717699] hover:text-[#1a1c35]'
-                    }`}
+                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0 ${activeFilter === 'completed'
+                        ? 'neu-inset text-emerald-700 bg-emerald-50/70 font-black'
+                        : 'neu-button text-[#717699] hover:text-[#1a1c35]'
+                        }`}
                 >
                     <span>Completed</span>
                     <span className="text-[10px] px-1.5 py-0.2 rounded-full neu-inset text-emerald-700">
@@ -54,11 +52,10 @@ export const ChallengesActionBar: React.FC<ChallengesActionBarProps> = ({
 
                 <button
                     onClick={() => onFilterChange('paused')}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0 ${
-                        activeFilter === 'paused'
-                            ? 'neu-inset text-amber-700 bg-amber-50/70 font-black'
-                            : 'neu-button text-[#717699] hover:text-[#1a1c35]'
-                    }`}
+                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0 ${activeFilter === 'paused'
+                        ? 'neu-inset text-amber-700 bg-amber-50/70 font-black'
+                        : 'neu-button text-[#717699] hover:text-[#1a1c35]'
+                        }`}
                 >
                     <span>Paused</span>
                     <span className="text-[10px] px-1.5 py-0.2 rounded-full neu-inset text-amber-700">
