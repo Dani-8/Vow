@@ -94,9 +94,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
     return (
         <aside
-            className={`neu-card flex flex-col justify-between py-6 transition-all duration-300 z-30 shrink-0 sticky top-4 h-[calc(100vh-2rem)] ${
-                collapsed ? 'w-20 px-3' : 'w-64 px-5'
-            }`}
+            className={`neu-card flex flex-col justify-between py-6 transition-all duration-300 z-30 shrink-0 sticky top-4 h-[calc(100vh-2rem)] ${collapsed ? 'w-20 px-3' : 'w-64 px-5'
+                }`}
         >
             <div className="space-y-6">
                 {collapsed ? (
@@ -148,16 +147,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         }
                         onOpenCreateModal();
                     }}
-                    className={`w-full py-3 rounded-2xl neu-button-primary font-bold text-xs flex items-center justify-center space-x-2 transition-all duration-300 ${
-                        collapsed ? 'px-0' : 'px-4'
-                    }`}
+                    className={`w-full py-3 rounded-2xl neu-button-primary font-bold text-xs flex items-center justify-center space-x-2 transition-all duration-300 ${collapsed ? 'px-0' : 'px-4'
+                        }`}
                     title="Create New Goal / Habit"
                 >
                     <Plus className="w-4 h-4 shrink-0" />
                     <span
-                        className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${
-                            collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[120px]'
-                        }`}
+                        className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[120px]'
+                            }`}
                     >
                         New Goal
                     </span>
@@ -172,17 +169,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             <button
                                 key={item.id}
                                 onClick={() => onNavigate(item.id)}
-                                className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${
-                                    isActive
+                                className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${isActive
                                         ? item.activeClass
                                         : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
-                                }`}
+                                    }`}
                             >
                                 <Icon className="w-4 h-4 shrink-0" />
                                 <span
-                                    className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${
-                                        collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
-                                    }`}
+                                    className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
+                                        }`}
                                 >
                                     {item.label}
                                 </span>
@@ -198,11 +193,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                 onNavigate('private');
                             }
                         }}
-                        className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${
-                            activeView === 'private'
+                        className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${activeView === 'private'
                                 ? 'neu-inset text-purple-600'
                                 : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
-                        }`}
+                            }`}
                     >
                         {isPrivateUnlocked ? (
                             <Unlock className="w-4 h-4 shrink-0" />
@@ -210,15 +204,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             <Lock className="w-4 h-4 shrink-0" />
                         )}
                         <div
-                            className={`flex items-center justify-between flex-1 min-w-0 whitespace-nowrap overflow-hidden transition-all duration-300 ${
-                                collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
-                            }`}
+                            className={`flex items-center justify-between flex-1 min-w-0 whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
+                                }`}
                         >
                             <span className="truncate">Growth Vault</span>
                             <span
-                                className={`text-[9px] px-1.5 py-0.5 rounded neu-inset font-bold ml-2 shrink-0 ${
-                                    activeView === 'private' ? 'text-purple-600' : 'text-[#717699]'
-                                }`}
+                                className={`text-[9px] px-1.5 py-0.5 rounded neu-inset font-bold ml-2 shrink-0 ${activeView === 'private' ? 'text-purple-600' : 'text-[#717699]'
+                                    }`}
                             >
                                 {isPrivateUnlocked ? 'OPEN' : 'PIN'}
                             </span>
@@ -231,9 +223,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 {stats && (
                     <div
                         onClick={() => onNavigate('stats')}
-                        className={`neu-inset rounded-2xl cursor-pointer hover:border-[#549acb] transition-all duration-300 overflow-hidden ${
-                            collapsed ? 'opacity-0 max-h-0 p-0 m-0 pointer-events-none' : 'opacity-100 p-3 max-h-24'
-                        }`}
+                        className={`neu-inset rounded-2xl cursor-pointer hover:border-[#549acb] transition-all duration-300 overflow-hidden ${collapsed ? 'opacity-0 max-h-0 p-0 m-0 pointer-events-none' : 'opacity-100 p-3 max-h-24'
+                            }`}
                     >
                         <div className="flex items-center justify-between whitespace-nowrap">
                             <div className="min-w-0">
@@ -257,9 +248,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                     <UserIcon className="w-4 h-4" />
                                 </div>
                                 <div
-                                    className={`min-w-0 whitespace-nowrap overflow-hidden transition-all duration-300 ${
-                                        collapsed ? 'opacity-0 max-w-0 pointer-events-none' : 'opacity-100 max-w-[110px]'
-                                    }`}
+                                    className={`min-w-0 whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0 pointer-events-none' : 'opacity-100 max-w-[110px]'
+                                        }`}
                                 >
                                     <p className="text-xs font-bold text-[#1a1c35] truncate">{user.name}</p>
                                     <p className="text-[10px] text-[#717699] truncate">{user.email}</p>
@@ -267,9 +257,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             </div>
                             <button
                                 onClick={onLogout}
-                                className={`p-1.5 rounded-xl neu-button text-[#717699] hover:text-rose-600 transition-all duration-300 shrink-0 ${
-                                    collapsed ? 'hidden opacity-0 max-w-0' : 'opacity-100'
-                                }`}
+                                className={`p-1.5 rounded-xl neu-button text-[#717699] hover:text-rose-600 transition-all duration-300 shrink-0 ${collapsed ? 'hidden opacity-0 max-w-0' : 'opacity-100'
+                                    }`}
                                 title="Sign Out"
                             >
                                 <LogOut className="w-3.5 h-3.5" />
@@ -279,15 +268,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         <div className="space-y-2">
                             <button
                                 onClick={onOpenAuthModal}
-                                className={`w-full py-2.5 rounded-xl neu-button text-[#549acb] font-bold text-xs flex items-center justify-center space-x-2 transition-all duration-300 ${
-                                    collapsed ? 'px-0' : 'px-3'
-                                }`}
+                                className={`w-full py-2.5 rounded-xl neu-button text-[#549acb] font-bold text-xs flex items-center justify-center space-x-2 transition-all duration-300 ${collapsed ? 'px-0' : 'px-3'
+                                    }`}
                             >
                                 <LogIn className="w-4 h-4 shrink-0" />
                                 <span
-                                    className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${
-                                        collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[120px]'
-                                    }`}
+                                    className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[120px]'
+                                        }`}
                                 >
                                     Sign In / Demo
                                 </span>
@@ -296,9 +283,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             {onBypassAuth && (
                                 <button
                                     onClick={onBypassAuth}
-                                    className={`w-full py-1.5 text-[10px] font-bold text-emerald-700 bg-emerald-100/70 rounded-xl hover:bg-emerald-200/80 flex items-center justify-center space-x-1 transition-all duration-300 overflow-hidden ${
-                                        collapsed ? 'opacity-0 max-h-0 p-0 m-0 pointer-events-none' : 'opacity-100 max-h-10'
-                                    }`}
+                                    className={`w-full py-1.5 text-[10px] font-bold text-emerald-700 bg-emerald-100/70 rounded-xl hover:bg-emerald-200/80 flex items-center justify-center space-x-1 transition-all duration-300 overflow-hidden ${collapsed ? 'opacity-0 max-h-0 p-0 m-0 pointer-events-none' : 'opacity-100 max-h-10'
+                                        }`}
                                     title="Testing bypass: auto login demo account"
                                 >
                                     <ShieldCheck className="w-3 h-3 shrink-0" />
