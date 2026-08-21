@@ -32,6 +32,52 @@ interface SidebarProps {
     onBypassAuth?: () => void;
 }
 
+interface NavItemConfig {
+    id: 'home' | 'visible' | 'challenges' | 'task-map' | 'stats';
+    label: string;
+    icon: React.ComponentType<{ className?: string }>;
+    activeViews: ActiveView[];
+    activeClass: string;
+}
+
+const NAV_ITEMS: NavItemConfig[] = [
+    {
+        id: 'home',
+        label: 'Home',
+        icon: Home,
+        activeViews: ['home'],
+        activeClass: 'neu-inset text-[#549acb]',
+    },
+    {
+        id: 'visible',
+        label: 'Tasks & Habits',
+        icon: CheckSquare,
+        activeViews: ['visible', 'task-detail'],
+        activeClass: 'neu-inset text-[#549acb]',
+    },
+    {
+        id: 'challenges',
+        label: 'Challenges',
+        icon: Target,
+        activeViews: ['challenges', 'challenge-detail'],
+        activeClass: 'neu-inset text-[#549acb]',
+    },
+    {
+        id: 'task-map',
+        label: 'Task Map',
+        icon: Network,
+        activeViews: ['task-map'],
+        activeClass: 'neu-inset text-[#549acb]',
+    },
+    {
+        id: 'stats',
+        label: 'Analytics & Streaks',
+        icon: BarChart3,
+        activeViews: ['stats'],
+        activeClass: 'neu-inset text-[#549acb]',
+    },
+];
+
 export const Sidebar: React.FC<SidebarProps> = ({
     collapsed,
     onToggleCollapse,
@@ -114,38 +160,30 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     </span>
                 </button>
 
+                {/* Main Navigation */}
                 <nav className="space-y-2 pt-2">
-                    <button
-                        onClick={() => onNavigate('home')}
-                        className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${activeView === 'home'
-                            ? 'neu-inset text-[#549acb]'
-                            : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
-                            }`}
-                    >
-                        <Home className="w-4 h-4 shrink-0" />
-                        <span
-                            className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
-                                }`}
-                        >
-                            Home
-                        </span>
-                    </button>
-
-                    <button
-                        onClick={() => onNavigate('visible')}
-                        className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${activeView === 'visible' || activeView === 'task-detail'
-                            ? 'neu-inset text-[#549acb]'
-                            : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
-                            }`}
-                    >
-                        <CheckSquare className="w-4 h-4 shrink-0" />
-                        <span
-                            className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
-                                }`}
-                        >
-                            Tasks & Habits
-                        </span>
-                    </button>
+                    {NAV_ITEMS.map((item) => {
+                        const Icon = item.icon;
+                        const isActive = item.activeViews.includes(activeView);
+                        return (
+                            <button
+                                key={item.id}
+                                onClick={() => onNavigate(item.id)}
+                                className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${isActive
+                                    ? item.activeClass
+                                    : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
+                                    }`}
+                            >
+                                <Icon className="w-4 h-4 shrink-0" />
+                                <span
+                                    className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
+                                        }`}
+                                >
+                                    {item.label}
+                                </span>
+                            </button>
+                        );
+                    })}
 
                     <button
                         onClick={() => {
@@ -161,67 +199,22 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             }`}
                     >
                         {isPrivateUnlocked ? (
-                            <Unlock className="w-4 h-4 shrink-0 text-purple-600" />
+                            <Unlock className="w-4 h-4 shrink-0" />
                         ) : (
-                            <Lock className="w-4 h-4 shrink-0 text-purple-500" />
+                            <Lock className="w-4 h-4 shrink-0" />
                         )}
                         <div
                             className={`flex items-center justify-between flex-1 min-w-0 whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
                                 }`}
                         >
                             <span className="truncate">Growth Vault</span>
-                            <span className="text-[9px] px-1.5 py-0.5 rounded neu-inset font-bold text-purple-600 ml-2 shrink-0">
+                            <span
+                                className={`text-[9px] px-1.5 py-0.5 rounded neu-inset font-bold ml-2 shrink-0 ${activeView === 'private' ? 'text-purple-600' : 'text-[#717699]'
+                                    }`}
+                            >
                                 {isPrivateUnlocked ? 'OPEN' : 'PIN'}
                             </span>
                         </div>
-                    </button>
-
-                    <button
-                        onClick={() => onNavigate('stats')}
-                        className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${activeView === 'stats'
-                            ? 'neu-inset text-[#549acb]'
-                            : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
-                            }`}
-                    >
-                        <BarChart3 className="w-4 h-4 shrink-0" />
-                        <span
-                            className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
-                                }`}
-                        >
-                            Analytics & Streaks
-                        </span>
-                    </button>
-
-                    <button
-                        onClick={() => onNavigate('task-map')}
-                        className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${activeView === 'task-map'
-                            ? 'neu-inset text-[#549acb]'
-                            : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
-                            }`}
-                    >
-                        <Network className="w-4 h-4 shrink-0 text-[#549acb]" />
-                        <span
-                            className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
-                                }`}
-                        >
-                            Task Map
-                        </span>
-                    </button>
-
-                    <button
-                        onClick={() => onNavigate('challenges')}
-                        className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${activeView === 'challenges' || activeView === 'challenge-detail'
-                            ? 'neu-inset text-indigo-600 bg-indigo-50/50 shadow-inner'
-                            : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
-                            }`}
-                    >
-                        <Target className="w-4 h-4 shrink-0 text-indigo-600" />
-                        <span
-                            className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
-                                }`}
-                        >
-                            Challenges
-                        </span>
                     </button>
                 </nav>
             </div>
