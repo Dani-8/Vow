@@ -37,7 +37,7 @@ export const ChallengesActionBar: React.FC<ChallengesActionBarProps> = ({
     return (
         <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3.5">
             {/* Left: Status Filter Tabs */}
-            <div className="flex items-center space-x-2 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden shrink-0">
+            <div className="flex items-center space-x-2 overflow-visible shrink-0">
                 {filters.map(({ key, label, count, color }) => (
                     <button
                         key={key}
