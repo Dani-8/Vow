@@ -20,12 +20,15 @@ export const ChallengesActionBar: React.FC<ChallengesActionBarProps> = ({
     onOpenGuide,
     onStartChallenge,
 }) => {
+
+    // Define the filter buttons with their respective labels, counts, and colors
     const filters = [
         { key: 'active' as const, label: 'Active', count: counts.active, color: 'indigo' },
         { key: 'completed' as const, label: 'Completed', count: counts.completed, color: 'emerald' },
         { key: 'paused' as const, label: 'Paused', count: counts.paused, color: 'amber' },
     ];
 
+    // Define the action buttons for Guide and Start a Challenge
     const actions = [
         { label: 'Guide', icon: HelpCircle, onClick: onOpenGuide, className: 'neu-button px-3.5 py-2 rounded-xl font-bold text-xs text-[#717699] hover:text-[#1a1c35]' },
         { label: 'Start a Challenge', icon: Plus, onClick: onStartChallenge, className: 'neu-button-primary px-4 py-2 rounded-xl font-bold text-xs text-white shadow-md hover:scale-105 transition-transform' },
