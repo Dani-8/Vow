@@ -11,7 +11,7 @@
 
     .neu-card {
         background: #E0E5EC;
-        box-shadow: 9px 9px 16px rgba(163, 177, 198, 0.6), -9px -9px 16px rgba(255, 255, 255, 0.5);
+        box-shadow: 0 9px 16px rgba(163, 177, 198, 0.6), 0 -9px 16px rgba(255, 255, 255, 0.5);
         border: 1px solid rgba(255, 255, 255, 0.6);
         border-radius: 1.5rem;
     }

@@ -770,8 +770,9 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                 </button>
                             </div>
                         ) : (
-                            <div className="max-h-[560px] overflow-y-auto pr-2 space-y-4 relative before:absolute before:top-2 before:bottom-2 before:left-3.5 before:w-0.5 before:bg-slate-300/80">
-                                {displayLogs.map((log) => {
+                            <div className="max-h-[560px] overflow-y-auto pr-2">
+                                <div className="py-3 px-1 space-y-4 relative before:absolute before:top-5 before:bottom-5 before:left-4.5 before:w-0.5 before:bg-slate-300/80">
+                                    {displayLogs.map((log) => {
                                     const isLogCompleted = log.status === 'completed';
                                     const isLogRest = log.status === 'rest';
 
@@ -779,7 +780,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                         <div key={log.id} className="relative pl-8 group">
                                             {/* Timeline Dot */}
                                             <div
-                                                className={`absolute left-2 top-1.5 w-3.5 h-3.5 rounded-full ring-4 ring-[#E0E5EC] transition-transform group-hover:scale-125 ${isLogCompleted
+                                                className={`absolute left-2 top-1.5 w-3.5 h-3.5 rounded-full ring-4 ring-[#E0E5EC] transition-all duration-400 group-hover:scale-125 ${isLogCompleted
                                                     ? 'bg-emerald-500'
                                                     : isLogRest
                                                         ? 'bg-amber-400'
@@ -787,7 +788,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                                     }`}
                                             />
 
-                                            <div className="neu-card p-3.5 rounded-xl bg-[#E0E5EC] hover:bg-white/40 transition-colors space-y-2">
+                                            <div className="neu-card p-3.5 rounded-xl bg-[#E0E5EC] hover:bg-white/40 transition-all duration-400 space-y-2">
                                                 <div className="flex items-center justify-between">
                                                     <span className="text-xs font-black text-slate-800">
                                                         Day {log.dayNumber}{' '}
@@ -836,7 +837,8 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                             </div>
                                         </div>
                                     );
-                                })}
+                                    })}
+                                </div>
                             </div>
                         )}
                     </div>
