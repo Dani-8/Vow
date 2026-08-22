@@ -770,8 +770,9 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                 </button>
                             </div>
                         ) : (
-                            <div className="max-h-[560px] overflow-y-auto pr-2 space-y-4 relative before:absolute before:top-2 before:bottom-2 before:left-3.5 before:w-0.5 before:bg-slate-300/80">
-                                {displayLogs.map((log) => {
+                            <div className="max-h-[560px] overflow-y-auto pr-2">
+                                <div className="py-3 px-1 space-y-4 relative before:absolute before:top-5 before:bottom-5 before:left-4.5 before:w-0.5 before:bg-slate-300/80">
+                                    {displayLogs.map((log) => {
                                     const isLogCompleted = log.status === 'completed';
                                     const isLogRest = log.status === 'rest';
 
@@ -836,7 +837,8 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                             </div>
                                         </div>
                                     );
-                                })}
+                                    })}
+                                </div>
                             </div>
                         )}
                     </div>
