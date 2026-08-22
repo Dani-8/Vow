@@ -20,48 +20,36 @@ export const ChallengesActionBar: React.FC<ChallengesActionBarProps> = ({
     onOpenGuide,
     onStartChallenge,
 }) => {
+    const filters = [
+        { key: 'active' as const, label: 'Active', count: counts.active, color: 'indigo' },
+        { key: 'completed' as const, label: 'Completed', count: counts.completed, color: 'emerald' },
+        { key: 'paused' as const, label: 'Paused', count: counts.paused, color: 'amber' },
+    ];
+
+    const actions = [
+        { label: 'Guide', icon: HelpCircle, onClick: onOpenGuide, className: 'neu-button px-3.5 py-2 rounded-xl font-bold text-xs text-[#717699] hover:text-[#1a1c35]' },
+        { label: 'Start a Challenge', icon: Plus, onClick: onStartChallenge, className: 'neu-button-primary px-4 py-2 rounded-xl font-bold text-xs text-white shadow-md hover:scale-105 transition-transform' },
+    ];
+
     return (
         <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3.5">
             {/* Left: Status Filter Tabs */}
-            <div className="flex items-center space-x-2 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden shrink-0">
-                <button
-                    onClick={() => onFilterChange('active')}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0 ${activeFilter === 'active'
-                        ? 'neu-inset text-indigo-700 bg-indigo-50/70 font-black'
-                        : 'neu-button text-[#717699] hover:text-[#1a1c35]'
-                        }`}
-                >
-                    <span>Active</span>
-                    <span className="text-[10px] px-1.5 py-0.2 rounded-full neu-inset text-indigo-700">
-                        {counts.active}
-                    </span>
-                </button>
-
-                <button
-                    onClick={() => onFilterChange('completed')}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0 ${activeFilter === 'completed'
-                        ? 'neu-inset text-emerald-700 bg-emerald-50/70 font-black'
-                        : 'neu-button text-[#717699] hover:text-[#1a1c35]'
-                        }`}
-                >
-                    <span>Completed</span>
-                    <span className="text-[10px] px-1.5 py-0.2 rounded-full neu-inset text-emerald-700">
-                        {counts.completed}
-                    </span>
-                </button>
-
-                <button
-                    onClick={() => onFilterChange('paused')}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0 ${activeFilter === 'paused'
-                        ? 'neu-inset text-amber-700 bg-amber-50/70 font-black'
-                        : 'neu-button text-[#717699] hover:text-[#1a1c35]'
-                        }`}
-                >
-                    <span>Paused</span>
-                    <span className="text-[10px] px-1.5 py-0.2 rounded-full neu-inset text-amber-700">
-                        {counts.paused}
-                    </span>
-                </button>
+            <div className="flex items-center bg-pink-400 space-x-2 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden shrink-0">
+                {filters.map(({ key, label, count, color }) => (
+                    <button
+                        key={key}
+                        onClick={() => onFilterChange(key)}
+                        className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0 ${activeFilter === key
+                            ? `neu-inset text-${color}-700 bg-${color}-50/70 font-black`
+                            : 'neu-button text-[#717699] hover:text-[#1a1c35]'
+                            }`}
+                    >
+                        <span>{label}</span>
+                        <span className={`text-[10px] px-1.5 py-0.2 rounded-full neu-inset text-${color}-700`}>
+                            {count}
+                        </span>
+                    </button>
+                ))}
             </div>
 
             {/* Right: Search Input + Guide + Start Challenge */}
@@ -77,22 +65,17 @@ export const ChallengesActionBar: React.FC<ChallengesActionBarProps> = ({
                     />
                 </div>
 
-                <button
-                    onClick={onOpenGuide}
-                    className="neu-button px-3.5 py-2 rounded-xl font-bold text-xs text-[#717699] hover:text-[#1a1c35] flex items-center space-x-1.5 shrink-0"
-                    title="How Challenges Work"
-                >
-                    <HelpCircle className="w-4 h-4" />
-                    <span className="hidden sm:inline">Guide</span>
-                </button>
-
-                <button
-                    onClick={onStartChallenge}
-                    className="neu-button-primary px-4 py-2 rounded-xl font-bold text-xs text-white flex items-center space-x-1.5 shadow-md hover:scale-105 transition-transform shrink-0"
-                >
-                    <Plus className="w-4 h-4" />
-                    <span className="whitespace-nowrap">Start a Challenge</span>
-                </button>
+                {actions.map(({ label, icon: Icon, onClick, className }) => (
+                    <button
+                        key={label}
+                        onClick={onClick}
+                        className={`${className} flex items-center space-x-1.5 shrink-0`}
+                        title={label === 'Guide' ? 'How Challenges Work' : undefined}
+                    >
+                        <Icon className="w-4 h-4" />
+                        <span className={label === 'Guide' ? 'hidden sm:inline' : 'whitespace-nowrap'}>{label}</span>
+                    </button>
+                ))}
             </div>
         </div>
     );
