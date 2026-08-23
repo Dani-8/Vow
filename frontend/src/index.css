@@ -97,6 +97,11 @@ body {
     min-height: 100vh;
 }
 
+button {
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
 /* Custom Soft Scrollbars */
 ::-webkit-scrollbar {
     width: 8px;

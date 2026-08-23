@@ -152,7 +152,7 @@ export const AppRouter: React.FC<AppRouterProps> = ({
           if (selectedTaskForDetail?.isPrivate || currentTask.isPrivate) {
             navigate('/app/vault');
           } else {
-            navigate('/app');
+            navigate('/app/tasks');
           }
         }}
         onToggleComplete={onToggleComplete}
@@ -163,7 +163,7 @@ export const AppRouter: React.FC<AppRouterProps> = ({
           if (t.isPrivate) {
             navigate('/app/vault');
           } else {
-            navigate('/app');
+            navigate('/app/tasks');
           }
         }}
       />

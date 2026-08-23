@@ -14,6 +14,7 @@ import {
     ShieldCheck,
     LogIn,
     LogOut,
+    Flame,
 } from 'lucide-react';
 import { User, MasterStreakStats, ActiveView } from '../../types';
 
@@ -232,8 +233,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                 <span className="text-sm font-black text-[#549acb]">{stats.masterStreak} Days</span>
                             </div>
                             <div className="w-8 h-8 rounded-full master-streak-ring flex items-center justify-center p-0.5 shrink-0">
-                                <div className="w-full h-full rounded-full bg-[#E0E5EC] flex items-center justify-center font-bold text-xs text-[#44476A]">
-                                    🔥
+                                <div className="w-full h-full rounded-full bg-[#E0E5EC] flex items-center justify-center text-xs">
+                                    <Flame className="w-4 h-4 text-orange-500 fill-orange-500" />
                                 </div>
                             </div>
                         </div>

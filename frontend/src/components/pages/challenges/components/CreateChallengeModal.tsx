@@ -174,299 +174,301 @@ export const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4 overflow-y-auto animate-in fade-in duration-200">
-            <div className="neu-card w-full max-w-4xl p-6 sm:p-8 bg-[#E0E5EC] relative my-6 max-h-[92vh] overflow-y-auto">
-                {/* Close Button */}
-                <button
-                    onClick={onClose}
-                    className="absolute top-5 right-5 p-2.5 rounded-xl neu-button text-[#717699] hover:text-[#1a1c35] transition-colors"
-                    title="Close modal"
-                >
-                    <X className="w-5 h-5" />
-                </button>
-
-                {/* Modal Header */}
-                <div className="flex items-center space-x-4 mb-7 pb-5 border-b border-slate-300/70">
-                    <div
-                        className="w-12 h-12 rounded-2xl neu-button flex items-center justify-center shrink-0 shadow-sm"
-                        style={{ color: color, backgroundColor: `${color}18` }}
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+            <div className="neu-card w-full max-w-4xl bg-[#E0E5EC] relative my-6 max-h-[92vh] overflow-hidden">
+                <div className="p-6 sm:p-8 max-h-[92vh] overflow-y-auto overflow-x-hidden">
+                    {/* Close Button */}
+                    <button
+                        onClick={onClose}
+                        className="absolute top-5 right-5 p-2.5 rounded-xl neu-button text-[#717699] hover:text-[#1a1c35] transition-colors"
+                        title="Close modal"
                     >
-                        <Target className="w-6 h-6" style={{ color: color }} />
-                    </div>
-                    <div>
-                        <h2 className="text-xl sm:text-2xl font-black text-[#1a1c35] tracking-tight">
-                            {editingChallenge ? 'Edit Challenge' : 'Start a New Challenge'}
-                        </h2>
-                        <p className="text-xs font-semibold text-[#717699] mt-0.5">
-                            Define your goals, track daily consistency, and reach milestones.
-                        </p>
-                    </div>
-                </div>
+                        <X className="w-5 h-5" />
+                    </button>
 
-                {error && (
-                    <div className="mb-6 p-3.5 rounded-xl bg-rose-100 border border-rose-200 text-rose-700 text-xs font-semibold">
-                        {error}
-                    </div>
-                )}
-
-                <form onSubmit={handleSubmit} className="space-y-8">
-                    {/* 2-Column Split Layout with Center Divider */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 items-start">
-                        {/* LEFT COLUMN: Identity & Focus */}
-                        <div className="space-y-5 md:pr-6 md:border-r border-slate-300/80">
-                            <div className="flex items-center justify-between pb-2 border-b border-slate-200/80">
-                                <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-700">
-                                    1. Identity & Theme
-                                </h3>
-                                <span className="text-[10px] font-bold text-[#717699]">Core Setup</span>
-                            </div>
-
-                            {/* Title */}
-                            <div className="space-y-1.5">
-                                <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
-                                    Challenge Title *
-                                </label>
-                                <input
-                                    type="text"
-                                    value={title}
-                                    onChange={(e) => setTitle(e.target.value)}
-                                    placeholder="e.g. 100 Days of Code & AI"
-                                    className="w-full px-4 py-2.5 rounded-xl neu-input text-xs font-bold"
-                                    required
-                                />
-                            </div>
-
-                            {/* Description / Mantra */}
-                            <div className="space-y-1.5">
-                                <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
-                                    Short Vision / Mantra
-                                </label>
-                                <input
-                                    type="text"
-                                    value={description}
-                                    onChange={(e) => setDescription(e.target.value)}
-                                    placeholder="e.g. Ship code. Learn AI. Build in public."
-                                    className="w-full px-4 py-2.5 rounded-xl neu-input text-xs font-medium"
-                                />
-                            </div>
-
-                            {/* Category Selector */}
-                            <div className="space-y-2">
-                                <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
-                                    Category
-                                </label>
-                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-                                    {CATEGORIES.map((cat) => {
-                                        const IconComponent = cat.icon;
-                                        const isSelected = category === cat.id;
-                                        return (
-                                            <button
-                                                key={cat.id}
-                                                type="button"
-                                                onClick={() => {
-                                                    setCategory(cat.id);
-                                                    if (!editingChallenge) {
-                                                        setColor(cat.defaultColor);
-                                                    }
-                                                }}
-                                                className={`flex items-center space-x-2 p-2.5 rounded-xl text-xs font-bold transition-all ${isSelected
-                                                    ? 'neu-inset text-[#1a1c35] font-black'
-                                                    : 'neu-button text-slate-600 hover:text-slate-900'
-                                                    }`}
-                                            >
-                                                <IconComponent className="w-3.5 h-3.5 shrink-0" />
-                                                <span className="truncate">{cat.label}</span>
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-
-                            {/* Accent Theme Color */}
-                            <div className="space-y-2">
-                                <div className="flex items-center justify-between">
-                                    <label className="text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
-                                        Accent Theme Color
-                                    </label>
-                                    <span className="text-[10px] font-bold text-[#717699]">
-                                        Active matrix & badge
-                                    </span>
-                                </div>
-                                <div className="flex items-center space-x-3 p-2.5 rounded-xl neu-inset bg-[#E0E5EC]/60 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden flex-nowrap">
-                                    {ACCENT_COLORS.map((c) => {
-                                        const isSelected = color === c.hex || color === c.id;
-                                        return (
-                                            <button
-                                                key={c.id}
-                                                type="button"
-                                                onClick={() => setColor(c.hex)}
-                                                title={c.label}
-                                                className={`w-7 h-7 shrink-0 rounded-full flex items-center justify-center transition-all cursor-pointer ${isSelected
-                                                    ? 'ring-2 ring-offset-2 ring-slate-600 scale-110 shadow-sm'
-                                                    : 'opacity-75 hover:opacity-100 hover:scale-105'
-                                                    }`}
-                                                style={{ backgroundColor: c.hex }}
-                                            >
-                                                {isSelected && (
-                                                    <Check className="w-3.5 h-3.5 text-white drop-shadow-sm" strokeWidth={3} />
-                                                )}
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-
-                            {/* Tags */}
-                            <div className="space-y-1.5">
-                                <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
-                                    Tags (Comma separated)
-                                </label>
-                                <input
-                                    type="text"
-                                    value={tagsInput}
-                                    onChange={(e) => setTagsInput(e.target.value)}
-                                    placeholder="Discipline, Focus, Coding"
-                                    className="w-full px-4 py-2.5 rounded-xl neu-input text-xs font-medium"
-                                />
-                            </div>
+                    {/* Modal Header */}
+                    <div className="flex items-center space-x-4 mb-7 pb-5 border-b border-slate-300/70">
+                        <div
+                            className="w-12 h-12 rounded-2xl neu-button flex items-center justify-center shrink-0 shadow-sm"
+                            style={{ color: color, backgroundColor: `${color}18` }}
+                        >
+                            <Target className="w-6 h-6" style={{ color: color }} />
                         </div>
+                        <div>
+                            <h2 className="text-xl sm:text-2xl font-black text-[#1a1c35] tracking-tight">
+                                {editingChallenge ? 'Edit Challenge' : 'Start a New Challenge'}
+                            </h2>
+                            <p className="text-xs font-semibold text-[#717699] mt-0.5">
+                                Define your goals, track daily consistency, and reach milestones.
+                            </p>
+                        </div>
+                    </div>
 
-                        {/* RIGHT COLUMN: Commitment & Timeline */}
-                        <div className="space-y-5 md:pl-2">
-                            <div className="flex items-center justify-between pb-2 border-b border-slate-200/80">
-                                <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-700">
-                                    2. Commitment & Timeline
-                                </h3>
-                                <span className="text-[10px] font-bold text-[#717699]">Schedule & Rules</span>
-                            </div>
+                    {error && (
+                        <div className="mb-6 p-3.5 rounded-xl bg-rose-100 border border-rose-200 text-rose-700 text-xs font-semibold">
+                            {error}
+                        </div>
+                    )}
 
-                            {/* Duration in Days */}
-                            <div className="space-y-2">
-                                <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
-                                    Target Duration (Days) *
-                                </label>
-                                <div className="flex flex-wrap gap-2.5">
-                                    {PRESET_DURATIONS.map((preset) => {
-                                        const isSelected = !isCustomDays && targetDays === preset.days;
-                                        return (
-                                            <button
-                                                key={preset.days}
-                                                type="button"
-                                                onClick={() => {
-                                                    setIsCustomDays(false);
-                                                    setTargetDays(preset.days);
-                                                }}
-                                                className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${isSelected
-                                                    ? 'neu-button-primary text-white shadow-sm'
-                                                    : 'neu-button text-slate-600 hover:text-slate-900'
-                                                    }`}
-                                            >
-                                                {preset.label}
-                                            </button>
-                                        );
-                                    })}
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsCustomDays(true)}
-                                        className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${isCustomDays
-                                            ? 'neu-button-primary text-white shadow-sm'
-                                            : 'neu-button text-slate-600 hover:text-slate-900'
-                                            }`}
-                                    >
-                                        Custom
-                                    </button>
+                    <form onSubmit={handleSubmit} className="space-y-8">
+                        {/* 2-Column Split Layout with Center Divider */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 items-start">
+                            {/* LEFT COLUMN: Identity & Focus */}
+                            <div className="space-y-5 md:pr-6 md:border-r border-slate-300/80">
+                                <div className="flex items-center justify-between pb-2 border-b border-slate-200/80">
+                                    <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-700">
+                                        1. Identity & Theme
+                                    </h3>
+                                    <span className="text-[10px] font-bold text-[#717699]">Core Setup</span>
                                 </div>
 
-                                {isCustomDays && (
-                                    <div className="flex items-center space-x-3 mt-3 pt-1">
-                                        <input
-                                            type="number"
-                                            min="1"
-                                            max="1000"
-                                            value={customDaysInput}
-                                            onChange={(e) => setCustomDaysInput(e.target.value)}
-                                            placeholder="e.g. 45"
-                                            className="w-28 px-3.5 py-2 rounded-xl neu-input text-xs font-bold"
-                                            required
-                                        />
-                                        <span className="text-[11px] font-bold text-[#717699]">
-                                            Total custom calendar days
+                                {/* Title */}
+                                <div className="space-y-1.5">
+                                    <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
+                                        Challenge Title *
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={title}
+                                        onChange={(e) => setTitle(e.target.value)}
+                                        placeholder="e.g. 100 Days of Code & AI"
+                                        className="w-full px-4 py-2.5 rounded-xl neu-input text-xs font-bold"
+                                        required
+                                    />
+                                </div>
+
+                                {/* Description / Mantra */}
+                                <div className="space-y-1.5">
+                                    <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
+                                        Short Vision / Mantra
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={description}
+                                        onChange={(e) => setDescription(e.target.value)}
+                                        placeholder="e.g. Ship code. Learn AI. Build in public."
+                                        className="w-full px-4 py-2.5 rounded-xl neu-input text-xs font-medium"
+                                    />
+                                </div>
+
+                                {/* Category Selector */}
+                                <div className="space-y-2">
+                                    <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
+                                        Category
+                                    </label>
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                                        {CATEGORIES.map((cat) => {
+                                            const IconComponent = cat.icon;
+                                            const isSelected = category === cat.id;
+                                            return (
+                                                <button
+                                                    key={cat.id}
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setCategory(cat.id);
+                                                        if (!editingChallenge) {
+                                                            setColor(cat.defaultColor);
+                                                        }
+                                                    }}
+                                                    className={`flex items-center space-x-2 p-2.5 rounded-xl text-xs font-bold transition-all ${isSelected
+                                                        ? 'neu-inset text-[#1a1c35] font-black'
+                                                        : 'neu-button text-slate-600 hover:text-slate-900'
+                                                        }`}
+                                                >
+                                                    <IconComponent className="w-3.5 h-3.5 shrink-0" />
+                                                    <span className="truncate">{cat.label}</span>
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+
+                                {/* Accent Theme Color */}
+                                <div className="space-y-2">
+                                    <div className="flex items-center justify-between">
+                                        <label className="text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
+                                            Accent Theme Color
+                                        </label>
+                                        <span className="text-[10px] font-bold text-[#717699]">
+                                            Active matrix & badge
                                         </span>
                                     </div>
-                                )}
-                            </div>
-
-                            {/* Start Date */}
-                            <div className="space-y-1.5">
-                                <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
-                                    Start Date
-                                </label>
-                                <input
-                                    type="date"
-                                    value={startDate}
-                                    onChange={(e) => setStartDate(e.target.value)}
-                                    className="w-full px-4 py-2.5 rounded-xl neu-input text-xs font-bold"
-                                />
-                            </div>
-
-                            {/* Date Summary Card Preview */}
-                            <div className="neu-card p-3.5 rounded-xl bg-[#E0E5EC] space-y-2 border border-slate-300/40">
-                                <div className="flex items-center justify-between text-xs font-bold text-slate-800">
-                                    <div className="flex items-center space-x-2">
-                                        <Calendar className="w-4 h-4" style={{ color: color }} />
-                                        <span>Sprint Window Preview</span>
+                                    <div className="flex items-center space-x-3 p-2.5 rounded-xl neu-inset bg-[#E0E5EC]/60 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden flex-nowrap">
+                                        {ACCENT_COLORS.map((c) => {
+                                            const isSelected = color === c.hex || color === c.id;
+                                            return (
+                                                <button
+                                                    key={c.id}
+                                                    type="button"
+                                                    onClick={() => setColor(c.hex)}
+                                                    title={c.label}
+                                                    className={`w-7 h-7 shrink-0 rounded-full flex items-center justify-center transition-all cursor-pointer ${isSelected
+                                                        ? 'ring-2 ring-offset-2 ring-slate-600 scale-110 shadow-sm'
+                                                        : 'opacity-75 hover:opacity-100 hover:scale-105'
+                                                        }`}
+                                                    style={{ backgroundColor: c.hex }}
+                                                >
+                                                    {isSelected && (
+                                                        <Check className="w-3.5 h-3.5 text-white drop-shadow-sm" strokeWidth={3} />
+                                                    )}
+                                                </button>
+                                            );
+                                        })}
                                     </div>
-                                    <span
-                                        className="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full neu-inset"
-                                        style={{ color: color, backgroundColor: `${color}18` }}
-                                    >
-                                        {activeDaysCount} Days Total
-                                    </span>
                                 </div>
-                                <div className="text-[11px] font-semibold text-[#717699] flex items-center justify-between pt-1 border-t border-slate-200/60">
-                                    <span>Starts: <strong className="text-slate-800 ml-1">{calculatedDates.startStr}</strong></span>
-                                    <span>Target Finish: <strong className="text-slate-800 ml-1">{calculatedDates.endStr}</strong></span>
+
+                                {/* Tags */}
+                                <div className="space-y-1.5">
+                                    <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
+                                        Tags (Comma separated)
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={tagsInput}
+                                        onChange={(e) => setTagsInput(e.target.value)}
+                                        placeholder="Discipline, Focus, Coding"
+                                        className="w-full px-4 py-2.5 rounded-xl neu-input text-xs font-medium"
+                                    />
                                 </div>
                             </div>
 
-                            {/* Challenge Rules */}
-                            <div className="space-y-1.5">
-                                <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
-                                    Challenge Rule (&quot;What counts as completed&quot;)
-                                </label>
-                                <textarea
-                                    rows={2}
-                                    value={rule}
-                                    onChange={(e) => setRule(e.target.value)}
-                                    placeholder="e.g. Work 1 hour minimum and post your daily reflection log."
-                                    className="w-full px-4 py-2.5 rounded-xl neu-input text-xs font-medium resize-none"
-                                />
+                            {/* RIGHT COLUMN: Commitment & Timeline */}
+                            <div className="space-y-5 md:pl-2">
+                                <div className="flex items-center justify-between pb-2 border-b border-slate-200/80">
+                                    <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-700">
+                                        2. Commitment & Timeline
+                                    </h3>
+                                    <span className="text-[10px] font-bold text-[#717699]">Schedule & Rules</span>
+                                </div>
+
+                                {/* Duration in Days */}
+                                <div className="space-y-2">
+                                    <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
+                                        Target Duration (Days) *
+                                    </label>
+                                    <div className="flex flex-wrap gap-2.5">
+                                        {PRESET_DURATIONS.map((preset) => {
+                                            const isSelected = !isCustomDays && targetDays === preset.days;
+                                            return (
+                                                <button
+                                                    key={preset.days}
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setIsCustomDays(false);
+                                                        setTargetDays(preset.days);
+                                                    }}
+                                                    className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${isSelected
+                                                        ? 'neu-button-primary text-white shadow-sm'
+                                                        : 'neu-button text-slate-600 hover:text-slate-900'
+                                                        }`}
+                                                >
+                                                    {preset.label}
+                                                </button>
+                                            );
+                                        })}
+                                        <button
+                                            type="button"
+                                            onClick={() => setIsCustomDays(true)}
+                                            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${isCustomDays
+                                                ? 'neu-button-primary text-white shadow-sm'
+                                                : 'neu-button text-slate-600 hover:text-slate-900'
+                                                }`}
+                                        >
+                                            Custom
+                                        </button>
+                                    </div>
+
+                                    {isCustomDays && (
+                                        <div className="flex items-center space-x-3 mt-3 pt-1">
+                                            <input
+                                                type="number"
+                                                min="1"
+                                                max="1000"
+                                                value={customDaysInput}
+                                                onChange={(e) => setCustomDaysInput(e.target.value)}
+                                                placeholder="e.g. 45"
+                                                className="w-28 px-3.5 py-2 rounded-xl neu-input text-xs font-bold"
+                                                required
+                                            />
+                                            <span className="text-[11px] font-bold text-[#717699]">
+                                                Total custom calendar days
+                                            </span>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Start Date */}
+                                <div className="space-y-1.5">
+                                    <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
+                                        Start Date
+                                    </label>
+                                    <input
+                                        type="date"
+                                        value={startDate}
+                                        onChange={(e) => setStartDate(e.target.value)}
+                                        className="w-full px-4 py-2.5 rounded-xl neu-input text-xs font-bold"
+                                    />
+                                </div>
+
+                                {/* Date Summary Card Preview */}
+                                <div className="neu-card p-3.5 rounded-xl bg-[#E0E5EC] space-y-2 border border-slate-300/40">
+                                    <div className="flex items-center justify-between text-xs font-bold text-slate-800">
+                                        <div className="flex items-center space-x-2">
+                                            <Calendar className="w-4 h-4" style={{ color: color }} />
+                                            <span>Sprint Window Preview</span>
+                                        </div>
+                                        <span
+                                            className="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full neu-inset"
+                                            style={{ color: color, backgroundColor: `${color}18` }}
+                                        >
+                                            {activeDaysCount} Days Total
+                                        </span>
+                                    </div>
+                                    <div className="text-[11px] font-semibold text-[#717699] flex items-center justify-between pt-1 border-t border-slate-200/60">
+                                        <span>Starts: <strong className="text-slate-800 ml-1">{calculatedDates.startStr}</strong></span>
+                                        <span>Target Finish: <strong className="text-slate-800 ml-1">{calculatedDates.endStr}</strong></span>
+                                    </div>
+                                </div>
+
+                                {/* Challenge Rules */}
+                                <div className="space-y-1.5">
+                                    <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
+                                        Challenge Rule (&quot;What counts as completed&quot;)
+                                    </label>
+                                    <textarea
+                                        rows={2}
+                                        value={rule}
+                                        onChange={(e) => setRule(e.target.value)}
+                                        placeholder="e.g. Work 1 hour minimum and post your daily reflection log."
+                                        className="w-full px-4 py-2.5 rounded-xl neu-input text-xs font-medium resize-none"
+                                    />
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    {/* Footer Actions */}
-                    <div className="pt-5 border-t border-slate-300/70 flex items-center justify-end space-x-3.5">
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            className="px-5 py-2.5 rounded-xl neu-button text-xs font-bold text-slate-600 hover:text-slate-900 transition-colors"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            disabled={isSubmitting}
-                            className="px-7 py-2.5 rounded-xl neu-button-primary text-xs font-bold text-white shadow-md disabled:opacity-50 transition-transform active:scale-95"
-                        >
-                            {isSubmitting
-                                ? 'Saving...'
-                                : editingChallenge
-                                    ? 'Update Challenge'
-                                    : 'Create & Commit'}
-                        </button>
-                    </div>
-                </form>
+                        {/* Footer Actions */}
+                        <div className="pt-5 border-t border-slate-300/70 flex items-center justify-end space-x-3.5">
+                            <button
+                                type="button"
+                                onClick={onClose}
+                                className="px-5 py-2.5 rounded-xl neu-button text-xs font-bold text-slate-600 hover:text-slate-900 transition-colors"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="submit"
+                                disabled={isSubmitting}
+                                className="px-7 py-2.5 rounded-xl neu-button-primary text-xs font-bold text-white shadow-md disabled:opacity-50 transition-transform active:scale-95"
+                            >
+                                {isSubmitting
+                                    ? 'Saving...'
+                                    : editingChallenge
+                                        ? 'Update Challenge'
+                                        : 'Create & Commit'}
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     );
