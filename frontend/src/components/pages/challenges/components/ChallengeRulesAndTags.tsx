@@ -37,7 +37,7 @@ export const ChallengeRulesAndTags: React.FC<ChallengeRulesAndTagsProps> = ({
                 {/* Challenge Tags */}
                 <div className="neu-card p-5 bg-[#E0E5EC] space-y-2.5">
                     <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2 text-indigo-700">
+                        <div className="flex items-center space-x-2" style={{ color: accentColor }}>
                             <Tag className="w-4 h-4" />
                             <h4 className="text-xs font-black uppercase tracking-wider text-slate-800">
                                 Challenge Tags
@@ -45,7 +45,8 @@ export const ChallengeRulesAndTags: React.FC<ChallengeRulesAndTagsProps> = ({
                         </div>
                         <button
                             onClick={onEdit}
-                            className="text-[10px] font-bold text-indigo-600 hover:text-indigo-800 flex items-center space-x-1"
+                            className="text-[10px] font-bold flex items-center space-x-1 hover:cursor-pointer"
+                            style={{ color: accentColor }}
                         >
                             <Edit3 className="w-3 h-3" />
                             <span>Edit</span>
@@ -71,7 +72,9 @@ export const ChallengeRulesAndTags: React.FC<ChallengeRulesAndTagsProps> = ({
             {/* Motivational Tip Banner */}
             <div className="neu-card p-4 bg-[#E0E5EC] flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                    <div className="w-9 h-9 rounded-xl neu-button flex items-center justify-center text-amber-500 bg-amber-50 shrink-0">
+                    <div className="w-9 h-9 rounded-xl neu-button flex items-center justify-center bg-amber-50 shrink-0"
+                     style={{ color: accentColor }}
+                     >
                         <Lightbulb className="w-4 h-4" />
                     </div>
                     <div>
@@ -81,7 +84,7 @@ export const ChallengeRulesAndTags: React.FC<ChallengeRulesAndTagsProps> = ({
                         </p>
                     </div>
                 </div>
-                <span className="text-xs font-bold text-indigo-600 flex items-center space-x-1 cursor-pointer hover:underline">
+                <span className="text-xs font-bold flex items-center space-x-1 cursor-pointer hover:underline" style={{ color: accentColor }}>
                     <span>Keep showing up</span>
                     <ChevronRight className="w-3.5 h-3.5" />
                 </span>
