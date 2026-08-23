@@ -127,17 +127,16 @@ export const ChallengeProgressMatrix: React.FC<ChallengeProgressMatrixProps> = (
                                                         dayItem.log
                                                     )
                                                 }
-                                                title={`Day ${dayItem.dayNumber} (${dayItem.dateStr}): ${
-                                                    isCompleted
-                                                        ? `Completed${dayItem.log?.note ? ` - ${dayItem.log.note}` : ''}`
-                                                        : isRest
-                                                            ? 'Rest Day'
-                                                            : isMissed
-                                                                ? 'Missed Day (Click to log)'
-                                                                : isCellToday
-                                                                    ? "Today's Target Day (Click to log)"
-                                                                    : 'Upcoming Day'
-                                                }`}
+                                                title={`Day ${dayItem.dayNumber} (${dayItem.dateStr}): ${isCompleted
+                                                    ? `Completed${dayItem.log?.note ? ` - ${dayItem.log.note}` : ''}`
+                                                    : isRest
+                                                        ? 'Rest Day'
+                                                        : isMissed
+                                                            ? 'Missed Day (Click to log)'
+                                                            : isCellToday
+                                                                ? "Today's Target Day (Click to log)"
+                                                                : 'Upcoming Day'
+                                                    }`}
                                                 className={`w-5 h-5 rounded-md text-[8px] sm:text-[9px] font-black flex items-center justify-center transition-all cursor-pointer hover:scale-115 shrink-0 ${bgClass}`}
                                             >
                                                 {isCellToday ? (
