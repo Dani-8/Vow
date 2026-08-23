@@ -1,32 +1,12 @@
-import React, { useState, useMemo, useEffect } from 'react';
-import {
-    ArrowLeft,
-    Share2,
-    MoreVertical,
-    Calendar,
-    Clock,
-    CheckCircle2,
-    Flame,
-    TrendingUp,
-    Tag,
-    Edit3,
-    Lightbulb,
-    BookOpen,
-    Code,
-    Dumbbell,
-    ClipboardCheck,
-    Sparkles,
-    ChevronRight,
-    Plus,
-    Trash2,
-    Coffee,
-    AlertCircle,
-    ExternalLink,
-} from 'lucide-react';
+import React, { useState, useMemo } from 'react';
 import { Challenge, ChallengeLog } from '../../../types';
 import { LogChallengeDayModal } from './components/LogChallengeDayModal';
 import { CreateChallengeModal } from './components/CreateChallengeModal';
 import { DeleteChallengeModal } from './components/DeleteChallengeModal';
+import { ChallengeDetailHeader } from './components/ChallengeDetailHeader';
+import { ChallengeProgressMatrix } from './components/ChallengeProgressMatrix';
+import { ChallengeRulesAndTags } from './components/ChallengeRulesAndTags';
+import { ChallengeReflectionFeed } from './components/ChallengeReflectionFeed';
 
 interface ChallengeDetailPageProps {
     challenge: Challenge;
@@ -47,14 +27,6 @@ interface ChallengeDetailPageProps {
     onDeleteLog: (challengeId: string, logId: string) => Promise<void>;
 }
 
-const CATEGORY_ICONS: Record<string, any> = {
-    engineering: Code,
-    fitness: Dumbbell,
-    learning: BookOpen,
-    discipline: ClipboardCheck,
-    mindfulness: Sparkles,
-};
-
 const getAccentColor = (challenge?: Partial<Challenge>): string => {
     if (!challenge?.color) return '#549acb';
     if (challenge.color.startsWith('#')) return challenge.color;
@@ -69,8 +41,6 @@ const getAccentColor = (challenge?: Partial<Challenge>): string => {
     };
     return map[challenge.color] || '#549acb';
 };
-
-const DAYS_OF_WEEK = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
     challenge,
@@ -88,20 +58,8 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
     } | null>(null);
 
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const [showShareToast, setShowShareToast] = useState(false);
-    const [activeTabLogs, setActiveTabLogs] = useState<'all' | 'completed' | 'notes'>('all');
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
-
-    // Close header menu on outside click
-    useEffect(() => {
-        const handleClickOutside = () => setIsMenuOpen(false);
-        if (isMenuOpen) {
-            window.addEventListener('click', handleClickOutside);
-        }
-        return () => window.removeEventListener('click', handleClickOutside);
-    }, [isMenuOpen]);
 
     // Calculate current elapsed days since startDate
     const {
@@ -168,7 +126,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
         const totalDays = challenge.targetDays;
         const weeks: {
             weekIndex: number;
-            days: {
+            days: ({
                 dayNumber: number;
                 date: Date;
                 dateStr: string;
@@ -177,7 +135,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                 isToday: boolean;
                 isPast: boolean;
                 isFuture: boolean;
-            }[];
+            } | null)[];
         }[] = [];
 
         // Figure out starting day of week (Monday as index 0)
@@ -234,19 +192,6 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
         return weeks;
     }, [challenge, startDateObj, currentDayNumber, isUpcoming]);
 
-    const CategoryIcon = CATEGORY_ICONS[challenge.category] || Code;
-
-    // Filtered reflection logs
-    const displayLogs = useMemo(() => {
-        let list = [...challenge.logs];
-        if (activeTabLogs === 'completed') {
-            list = list.filter((l) => l.status === 'completed');
-        } else if (activeTabLogs === 'notes') {
-            list = list.filter((l) => l.note && l.note.trim().length > 0);
-        }
-        return list.sort((a, b) => Number(b.dayNumber) - Number(a.dayNumber));
-    }, [challenge.logs, activeTabLogs]);
-
     // Today's log if present
     const todayLog = challenge.logs.find((l) => Number(l.dayNumber) === currentDayNumber);
 
@@ -258,590 +203,81 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
         });
     };
 
-    const handleShare = () => {
-        const text = `I'm on Day ${currentDayNumber} of ${challenge.targetDays} on "${challenge.title}" in Vow! #VowChallenge`;
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(text);
-            setShowShareToast(true);
-            setTimeout(() => setShowShareToast(false), 3000);
-        }
-    };
+    const challengeId = challenge.id || challenge._id;
 
     return (
         <div className="space-y-6 animate-in fade-in duration-300 pb-12">
-            {/* Top Header Navigation */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <button
-                    onClick={onBack}
-                    className="neu-button px-4 py-2 rounded-xl text-xs font-bold text-[#717699] hover:text-[#1a1c35] flex items-center space-x-2 w-fit"
-                >
-                    <ArrowLeft className="w-4 h-4" />
-                    <span>Back to Challenges</span>
-                </button>
-
-                <div className="flex items-center space-x-2 self-end sm:self-auto">
-                    <button
-                        onClick={handleShare}
-                        className="neu-button px-3.5 py-2 rounded-xl text-xs font-bold text-[#717699] hover:text-[#1a1c35] flex items-center space-x-1.5"
-                        title="Share Challenge Progress"
-                    >
-                        <Share2 className="w-3.5 h-3.5" />
-                        <span>Share</span>
-                    </button>
-
-                    <div className="relative">
-                        <button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                setIsMenuOpen((prev) => !prev);
-                            }}
-                            className="neu-button p-2 rounded-xl text-[#717699] hover:text-[#1a1c35]"
-                            title="More Options"
-                        >
-                            <MoreVertical className="w-4 h-4" />
-                        </button>
-
-                        {isMenuOpen && (
-                            <div
-                                onClick={(e) => e.stopPropagation()}
-                                className="absolute right-0 mt-2 w-44 neu-card p-1.5 bg-[#E0E5EC] z-30 shadow-xl rounded-xl"
-                            >
-                                <button
-                                    onClick={() => {
-                                        setIsMenuOpen(false);
-                                        setIsEditModalOpen(true);
-                                    }}
-                                    className="w-full text-left px-3 py-2 text-xs font-bold text-slate-700 hover:bg-white rounded-lg flex items-center space-x-2"
-                                >
-                                    <Edit3 className="w-3.5 h-3.5" />
-                                    <span>Edit Challenge</span>
-                                </button>
-                                <button
-                                    onClick={async () => {
-                                        setIsMenuOpen(false);
-                                        const newStatus = challenge.status === 'paused' ? 'active' : 'paused';
-                                        await onUpdateChallenge(challenge.id || challenge._id, { status: newStatus });
-                                    }}
-                                    className="w-full text-left px-3 py-2 text-xs font-bold text-slate-700 hover:bg-white rounded-lg flex items-center space-x-2"
-                                >
-                                    <Coffee className="w-3.5 h-3.5" />
-                                    <span>{challenge.status === 'paused' ? 'Resume Sprint' : 'Pause Sprint'}</span>
-                                </button>
-                                <div className="my-1 border-t border-slate-300/60" />
-                                <button
-                                    onClick={() => {
-                                        setIsMenuOpen(false);
-                                        setIsDeleteModalOpen(true);
-                                    }}
-                                    className="w-full text-left px-3 py-2 text-xs font-bold text-rose-600 hover:bg-rose-50 rounded-lg flex items-center space-x-2"
-                                >
-                                    <Trash2 className="w-3.5 h-3.5" />
-                                    <span>Delete Challenge</span>
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </div>
-
-            {showShareToast && (
-                <div className="p-3 rounded-xl bg-indigo-100 border border-indigo-200 text-indigo-800 text-xs font-bold text-center animate-in fade-in slide-in-from-top-2">
-                    Progress summary copied to clipboard!
-                </div>
-            )}
-
-            {/* Main Challenge Header Card */}
-            <div className="neu-card p-6 sm:p-8 bg-[#E0E5EC]">
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-                    <div className="flex items-start space-x-4">
-                        <div
-                            className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl neu-button flex items-center justify-center shadow-sm shrink-0"
-                            style={{ color: accentColor, backgroundColor: `${accentColor}18` }}
-                        >
-                            <CategoryIcon className="w-8 h-8 sm:w-10 sm:h-10" style={{ color: accentColor }} />
-                        </div>
-                        <div className="space-y-1.5">
-                            <div className="flex items-center space-x-2">
-                                <span
-                                    className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full neu-inset"
-                                    style={{ color: accentColor, backgroundColor: `${accentColor}18` }}
-                                >
-                                    {challenge.category || 'Engineering'}
-                                </span>
-                                {isUpcoming ? (
-                                    <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full neu-inset text-indigo-700 bg-indigo-50">
-                                        Upcoming • Starts in {daysUntilStart} {daysUntilStart === 1 ? 'day' : 'days'}
-                                    </span>
-                                ) : challenge.status === 'paused' ? (
-                                    <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full neu-inset text-amber-700 bg-amber-50">
-                                        Paused
-                                    </span>
-                                ) : null}
-                            </div>
-                            <h1 className="text-xl sm:text-2xl font-black text-[#1a1c35] tracking-tight">
-                                {challenge.title}
-                            </h1>
-                            <p className="text-xs font-semibold text-[#717699] max-w-xl">
-                                {challenge.description || 'Ship code. Learn AI. Build in public.'}
-                            </p>
-                            <div className="flex items-center space-x-2 pt-1 text-[11px] font-bold text-[#515777]">
-                                <Calendar className="w-3.5 h-3.5" style={{ color: accentColor }} />
-                                <span>
-                                    {startDateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} –{' '}
-                                    {targetEndDateObj.toLocaleDateString('en-US', {
-                                        month: 'short',
-                                        day: 'numeric',
-                                        year: 'numeric',
-                                    })}{' '}
-                                    ({challenge.targetDays} Days)
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Metric Stats & Check-In Action Button */}
-                    <div className="flex flex-col sm:flex-row lg:flex-col xl:flex-row items-stretch sm:items-center lg:items-end xl:items-center gap-4">
-                        {/* 5-Card Stats Grid */}
-                        <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-2.5 text-center">
-                            {/* Day */}
-                            <div className="neu-inset px-3 py-2 rounded-xl">
-                                <span className="text-[9px] font-extrabold text-[#717699] uppercase block">Day</span>
-                                <span className="text-lg font-black text-[#1a1c35]">
-                                    {isUpcoming ? '—' : `#${currentDayNumber}`}
-                                </span>
-                                <span className="text-[9px] text-[#717699] block font-semibold">
-                                    {isUpcoming ? `In ${daysUntilStart}d` : `of ${challenge.targetDays}`}
-                                </span>
-                            </div>
-
-                            {/* Completed */}
-                            <div className="neu-inset px-3 py-2 rounded-xl">
-                                <span className="text-[9px] font-extrabold text-[#717699] uppercase block">Completed</span>
-                                <span className="text-lg font-black text-emerald-600">{completedDaysCount}</span>
-                                <span className="text-[9px] text-emerald-700 block font-semibold">Days</span>
-                            </div>
-
-                            {/* Streak */}
-                            <div className="neu-inset px-3 py-2 rounded-xl bg-amber-50/30">
-                                <span className="text-[9px] font-extrabold text-amber-700 uppercase flex items-center justify-center space-x-0.5">
-                                    <Flame className="w-2.5 h-2.5 text-amber-500 fill-amber-500" />
-                                    <span>Streak</span>
-                                </span>
-                                <span className="text-lg font-black text-amber-600">{streak}</span>
-                                <span className="text-[9px] text-amber-700 block font-semibold">Days</span>
-                            </div>
-
-                            {/* Remaining */}
-                            <div className="neu-inset px-3 py-2 rounded-xl">
-                                <span className="text-[9px] font-extrabold text-[#717699] uppercase block">Remaining</span>
-                                <span className="text-lg font-black text-slate-700">{remainingDays}</span>
-                                <span className="text-[9px] text-[#717699] block font-semibold">Days</span>
-                            </div>
-
-                            {/* Success Rate */}
-                            <div className="neu-inset px-3 py-2 rounded-xl col-span-2 sm:col-span-1">
-                                <span className="text-[9px] font-extrabold text-[#717699] uppercase block">Success Rate</span>
-                                <span className="text-lg font-black text-[#1a1c35]">{successRate}%</span>
-                                <span className="text-[9px] font-bold text-emerald-600 flex items-center justify-center">
-                                    {isUpcoming ? 'Ready' : 'On Track ↗'}
-                                </span>
-                            </div>
-                        </div>
-
-                        {isUpcoming ? (
-                            <button
-                                onClick={() =>
-                                    handleOpenDayModal(
-                                        1,
-                                        startDateObj.toISOString().split('T')[0],
-                                        challenge.logs.find((l) => Number(l.dayNumber) === 1)
-                                    )
-                                }
-                                className="px-5 py-3 rounded-2xl font-bold text-xs flex items-center justify-center space-x-2 neu-button text-indigo-700 bg-indigo-50/60 hover:bg-indigo-50 shadow-sm transition-all shrink-0"
-                            >
-                                <Clock className="w-4 h-4 text-indigo-600" />
-                                <span>Starts in {daysUntilStart} {daysUntilStart === 1 ? 'Day' : 'Days'}</span>
-                            </button>
-                        ) : (
-                            <button
-                                onClick={() =>
-                                    handleOpenDayModal(
-                                        currentDayNumber,
-                                        new Date().toISOString().split('T')[0],
-                                        todayLog
-                                    )
-                                }
-                                className={`px-5 py-3 rounded-2xl font-bold text-xs flex items-center justify-center space-x-2 shadow-md transition-all shrink-0 ${todayLog?.status === 'completed'
-                                    ? 'neu-button bg-emerald-50 text-emerald-700 border border-emerald-300'
-                                    : 'neu-button-primary text-white hover:scale-105'
-                                    }`}
-                            >
-                                <Calendar className="w-4 h-4" />
-                                <span>
-                                    {todayLog?.status === 'completed'
-                                        ? `Day ${currentDayNumber} Logged ✓`
-                                        : `Log Day ${currentDayNumber} Check-In`}
-                                </span>
-                            </button>
-                        )}
-                    </div>
-                </div>
-            </div>
+            {/* Top Navigation & Challenge Header Card */}
+            <ChallengeDetailHeader
+                challenge={challenge}
+                accentColor={accentColor}
+                onBack={onBack}
+                onEdit={() => setIsEditModalOpen(true)}
+                onDelete={() => setIsDeleteModalOpen(true)}
+                onTogglePause={async () => {
+                    const newStatus = challenge.status === 'paused' ? 'active' : 'paused';
+                    await onUpdateChallenge(challengeId, { status: newStatus });
+                }}
+                onCheckIn={() => {
+                    if (isUpcoming) {
+                        handleOpenDayModal(
+                            1,
+                            startDateObj.toISOString().split('T')[0],
+                            challenge.logs.find((l) => Number(l.dayNumber) === 1)
+                        );
+                    } else {
+                        handleOpenDayModal(
+                            currentDayNumber,
+                            new Date().toISOString().split('T')[0],
+                            todayLog
+                        );
+                    }
+                }}
+                isUpcoming={isUpcoming}
+                daysUntilStart={daysUntilStart}
+                currentDayNumber={currentDayNumber}
+                completedDaysCount={completedDaysCount}
+                streak={streak}
+                remainingDays={remainingDays}
+                successRate={successRate}
+                startDateObj={startDateObj}
+                targetEndDateObj={targetEndDateObj}
+                isTodayCompleted={todayLog?.status === 'completed'}
+            />
 
             {/* Main Content 2-Column Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                {/* Left Column: Progress Matrix / Heatmap */}
+                {/* Left Column: Progress Matrix & Sub-Cards */}
                 <div className="lg:col-span-8 space-y-6">
-                    {/* Contribution Heatmap Card */}
-                    <div className="neu-card p-6 bg-[#E0E5EC]">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
-                            <div className="flex items-center space-x-2">
-                                <TrendingUp className="w-4 h-4" style={{ color: accentColor }} />
-                                <h3 className="text-sm font-black text-[#1a1c35]">Your Progress</h3>
-                            </div>
+                    <ChallengeProgressMatrix
+                        accentColor={accentColor}
+                        gridWeeks={gridWeeks}
+                        startDateObj={startDateObj}
+                        targetEndDateObj={targetEndDateObj}
+                        onOpenDayModal={handleOpenDayModal}
+                    />
 
-                            {/* Legend */}
-                            <div className="flex flex-wrap items-center gap-3 text-[11px] font-bold text-[#515777]">
-                                <div className="flex items-center space-x-1.5">
-                                    <div className="w-3 h-3 rounded-[3px] bg-emerald-500" />
-                                    <span>Completed</span>
-                                </div>
-                                <div className="flex items-center space-x-1.5">
-                                    <div
-                                        className="w-3 h-3 rounded-[3px] ring-2 ring-offset-1"
-                                        style={{ backgroundColor: accentColor, borderColor: accentColor }}
-                                    />
-                                    <span>Today</span>
-                                </div>
-                                <div className="flex items-center space-x-1.5">
-                                    <div className="w-3 h-3 rounded-[3px] bg-[#8A95A5]" />
-                                    <span>Missed</span>
-                                </div>
-                                <div className="flex items-center space-x-1.5">
-                                    <div className="w-3 h-3 rounded-[3px] bg-[#D1D9E6] border border-slate-300/40" />
-                                    <span>Upcoming</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Matrix Heatmap Container */}
-                        <div className="neu-inset p-4 rounded-2xl overflow-x-auto bg-[#E0E5EC]/80">
-                            <div className="min-w-fit">
-                                {/* Week Header Labels */}
-                                <div className="flex ml-8 mb-2 space-x-1.5">
-                                    {gridWeeks.map((week, idx) => (
-                                        <div
-                                            key={week.weekIndex}
-                                            className="w-5 text-[8px] sm:text-[9px] font-black text-[#717699] text-center uppercase tracking-tight shrink-0"
-                                        >
-                                            {idx === 0 || (idx + 1) % 2 === 0 ? `W${week.weekIndex}` : ''}
-                                        </div>
-                                    ))}
-                                </div>
-
-                                {/* 7 Day Rows (Mon - Sun) */}
-                                <div className="space-y-1.5">
-                                    {DAYS_OF_WEEK.map((dayLabel, rowIndex) => (
-                                        <div key={dayLabel} className="flex items-center space-x-1.5">
-                                            <span className="w-6 text-[10px] font-extrabold text-[#717699] shrink-0">
-                                                {dayLabel}
-                                            </span>
-
-                                            <div className="flex space-x-1.5">
-                                                {gridWeeks.map((week) => {
-                                                    const dayItem = week.days[rowIndex];
-                                                    if (!dayItem) {
-                                                        return <div key={`${week.weekIndex}-${rowIndex}`} className="w-5 h-5 opacity-0" />;
-                                                    }
-
-                                                    const isCompleted = dayItem.log?.status === 'completed';
-                                                    const isRest = dayItem.log?.status === 'rest';
-                                                    const isMissed = !isCompleted && !isRest && (dayItem.log?.status === 'missed' || (dayItem.isPast && !dayItem.log));
-                                                    const isCellToday = dayItem.isToday;
-
-                                                    let bgClass = 'bg-[#D1D9E6] hover:border-slate-400';
-                                                    let cellStyle: React.CSSProperties | undefined = undefined;
-
-                                                    if (isCompleted) {
-                                                        bgClass = 'bg-emerald-500 text-white shadow-sm';
-                                                    } else if (isRest) {
-                                                        bgClass = 'bg-amber-400 text-slate-900';
-                                                    } else if (isMissed) {
-                                                        bgClass = 'bg-[#8A95A5] text-white hover:ring-1 hover:ring-slate-400';
-                                                    } else if (isCellToday) {
-                                                        bgClass = 'text-white ring-2 ring-offset-1 animate-pulse';
-                                                        cellStyle = {
-                                                            backgroundColor: accentColor,
-                                                            borderColor: accentColor,
-                                                        };
-                                                    }
-
-                                                    return (
-                                                        <button
-                                                            key={dayItem.dayNumber}
-                                                            type="button"
-                                                            style={cellStyle}
-                                                            onClick={() =>
-                                                                handleOpenDayModal(
-                                                                    dayItem.dayNumber,
-                                                                    dayItem.dateStr,
-                                                                    dayItem.log
-                                                                )
-                                                            }
-                                                            title={`Day ${dayItem.dayNumber} (${dayItem.dateStr}): ${isCompleted
-                                                                ? `Completed${dayItem.log?.note ? ` - ${dayItem.log.note}` : ''}`
-                                                                : isRest
-                                                                    ? 'Rest Day'
-                                                                    : isMissed
-                                                                        ? 'Missed Day (Click to log)'
-                                                                        : isCellToday
-                                                                            ? "Today's Target Day (Click to log)"
-                                                                            : 'Upcoming Day'
-                                                                }`}
-                                                            className={`w-5 h-5 rounded-md text-[8px] sm:text-[9px] font-black flex items-center justify-center transition-all cursor-pointer hover:scale-115 shrink-0 ${bgClass}`}
-                                                        >
-                                                            {isCellToday ? (
-                                                                <span className="font-extrabold text-[8px] leading-none">{dayItem.dayNumber}</span>
-                                                            ) : isCompleted ? (
-                                                                <span className="leading-none text-[9px]">✓</span>
-                                                            ) : isRest ? (
-                                                                <span className="leading-none text-[8px]">☕</span>
-                                                            ) : (
-                                                                ''
-                                                            )}
-                                                        </button>
-                                                    );
-                                                })}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Matrix Footer Span */}
-                        <div className="flex flex-wrap items-center justify-between gap-2 mt-4 pt-3 border-t border-slate-200/60 text-[11px] font-bold text-[#717699]">
-                            <span>
-                                Start:{' '}
-                                <strong className="text-slate-800">
-                                    {startDateObj.toLocaleDateString('en-US', {
-                                        month: 'short',
-                                        day: 'numeric',
-                                        year: 'numeric',
-                                    })}
-                                </strong>
-                            </span>
-                            <span>
-                                Today:{' '}
-                                <strong style={{ color: accentColor }}>
-                                    {new Date().toLocaleDateString('en-US', {
-                                        month: 'short',
-                                        day: 'numeric',
-                                        year: 'numeric',
-                                    })}
-                                </strong>
-                            </span>
-                            <span>
-                                Target End:{' '}
-                                <strong className="text-slate-800">
-                                    {targetEndDateObj.toLocaleDateString('en-US', {
-                                        month: 'short',
-                                        day: 'numeric',
-                                        year: 'numeric',
-                                    })}
-                                </strong>
-                            </span>
-                        </div>
-                    </div>
-
-                    {/* Bottom Sub-cards: Challenge Rules & Tags */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* Challenge Rules */}
-                        <div className="neu-card p-5 bg-[#E0E5EC] space-y-2.5">
-                            <div className="flex items-center space-x-2" style={{ color: accentColor }}>
-                                <ClipboardCheck className="w-4 h-4" />
-                                <h4 className="text-xs font-black uppercase tracking-wider text-slate-800">
-                                    Challenge Rules
-                                </h4>
-                            </div>
-                            <p className="text-[11px] font-bold text-[#717699]">
-                                What counts as a completed day
-                            </p>
-                            <div className="neu-inset p-3.5 rounded-xl bg-[#E0E5EC]/90 text-xs font-medium text-slate-700 leading-relaxed">
-                                {challenge.rule ||
-                                    'Code for at least 1 hour and learn something new in AI or Software Engineering.'}
-                            </div>
-                        </div>
-
-                        {/* Challenge Tags */}
-                        <div className="neu-card p-5 bg-[#E0E5EC] space-y-2.5">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center space-x-2 text-indigo-700">
-                                    <Tag className="w-4 h-4" />
-                                    <h4 className="text-xs font-black uppercase tracking-wider text-slate-800">
-                                        Challenge Tags
-                                    </h4>
-                                </div>
-                                <button
-                                    onClick={() => setIsEditModalOpen(true)}
-                                    className="text-[10px] font-bold text-indigo-600 hover:text-indigo-800 flex items-center space-x-1"
-                                >
-                                    <Edit3 className="w-3 h-3" />
-                                    <span>Edit</span>
-                                </button>
-                            </div>
-                            <div className="flex flex-wrap gap-1.5 pt-1">
-                                {challenge.tags && challenge.tags.length > 0 ? (
-                                    challenge.tags.map((tag) => (
-                                        <span
-                                            key={tag}
-                                            className="px-2.5 py-1 rounded-lg neu-inset text-[11px] font-bold text-slate-700 bg-white/40"
-                                        >
-                                            {tag}
-                                        </span>
-                                    ))
-                                ) : (
-                                    <span className="text-xs text-slate-400 font-medium italic">No tags</span>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Motivational Tip Banner */}
-                    <div className="neu-card p-4 bg-[#E0E5EC] flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                            <div className="w-9 h-9 rounded-xl neu-button flex items-center justify-center text-amber-500 bg-amber-50 shrink-0">
-                                <Lightbulb className="w-4 h-4" />
-                            </div>
-                            <div>
-                                <h5 className="text-xs font-bold text-slate-900">Consistency compounds.</h5>
-                                <p className="text-[11px] text-[#717699] font-medium">
-                                    Small daily actions lead to massive results over time.
-                                </p>
-                            </div>
-                        </div>
-                        <span className="text-xs font-bold text-indigo-600 flex items-center space-x-1 cursor-pointer hover:underline">
-                            <span>Keep showing up</span>
-                            <ChevronRight className="w-3.5 h-3.5" />
-                        </span>
-                    </div>
+                    <ChallengeRulesAndTags
+                        challenge={challenge}
+                        accentColor={accentColor}
+                        onEdit={() => setIsEditModalOpen(true)}
+                    />
                 </div>
 
                 {/* Right Column: Daily Reflection Logs Feed */}
                 <div className="lg:col-span-4 space-y-4">
-                    <div className="neu-card p-5 sm:p-6 bg-[#E0E5EC]">
-                        <div className="flex items-center justify-between mb-4 pb-2 border-b border-slate-200/60">
-                            <div className="flex items-center space-x-2">
-                                <BookOpen className="w-4 h-4" style={{ color: accentColor }} />
-                                <h3 className="text-sm font-black text-[#1a1c35]">Daily Reflection Logs</h3>
-                            </div>
-                            <span
-                                className="text-xs font-extrabold px-2 py-0.5 rounded-full neu-inset"
-                                style={{ color: accentColor, backgroundColor: `${accentColor}18` }}
-                            >
-                                {challenge.logs.length}
-                            </span>
-                        </div>
-
-                        {/* Reflection Logs Feed */}
-                        {displayLogs.length === 0 ? (
-                            <div className="text-center py-10 space-y-3">
-                                <div
-                                    className="w-12 h-12 mx-auto rounded-2xl neu-button flex items-center justify-center shadow-sm"
-                                    style={{ color: accentColor }}
-                                >
-                                    <BookOpen className="w-5 h-5" />
-                                </div>
-                                <p className="text-xs font-bold text-slate-700">No reflections logged yet</p>
-                                <p className="text-[11px] text-[#717699]">
-                                    Log your daily check-in to build a timeline of accomplishments.
-                                </p>
-                                <button
-                                    onClick={() =>
-                                        handleOpenDayModal(
-                                            currentDayNumber,
-                                            new Date().toISOString().split('T')[0],
-                                            todayLog
-                                        )
-                                    }
-                                    className="neu-button-primary px-4 py-2 rounded-xl text-xs font-bold text-white mt-2"
-                                >
-                                    Log First Reflection
-                                </button>
-                            </div>
-                        ) : (
-                            <div className="max-h-[560px] overflow-y-auto pr-2">
-                                <div className="py-3 px-1 space-y-4 relative before:absolute before:top-5 before:bottom-5 before:left-4.5 before:w-0.5 before:bg-slate-300/80">
-                                    {displayLogs.map((log) => {
-                                    const isLogCompleted = log.status === 'completed';
-                                    const isLogRest = log.status === 'rest';
-
-                                    return (
-                                        <div key={log.id} className="relative pl-8 group">
-                                            {/* Timeline Dot */}
-                                            <div
-                                                className={`absolute left-2 top-1.5 w-3.5 h-3.5 rounded-full ring-4 ring-[#E0E5EC] transition-all duration-400 group-hover:scale-125 ${isLogCompleted
-                                                    ? 'bg-emerald-500'
-                                                    : isLogRest
-                                                        ? 'bg-amber-400'
-                                                        : 'bg-slate-400'
-                                                    }`}
-                                            />
-
-                                            <div className="neu-card p-3.5 rounded-xl bg-[#E0E5EC] hover:bg-white/40 transition-all duration-400 space-y-2">
-                                                <div className="flex items-center justify-between">
-                                                    <span className="text-xs font-black text-slate-800">
-                                                        Day {log.dayNumber}{' '}
-                                                        <span className="text-[10px] font-bold text-[#717699] ml-1">
-                                                            • {log.date}
-                                                        </span>
-                                                    </span>
-
-                                                    <button
-                                                        onClick={() =>
-                                                            handleOpenDayModal(log.dayNumber, log.date, log)
-                                                        }
-                                                        className="p-1 rounded-lg text-slate-400 hover:text-slate-700 opacity-60 hover:opacity-100"
-                                                        title="Edit Log"
-                                                    >
-                                                        <MoreVertical className="w-3.5 h-3.5" />
-                                                    </button>
-                                                </div>
-
-                                                {log.note && (
-                                                    <p className="text-xs font-medium text-slate-700 leading-relaxed">
-                                                        {log.note}
-                                                    </p>
-                                                )}
-
-                                                {log.imageUrl && (
-                                                    <div className="mt-2 rounded-lg overflow-hidden border border-slate-200/60 max-h-32">
-                                                        <img
-                                                            src={log.imageUrl}
-                                                            alt={`Day ${log.dayNumber} screenshot`}
-                                                            className="w-full h-full object-cover"
-                                                            referrerPolicy="no-referrer"
-                                                        />
-                                                    </div>
-                                                )}
-
-                                                {log.timeSpent && log.timeSpent !== '—' && (
-                                                    <div
-                                                        className="flex items-center space-x-1 text-[10px] font-bold w-fit px-2 py-0.5 rounded neu-inset"
-                                                        style={{ color: accentColor, backgroundColor: `${accentColor}18` }}
-                                                    >
-                                                        <Clock className="w-3 h-3" />
-                                                        <span>{log.timeSpent}</span>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    );
-                                    })}
-                                </div>
-                            </div>
-                        )}
-                    </div>
+                    <ChallengeReflectionFeed
+                        logs={challenge.logs}
+                        accentColor={accentColor}
+                        onOpenDayModal={handleOpenDayModal}
+                        onLogFirst={() =>
+                            handleOpenDayModal(
+                                currentDayNumber,
+                                new Date().toISOString().split('T')[0],
+                                todayLog
+                            )
+                        }
+                    />
                 </div>
             </div>
 
@@ -854,12 +290,12 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                     dateStr={selectedDayForModal.dateStr}
                     existingLog={selectedDayForModal.existingLog}
                     onSaveLog={async (logData) => {
-                        await onLogDay(challenge.id || challenge._id, logData);
+                        await onLogDay(challengeId, logData);
                     }}
                     onDeleteLog={
                         selectedDayForModal.existingLog
                             ? async (logId) => {
-                                await onDeleteLog(challenge.id || challenge._id, logId);
+                                await onDeleteLog(challengeId, logId);
                             }
                             : undefined
                     }
@@ -873,7 +309,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                     onClose={() => setIsEditModalOpen(false)}
                     editingChallenge={challenge}
                     onSubmit={async (updates) => {
-                        await onUpdateChallenge(challenge.id || challenge._id, updates);
+                        await onUpdateChallenge(challengeId, updates);
                         setIsEditModalOpen(false);
                     }}
                 />
@@ -889,7 +325,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                     onConfirm={async () => {
                         try {
                             setIsDeleting(true);
-                            await onDeleteChallenge(challenge.id || challenge._id);
+                            await onDeleteChallenge(challengeId);
                             setIsDeleteModalOpen(false);
                             onBack();
                         } finally {
