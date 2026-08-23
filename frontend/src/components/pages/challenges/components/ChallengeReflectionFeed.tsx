@@ -53,7 +53,7 @@ export const ChallengeReflectionFeed: React.FC<ChallengeReflectionFeedProps> = (
                     </button>
                 </div>
             ) : (
-                <div className="max-h-[560px] overflow-y-auto pr-2 py-3 space-y-4 relative before:absolute before:top-2 before:bottom-2 before:left-3.5 before:w-0.5 before:bg-slate-300/80 bg-pink-400">
+                <div className="max-h-[560px] overflow-y-auto pr-2 py-5 space-y-4 relative before:absolute before:top-2 before:bottom-2 before:left-3.5 before:w-0.5 before:bg-slate-300/80">
                     {sortedLogs.map((log) => {
                         const isLogCompleted = log.status === 'completed';
                         const isLogRest = log.status === 'rest';
@@ -62,7 +62,7 @@ export const ChallengeReflectionFeed: React.FC<ChallengeReflectionFeedProps> = (
                             <div key={log.id} className="relative pl-8 group">
                                 {/* Timeline Dot */}
                                 <div
-                                    className={`absolute left-2 top-1.5 w-3.5 h-3.5 rounded-full ring-4 ring-[#E0E5EC] transition-all duration-400 group-hover:scale-125 ${isLogCompleted
+                                    className={`absolute left-2 top-5 w-3.5 h-3.5 rounded-full ring-4 ring-[#E0E5EC] transition-all duration-400 group-hover:scale-125 ${isLogCompleted
                                         ? 'bg-emerald-500'
                                         : isLogRest
                                             ? 'bg-amber-400'
