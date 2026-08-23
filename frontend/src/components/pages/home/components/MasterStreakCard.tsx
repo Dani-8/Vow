@@ -1,5 +1,5 @@
 import React from 'react';
-import { Trophy, CheckCircle2, Check, Zap } from 'lucide-react';
+import { Trophy, CheckCircle2, Check, Zap, Flame } from 'lucide-react';
 import { MasterStreakStats } from '../../../../types';
 import { WeekDay } from '../../../../hooks/useHomeData';
 
@@ -80,7 +80,7 @@ export const MasterStreakCard: React.FC<MasterStreakCardProps> = ({
             {/* Footer Stats */}
             <div className="mt-6 pt-4 border-t border-white/50 flex items-center justify-between neu-inset px-4 py-3 rounded-2xl">
                 <div className="flex items-center space-x-2">
-                    <span className="text-base">🔥</span>
+                    <Flame className="w-4 h-4 text-orange-500 fill-orange-500 shrink-0" />
                     <span className="text-xs sm:text-sm font-extrabold text-[#1a1c35]">
                         {stats?.masterStreak || 0} Days Current Streak
                     </span>
