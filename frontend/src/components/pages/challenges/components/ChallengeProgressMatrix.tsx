@@ -47,7 +47,7 @@ export const ChallengeProgressMatrix: React.FC<ChallengeProgressMatrixProps> = (
                     </div>
                     <div className="flex items-center space-x-1.5">
                         <div
-                            className="w-3 h-3 rounded-[3px] ring-2 ring-offset-1"
+                            className="w-3 h-3 rounded-[3px] ring-2 ring-offset-1 ring-mist-500/60"
                             style={{ backgroundColor: accentColor, borderColor: accentColor }}
                         />
                         <span>Today</span>
