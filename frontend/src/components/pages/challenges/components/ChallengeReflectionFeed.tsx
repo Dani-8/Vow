@@ -62,13 +62,12 @@ export const ChallengeReflectionFeed: React.FC<ChallengeReflectionFeedProps> = (
                             <div key={log.id} className="relative pl-8 group">
                                 {/* Timeline Dot */}
                                 <div
-                                    className={`absolute left-2 top-1.5 w-3.5 h-3.5 rounded-full ring-4 ring-[#E0E5EC] transition-transform group-hover:scale-125 ${
-                                        isLogCompleted
-                                            ? 'bg-emerald-500'
-                                            : isLogRest
-                                                ? 'bg-amber-400'
-                                                : 'bg-slate-400'
-                                    }`}
+                                    className={`absolute left-2 top-1.5 w-3.5 h-3.5 rounded-full ring-4 ring-[#E0E5EC] transition-transform group-hover:scale-125 ${isLogCompleted
+                                        ? 'bg-emerald-500'
+                                        : isLogRest
+                                            ? 'bg-amber-400'
+                                            : 'bg-slate-400'
+                                        }`}
                                 />
 
                                 <div className="neu-card p-3.5 rounded-xl bg-[#E0E5EC] hover:bg-white/40 transition-colors space-y-2">
