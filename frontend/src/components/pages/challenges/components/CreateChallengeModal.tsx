@@ -174,7 +174,7 @@ export const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4 overflow-y-auto animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
             <div className="neu-card w-full max-w-4xl p-6 sm:p-8 bg-[#E0E5EC] relative my-6 max-h-[92vh] overflow-y-auto">
                 {/* Close Button */}
                 <button
