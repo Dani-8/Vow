@@ -68,10 +68,29 @@ interface AppRouterProps {
       status?: 'completed' | 'rest' | 'missed';
       note?: string;
       timeSpent?: string;
-      imageUrl?: string;
     }
   ) => Promise<void>;
   onDeleteChallengeLog: (challengeId: string, logId: string) => Promise<void>;
+  onStartNextSprint?: (
+    challengeId: string,
+    sprintData: {
+      title: string;
+      targetDays: number;
+      startDate: string;
+      targetEndDate?: string;
+      rule?: string;
+    }
+  ) => Promise<void>;
+  onCompleteSprint?: (
+    challengeId: string,
+    sprintId: string,
+    retrospective: {
+      completedAt: string;
+      summary: string;
+      score?: number;
+      keyLearnings?: string;
+    }
+  ) => Promise<void>;
 }
 
 export const AppRouter: React.FC<AppRouterProps> = ({
@@ -79,25 +98,6 @@ export const AppRouter: React.FC<AppRouterProps> = ({
   location,
   user,
   tasks,
-  privateTasks,
-  filteredTasks,
-  stats,
-  isPrivateUnlocked,
-  selectedTaskForDetail,
-  setSelectedTaskForDetail,
-  searchQuery,
-  setSearchQuery,
-  filter,
-  setFilter,
-  navigate,
-  navigateToView,
-  setIsPrivateUnlocked,
-  onCheckInToday,
-  onToggleComplete,
-  onTogglePrivate,
-  onEditTask,
-  onDeleteTask,
-  onOpenAIAssist,
   onOpenCreateModal,
   onOpenPinModal,
   challenges,
