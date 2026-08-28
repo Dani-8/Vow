@@ -198,6 +198,8 @@ export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
                                     <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full neu-inset text-amber-700 bg-amber-50">
                                         Paused
                                     </span>
+                                ) : null}
+                            </div>
                             <h1 className="text-xl sm:text-2xl font-black text-[#1a1c35] tracking-tight">
                                 {challenge.title}
                             </h1>
@@ -213,7 +215,7 @@ export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
                                         day: 'numeric',
                                         year: 'numeric',
                                     })}{' '}
-                                    ({challenge.targetDays} Days)
+                                    ({activeDays} Days)
                                 </span>
                             </div>
                         </div>
@@ -228,7 +230,7 @@ export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
                                     {isUpcoming ? '—' : `#${currentDayNumber}`}
                                 </span>
                                 <span className="text-[9px] text-[#717699] block font-semibold">
-                                    {isUpcoming ? `In ${daysUntilStart}d` : `of ${challenge.targetDays}`}
+                                    {isUpcoming ? `In ${daysUntilStart}d` : `of ${activeDays}`}
                                 </span>
                             </div>
 
@@ -273,10 +275,11 @@ export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
                         ) : (
                             <button
                                 onClick={onCheckIn}
-                                className={`px-5 py-3 rounded-2xl font-bold text-xs flex items-center justify-center space-x-2 shadow-md transition-all shrink-0 ${isTodayCompleted
-                                    ? 'neu-button bg-emerald-50 text-emerald-700 border border-emerald-300'
-                                    : 'neu-button-primary text-white hover:scale-105'
-                                    }`}
+                                className={`px-5 py-3 rounded-2xl font-bold text-xs flex items-center justify-center space-x-2 shadow-md transition-all shrink-0 ${
+                                    isTodayCompleted
+                                        ? 'neu-button bg-emerald-50 text-emerald-700 border border-emerald-300'
+                                        : 'neu-button-primary text-white hover:scale-105'
+                                }`}
                             >
                                 <Calendar className="w-4 h-4" />
                                 <span>
