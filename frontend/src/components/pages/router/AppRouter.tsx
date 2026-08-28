@@ -148,6 +148,27 @@ export const AppRouter: React.FC<AppRouterProps> = ({
             .replace(/[\s_-]+/g, '-')
             .replace(/^-+|-+$/g, '') === paramLower
       ) ||
+      selectedTaskForDetail ||
+      allTasks[0] || {
+        _id: 'default',
+        userId: user?.id || 'demo',
+        title: 'Draft Q3 Personal Growth Blueprint',
+        description:
+          'Outline key milestones for skill acquisition and daily habit consistency for Q3.',
+        tags: ['GROWTH', 'STRATEGY'],
+        status: 'in_progress',
+        priority: 'High',
+        isPrivate: false,
+        isHabit: false,
+        currentStreak: 4,
+        bestStreak: 12,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+
+    return (
+      <TaskDetailPage
+        task={currentTask}
         onBack={() => {
           if (selectedTaskForDetail?.isPrivate || currentTask.isPrivate) {
             navigate('/app/vault');
@@ -177,27 +198,6 @@ export const AppRouter: React.FC<AppRouterProps> = ({
         stats={stats}
         onToggleComplete={onToggleComplete}
         onCheckInToday={onCheckInToday}
-        onOpenCreateModal={onOpenCreateModal}
-        onOpenAIAssist={onOpenAIAssist}
-        onViewTaskDetail={(t) => {
-          setSelectedTaskForDetail(t);
-          navigate(`/app/task/${getTaskSlug(t)}`);
-        }}
-      />
-    );
-  }
-
-  if (activeView === 'stats') {
-    return <StatsView stats={stats} tasks={tasks} privateTasks={privateTasks} />;
-  }
-
-  if (activeView === 'task-map') {
-    return <TaskMapPage tasks={[...tasks, ...privateTasks]} onBackToHome={() => navigateToView('home')} />;
-  }
-
-  if (activeView === 'challenge-detail' || (selectedChallenge && activeView === 'challenges' && location.pathname.startsWith('/app/challenges/'))) {
-    const challengeParam = decodeURIComponent(location.pathname.replace('/app/challenges/', ''));
-    const currentChallenge =
       challenges.find(
         (c) =>
           (c.id && c.id.toLowerCase() === challengeParam.toLowerCase()) ||
