@@ -1,5 +1,6 @@
 import { Router, Response } from 'express';
 import { Challenge, IChallengeLog } from '../models/Challenge.js';
+import { INITIAL_DEMO_CHALLENGES_SERVER } from '../data/demoChallenges.js';
 import { authenticateToken, AuthenticatedRequest } from '../middleware/auth.js';
 
 const router = Router();
@@ -7,7 +8,41 @@ const router = Router();
 // Get all challenges for the authenticated user
 router.get('/', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
     try {
-        const rawChallenges = await Challenge.find({ userId: req.userId });
+        let rawChallenges = await Challenge.find({ userId: req.userId });
+
+        // If user has no challenges yet (e.g. fresh session), auto-seed the demo challenges
+        if (rawChallenges.length === 0 && INITIAL_DEMO_CHALLENGES_SERVER.length > 0) {
+            for (const chData of INITIAL_DEMO_CHALLENGES_SERVER) {
+                await Challenge.create({
+                    ...chData,
+                    userId: req.userId,
+                });
+            }
+            rawChallenges = await Challenge.find({ userId: req.userId });
+        } else {
+            // Update or enrich existing Russian challenge with multi-phase demo sprints if needed
+            const russianDemo = INITIAL_DEMO_CHALLENGES_SERVER.find(
+                (c) => c.id === 'ch-russian-phases' || c.title === 'Learn Conversational Russian'
+            );
+            if (russianDemo) {
+                for (const ch of rawChallenges) {
+                    if (
+                        (ch.id === 'ch-russian-phases' ||
+                            ch.id === 'challenge-russian-mastery-3' ||
+                            ch.title === 'Learn Conversational Russian') &&
+                        (!ch.sprints || ch.sprints.length <= 1)
+                    ) {
+                        ch.sprints = russianDemo.sprints;
+                        ch.currentSprintId = russianDemo.currentSprintId;
+                        ch.targetDays = russianDemo.targetDays;
+                        ch.rule = russianDemo.rule;
+                        ch.logs = russianDemo.logs;
+                        await ch.save();
+                    }
+                }
+            }
+        }
+
         const challenges = rawChallenges.map((c) => c.toObject());
         return res.json({ challenges });
     } catch (err: any) {
@@ -19,10 +54,31 @@ router.get('/', authenticateToken, async (req: AuthenticatedRequest, res: Respon
 // Get a single challenge by ID
 router.get('/:id', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
     try {
-        const challenge = await Challenge.findOne({ id: req.params.id, userId: req.userId });
+        let challenge = await Challenge.findOne({ id: req.params.id, userId: req.userId });
         if (!challenge) {
             return res.status(404).json({ error: 'Challenge not found' });
         }
+
+        // Migrate Russian challenge if needed
+        if (
+            (challenge.id === 'ch-russian-phases' ||
+                challenge.id === 'challenge-russian-mastery-3' ||
+                challenge.title === 'Learn Conversational Russian') &&
+            (!challenge.sprints || challenge.sprints.length <= 1)
+        ) {
+            const russianDemo = INITIAL_DEMO_CHALLENGES_SERVER.find(
+                (c) => c.id === 'ch-russian-phases' || c.title === 'Learn Conversational Russian'
+            );
+            if (russianDemo) {
+                challenge.sprints = russianDemo.sprints;
+                challenge.currentSprintId = russianDemo.currentSprintId;
+                challenge.targetDays = russianDemo.targetDays;
+                challenge.rule = russianDemo.rule;
+                challenge.logs = russianDemo.logs;
+                await challenge.save();
+            }
+        }
+
         return res.json({ challenge: challenge.toObject() });
     } catch (err: any) {
         console.error('Error fetching challenge:', err);
@@ -103,6 +159,8 @@ router.put('/:id', authenticateToken, async (req: AuthenticatedRequest, res: Res
         if (Array.isArray(req.body.tags)) challenge.tags = req.body.tags;
         if (req.body.status !== undefined) challenge.status = req.body.status;
         if (Array.isArray(req.body.logs)) challenge.logs = req.body.logs;
+        if (Array.isArray(req.body.sprints)) challenge.sprints = req.body.sprints;
+        if (req.body.currentSprintId !== undefined) challenge.currentSprintId = req.body.currentSprintId;
 
         await challenge.save();
         return res.json({ challenge: challenge.toObject() });
@@ -120,7 +178,7 @@ router.post('/:id/log', authenticateToken, async (req: AuthenticatedRequest, res
             return res.status(404).json({ error: 'Challenge not found' });
         }
 
-        const { dayNumber, date, status, note, timeSpent, imageUrl } = req.body;
+        const { dayNumber, date, status, note, timeSpent, imageUrl, sprintId } = req.body;
         const targetDay = Number(dayNumber) || 1;
         const logDate = date || new Date().toISOString().split('T')[0];
         const logStatus = status || 'completed';
@@ -145,6 +203,26 @@ router.post('/:id/log', authenticateToken, async (req: AuthenticatedRequest, res
             challenge.logs.unshift(newLog);
         }
 
+        // Also sync log to target sprint if sprints exist
+        const targetSprintId = sprintId || challenge.currentSprintId || (challenge.sprints && challenge.sprints.length > 0 ? challenge.sprints[challenge.sprints.length - 1].id : undefined);
+        if (targetSprintId && Array.isArray(challenge.sprints)) {
+            challenge.sprints = challenge.sprints.map((s: any) => {
+                if (s.id === targetSprintId) {
+                    const sLogs = Array.isArray(s.logs) ? s.logs : [];
+                    const sIdx = sLogs.findIndex((l: any) => Number(l.dayNumber) === targetDay);
+                    let newSLogs = [...sLogs];
+                    if (sIdx >= 0) {
+                        newSLogs[sIdx] = newLog;
+                    } else {
+                        newSLogs.unshift(newLog);
+                    }
+                    newSLogs.sort((a: any, b: any) => Number(b.dayNumber) - Number(a.dayNumber));
+                    return { ...s, logs: newSLogs, updatedAt: new Date().toISOString() };
+                }
+                return s;
+            });
+        }
+
         // Sort logs descending by dayNumber
         challenge.logs.sort((a, b) => Number(b.dayNumber) - Number(a.dayNumber));
 
@@ -164,7 +242,21 @@ router.delete('/:id/log/:logId', authenticateToken, async (req: AuthenticatedReq
             return res.status(404).json({ error: 'Challenge not found' });
         }
 
-        challenge.logs = challenge.logs.filter((l) => l.id !== req.params.logId && String(l.dayNumber) !== req.params.logId);
+        const logId = req.params.logId;
+        challenge.logs = challenge.logs.filter((l) => l.id !== logId && String(l.dayNumber) !== logId);
+
+        if (Array.isArray(challenge.sprints)) {
+            challenge.sprints = challenge.sprints.map((s: any) => {
+                if (Array.isArray(s.logs)) {
+                    return {
+                        ...s,
+                        logs: s.logs.filter((l: any) => l.id !== logId && String(l.dayNumber) !== logId),
+                    };
+                }
+                return s;
+            });
+        }
+
         await challenge.save();
 
         return res.json({ challenge: challenge.toObject() });
