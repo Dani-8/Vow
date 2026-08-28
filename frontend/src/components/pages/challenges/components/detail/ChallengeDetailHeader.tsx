@@ -15,11 +15,12 @@ import {
     ClipboardCheck,
     Sparkles,
 } from 'lucide-react';
-import { Challenge } from '../../../../types';
+import { Challenge } from '../../../../../types';
 
 interface ChallengeDetailHeaderProps {
     challenge: Challenge;
     accentColor: string;
+    phaseTargetDays?: number;
     onBack: () => void;
     onEdit: () => void;
     onDelete: () => void;
@@ -44,6 +45,7 @@ const CATEGORY_ICONS: Record<string, any> = {
     discipline: ClipboardCheck,
     mindfulness: Sparkles,
 };
+
 
 export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
     challenge,
