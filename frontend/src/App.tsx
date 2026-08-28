@@ -135,6 +135,8 @@ export default function App() {
         onDeleteChallenge={challengeState.deleteChallenge}
         onLogChallengeDay={challengeState.logDay}
         onDeleteChallengeLog={challengeState.deleteLog}
+        onStartNextSprint={challengeState.startNextSprint}
+        onCompleteSprint={challengeState.completeSprint}
       />
 
       <GlobalModals

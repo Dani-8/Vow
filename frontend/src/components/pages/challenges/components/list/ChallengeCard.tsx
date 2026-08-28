@@ -13,7 +13,7 @@ import {
     Coffee,
     Flame,
 } from 'lucide-react';
-import { Challenge } from '../../../../types';
+import { Challenge } from '../../../../../types';
 
 interface ChallengeCardProps {
     challenge: Challenge;
@@ -130,6 +130,11 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({
                                     <span>{streak}d Streak</span>
                                 </span>
                             ) : null}
+                            {challenge.sprints && challenge.sprints.length > 0 && (
+                                <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full neu-inset text-slate-700 bg-slate-100/80">
+                                    {challenge.sprints.length} {challenge.sprints.length === 1 ? 'Phase' : 'Phases'}
+                                </span>
+                            )}
                         </div>
                     </div>
 

@@ -39,6 +39,8 @@ export interface IChallenge {
     tags: string[];
     status: 'active' | 'completed' | 'paused';
     logs: IChallengeLog[];
+    sprints?: any[];
+    currentSprintId?: string;
     createdAt?: string;
     updatedAt?: string;
 }
@@ -61,6 +63,8 @@ export class ChallengeInstance implements IChallenge {
     tags: string[];
     status: 'active' | 'completed' | 'paused';
     logs: IChallengeLog[];
+    sprints?: any[];
+    currentSprintId?: string;
     createdAt?: string;
     updatedAt?: string;
 
@@ -80,6 +84,8 @@ export class ChallengeInstance implements IChallenge {
         this.tags = Array.isArray(data.tags) ? data.tags : [];
         this.status = data.status || 'active';
         this.logs = Array.isArray(data.logs) ? data.logs : [];
+        this.sprints = Array.isArray(data.sprints) ? data.sprints : [];
+        this.currentSprintId = data.currentSprintId || (this.sprints.length > 0 ? this.sprints[0].id : undefined);
         this.createdAt = data.createdAt || new Date().toISOString();
         this.updatedAt = data.updatedAt || new Date().toISOString();
     }
@@ -101,6 +107,8 @@ export class ChallengeInstance implements IChallenge {
             tags: this.tags,
             status: this.status,
             logs: this.logs,
+            sprints: this.sprints,
+            currentSprintId: this.currentSprintId,
             createdAt: this.createdAt,
             updatedAt: this.updatedAt,
         };
@@ -123,6 +131,8 @@ export class ChallengeInstance implements IChallenge {
             tags: this.tags,
             status: this.status,
             logs: this.logs,
+            sprints: this.sprints || [],
+            currentSprintId: this.currentSprintId,
             createdAt: this.createdAt,
             updatedAt: this.updatedAt,
         };
