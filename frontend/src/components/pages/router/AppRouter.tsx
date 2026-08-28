@@ -68,10 +68,29 @@ interface AppRouterProps {
       status?: 'completed' | 'rest' | 'missed';
       note?: string;
       timeSpent?: string;
-      imageUrl?: string;
     }
   ) => Promise<void>;
   onDeleteChallengeLog: (challengeId: string, logId: string) => Promise<void>;
+  onStartNextSprint?: (
+    challengeId: string,
+    sprintData: {
+      title: string;
+      targetDays: number;
+      startDate: string;
+      targetEndDate?: string;
+      rule?: string;
+    }
+  ) => Promise<void>;
+  onCompleteSprint?: (
+    challengeId: string,
+    sprintId: string,
+    retrospective: {
+      completedAt: string;
+      summary: string;
+      score?: number;
+      keyLearnings?: string;
+    }
+  ) => Promise<void>;
 }
 
 export const AppRouter: React.FC<AppRouterProps> = ({
@@ -108,6 +127,8 @@ export const AppRouter: React.FC<AppRouterProps> = ({
   onDeleteChallenge,
   onLogChallengeDay,
   onDeleteChallengeLog,
+  onStartNextSprint,
+  onCompleteSprint,
 }) => {
   if (activeView === 'task-detail') {
     const activeTaskParam = decodeURIComponent(location.pathname.replace('/app/task/', ''));
@@ -219,6 +240,8 @@ export const AppRouter: React.FC<AppRouterProps> = ({
           onDeleteChallenge={onDeleteChallenge}
           onLogDay={onLogChallengeDay}
           onDeleteLog={onDeleteChallengeLog}
+          onStartNextSprint={onStartNextSprint}
+          onCompleteSprint={onCompleteSprint}
         />
       );
     }

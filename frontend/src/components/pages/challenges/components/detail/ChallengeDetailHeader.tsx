@@ -15,11 +15,12 @@ import {
     ClipboardCheck,
     Sparkles,
 } from 'lucide-react';
-import { Challenge } from '../../../../types';
+import { Challenge } from '../../../../../types';
 
 interface ChallengeDetailHeaderProps {
     challenge: Challenge;
     accentColor: string;
+    phaseTargetDays?: number;
     onBack: () => void;
     onEdit: () => void;
     onDelete: () => void;
@@ -48,6 +49,7 @@ const CATEGORY_ICONS: Record<string, any> = {
 export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
     challenge,
     accentColor,
+    phaseTargetDays,
     onBack,
     onEdit,
     onDelete,
@@ -75,8 +77,10 @@ export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
         return () => window.removeEventListener('click', handleClickOutside);
     }, [isMenuOpen]);
 
+    const activeDays = phaseTargetDays || challenge.targetDays;
+
     const handleShare = () => {
-        const text = `I'm on Day ${currentDayNumber} of ${challenge.targetDays} on "${challenge.title}" in Vow! #VowChallenge`;
+        const text = `I'm on Day ${currentDayNumber} of ${activeDays} on "${challenge.title}" in Vow! #VowChallenge`;
         if (navigator.clipboard) {
             navigator.clipboard.writeText(text);
             setShowShareToast(true);
@@ -211,7 +215,7 @@ export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
                                         day: 'numeric',
                                         year: 'numeric',
                                     })}{' '}
-                                    ({challenge.targetDays} Days)
+                                    ({activeDays} Days)
                                 </span>
                             </div>
                         </div>
@@ -226,7 +230,7 @@ export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
                                     {isUpcoming ? '—' : `#${currentDayNumber}`}
                                 </span>
                                 <span className="text-[9px] text-[#717699] block font-semibold">
-                                    {isUpcoming ? `In ${daysUntilStart}d` : `of ${challenge.targetDays}`}
+                                    {isUpcoming ? `In ${daysUntilStart}d` : `of ${activeDays}`}
                                 </span>
                             </div>
 

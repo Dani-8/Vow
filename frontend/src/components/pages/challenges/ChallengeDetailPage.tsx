@@ -1,12 +1,16 @@
-import React, { useState, useMemo } from 'react';
-import { Challenge, ChallengeLog } from '../../../types';
-import { LogChallengeDayModal } from './components/LogChallengeDayModal';
-import { CreateChallengeModal } from './components/CreateChallengeModal';
-import { DeleteChallengeModal } from './components/DeleteChallengeModal';
-import { ChallengeDetailHeader } from './components/ChallengeDetailHeader';
-import { ChallengeProgressMatrix } from './components/ChallengeProgressMatrix';
-import { ChallengeRulesAndTags } from './components/ChallengeRulesAndTags';
-import { ChallengeReflectionFeed } from './components/ChallengeReflectionFeed';
+import React, { useState, useMemo, useEffect } from 'react';
+import { Challenge, ChallengeLog, ChallengeSprint, SprintRetrospective } from '../../../types';
+import { ChallengeDetailHeader } from './components/detail/ChallengeDetailHeader';
+import { ChallengeProgressMatrix } from './components/detail/ChallengeProgressMatrix';
+import { ChallengeRulesAndTags } from './components/detail/ChallengeRulesAndTags';
+import { ChallengeReflectionFeed } from './components/detail/ChallengeReflectionFeed';
+import { SprintPhaseNavigator } from './components/detail/SprintPhaseNavigator';
+import { SprintRetrospectiveBanner } from './components/detail/SprintRetrospectiveBanner';
+import { LogChallengeDayModal } from './components/detail/LogChallengeDayModal';
+import { CompleteSprintModal } from './components/detail/CompleteSprintModal';
+import { StartNextSprintModal } from './components/detail/StartNextSprintModal';
+import { CreateChallengeModal } from './components/shared/CreateChallengeModal';
+import { DeleteChallengeModal } from './components/shared/DeleteChallengeModal';
 
 interface ChallengeDetailPageProps {
     challenge: Challenge;
@@ -21,10 +25,24 @@ interface ChallengeDetailPageProps {
             status?: 'completed' | 'rest' | 'missed';
             note?: string;
             timeSpent?: string;
-            imageUrl?: string;
         }
     ) => Promise<void>;
     onDeleteLog: (challengeId: string, logId: string) => Promise<void>;
+    onStartNextSprint?: (
+        challengeId: string,
+        sprintData: {
+            title: string;
+            targetDays: number;
+            startDate: string;
+            targetEndDate?: string;
+            rule?: string;
+        }
+    ) => Promise<void>;
+    onCompleteSprint?: (
+        challengeId: string,
+        sprintId: string,
+        retrospective: SprintRetrospective
+    ) => Promise<void>;
 }
 
 const getAccentColor = (challenge?: Partial<Challenge>): string => {
@@ -49,8 +67,58 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
     onDeleteChallenge,
     onLogDay,
     onDeleteLog,
+    onStartNextSprint,
+    onCompleteSprint,
 }) => {
     const accentColor = getAccentColor(challenge);
+    const challengeId = challenge.id || challenge._id;
+
+    // Sprint/Phase state - Ensure there is always at least Phase 1
+    const sprints = useMemo(() => {
+        if (challenge.sprints && challenge.sprints.length > 0) {
+            return challenge.sprints;
+        }
+        const defaultSprint: ChallengeSprint = {
+            id: `sprint-${challenge.id || challenge._id || 'init'}-1`,
+            phaseNumber: 1,
+            title: `${challenge.title} (Phase 1)`,
+            targetDays: challenge.targetDays || 30,
+            startDate: challenge.startDate || new Date().toISOString(),
+            targetEndDate: challenge.targetEndDate,
+            rule: challenge.rule,
+            status: challenge.status || 'active',
+            logs: challenge.logs || [],
+            createdAt: challenge.createdAt || new Date().toISOString(),
+            updatedAt: challenge.updatedAt || new Date().toISOString(),
+        };
+        return [defaultSprint];
+    }, [challenge]);
+
+    const [selectedSprintId, setSelectedSprintId] = useState<string | undefined>(
+        challenge.currentSprintId || (sprints.length > 0 ? sprints[sprints.length - 1].id : undefined)
+    );
+
+    // Keep selectedSprintId synchronized whenever the challenge or its sprints change
+    useEffect(() => {
+        if (challenge.currentSprintId && sprints.some((s) => s.id === challenge.currentSprintId)) {
+            setSelectedSprintId(challenge.currentSprintId);
+        } else if (sprints.length > 0) {
+            if (!selectedSprintId || !sprints.some((s) => s.id === selectedSprintId)) {
+                const active = sprints.find((s) => s.status === 'active');
+                setSelectedSprintId(active ? active.id : sprints[sprints.length - 1].id);
+            }
+        }
+    }, [challenge.id, challenge._id, challenge.currentSprintId, sprints]);
+
+    const activeSprint = useMemo(() => {
+        if (!sprints || sprints.length === 0) return null;
+        if (selectedSprintId) {
+            return sprints.find((s) => s.id === selectedSprintId) || sprints[sprints.length - 1];
+        }
+        return sprints[sprints.length - 1];
+    }, [sprints, selectedSprintId]);
+
+    // Modals
     const [selectedDayForModal, setSelectedDayForModal] = useState<{
         dayNumber: number;
         dateStr: string;
@@ -60,8 +128,10 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
+    const [isStartSprintModalOpen, setIsStartSprintModalOpen] = useState(false);
+    const [sprintToComplete, setSprintToComplete] = useState<ChallengeSprint | null>(null);
 
-    // Calculate current elapsed days since startDate
+    // Calculate elapsed days and stats scoped to the active phase/sprint
     const {
         currentDayNumber,
         isUpcoming,
@@ -72,8 +142,11 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
         successRate,
         remainingDays,
         streak,
+        phaseTargetDays,
+        phaseLogs,
     } = useMemo(() => {
-        const start = new Date(challenge.startDate || new Date());
+        const targetDays = activeSprint?.targetDays || challenge.targetDays;
+        const start = new Date(activeSprint?.startDate || challenge.startDate || new Date());
         const startMidnight = new Date(start.getFullYear(), start.getMonth(), start.getDate());
         const nowMidnight = new Date();
         nowMidnight.setHours(0, 0, 0, 0);
@@ -82,21 +155,30 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
         const daysDiff = Math.floor(diffMs / 86400000);
         const upcoming = daysDiff < 0;
         const untilStart = upcoming ? Math.abs(daysDiff) : 0;
-        const currentDay = upcoming ? 0 : Math.min(challenge.targetDays, daysDiff + 1);
+        const currentDay = upcoming ? 0 : Math.min(targetDays, daysDiff + 1);
 
-        const targetEnd = new Date(challenge.targetEndDate || start.getTime() + challenge.targetDays * 86400000);
+        const targetEnd = new Date(
+            activeSprint?.targetEndDate || challenge.targetEndDate || start.getTime() + targetDays * 86400000
+        );
 
-        const completed = challenge.logs.filter((l) => l.status === 'completed').length;
-        const rate = Math.round((completed / challenge.targetDays) * 100);
-        const remaining = Math.max(0, challenge.targetDays - completed);
+        // Get logs for this phase
+        const currentPhaseLogs = activeSprint?.logs && activeSprint.logs.length > 0
+            ? activeSprint.logs
+            : (activeSprint?.phaseNumber === 1 || !activeSprint)
+                ? challenge.logs || []
+                : activeSprint?.logs || [];
+
+        const completed = currentPhaseLogs.filter((l) => l.status === 'completed').length;
+        const rate = targetDays > 0 ? Math.round((completed / targetDays) * 100) : 0;
+        const remaining = Math.max(0, targetDays - completed);
 
         // Calculate consecutive completed streak
         let currentStreak = 0;
         if (!upcoming && currentDay >= 1) {
-            const todayLog = challenge.logs.find((l) => Number(l.dayNumber) === currentDay);
+            const todayLog = currentPhaseLogs.find((l) => Number(l.dayNumber) === currentDay);
             let checkDay = todayLog?.status === 'completed' ? currentDay : currentDay - 1;
             while (checkDay >= 1) {
-                const log = challenge.logs.find((l) => Number(l.dayNumber) === checkDay);
+                const log = currentPhaseLogs.find((l) => Number(l.dayNumber) === checkDay);
                 if (log?.status === 'completed') {
                     currentStreak++;
                     checkDay--;
@@ -118,19 +200,21 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
             successRate: rate,
             remainingDays: remaining,
             streak: currentStreak,
+            phaseTargetDays: targetDays,
+            phaseLogs: currentPhaseLogs,
         };
-    }, [challenge]);
+    }, [challenge, activeSprint]);
 
-    // Build the 7-row calendar grid for the total challenge duration
+    // Build the 7-row calendar grid for the selected phase duration
     const gridWeeks = useMemo(() => {
-        const totalDays = challenge.targetDays;
+        const totalDays = phaseTargetDays;
         const weeks: {
             weekIndex: number;
             days: ({
                 dayNumber: number;
                 date: Date;
                 dateStr: string;
-                dayOfWeek: number; // 0=Mon, 6=Sun
+                dayOfWeek: number;
                 log?: ChallengeLog;
                 isToday: boolean;
                 isPast: boolean;
@@ -138,13 +222,11 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
             } | null)[];
         }[] = [];
 
-        // Figure out starting day of week (Monday as index 0)
         const startDayOfWeek = (startDateObj.getDay() + 6) % 7;
 
         let currentWeekDays: any[] = [];
         let weekIndex = 1;
 
-        // Pad first week if start day is not Monday
         for (let p = 0; p < startDayOfWeek; p++) {
             currentWeekDays.push(null);
         }
@@ -152,7 +234,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
         for (let dayNum = 1; dayNum <= totalDays; dayNum++) {
             const dayDate = new Date(startDateObj.getTime() + (dayNum - 1) * 86400000);
             const dateStr = dayDate.toISOString().split('T')[0];
-            const log = challenge.logs.find((l) => Number(l.dayNumber) === dayNum);
+            const log = phaseLogs.find((l) => Number(l.dayNumber) === dayNum);
 
             const isToday = !isUpcoming && dayNum === currentDayNumber;
             const isPast = !isUpcoming && dayNum < currentDayNumber;
@@ -190,10 +272,10 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
         }
 
         return weeks;
-    }, [challenge, startDateObj, currentDayNumber, isUpcoming]);
+    }, [phaseTargetDays, phaseLogs, startDateObj, currentDayNumber, isUpcoming]);
 
-    // Today's log if present
-    const todayLog = challenge.logs.find((l) => Number(l.dayNumber) === currentDayNumber);
+    // Today's log for the active phase if present
+    const todayLog = phaseLogs.find((l) => Number(l.dayNumber) === currentDayNumber);
 
     const handleOpenDayModal = (dayNumber: number, dateStr: string, log?: ChallengeLog) => {
         setSelectedDayForModal({
@@ -203,14 +285,13 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
         });
     };
 
-    const challengeId = challenge.id || challenge._id;
-
     return (
         <div className="space-y-6 animate-in fade-in duration-300 pb-12">
             {/* Top Navigation & Challenge Header Card */}
             <ChallengeDetailHeader
                 challenge={challenge}
                 accentColor={accentColor}
+                phaseTargetDays={phaseTargetDays}
                 onBack={onBack}
                 onEdit={() => setIsEditModalOpen(true)}
                 onDelete={() => setIsDeleteModalOpen(true)}
@@ -223,7 +304,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                         handleOpenDayModal(
                             1,
                             startDateObj.toISOString().split('T')[0],
-                            challenge.logs.find((l) => Number(l.dayNumber) === 1)
+                            phaseLogs.find((l) => Number(l.dayNumber) === 1)
                         );
                     } else {
                         handleOpenDayModal(
@@ -244,6 +325,26 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                 targetEndDateObj={targetEndDateObj}
                 isTodayCompleted={todayLog?.status === 'completed'}
             />
+
+            {/* Sprints Navigator */}
+            <SprintPhaseNavigator
+                sprints={sprints}
+                activeSprintId={activeSprint?.id || sprints[0]?.id}
+                accentColor={accentColor}
+                onSelectSprint={(id) => setSelectedSprintId(id)}
+                onStartNextSprintPrompt={() => setIsStartSprintModalOpen(true)}
+                onCompleteCurrentSprintPrompt={(sprint) => setSprintToComplete(sprint)}
+            />
+
+            {/* Retrospective Summary Banner if active phase is completed */}
+            {activeSprint && activeSprint.status === 'completed' && activeSprint.retrospective && (
+                <SprintRetrospectiveBanner
+                    sprint={activeSprint}
+                    accentColor={accentColor}
+                    onStartNextSprintPrompt={() => setIsStartSprintModalOpen(true)}
+                    onEditRetrospectivePrompt={() => setSprintToComplete(activeSprint)}
+                />
+            )}
 
             {/* Main Content 2-Column Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -267,7 +368,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                 {/* Right Column: Daily Reflection Logs Feed */}
                 <div className="lg:col-span-4 space-y-4">
                     <ChallengeReflectionFeed
-                        logs={challenge.logs}
+                        logs={phaseLogs}
                         accentColor={accentColor}
                         onOpenDayModal={handleOpenDayModal}
                         onLogFirst={() =>
@@ -281,7 +382,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                 </div>
             </div>
 
-            {/* Log Modal */}
+            {/* Log Day Modal */}
             {selectedDayForModal && (
                 <LogChallengeDayModal
                     isOpen={true}
@@ -290,7 +391,10 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                     dateStr={selectedDayForModal.dateStr}
                     existingLog={selectedDayForModal.existingLog}
                     onSaveLog={async (logData) => {
-                        await onLogDay(challengeId, logData);
+                        await onLogDay(challengeId, {
+                            ...logData,
+                            sprintId: activeSprint?.id,
+                        });
                     }}
                     onDeleteLog={
                         selectedDayForModal.existingLog
@@ -299,6 +403,65 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                             }
                             : undefined
                     }
+                />
+            )}
+
+            {/* Complete Sprint Modal */}
+            {sprintToComplete && (
+                <CompleteSprintModal
+                    isOpen={true}
+                    onClose={() => setSprintToComplete(null)}
+                    sprint={sprintToComplete}
+                    accentColor={accentColor}
+                    onConfirmComplete={async (retro) => {
+                        if (onCompleteSprint) {
+                            await onCompleteSprint(challengeId, sprintToComplete.id, retro);
+                        } else {
+                            const updatedSprints = (challenge.sprints || []).map((s) =>
+                                s.id === sprintToComplete.id
+                                    ? { ...s, status: 'completed' as const, retrospective: retro }
+                                    : s
+                            );
+                            await onUpdateChallenge(challengeId, { sprints: updatedSprints });
+                        }
+                    }}
+                    onStartNextSprintPrompt={() => setIsStartSprintModalOpen(true)}
+                />
+            )}
+
+            {/* Start Next Sprint Modal */}
+            {isStartSprintModalOpen && (
+                <StartNextSprintModal
+                    isOpen={isStartSprintModalOpen}
+                    onClose={() => setIsStartSprintModalOpen(false)}
+                    challenge={challenge}
+                    accentColor={accentColor}
+                    onStartSprint={async (sprintData) => {
+                        const newSprintId = `sprint_${Date.now()}`;
+                        if (onStartNextSprint) {
+                            await onStartNextSprint(challengeId, sprintData);
+                        } else {
+                            const newSprint = {
+                                id: newSprintId,
+                                phaseNumber: (challenge.sprints?.length || 0) + 1,
+                                title: sprintData.title,
+                                targetDays: sprintData.targetDays,
+                                startDate: sprintData.startDate,
+                                targetEndDate: sprintData.targetEndDate,
+                                rule: sprintData.rule,
+                                status: 'active' as const,
+                                logs: [],
+                                createdAt: new Date().toISOString(),
+                            };
+                            await onUpdateChallenge(challengeId, {
+                                sprints: [...(challenge.sprints || []), newSprint],
+                                currentSprintId: newSprintId,
+                                status: 'active',
+                            });
+                        }
+                        // Automatically select the newly started phase
+                        setSelectedSprintId(newSprintId);
+                    }}
                 />
             )}
 
