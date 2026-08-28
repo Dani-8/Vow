@@ -12,7 +12,7 @@ import {
     Clock,
     Flame,
 } from 'lucide-react';
-import { Challenge } from '../../../../types';
+import { Challenge } from '../../../../../types';
 
 interface CreateChallengeModalProps {
     isOpen: boolean;

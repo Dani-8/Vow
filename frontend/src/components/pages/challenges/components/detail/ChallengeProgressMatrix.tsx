@@ -1,6 +1,6 @@
 import React from 'react';
 import { TrendingUp } from 'lucide-react';
-import { ChallengeLog } from '../../../../types';
+import { ChallengeLog } from '../../../../../types';
 
 interface ChallengeProgressMatrixProps {
     accentColor: string;
