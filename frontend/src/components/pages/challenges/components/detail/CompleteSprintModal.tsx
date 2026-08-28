@@ -98,3 +98,54 @@ export const CompleteSprintModal: React.FC<CompleteSprintModalProps> = ({
                         <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
                             How did this sprint go?
                         </label>
+                        <div className="flex items-center space-x-2">
+                            {[1, 2, 3, 4, 5].map((val) => (
+                                <button
+                                    key={val}
+                                    type="button"
+                                    onClick={() => setScore(val)}
+                                    className={`p-2.5 rounded-xl transition-all flex items-center space-x-1 ${
+                                        score >= val
+                                            ? 'neu-button text-amber-500 bg-amber-50/60'
+                                            : 'neu-button text-slate-400 opacity-60'
+                                    }`}
+                                >
+                                    <Star className={`w-4 h-4 ${score >= val ? 'fill-amber-500' : ''}`} />
+                                    <span className="text-xs font-bold">{val}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Final Result / Summary */}
+                    <div className="space-y-1.5">
+                        <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
+                            Final Milestone Result / Accomplishment *
+                        </label>
+                        <textarea
+                            rows={3}
+                            value={summary}
+                            onChange={(e) => setSummary(e.target.value)}
+                            placeholder="e.g. Mastered the alphabet and can read Russian signs smoothly without hesitation!"
+                            className="w-full px-3.5 py-2.5 rounded-xl neu-input text-xs font-medium resize-none"
+                            required
+                        />
+                    </div>
+
+                    {/* Key Lessons / Next Stage ideas */}
+                    <div className="space-y-1.5">
+                        <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
+                            Key Takeaways & Lessons (Optional)
+                        </label>
+                        <textarea
+                            rows={2}
+                            value={keyLearnings}
+                            onChange={(e) => setKeyLearnings(e.target.value)}
+                            placeholder="e.g. Practicing pronunciation early saved time. Ready for 100 verbs next."
+                            className="w-full px-3.5 py-2.5 rounded-xl neu-input text-xs font-medium resize-none"
+                        />
+                    </div>
+
+                    {/* Footer Actions */}
+                    <div className="pt-4 border-t border-slate-300/70 flex items-center justify-end space-x-2.5">
+                        <button
