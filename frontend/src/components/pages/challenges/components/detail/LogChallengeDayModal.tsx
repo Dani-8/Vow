@@ -9,7 +9,7 @@ import {
     Camera,
     Calendar,
 } from 'lucide-react';
-import { ChallengeLog } from '../../../../types';
+import { ChallengeLog } from '../../../../../types';
 
 interface LogChallengeDayModalProps {
     isOpen: boolean;
@@ -23,7 +23,6 @@ interface LogChallengeDayModalProps {
         status: 'completed' | 'rest' | 'missed';
         note: string;
         timeSpent?: string;
-        imageUrl?: string;
     }) => Promise<void>;
     onDeleteLog?: (logId: string) => Promise<void>;
 }
@@ -40,7 +39,6 @@ export const LogChallengeDayModal: React.FC<LogChallengeDayModalProps> = ({
     const [status, setStatus] = useState<'completed' | 'rest' | 'missed'>('completed');
     const [note, setNote] = useState('');
     const [timeSpent, setTimeSpent] = useState('1h 30m');
-    const [imageUrl, setImageUrl] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -48,6 +46,8 @@ export const LogChallengeDayModal: React.FC<LogChallengeDayModalProps> = ({
         if (existingLog) {
             setStatus(existingLog.status || 'completed');
             setNote(existingLog.note || '');
+            setTimeSpent(existingLog.timeSpent || '1h 30m');
+        } else {
             setTimeSpent(existingLog.timeSpent || '1h 30m');
             setImageUrl(existingLog.imageUrl || '');
         } else {
