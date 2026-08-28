@@ -1,5 +1,6 @@
 import { Router, Response } from 'express';
 import { Challenge, IChallengeLog } from '../models/Challenge.js';
+import { INITIAL_DEMO_CHALLENGES_SERVER } from '../data/demoChallenges.js';
 import { authenticateToken, AuthenticatedRequest } from '../middleware/auth.js';
 
 const router = Router();
@@ -7,47 +8,46 @@ const router = Router();
 // Get all challenges for the authenticated user
 router.get('/', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
     try {
-        const rawChallenges = await Challenge.find({ userId: req.userId });
+        let rawChallenges = await Challenge.find({ userId: req.userId });
+
+        // If user has no challenges yet (e.g. fresh session), auto-seed the demo challenges
+        if (rawChallenges.length === 0 && INITIAL_DEMO_CHALLENGES_SERVER.length > 0) {
+            for (const chData of INITIAL_DEMO_CHALLENGES_SERVER) {
+                await Challenge.create({
+                    ...chData,
+                    userId: req.userId,
+                });
+            }
+            rawChallenges = await Challenge.find({ userId: req.userId });
+        } else {
+            // Update or enrich existing Russian challenge with multi-phase demo sprints if needed
+            const russianDemo = INITIAL_DEMO_CHALLENGES_SERVER.find(
+                (c) => c.id === 'ch-russian-phases' || c.title === 'Learn Conversational Russian'
+            );
+            if (russianDemo) {
+                for (const ch of rawChallenges) {
+                    if (
+                        (ch.id === 'ch-russian-phases' ||
+                            ch.id === 'challenge-russian-mastery-3' ||
+                            ch.title === 'Learn Conversational Russian') &&
+                        (!ch.sprints || ch.sprints.length <= 1)
+                    ) {
+                        ch.sprints = russianDemo.sprints;
+                        ch.currentSprintId = russianDemo.currentSprintId;
+                        ch.targetDays = russianDemo.targetDays;
+                        ch.rule = russianDemo.rule;
+                        ch.logs = russianDemo.logs;
+                        await ch.save();
+                    }
+                }
+            }
+        }
+
         const challenges = rawChallenges.map((c) => c.toObject());
         return res.json({ challenges });
     } catch (err: any) {
         console.error('Error fetching challenges:', err);
         return res.status(500).json({ error: 'Failed to fetch challenges' });
-    }
-});
-
-// Get a single challenge by ID
-router.get('/:id', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
-    try {
-        const challenge = await Challenge.findOne({ id: req.params.id, userId: req.userId });
-        if (!challenge) {
-            return res.status(404).json({ error: 'Challenge not found' });
-        }
-        return res.json({ challenge: challenge.toObject() });
-    } catch (err: any) {
-        console.error('Error fetching challenge:', err);
-        return res.status(500).json({ error: 'Failed to fetch challenge' });
-    }
-});
-
-// Create a new challenge
-router.post('/', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
-    try {
-        const {
-            id,
-            title,
-            description,
-            category,
-            color,
-            icon,
-            targetDays,
-            startDate,
-            targetEndDate,
-            rule,
-            tags,
-            status,
-            logs,
-        } = req.body;
 
         if (!title || typeof title !== 'string') {
             return res.status(400).json({ error: 'Challenge title is required' });
