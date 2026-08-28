@@ -73,8 +73,8 @@ export const ChallengeRulesAndTags: React.FC<ChallengeRulesAndTagsProps> = ({
             <div className="neu-card p-4 bg-[#E0E5EC] flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                     <div className="w-9 h-9 rounded-xl neu-button flex items-center justify-center bg-amber-50 shrink-0"
-                     style={{ color: accentColor }}
-                     >
+                        style={{ color: accentColor }}
+                    >
                         <Lightbulb className="w-4 h-4" />
                     </div>
                     <div>
