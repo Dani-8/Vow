@@ -7,8 +7,29 @@ export interface ChallengeLog {
   status: 'completed' | 'rest' | 'missed';
   note: string;
   timeSpent?: string;
-  imageUrl?: string;
   createdAt: string;
+  updatedAt?: string;
+}
+
+export interface SprintRetrospective {
+  completedAt: string;
+  summary: string;
+  score?: number; // 1 to 5 rating
+  keyLearnings?: string;
+}
+
+export interface ChallengeSprint {
+  id: string;
+  phaseNumber: number;
+  title: string;
+  targetDays: number;
+  startDate: string;
+  targetEndDate?: string;
+  rule?: string;
+  status: 'active' | 'completed' | 'paused';
+  logs: ChallengeLog[];
+  retrospective?: SprintRetrospective;
+  createdAt?: string;
   updatedAt?: string;
 }
 
@@ -28,6 +49,8 @@ export interface Challenge {
   tags: string[];
   status: 'active' | 'completed' | 'paused';
   logs: ChallengeLog[];
+  sprints?: ChallengeSprint[];
+  currentSprintId?: string;
   createdAt?: string;
   updatedAt?: string;
 }

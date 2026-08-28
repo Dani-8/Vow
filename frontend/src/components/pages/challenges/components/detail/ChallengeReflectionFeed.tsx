@@ -1,6 +1,6 @@
 import React from 'react';
 import { BookOpen, MoreVertical, Clock } from 'lucide-react';
-import { ChallengeLog } from '../../../../types';
+import { ChallengeLog } from '../../../../../types';
 
 interface ChallengeReflectionFeedProps {
     logs: ChallengeLog[];
@@ -94,17 +94,6 @@ export const ChallengeReflectionFeed: React.FC<ChallengeReflectionFeedProps> = (
                                         <p className="text-xs font-medium text-slate-700 leading-relaxed">
                                             {log.note}
                                         </p>
-                                    )}
-
-                                    {log.imageUrl && (
-                                        <div className="mt-2 rounded-lg overflow-hidden border border-slate-200/60 max-h-32">
-                                            <img
-                                                src={log.imageUrl}
-                                                alt={`Day ${log.dayNumber} screenshot`}
-                                                className="w-full h-full object-cover"
-                                                referrerPolicy="no-referrer"
-                                            />
-                                        </div>
                                     )}
 
                                     {log.timeSpent && log.timeSpent !== '—' && (

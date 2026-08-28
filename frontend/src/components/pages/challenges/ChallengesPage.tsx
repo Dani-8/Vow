@@ -1,12 +1,12 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Trophy, HelpCircle } from 'lucide-react';
 import { Challenge } from '../../../types';
-import { CreateChallengeModal } from './components/CreateChallengeModal';
-import { HowChallengesWorkModal } from './components/HowChallengesWorkModal';
-import { DeleteChallengeModal } from './components/DeleteChallengeModal';
-import { ChallengeCard } from './components/ChallengeCard';
-import { ChallengesActionBar } from './components/ChallengesActionBar';
-import { ChallengesEmptyState } from './components/ChallengesEmptyState';
+import { ChallengeCard } from './components/list/ChallengeCard';
+import { ChallengesActionBar } from './components/list/ChallengesActionBar';
+import { ChallengesEmptyState } from './components/list/ChallengesEmptyState';
+import { HowChallengesWorkModal } from './components/list/HowChallengesWorkModal';
+import { CreateChallengeModal } from './components/shared/CreateChallengeModal';
+import { DeleteChallengeModal } from './components/shared/DeleteChallengeModal';
 
 interface ChallengesPageProps {
     challenges: Challenge[];
