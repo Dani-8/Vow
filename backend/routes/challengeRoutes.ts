@@ -148,41 +148,53 @@ router.put('/:id', authenticateToken, async (req: AuthenticatedRequest, res: Res
         }
 
         if (req.body.title !== undefined) challenge.title = String(req.body.title).trim();
+        if (req.body.description !== undefined) challenge.description = String(req.body.description);
+        if (req.body.category !== undefined) challenge.category = String(req.body.category);
+        if (req.body.color !== undefined) challenge.color = String(req.body.color);
+        if (req.body.icon !== undefined) challenge.icon = String(req.body.icon);
+        if (req.body.targetDays !== undefined) challenge.targetDays = Number(req.body.targetDays);
+        if (req.body.startDate !== undefined) challenge.startDate = String(req.body.startDate);
+        if (req.body.targetEndDate !== undefined) challenge.targetEndDate = String(req.body.targetEndDate);
+        if (req.body.rule !== undefined) challenge.rule = String(req.body.rule);
+        if (Array.isArray(req.body.tags)) challenge.tags = req.body.tags;
+        if (req.body.status !== undefined) challenge.status = req.body.status;
+        if (Array.isArray(req.body.logs)) challenge.logs = req.body.logs;
+        if (Array.isArray(req.body.sprints)) challenge.sprints = req.body.sprints;
+        if (req.body.currentSprintId !== undefined) challenge.currentSprintId = req.body.currentSprintId;
+
         await challenge.save();
-        return res.json({ challenge: challenge.toObject(), log: newLog });
+        return res.json({ challenge: challenge.toObject() });
     } catch (err: any) {
-        console.error('Error logging day for challenge:', err);
-        return res.status(500).json({ error: 'Failed to log day' });
+        console.error('Error updating challenge:', err);
+        return res.status(500).json({ error: 'Failed to update challenge' });
     }
 });
 
-// Delete a day log
-router.delete('/:id/log/:logId', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+// Add or update a day log in a challenge
+router.post('/:id/log', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
     try {
         const challenge = await Challenge.findOne({ id: req.params.id, userId: req.userId });
         if (!challenge) {
             return res.status(404).json({ error: 'Challenge not found' });
         }
 
-        challenge.logs = challenge.logs.filter((l) => l.id !== req.params.logId && String(l.dayNumber) !== req.params.logId);
-        await challenge.save();
+        const { dayNumber, date, status, note, timeSpent, imageUrl, sprintId } = req.body;
+        const targetDay = Number(dayNumber) || 1;
+        const logDate = date || new Date().toISOString().split('T')[0];
+        const logStatus = status || 'completed';
 
-        return res.json({ challenge: challenge.toObject() });
-    } catch (err: any) {
-        console.error('Error deleting log:', err);
-        return res.status(500).json({ error: 'Failed to delete log' });
-    }
-});
+        const existingIndex = challenge.logs.findIndex((l) => Number(l.dayNumber) === targetDay);
 
-// Delete an entire challenge
-router.delete('/:id', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
-    try {
-        await Challenge.deleteOne({ id: req.params.id, userId: req.userId });
-        return res.json({ success: true });
-    } catch (err: any) {
-        console.error('Error deleting challenge:', err);
-        return res.status(500).json({ error: 'Failed to delete challenge' });
-    }
-});
+        const newLog: IChallengeLog = {
+            id: existingIndex >= 0 ? challenge.logs[existingIndex].id : `log_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
+            dayNumber: targetDay,
+            date: logDate,
+            status: logStatus,
+            note: note || '',
+            timeSpent: timeSpent || '',
+            imageUrl: imageUrl || '',
+            createdAt: existingIndex >= 0 ? challenge.logs[existingIndex].createdAt : new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+        };
 
-export default router;
+        if (existingIndex >= 0) {
