@@ -148,6 +148,8 @@ export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
                                 >
                                     <Coffee className="w-3.5 h-3.5" />
                                     <span>{challenge.status === 'paused' ? 'Resume Sprint' : 'Pause Sprint'}</span>
+                                </button>
+                                <div className="my-1 border-t border-slate-300/60" />
                                 <button
                                     onClick={() => {
                                         setIsMenuOpen(false);
@@ -196,8 +198,6 @@ export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
                                     <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full neu-inset text-amber-700 bg-amber-50">
                                         Paused
                                     </span>
-                                ) : null}
-                            </div>
                             <h1 className="text-xl sm:text-2xl font-black text-[#1a1c35] tracking-tight">
                                 {challenge.title}
                             </h1>
