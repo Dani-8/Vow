@@ -1,6 +1,6 @@
 import React from 'react';
 import { BookOpen, MoreVertical, Clock } from 'lucide-react';
-import { ChallengeLog } from '../../../../types';
+import { ChallengeLog } from '../../../../../types';
 
 interface ChallengeReflectionFeedProps {
     logs: ChallengeLog[];
