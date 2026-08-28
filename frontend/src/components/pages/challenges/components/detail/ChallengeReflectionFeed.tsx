@@ -98,17 +98,6 @@ export const ChallengeReflectionFeed: React.FC<ChallengeReflectionFeedProps> = (
 
                                     {log.timeSpent && log.timeSpent !== '—' && (
                                         <div
-                                            <img
-                                                src={log.imageUrl}
-                                                alt={`Day ${log.dayNumber} screenshot`}
-                                                className="w-full h-full object-cover"
-                                                referrerPolicy="no-referrer"
-                                            />
-                                        </div>
-                                    )}
-
-                                    {log.timeSpent && log.timeSpent !== '—' && (
-                                        <div
                                             className="flex items-center space-x-1 text-[10px] font-bold w-fit px-2 py-0.5 rounded neu-inset"
                                             style={{ color: accentColor, backgroundColor: `${accentColor}18` }}
                                         >
