@@ -46,10 +46,10 @@ const CATEGORY_ICONS: Record<string, any> = {
     mindfulness: Sparkles,
 };
 
-
 export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
     challenge,
     accentColor,
+    phaseTargetDays,
     onBack,
     onEdit,
     onDelete,
@@ -77,8 +77,10 @@ export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
         return () => window.removeEventListener('click', handleClickOutside);
     }, [isMenuOpen]);
 
+    const activeDays = phaseTargetDays || challenge.targetDays;
+
     const handleShare = () => {
-        const text = `I'm on Day ${currentDayNumber} of ${challenge.targetDays} on "${challenge.title}" in Vow! #VowChallenge`;
+        const text = `I'm on Day ${currentDayNumber} of ${activeDays} on "${challenge.title}" in Vow! #VowChallenge`;
         if (navigator.clipboard) {
             navigator.clipboard.writeText(text);
             setShowShareToast(true);
@@ -96,8 +98,6 @@ export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
                     onClick={onBack}
                     className="neu-button px-4 py-2 rounded-xl text-xs font-bold text-[#717699] hover:text-[#1a1c35] flex items-center space-x-2 w-fit"
                 >
-                    <ArrowLeft className="w-4 h-4" />
-                    <span>Back to Challenges</span>
                 </button>
 
                 <div className="flex items-center space-x-2 self-end sm:self-auto">
