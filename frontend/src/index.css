@@ -53,6 +53,10 @@
         transform: translateY(0);
     }
 
+    .neu-text-primary {
+        color: #549acb;
+    }
+
     .neu-input {
         background: #E0E5EC;
         box-shadow: inset 5px 5px 10px rgba(163, 177, 198, 0.6), inset -5px -5px 10px rgba(255, 255, 255, 0.5);

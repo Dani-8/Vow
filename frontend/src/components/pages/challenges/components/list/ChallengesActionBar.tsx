@@ -23,9 +23,27 @@ export const ChallengesActionBar: React.FC<ChallengesActionBarProps> = ({
 
     // Define the filter buttons with their respective labels, counts, and colors
     const filters = [
-        { key: 'active' as const, label: 'Active', count: counts.active, color: 'indigo' },
-        { key: 'completed' as const, label: 'Completed', count: counts.completed, color: 'emerald' },
-        { key: 'paused' as const, label: 'Paused', count: counts.paused, color: 'amber' },
+        {
+            key: 'active' as const,
+            label: 'Active',
+            count: counts.active,
+            activeClass: 'text-[#549acb] bg-[#eef4f9]',
+            countClass: 'text-[#549acb]',
+        },
+        {
+            key: 'completed' as const,
+            label: 'Completed',
+            count: counts.completed,
+            activeClass: 'text-emerald-700 bg-emerald-50/70',
+            countClass: 'text-emerald-700',
+        },
+        {
+            key: 'paused' as const,
+            label: 'Paused',
+            count: counts.paused,
+            activeClass: 'text-amber-700 bg-amber-50/70',
+            countClass: 'text-amber-700',
+        },
     ];
 
     // Define the action buttons for Guide and Start a Challenge
@@ -38,17 +56,17 @@ export const ChallengesActionBar: React.FC<ChallengesActionBarProps> = ({
         <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3.5">
             {/* Left: Status Filter Tabs */}
             <div className="flex items-center space-x-2 overflow-visible shrink-0">
-                {filters.map(({ key, label, count, color }) => (
+                {filters.map(({ key, label, count, activeClass, countClass }) => (
                     <button
                         key={key}
                         onClick={() => onFilterChange(key)}
                         className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0 ${activeFilter === key
-                            ? `neu-inset text-${color}-700 bg-${color}-50/70 font-black`
+                            ? `neu-inset ${activeClass} font-black`
                             : 'neu-button text-[#717699] hover:text-[#1a1c35]'
                             }`}
                     >
                         <span>{label}</span>
-                        <span className={`text-[10px] px-1.5 py-0.2 rounded-full neu-inset text-${color}-700`}>
+                        <span className={`text-[10px] px-1.5 py-0.2 rounded-full neu-inset ${countClass}`}>
                             {count}
                         </span>
                     </button>
