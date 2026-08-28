@@ -96,8 +96,8 @@ export const ChallengeReflectionFeed: React.FC<ChallengeReflectionFeedProps> = (
                                         </p>
                                     )}
 
-                                    {log.imageUrl && (
-                                        <div className="mt-2 rounded-lg overflow-hidden border border-slate-200/60 max-h-32">
+                                    {log.timeSpent && log.timeSpent !== '—' && (
+                                        <div
                                             <img
                                                 src={log.imageUrl}
                                                 alt={`Day ${log.dayNumber} screenshot`}
