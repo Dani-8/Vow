@@ -248,3 +248,33 @@ router.delete('/:id/log/:logId', authenticateToken, async (req: AuthenticatedReq
         if (Array.isArray(challenge.sprints)) {
             challenge.sprints = challenge.sprints.map((s: any) => {
                 if (Array.isArray(s.logs)) {
+                    return {
+                        ...s,
+                        logs: s.logs.filter((l: any) => l.id !== logId && String(l.dayNumber) !== logId),
+                    };
+                }
+                return s;
+            });
+        }
+
+        await challenge.save();
+
+        return res.json({ challenge: challenge.toObject() });
+    } catch (err: any) {
+        console.error('Error deleting log:', err);
+        return res.status(500).json({ error: 'Failed to delete log' });
+    }
+});
+
+// Delete an entire challenge
+router.delete('/:id', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        await Challenge.deleteOne({ id: req.params.id, userId: req.userId });
+        return res.json({ success: true });
+    } catch (err: any) {
+        console.error('Error deleting challenge:', err);
+        return res.status(500).json({ error: 'Failed to delete challenge' });
+    }
+});
+
+export default router;
