@@ -63,20 +63,18 @@ export const SprintPhaseNavigator: React.FC<SprintPhaseNavigatorProps> = ({
                         <button
                             key={sprint.id}
                             onClick={() => onSelectSprint(sprint.id)}
-                            className={`px-3.5 py-2.5 rounded-xl text-left transition-all shrink-0 flex items-center space-x-3 min-w-[200px] ${
-                                isSelected
-                                    ? 'neu-inset bg-white/70 shadow-sm border border-slate-300/80'
-                                    : 'neu-button bg-[#E0E5EC] hover:bg-white/40'
-                            }`}
+                            className={`px-3.5 py-2.5 rounded-xl text-left transition-all shrink-0 flex items-center space-x-3 min-w-[200px] ${isSelected
+                                ? 'neu-inset bg-white/70 shadow-sm border border-slate-300/80'
+                                : 'neu-button bg-[#E0E5EC] hover:bg-white/40'
+                                }`}
                         >
                             <div
-                                className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 text-xs font-black ${
-                                    isCompleted
-                                        ? 'bg-emerald-100 text-emerald-700'
-                                        : isSelected
-                                            ? 'text-white'
-                                            : 'bg-slate-200 text-slate-700'
-                                }`}
+                                className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 text-xs font-black ${isCompleted
+                                    ? 'bg-emerald-100 text-emerald-700'
+                                    : isSelected
+                                        ? 'text-white'
+                                        : 'bg-slate-200 text-slate-700'
+                                    }`}
                                 style={
                                     isSelected && !isCompleted
                                         ? { backgroundColor: accentColor }
