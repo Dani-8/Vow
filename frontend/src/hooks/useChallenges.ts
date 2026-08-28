@@ -96,6 +96,7 @@ export function useChallenges(user: User | null) {
             note?: string;
             timeSpent?: string;
             imageUrl?: string;
+            sprintId?: string;
         }
     ) => {
         try {
@@ -146,5 +147,69 @@ export function useChallenges(user: User | null) {
         deleteChallenge: handleDeleteChallenge,
         logDay: handleLogDay,
         deleteLog: handleDeleteLog,
+        startNextSprint: async (
+            challengeId: string,
+            sprintData: {
+                title: string;
+                targetDays: number;
+                startDate: string;
+                targetEndDate?: string;
+                rule?: string;
+            }
+        ) => {
+            const current = challenges.find((c) => (c.id || c._id) === challengeId);
+            if (!current) return;
+
+            const existingSprints = current.sprints || [];
+            const newSprintId = `sprint_${Date.now()}`;
+            const newSprint = {
+                id: newSprintId,
+                phaseNumber: existingSprints.length + 1,
+                title: sprintData.title,
+                targetDays: sprintData.targetDays,
+                startDate: sprintData.startDate,
+                targetEndDate: sprintData.targetEndDate,
+                rule: sprintData.rule,
+                status: 'active' as const,
+                logs: [],
+                createdAt: new Date().toISOString(),
+            };
+
+            const updatedSprints = [...existingSprints, newSprint];
+            return await handleUpdateChallenge(challengeId, {
+                sprints: updatedSprints,
+                currentSprintId: newSprintId,
+                status: 'active',
+            });
+        },
+        completeSprint: async (
+            challengeId: string,
+            sprintId: string,
+            retrospective: {
+                completedAt: string;
+                summary: string;
+                score?: number;
+                keyLearnings?: string;
+            }
+        ) => {
+            const current = challenges.find((c) => (c.id || c._id) === challengeId);
+            if (!current || !current.sprints) return;
+
+            const updatedSprints = current.sprints.map((s) => {
+                if (s.id === sprintId) {
+                    return {
+                        ...s,
+                        status: 'completed' as const,
+                        retrospective,
+                        updatedAt: new Date().toISOString(),
+                    };
+                }
+                return s;
+            });
+
+            return await handleUpdateChallenge(challengeId, {
+                sprints: updatedSprints,
+            });
+        },
     };
 }
