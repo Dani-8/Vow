@@ -149,3 +149,23 @@ export const CompleteSprintModal: React.FC<CompleteSprintModalProps> = ({
                     {/* Footer Actions */}
                     <div className="pt-4 border-t border-slate-300/70 flex items-center justify-end space-x-2.5">
                         <button
+                            type="button"
+                            onClick={onClose}
+                            className="px-4 py-2 rounded-xl neu-button text-xs font-bold text-slate-600 hover:text-slate-900"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="px-5 py-2.5 rounded-xl neu-button-primary text-xs font-bold text-white shadow-md disabled:opacity-50 flex items-center space-x-1.5"
+                        >
+                            <CheckCircle2 className="w-4 h-4" />
+                            <span>{isSubmitting ? 'Recording...' : 'Record Result & Finish Sprint'}</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+};
