@@ -198,6 +198,27 @@ export const AppRouter: React.FC<AppRouterProps> = ({
         stats={stats}
         onToggleComplete={onToggleComplete}
         onCheckInToday={onCheckInToday}
+        onOpenCreateModal={onOpenCreateModal}
+        onOpenAIAssist={onOpenAIAssist}
+        onViewTaskDetail={(t) => {
+          setSelectedTaskForDetail(t);
+          navigate(`/app/task/${getTaskSlug(t)}`);
+        }}
+      />
+    );
+  }
+
+  if (activeView === 'stats') {
+    return <StatsView stats={stats} tasks={tasks} privateTasks={privateTasks} />;
+  }
+
+  if (activeView === 'task-map') {
+    return <TaskMapPage tasks={[...tasks, ...privateTasks]} onBackToHome={() => navigateToView('home')} />;
+  }
+
+  if (activeView === 'challenge-detail' || (selectedChallenge && activeView === 'challenges' && location.pathname.startsWith('/app/challenges/'))) {
+    const challengeParam = decodeURIComponent(location.pathname.replace('/app/challenges/', ''));
+    const currentChallenge =
       challenges.find(
         (c) =>
           (c.id && c.id.toLowerCase() === challengeParam.toLowerCase()) ||
@@ -219,35 +240,14 @@ export const AppRouter: React.FC<AppRouterProps> = ({
           onDeleteChallenge={onDeleteChallenge}
           onLogDay={onLogChallengeDay}
           onDeleteLog={onDeleteChallengeLog}
+          onStartNextSprint={onStartNextSprint}
+          onCompleteSprint={onCompleteSprint}
         />
       );
     }
   }
 
   if (activeView === 'challenges') {
-    return (
-      <ChallengesPage
-        challenges={challenges}
-        onSelectChallenge={(ch) => {
-          setSelectedChallenge(ch);
-          navigateToView('challenge-detail', ch.id || ch._id);
-        }}
-        onCreateChallenge={onCreateChallenge}
-        onUpdateChallenge={onUpdateChallenge}
-        onDeleteChallenge={onDeleteChallenge}
-      />
-    );
-  }
-
-  if (activeView === 'private' && !isPrivateUnlocked) {
-    return <LockedVaultCard onEnterPin={onOpenPinModal} />;
-  }
-
-  return (
-    <div className="space-y-6">
-      {/* Controls Bar */}
-      <ControlsBar
-        searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         activeFilter={filter}
         onFilterChange={setFilter}
