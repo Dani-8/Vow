@@ -48,13 +48,9 @@ export const LogChallengeDayModal: React.FC<LogChallengeDayModalProps> = ({
             setNote(existingLog.note || '');
             setTimeSpent(existingLog.timeSpent || '1h 30m');
         } else {
-            setTimeSpent(existingLog.timeSpent || '1h 30m');
-            setImageUrl(existingLog.imageUrl || '');
-        } else {
             setStatus('completed');
             setNote('');
             setTimeSpent('1h 00m');
-            setImageUrl('');
         }
         setError(null);
     }, [existingLog, isOpen, dayNumber]);
@@ -72,7 +68,6 @@ export const LogChallengeDayModal: React.FC<LogChallengeDayModalProps> = ({
                 status,
                 note: note.trim(),
                 timeSpent: status === 'completed' ? timeSpent : '—',
-                imageUrl: imageUrl.trim(),
             });
             onClose();
         } catch (err: any) {
@@ -202,20 +197,6 @@ export const LogChallengeDayModal: React.FC<LogChallengeDayModalProps> = ({
                             </div>
                         </div>
                     )}
-
-                    {/* Image URL / Screenshot */}
-                    <div>
-                        <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600 mb-1.5">
-                            Image / Screenshot Proof (Optional URL)
-                        </label>
-                        <input
-                            type="url"
-                            value={imageUrl}
-                            onChange={(e) => setImageUrl(e.target.value)}
-                            placeholder="https://images.unsplash.com/... or screenshot URL"
-                            className="w-full px-4 py-2 rounded-xl neu-input text-xs font-medium"
-                        />
-                    </div>
 
                     {/* Actions */}
                     <div className="pt-3 border-t border-slate-200/60 flex items-center justify-between">
