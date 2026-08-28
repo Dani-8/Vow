@@ -98,6 +98,25 @@ export const AppRouter: React.FC<AppRouterProps> = ({
   location,
   user,
   tasks,
+  privateTasks,
+  filteredTasks,
+  stats,
+  isPrivateUnlocked,
+  selectedTaskForDetail,
+  setSelectedTaskForDetail,
+  searchQuery,
+  setSearchQuery,
+  filter,
+  setFilter,
+  navigate,
+  navigateToView,
+  setIsPrivateUnlocked,
+  onCheckInToday,
+  onToggleComplete,
+  onTogglePrivate,
+  onEditTask,
+  onDeleteTask,
+  onOpenAIAssist,
   onOpenCreateModal,
   onOpenPinModal,
   challenges,
@@ -108,6 +127,8 @@ export const AppRouter: React.FC<AppRouterProps> = ({
   onDeleteChallenge,
   onLogChallengeDay,
   onDeleteChallengeLog,
+  onStartNextSprint,
+  onCompleteSprint,
 }) => {
   if (activeView === 'task-detail') {
     const activeTaskParam = decodeURIComponent(location.pathname.replace('/app/task/', ''));
@@ -127,27 +148,6 @@ export const AppRouter: React.FC<AppRouterProps> = ({
             .replace(/[\s_-]+/g, '-')
             .replace(/^-+|-+$/g, '') === paramLower
       ) ||
-      selectedTaskForDetail ||
-      allTasks[0] || {
-        _id: 'default',
-        userId: user?.id || 'demo',
-        title: 'Draft Q3 Personal Growth Blueprint',
-        description:
-          'Outline key milestones for skill acquisition and daily habit consistency for Q3.',
-        tags: ['GROWTH', 'STRATEGY'],
-        status: 'in_progress',
-        priority: 'High',
-        isPrivate: false,
-        isHabit: false,
-        currentStreak: 4,
-        bestStreak: 12,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
-
-    return (
-      <TaskDetailPage
-        task={currentTask}
         onBack={() => {
           if (selectedTaskForDetail?.isPrivate || currentTask.isPrivate) {
             navigate('/app/vault');
