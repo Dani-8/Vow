@@ -298,3 +298,26 @@ export const AppRouter: React.FC<AppRouterProps> = ({
             }}
             className="neu-button px-3 py-1.5 rounded-xl text-xs font-bold text-[#717699] hover:text-purple-600"
           >
+            Lock Vault
+          </button>
+        </div>
+      )}
+
+      {/* Task Cards Grid */}
+      <TaskGrid
+        tasks={filteredTasks}
+        searchQuery={searchQuery}
+        onToggleComplete={onToggleComplete}
+        onTogglePrivate={(t) => onTogglePrivate(t)}
+        onOpenAIAssist={onOpenAIAssist}
+        onEditTask={onEditTask}
+        onDeleteTask={onDeleteTask}
+        onViewDetails={(t) => {
+          setSelectedTaskForDetail(t);
+          navigate(`/app/task/${getTaskSlug(t)}`);
+        }}
+        onCreateNewGoal={onOpenCreateModal}
+      />
+    </div>
+  );
+};
