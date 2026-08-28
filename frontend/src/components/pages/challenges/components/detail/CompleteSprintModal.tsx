@@ -104,11 +104,10 @@ export const CompleteSprintModal: React.FC<CompleteSprintModalProps> = ({
                                     key={val}
                                     type="button"
                                     onClick={() => setScore(val)}
-                                    className={`p-2.5 rounded-xl transition-all flex items-center space-x-1 ${
-                                        score >= val
+                                    className={`p-2.5 rounded-xl transition-all flex items-center space-x-1 ${score >= val
                                             ? 'neu-button text-amber-500 bg-amber-50/60'
                                             : 'neu-button text-slate-400 opacity-60'
-                                    }`}
+                                        }`}
                                 >
                                     <Star className={`w-4 h-4 ${score >= val ? 'fill-amber-500' : ''}`} />
                                     <span className="text-xs font-bold">{val}</span>
