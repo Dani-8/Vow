@@ -248,6 +248,29 @@ export const AppRouter: React.FC<AppRouterProps> = ({
   }
 
   if (activeView === 'challenges') {
+    return (
+      <ChallengesPage
+        challenges={challenges}
+        onSelectChallenge={(ch) => {
+          setSelectedChallenge(ch);
+          navigateToView('challenge-detail', ch.id || ch._id);
+        }}
+        onCreateChallenge={onCreateChallenge}
+        onUpdateChallenge={onUpdateChallenge}
+        onDeleteChallenge={onDeleteChallenge}
+      />
+    );
+  }
+
+  if (activeView === 'private' && !isPrivateUnlocked) {
+    return <LockedVaultCard onEnterPin={onOpenPinModal} />;
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Controls Bar */}
+      <ControlsBar
+        searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         activeFilter={filter}
         onFilterChange={setFilter}
@@ -275,26 +298,3 @@ export const AppRouter: React.FC<AppRouterProps> = ({
             }}
             className="neu-button px-3 py-1.5 rounded-xl text-xs font-bold text-[#717699] hover:text-purple-600"
           >
-            Lock Vault
-          </button>
-        </div>
-      )}
-
-      {/* Task Cards Grid */}
-      <TaskGrid
-        tasks={filteredTasks}
-        searchQuery={searchQuery}
-        onToggleComplete={onToggleComplete}
-        onTogglePrivate={(t) => onTogglePrivate(t)}
-        onOpenAIAssist={onOpenAIAssist}
-        onEditTask={onEditTask}
-        onDeleteTask={onDeleteTask}
-        onViewDetails={(t) => {
-          setSelectedTaskForDetail(t);
-          navigate(`/app/task/${getTaskSlug(t)}`);
-        }}
-        onCreateNewGoal={onOpenCreateModal}
-      />
-    </div>
-  );
-};
