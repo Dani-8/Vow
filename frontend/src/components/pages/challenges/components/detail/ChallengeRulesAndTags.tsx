@@ -1,6 +1,6 @@
 import React from 'react';
 import { ClipboardCheck, Tag, Edit3, Lightbulb, ChevronRight } from 'lucide-react';
-import { Challenge } from '../../../../types';
+import { Challenge } from '../../../../../types';
 
 interface ChallengeRulesAndTagsProps {
     challenge: Challenge;
