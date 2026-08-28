@@ -165,8 +165,8 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
         const currentPhaseLogs = activeSprint?.logs && activeSprint.logs.length > 0
             ? activeSprint.logs
             : (activeSprint?.phaseNumber === 1 || !activeSprint)
-            ? challenge.logs || []
-            : activeSprint?.logs || [];
+                ? challenge.logs || []
+                : activeSprint?.logs || [];
 
         const completed = currentPhaseLogs.filter((l) => l.status === 'completed').length;
         const rate = targetDays > 0 ? Math.round((completed / targetDays) * 100) : 0;
@@ -399,8 +399,8 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                     onDeleteLog={
                         selectedDayForModal.existingLog
                             ? async (logId) => {
-                                  await onDeleteLog(challengeId, logId);
-                              }
+                                await onDeleteLog(challengeId, logId);
+                            }
                             : undefined
                     }
                 />
