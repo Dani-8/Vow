@@ -98,6 +98,8 @@ export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
                     onClick={onBack}
                     className="neu-button px-4 py-2 rounded-xl text-xs font-bold text-[#717699] hover:text-[#1a1c35] flex items-center space-x-2 w-fit"
                 >
+                    <ArrowLeft className="w-4 h-4" />
+                    <span>Back to Challenges</span>
                 </button>
 
                 <div className="flex items-center space-x-2 self-end sm:self-auto">
@@ -146,8 +148,6 @@ export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
                                 >
                                     <Coffee className="w-3.5 h-3.5" />
                                     <span>{challenge.status === 'paused' ? 'Resume Sprint' : 'Pause Sprint'}</span>
-                                </button>
-                                <div className="my-1 border-t border-slate-300/60" />
                                 <button
                                     onClick={() => {
                                         setIsMenuOpen(false);
