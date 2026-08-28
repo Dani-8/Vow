@@ -269,6 +269,7 @@ export const api = {
     note?: string;
     timeSpent?: string;
     imageUrl?: string;
+    sprintId?: string;
   }) {
     return fetchAPI<{ challenge: any; log: any }>(`/api/challenges/${id}/log`, {
       method: 'POST',
