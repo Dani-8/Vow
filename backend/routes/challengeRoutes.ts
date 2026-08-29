@@ -288,3 +288,13 @@ router.delete('/:id/log/:logId', authenticateToken, async (req: AuthenticatedReq
 
         const logId = req.params.logId;
         challenge.logs = challenge.logs.filter((l) => l.id !== logId && String(l.dayNumber) !== logId);
+
+        if (Array.isArray(challenge.sprints)) {
+            challenge.sprints = challenge.sprints.map((s: any) => {
+                if (Array.isArray(s.logs)) {
+                    return {
+                        ...s,
+                        logs: s.logs.filter((l: any) => l.id !== logId && String(l.dayNumber) !== logId),
+                    };
+                }
+                return s;
