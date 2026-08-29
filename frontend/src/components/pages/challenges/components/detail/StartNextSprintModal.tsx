@@ -198,56 +198,56 @@ export const StartNextSprintModal: React.FC<StartNextSprintModalProps> = ({
                                 type="button"
                                 onClick={() => setIsCustomDays(true)}
                                 className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                                    isCustomDays
+                                        ? 'neu-button-primary text-white shadow-sm'
+                                        : 'neu-button text-slate-600 hover:text-slate-900'
+                                }`}
+                            >
+                                Custom
+                            </button>
+                        </div>
+
+                        {isCustomDays && (
+                            <div className="flex items-center space-x-2 pt-1">
+                                <input
+                                    type="number"
+                                    min="1"
+                                    max="365"
+                                    value={customDaysInput}
+                                    onChange={(e) => setCustomDaysInput(e.target.value)}
+                                    className="w-24 px-3 py-2 rounded-xl neu-input text-xs font-bold"
+                                    required
+                                />
+                                <span className="text-[11px] font-bold text-[#717699]">Days sprint</span>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Start Date */}
+                    <div className="space-y-1.5">
+                        <div className="flex items-center justify-between">
+                            <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
+                                Sprint Start Date *
+                            </label>
+                            {lastSprint?.targetEndDate && (
+                                <span className="text-[10px] font-semibold text-[#717699]">
+                                    Previous phase ended {new Date(lastSprint.targetEndDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                                </span>
+                            )}
+                        </div>
                         <input
                             type="date"
                             value={startDate}
                             onChange={(e) => setStartDate(e.target.value)}
                             className="w-full px-3.5 py-2.5 rounded-xl neu-input text-xs font-bold"
+                            required
                         />
                     </div>
 
-                    {/* Sprint Rule */}
+                    {/* Evolving Sprint Rule */}
                     <div className="space-y-1.5">
-                        <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
-                            Phase Rule / Daily Goal
-                        </label>
-                        <input
-                            type="text"
-                            value={rule}
-                            onChange={(e) => setRule(e.target.value)}
-                            placeholder="e.g. Learn 6 new verbs daily and form 3 sentences."
-                            className="w-full px-3.5 py-2.5 rounded-xl neu-input text-xs font-medium"
-                        />
-                    </div>
-
-                    {/* Date Preview Card */}
-                    <div className="neu-card p-3 rounded-xl bg-[#E0E5EC] flex items-center justify-between text-xs font-bold text-slate-700">
-                        <div className="flex items-center space-x-1.5">
-                            <Calendar className="w-4 h-4" style={{ color: accentColor }} />
-                            <span>
-                                {startObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} –{' '}
-                                {endObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                            </span>
-                        </div>
-                        <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full neu-inset text-indigo-700">
-                            {activeDaysCount} Days Sprint
-                        </span>
-                    </div>
-
-                    {/* Footer Actions */}
-                    <div className="pt-4 border-t border-slate-300/70 flex items-center justify-end space-x-2.5">
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            className="px-4 py-2 rounded-xl neu-button text-xs font-bold text-slate-600 hover:text-slate-900"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            disabled={isSubmitting}
-                            className="px-5 py-2.5 rounded-xl neu-button-primary text-xs font-bold text-white shadow-md disabled:opacity-50 flex items-center space-x-1.5"
-                        >
+                        <div className="flex items-center justify-between">
+                            <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
                             <Sparkles className="w-4 h-4" />
                             <span>{isSubmitting ? 'Launching...' : 'Start Phase Sprint'}</span>
                         </button>
