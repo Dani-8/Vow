@@ -1,18 +1,16 @@
 import React from 'react';
-import { Award, Star, BookOpen, ArrowRight } from 'lucide-react';
+import { Award, Star, BookOpen } from 'lucide-react';
 import { ChallengeSprint } from '../../../../../types';
 
 interface SprintRetrospectiveBannerProps {
     sprint: ChallengeSprint;
     accentColor: string;
-    onStartNextSprintPrompt: () => void;
     onEditRetrospectivePrompt?: () => void;
 }
 
 export const SprintRetrospectiveBanner: React.FC<SprintRetrospectiveBannerProps> = ({
     sprint,
     accentColor,
-    onStartNextSprintPrompt,
     onEditRetrospectivePrompt,
 }) => {
     const retro = sprint.retrospective;
@@ -21,8 +19,8 @@ export const SprintRetrospectiveBanner: React.FC<SprintRetrospectiveBannerProps>
         <div className="neu-card p-5 sm:p-6 bg-[#E0E5EC] border-l-4 border-emerald-500 rounded-2xl space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-2xl neu-button flex items-center justify-center bg-emerald-50 text-emerald-600 shadow-sm shrink-0">
-                        <Award className="w-5 h-5" />
+                    <div className="w-10 h-10 rounded-2xl neu-button flex items-center justify-center bg-emerald-50 shadow-sm shrink-0">
+                        <Award className="w-5 h-5 text-emerald-600" />
                     </div>
                     <div>
                         <div className="flex items-center space-x-2">
@@ -52,13 +50,6 @@ export const SprintRetrospectiveBanner: React.FC<SprintRetrospectiveBannerProps>
                             Edit Takeaway
                         </button>
                     )}
-                    <button
-                        onClick={onStartNextSprintPrompt}
-                        className="px-4 py-2 rounded-xl neu-button-primary text-xs font-bold text-white flex items-center space-x-1.5 shadow-sm"
-                    >
-                        <span>Start Next Phase</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
                 </div>
             </div>
 

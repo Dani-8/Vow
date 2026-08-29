@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { X, Plus, Calendar, Sparkles } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Plus, Calendar, Sparkles, Copy, ArrowRight, ShieldCheck } from 'lucide-react';
 import { Challenge } from '../../../../../types';
 
 interface StartNextSprintModalProps {
@@ -31,7 +31,11 @@ export const StartNextSprintModal: React.FC<StartNextSprintModalProps> = ({
     accentColor,
     onStartSprint,
 }) => {
-    const nextPhaseNumber = (challenge.sprints?.length || 0) + 1;
+    const existingSprints = challenge.sprints || [];
+    const lastSprint = existingSprints.length > 0 ? existingSprints[existingSprints.length - 1] : null;
+    const nextPhaseNumber = existingSprints.length + 1;
+    const isExtension = challenge.status === 'completed' || (lastSprint && lastSprint.status === 'completed');
+
     const [title, setTitle] = useState('');
     const [targetDays, setTargetDays] = useState<number>(14);
     const [isCustomDays, setIsCustomDays] = useState(false);
@@ -41,30 +45,49 @@ export const StartNextSprintModal: React.FC<StartNextSprintModalProps> = ({
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
 
-    // Reset fields whenever modal opens
-    React.useEffect(() => {
+    // Compute default start date seamlessly from previous sprint
+    useEffect(() => {
         if (isOpen) {
-            setTitle('');
+            let defaultStart = new Date().toISOString().split('T')[0];
+            if (lastSprint?.targetEndDate) {
+                const prevEnd = new Date(lastSprint.targetEndDate);
+                // The day after previous sprint ends
+                const nextDay = new Date(prevEnd.getTime() + 86400000);
+                const nextDayStr = nextDay.toISOString().split('T')[0];
+                // If the day after previous sprint is today or future, use it
+                const todayStr = new Date().toISOString().split('T')[0];
+                defaultStart = nextDayStr >= todayStr ? nextDayStr : todayStr;
+            }
+
+            const previousRule = lastSprint?.rule || challenge.rule || '';
+            setTitle(`Phase ${nextPhaseNumber}: ${challenge.title} (Part ${nextPhaseNumber})`);
             setTargetDays(14);
             setIsCustomDays(false);
             setCustomDaysInput('14');
-            setStartDate(new Date().toISOString().split('T')[0]);
-            setRule('');
+            setStartDate(defaultStart);
+            setRule(previousRule);
             setError('');
             setIsSubmitting(false);
         }
-    }, [isOpen]);
+    }, [isOpen, challenge, lastSprint, nextPhaseNumber]);
 
     if (!isOpen) return null;
 
     const activeDaysCount = isCustomDays ? parseInt(customDaysInput, 10) || targetDays : targetDays;
     const startObj = new Date(startDate || new Date());
-    const endObj = new Date(startObj.getTime() + activeDaysCount * 86400000);
+    // End date calculation: startDate + (activeDaysCount - 1) days
+    const endObj = new Date(startObj.getTime() + Math.max(0, activeDaysCount - 1) * 86400000);
+    const prevRule = lastSprint?.rule || challenge.rule || '';
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!title.trim()) {
             setError('Please enter a sprint/phase title.');
+            return;
+        }
+
+        if (activeDaysCount <= 0) {
+            setError('Sprint duration must be at least 1 day.');
             return;
         }
 
@@ -106,14 +129,19 @@ export const StartNextSprintModal: React.FC<StartNextSprintModalProps> = ({
                         <Plus className="w-6 h-6" style={{ color: accentColor }} />
                     </div>
                     <div>
-                        <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full neu-inset" style={{ color: accentColor, backgroundColor: `${accentColor}18` }}>
-                            Next Phase Sprints
+                        <span
+                            className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full neu-inset"
+                            style={{ color: accentColor, backgroundColor: `${accentColor}18` }}
+                        >
+                            {isExtension ? 'Extend Challenge / Bonus Sprint' : `Phase ${nextPhaseNumber} Sprint`}
                         </span>
                         <h3 className="text-lg font-black text-[#1a1c35] mt-1">
-                            Launch Phase {nextPhaseNumber} Sprint
+                            {isExtension ? `Launch Bonus Phase ${nextPhaseNumber}` : `Launch Phase ${nextPhaseNumber} Sprint`}
                         </h3>
                         <p className="text-xs font-bold text-[#717699]">
-                            Continue &ldquo;{challenge.title}&rdquo; with a new milestone target
+                            {isExtension
+                                ? `Keep your momentum going on "${challenge.title}"`
+                                : `Progress "${challenge.title}" to its next milestone`}
                         </p>
                     </div>
                 </div>
@@ -134,7 +162,7 @@ export const StartNextSprintModal: React.FC<StartNextSprintModalProps> = ({
                             type="text"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
-                            placeholder="e.g. Phase 2: Core 100 Verbs & Sentence Structures"
+                            placeholder="e.g. Phase 2: Advanced Conversational Dialogues"
                             className="w-full px-3.5 py-2.5 rounded-xl neu-input text-xs font-bold"
                             required
                         />
@@ -195,42 +223,67 @@ export const StartNextSprintModal: React.FC<StartNextSprintModalProps> = ({
 
                     {/* Start Date */}
                     <div className="space-y-1.5">
-                        <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
-                            Start Date
-                        </label>
+                        <div className="flex items-center justify-between">
+                            <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
+                                Sprint Start Date *
+                            </label>
+                            {lastSprint?.targetEndDate && (
+                                <span className="text-[10px] font-semibold text-[#717699]">
+                                    Previous phase ended {new Date(lastSprint.targetEndDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                                </span>
+                            )}
+                        </div>
                         <input
                             type="date"
                             value={startDate}
                             onChange={(e) => setStartDate(e.target.value)}
                             className="w-full px-3.5 py-2.5 rounded-xl neu-input text-xs font-bold"
+                            required
                         />
                     </div>
 
-                    {/* Sprint Rule */}
+                    {/* Evolving Sprint Rule */}
                     <div className="space-y-1.5">
-                        <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
-                            Phase Rule / Daily Goal
-                        </label>
-                        <input
-                            type="text"
+                        <div className="flex items-center justify-between">
+                            <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
+                                Phase Non-Negotiable Rule / Goal
+                            </label>
+                            {prevRule && (
+                                <button
+                                    type="button"
+                                    onClick={() => setRule(prevRule)}
+                                    className="text-[10px] font-bold flex items-center space-x-1 hover:underline"
+                                    style={{ color: accentColor }}
+                                >
+                                    <Copy className="w-3 h-3" />
+                                    <span>Copy previous rule</span>
+                                </button>
+                            )}
+                        </div>
+                        <textarea
+                            rows={2}
                             value={rule}
                             onChange={(e) => setRule(e.target.value)}
-                            placeholder="e.g. Learn 6 new verbs daily and form 3 sentences."
-                            className="w-full px-3.5 py-2.5 rounded-xl neu-input text-xs font-medium"
+                            placeholder="e.g. Increase daily study to 25 minutes + record 1 speaking clip."
+                            className="w-full px-3.5 py-2.5 rounded-xl neu-input text-xs font-medium resize-none"
                         />
+                        <p className="text-[10px] text-[#717699] font-medium">
+                            Tip: Adapt or increase the difficulty for this new phase without altering previous phase history.
+                        </p>
                     </div>
 
-                    {/* Date Preview Card */}
+                    {/* Seamless Date Preview Card */}
                     <div className="neu-card p-3 rounded-xl bg-[#E0E5EC] flex items-center justify-between text-xs font-bold text-slate-700">
-                        <div className="flex items-center space-x-1.5">
+                        <div className="flex items-center space-x-2">
                             <Calendar className="w-4 h-4" style={{ color: accentColor }} />
                             <span>
-                                {startObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} –{' '}
+                                {startObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                                {' → '}
                                 {endObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                             </span>
                         </div>
                         <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full neu-inset text-indigo-700">
-                            {activeDaysCount} Days Sprint
+                            {activeDaysCount} Days Duration
                         </span>
                     </div>
 
@@ -249,7 +302,7 @@ export const StartNextSprintModal: React.FC<StartNextSprintModalProps> = ({
                             className="px-5 py-2.5 rounded-xl neu-button-primary text-xs font-bold text-white shadow-md disabled:opacity-50 flex items-center space-x-1.5"
                         >
                             <Sparkles className="w-4 h-4" />
-                            <span>{isSubmitting ? 'Launching...' : 'Start Phase Sprint'}</span>
+                            <span>{isSubmitting ? 'Launching...' : `Launch Phase ${nextPhaseNumber}`}</span>
                         </button>
                     </div>
                 </form>
