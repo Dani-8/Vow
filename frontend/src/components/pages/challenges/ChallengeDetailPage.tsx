@@ -248,6 +248,26 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
         let weekIndex = 1;
 
         for (let p = 0; p < startDayOfWeek; p++) {
+            currentWeekDays.push(null);
+        }
+
+        for (let dayNum = 1; dayNum <= totalDays; dayNum++) {
+            const dayDate = new Date(startDateObj.getTime() + (dayNum - 1) * 86400000);
+            const dateStr = dayDate.toISOString().split('T')[0];
+            const log = phaseLogs.find((l) => Number(l.dayNumber) === dayNum);
+
+            const isToday = !isUpcoming && dayNum === currentDayNumber;
+            const isPast = !isUpcoming && dayNum < currentDayNumber;
+            const isFuture = isUpcoming || dayNum > currentDayNumber;
+
+            currentWeekDays.push({
+                dayNumber: dayNum,
+                date: dayDate,
+                dateStr,
+                dayOfWeek: (dayDate.getDay() + 6) % 7,
+                log,
+                isToday,
+                isPast,
                 isFuture,
             });
 
@@ -278,26 +298,6 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
     const todayLog = phaseLogs.find((l) => Number(l.dayNumber) === currentDayNumber);
 
     const handleOpenDayModal = (dayNumber: number, dateStr: string, log?: ChallengeLog) => {
-        setSelectedDayForModal({
-            dayNumber,
-            dateStr,
-            existingLog: log || null,
-        });
-    };
-
-    return (
-        <div className="space-y-6 animate-in fade-in duration-300 pb-12">
-            {/* Top Navigation & Challenge Header Card */}
-            <ChallengeDetailHeader
-                challenge={challenge}
-                accentColor={accentColor}
-                phaseTargetDays={phaseTargetDays}
-                onBack={onBack}
-                onEdit={() => setIsEditModalOpen(true)}
-                onDelete={() => setIsDeleteModalOpen(true)}
-                onTogglePause={async () => {
-                    const newStatus = challenge.status === 'paused' ? 'active' : 'paused';
-                    await onUpdateChallenge(challengeId, { status: newStatus });
                 }}
                 onCheckIn={() => {
                     if (isUpcoming) {
