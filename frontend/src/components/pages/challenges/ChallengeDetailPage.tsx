@@ -198,6 +198,26 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
             const todayLog = currentPhaseLogs.find((l) => Number(l.dayNumber) === currentDay);
             let checkDay = todayLog?.status === 'completed' ? currentDay : currentDay - 1;
             while (checkDay >= 1) {
+                const log = currentPhaseLogs.find((l) => Number(l.dayNumber) === checkDay);
+                if (log?.status === 'completed') {
+                    currentStreak++;
+                    checkDay--;
+                } else if (log?.status === 'rest') {
+                    checkDay--;
+                } else {
+                    break;
+                }
+            }
+        }
+
+        return {
+            currentDayNumber: currentDay,
+            isUpcoming: upcoming,
+            daysUntilStart: untilStart,
+            startDateObj: start,
+            targetEndDateObj: targetEnd,
+            completedDaysCount: completed,
+            successRate: rate,
             remainingDays: remaining,
             streak: currentStreak,
             phaseTargetDays: targetDays,
@@ -228,26 +248,6 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
         let weekIndex = 1;
 
         for (let p = 0; p < startDayOfWeek; p++) {
-            currentWeekDays.push(null);
-        }
-
-        for (let dayNum = 1; dayNum <= totalDays; dayNum++) {
-            const dayDate = new Date(startDateObj.getTime() + (dayNum - 1) * 86400000);
-            const dateStr = dayDate.toISOString().split('T')[0];
-            const log = phaseLogs.find((l) => Number(l.dayNumber) === dayNum);
-
-            const isToday = !isUpcoming && dayNum === currentDayNumber;
-            const isPast = !isUpcoming && dayNum < currentDayNumber;
-            const isFuture = isUpcoming || dayNum > currentDayNumber;
-
-            currentWeekDays.push({
-                dayNumber: dayNum,
-                date: dayDate,
-                dateStr,
-                dayOfWeek: (dayDate.getDay() + 6) % 7,
-                log,
-                isToday,
-                isPast,
                 isFuture,
             });
 
