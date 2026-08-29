@@ -188,16 +188,16 @@ router.put('/:id', authenticateToken, async (req: AuthenticatedRequest, res: Res
                 userId: req.userId,
                 ...req.body,
             });
-            date: logDate,
-            status: logStatus,
-            note: note || '',
-            timeSpent: timeSpent || '',
-            imageUrl: imageUrl || '',
-            createdAt: existingIndex >= 0 ? challenge.logs[existingIndex].createdAt : new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-        };
+            return res.json({ challenge: created.toObject() });
+        }
 
-        if (existingIndex >= 0) {
+        if (req.body.title !== undefined) challenge.title = String(req.body.title).trim();
+        if (req.body.description !== undefined) challenge.description = String(req.body.description);
+        if (req.body.category !== undefined) challenge.category = String(req.body.category);
+        if (req.body.color !== undefined) challenge.color = String(req.body.color);
+        if (req.body.icon !== undefined) challenge.icon = String(req.body.icon);
+        if (req.body.targetDays !== undefined) challenge.targetDays = Number(req.body.targetDays);
+        if (req.body.startDate !== undefined) challenge.startDate = String(req.body.startDate);
             challenge.logs[existingIndex] = newLog;
         } else {
             challenge.logs.unshift(newLog);
