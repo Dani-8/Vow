@@ -228,36 +228,36 @@ router.post('/:id/log', authenticateToken, async (req: AuthenticatedRequest, res
         const logStatus = status || 'completed';
 
         const existingIndex = challenge.logs.findIndex((l) => Number(l.dayNumber) === targetDay);
-    } catch (err: any) {
-        console.error('Error logging day for challenge:', err);
-        return res.status(500).json({ error: 'Failed to log day' });
-    }
-});
 
-// Delete a day log
-router.delete('/:id/log/:logId', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
-    try {
-        const challenge = await Challenge.findOne({ id: req.params.id, userId: req.userId });
-        if (!challenge) {
-            return res.status(404).json({ error: 'Challenge not found' });
+        const newLog: IChallengeLog = {
+            id: existingIndex >= 0 ? challenge.logs[existingIndex].id : `log_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
+            dayNumber: targetDay,
+            date: logDate,
+            status: logStatus,
+            note: note || '',
+            timeSpent: timeSpent || '',
+            imageUrl: imageUrl || '',
+            createdAt: existingIndex >= 0 ? challenge.logs[existingIndex].createdAt : new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+        };
+
+        if (existingIndex >= 0) {
+            challenge.logs[existingIndex] = newLog;
+        } else {
+            challenge.logs.unshift(newLog);
         }
 
-        const logId = req.params.logId;
-        challenge.logs = challenge.logs.filter((l) => l.id !== logId && String(l.dayNumber) !== logId);
-
-        if (Array.isArray(challenge.sprints)) {
+        // Also sync log to target sprint if sprints exist
+        const targetSprintId = sprintId || challenge.currentSprintId || (challenge.sprints && challenge.sprints.length > 0 ? challenge.sprints[challenge.sprints.length - 1].id : undefined);
+        if (targetSprintId && Array.isArray(challenge.sprints)) {
             challenge.sprints = challenge.sprints.map((s: any) => {
-                if (Array.isArray(s.logs)) {
-                    return {
-                        ...s,
-                        logs: s.logs.filter((l: any) => l.id !== logId && String(l.dayNumber) !== logId),
-                    };
-                }
-                return s;
-            });
-        }
-
-        await challenge.save();
+                if (s.id === targetSprintId) {
+                    const sLogs = Array.isArray(s.logs) ? s.logs : [];
+                    const sIdx = sLogs.findIndex((l: any) => Number(l.dayNumber) === targetDay);
+                    let newSLogs = [...sLogs];
+                    if (sIdx >= 0) {
+                        newSLogs[sIdx] = newLog;
+                    } else {
 
         return res.json({ challenge: challenge.toObject() });
     } catch (err: any) {
