@@ -548,3 +548,46 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                 sprints: [...(challenge.sprints || []), newSprint],
                                 currentSprintId: newSprintId,
                                 status: 'active',
+                            });
+                        }
+                        // Automatically select the newly started phase
+                        setSelectedSprintId(newSprintId);
+                    }}
+                />
+            )}
+
+            {/* Edit Challenge Modal */}
+            {isEditModalOpen && (
+                <CreateChallengeModal
+                    isOpen={isEditModalOpen}
+                    onClose={() => setIsEditModalOpen(false)}
+                    editingChallenge={challenge}
+                    onSubmit={async (updates) => {
+                        await onUpdateChallenge(challengeId, updates);
+                        setIsEditModalOpen(false);
+                    }}
+                />
+            )}
+
+            {/* Delete Challenge Modal */}
+            {isDeleteModalOpen && (
+                <DeleteChallengeModal
+                    isOpen={isDeleteModalOpen}
+                    onClose={() => setIsDeleteModalOpen(false)}
+                    challengeTitle={challenge.title}
+                    isDeleting={isDeleting}
+                    onConfirm={async () => {
+                        try {
+                            setIsDeleting(true);
+                            await onDeleteChallenge(challengeId);
+                            setIsDeleteModalOpen(false);
+                            onBack();
+                        } finally {
+                            setIsDeleting(false);
+                        }
+                    }}
+                />
+            )}
+        </div>
+    );
+};
