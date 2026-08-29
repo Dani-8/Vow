@@ -89,15 +89,15 @@ interface AppRouterProps {
       summary: string;
       score?: number;
       keyLearnings?: string;
-    }
+    },
+    markChallengeCompleted?: boolean
   ) => Promise<void>;
+  onUpdateSprintRule?: (challengeId: string, sprintId: string, rule: string) => Promise<void>;
 }
 
 export const AppRouter: React.FC<AppRouterProps> = ({
   activeView,
   location,
-  user,
-  tasks,
   privateTasks,
   filteredTasks,
   stats,
