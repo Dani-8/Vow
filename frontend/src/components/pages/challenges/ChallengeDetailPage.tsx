@@ -398,36 +398,36 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
             )}
 
             {/* Sprints Navigator */}
-                            ? async (logId) => {
-                                await onDeleteLog(challengeId, logId);
-                            }
-                            : undefined
-                    }
+            <SprintPhaseNavigator
+                sprints={sprints}
+                activeSprintId={activeSprint?.id || sprints[0]?.id}
+                accentColor={accentColor}
+                onSelectSprint={(id) => setSelectedSprintId(id)}
+                onCompleteCurrentSprintPrompt={(sprint) => setSprintToComplete(sprint)}
+            />
+
+            {/* Retrospective Summary Banner if active phase is completed */}
+            {activeSprint && activeSprint.status === 'completed' && activeSprint.retrospective && (
+                <SprintRetrospectiveBanner
+                    sprint={activeSprint}
+                    accentColor={accentColor}
+                    onEditRetrospectivePrompt={() => setSprintToComplete(activeSprint)}
                 />
             )}
 
-            {/* Complete Sprint Modal */}
-            {sprintToComplete && (
-                <CompleteSprintModal
-                    isOpen={true}
-                    onClose={() => setSprintToComplete(null)}
-                    sprint={sprintToComplete}
-                    accentColor={accentColor}
-                    onConfirmComplete={async (retro) => {
-                        if (onCompleteSprint) {
-                            await onCompleteSprint(challengeId, sprintToComplete.id, retro);
-                        } else {
-                            const updatedSprints = (challenge.sprints || []).map((s) =>
-                                s.id === sprintToComplete.id
-                                    ? { ...s, status: 'completed' as const, retrospective: retro }
-                                    : s
-                            );
-                            await onUpdateChallenge(challengeId, { sprints: updatedSprints });
-                        }
-                    }}
-                    onStartNextSprintPrompt={() => setIsStartSprintModalOpen(true)}
-                />
-            )}
+            {/* Main Content 2-Column Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                {/* Left Column: Progress Matrix & Sub-Cards */}
+                <div className="lg:col-span-8 space-y-6">
+                    <ChallengeProgressMatrix
+                        accentColor={accentColor}
+                        gridWeeks={gridWeeks}
+                        startDateObj={startDateObj}
+                        targetEndDateObj={targetEndDateObj}
+                        onOpenDayModal={handleOpenDayModal}
+                    />
+
+                    <ChallengeRulesAndTags
 
             {/* Start Next Sprint Modal */}
             {isStartSprintModalOpen && (
