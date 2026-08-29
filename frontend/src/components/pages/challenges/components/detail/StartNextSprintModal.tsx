@@ -148,6 +148,34 @@ export const StartNextSprintModal: React.FC<StartNextSprintModalProps> = ({
 
                 {error && (
                     <div className="mb-4 p-3 rounded-xl bg-rose-100 border border-rose-200 text-rose-700 text-xs font-bold">
+                        {error}
+                    </div>
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-5">
+                    {/* Phase Title */}
+                    <div className="space-y-1.5">
+                        <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
+                            Sprint / Phase Title *
+                        </label>
+                        <input
+                            type="text"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            placeholder="e.g. Phase 2: Advanced Conversational Dialogues"
+                            className="w-full px-3.5 py-2.5 rounded-xl neu-input text-xs font-bold"
+                            required
+                        />
+                    </div>
+
+                    {/* Target Duration */}
+                    <div className="space-y-2">
+                        <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
+                            Sprint Duration (Days) *
+                        </label>
+                        <div className="flex flex-wrap gap-2">
+                            {PRESET_DURATIONS.map((preset) => {
+                                const isSelected = !isCustomDays && targetDays === preset.days;
                                 return (
                                     <button
                                         key={preset.days}
@@ -156,10 +184,11 @@ export const StartNextSprintModal: React.FC<StartNextSprintModalProps> = ({
                                             setIsCustomDays(false);
                                             setTargetDays(preset.days);
                                         }}
-                                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${isSelected
-                                            ? 'neu-button-primary text-white shadow-sm'
-                                            : 'neu-button text-slate-600 hover:text-slate-900'
-                                            }`}
+                                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                                            isSelected
+                                                ? 'neu-button-primary text-white shadow-sm'
+                                                : 'neu-button text-slate-600 hover:text-slate-900'
+                                        }`}
                                     >
                                         {preset.label}
                                     </button>
@@ -168,36 +197,7 @@ export const StartNextSprintModal: React.FC<StartNextSprintModalProps> = ({
                             <button
                                 type="button"
                                 onClick={() => setIsCustomDays(true)}
-                                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${isCustomDays
-                                    ? 'neu-button-primary text-white shadow-sm'
-                                    : 'neu-button text-slate-600 hover:text-slate-900'
-                                    }`}
-                            >
-                                Custom
-                            </button>
-                        </div>
-
-                        {isCustomDays && (
-                            <div className="flex items-center space-x-2 pt-1">
-                                <input
-                                    type="number"
-                                    min="1"
-                                    max="365"
-                                    value={customDaysInput}
-                                    onChange={(e) => setCustomDaysInput(e.target.value)}
-                                    className="w-24 px-3 py-2 rounded-xl neu-input text-xs font-bold"
-                                    required
-                                />
-                                <span className="text-[11px] font-bold text-[#717699]">Days sprint</span>
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Start Date */}
-                    <div className="space-y-1.5">
-                        <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
-                            Start Date
-                        </label>
+                                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                         <input
                             type="date"
                             value={startDate}
