@@ -48,6 +48,29 @@ router.get('/', authenticateToken, async (req: AuthenticatedRequest, res: Respon
             );
             if (readingDemo) {
                 for (const ch of rawChallenges) {
+                    if (
+                        (ch.id === 'ch-reading-30' ||
+                            ch.title === '30 Days of Deep Reading') &&
+                        (!ch.sprints || ch.sprints.length <= 1 || ch.status !== 'completed')
+                    ) {
+                        ch.sprints = readingDemo.sprints;
+                        ch.currentSprintId = readingDemo.currentSprintId;
+                        ch.targetDays = readingDemo.targetDays;
+                        ch.rule = readingDemo.rule;
+                        ch.logs = readingDemo.logs;
+                        ch.status = 'completed';
+                        ch.tags = readingDemo.tags;
+                        await ch.save();
+                    }
+                }
+            }
+        }
+
+        const challenges = rawChallenges.map((c) => c.toObject());
+        return res.json({ challenges });
+    } catch (err: any) {
+        console.error('Error fetching challenges:', err);
+        return res.status(500).json({ error: 'Failed to fetch challenges' });
     }
 });
 
@@ -75,29 +98,6 @@ router.get('/:id', authenticateToken, async (req: AuthenticatedRequest, res: Res
                 challenge.targetDays = russianDemo.targetDays;
                 challenge.rule = russianDemo.rule;
                 challenge.logs = russianDemo.logs;
-                await challenge.save();
-            }
-        }
-
-        return res.json({ challenge: challenge.toObject() });
-    } catch (err: any) {
-        console.error('Error fetching challenge:', err);
-        return res.status(500).json({ error: 'Failed to fetch challenge' });
-    }
-});
-
-// Create a new challenge
-router.post('/', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
-    try {
-        const {
-            id,
-            title,
-            description,
-            category,
-            color,
-            icon,
-            targetDays,
-            startDate,
             targetEndDate,
             rule,
             tags,
