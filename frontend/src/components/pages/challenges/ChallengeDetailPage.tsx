@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { Trophy, Sparkles, RotateCcw, CheckCircle2, ArrowRight, Star, Flame, Calendar, Award } from 'lucide-react';
 import { Challenge, ChallengeLog, ChallengeSprint, SprintRetrospective } from '../../../types';
 import { ChallengeDetailHeader } from './components/detail/ChallengeDetailHeader';
 import { ChallengeProgressMatrix } from './components/detail/ChallengeProgressMatrix';
@@ -25,6 +26,8 @@ interface ChallengeDetailPageProps {
             status?: 'completed' | 'rest' | 'missed';
             note?: string;
             timeSpent?: string;
+            imageUrl?: string;
+            sprintId?: string;
         }
     ) => Promise<void>;
     onDeleteLog: (challengeId: string, logId: string) => Promise<void>;
@@ -41,8 +44,10 @@ interface ChallengeDetailPageProps {
     onCompleteSprint?: (
         challengeId: string,
         sprintId: string,
-        retrospective: SprintRetrospective
+        retrospective: SprintRetrospective,
+        markChallengeCompleted?: boolean
     ) => Promise<void>;
+    onUpdateSprintRule?: (challengeId: string, sprintId: string, rule: string) => Promise<void>;
 }
 
 const getAccentColor = (challenge?: Partial<Challenge>): string => {
@@ -69,6 +74,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
     onDeleteLog,
     onStartNextSprint,
     onCompleteSprint,
+    onUpdateSprintRule,
 }) => {
     const accentColor = getAccentColor(challenge);
     const challengeId = challenge.id || challenge._id;
@@ -93,6 +99,10 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
         };
         return [defaultSprint];
     }, [challenge]);
+
+    const isChallengeCompleted =
+        challenge.status === 'completed' ||
+        (sprints.length > 0 && sprints.every((s) => s.status === 'completed'));
 
     const [selectedSprintId, setSelectedSprintId] = useState<string | undefined>(
         challenge.currentSprintId || (sprints.length > 0 ? sprints[sprints.length - 1].id : undefined)
@@ -131,6 +141,16 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
     const [isStartSprintModalOpen, setIsStartSprintModalOpen] = useState(false);
     const [sprintToComplete, setSprintToComplete] = useState<ChallengeSprint | null>(null);
 
+    // Overall totals across entire challenge
+    const totalChallengeCompletedDays = useMemo(() => {
+        const allLogs = challenge.logs || [];
+        return allLogs.filter((l) => l.status === 'completed').length;
+    }, [challenge.logs]);
+
+    const totalPhasesCompletedCount = useMemo(() => {
+        return sprints.filter((s) => s.status === 'completed').length;
+    }, [sprints]);
+
     // Calculate elapsed days and stats scoped to the active phase/sprint
     const {
         currentDayNumber,
@@ -165,8 +185,8 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
         const currentPhaseLogs = activeSprint?.logs && activeSprint.logs.length > 0
             ? activeSprint.logs
             : (activeSprint?.phaseNumber === 1 || !activeSprint)
-                ? challenge.logs || []
-                : activeSprint?.logs || [];
+            ? challenge.logs || []
+            : activeSprint?.logs || [];
 
         const completed = currentPhaseLogs.filter((l) => l.status === 'completed').length;
         const rate = targetDays > 0 ? Math.round((completed / targetDays) * 100) : 0;
@@ -325,26 +345,6 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                 targetEndDateObj={targetEndDateObj}
                 isTodayCompleted={todayLog?.status === 'completed'}
             />
-
-            {/* Sprints Navigator */}
-            <SprintPhaseNavigator
-                sprints={sprints}
-                activeSprintId={activeSprint?.id || sprints[0]?.id}
-                accentColor={accentColor}
-                onSelectSprint={(id) => setSelectedSprintId(id)}
-                onStartNextSprintPrompt={() => setIsStartSprintModalOpen(true)}
-                onCompleteCurrentSprintPrompt={(sprint) => setSprintToComplete(sprint)}
-            />
-
-            {/* Retrospective Summary Banner if active phase is completed */}
-            {activeSprint && activeSprint.status === 'completed' && activeSprint.retrospective && (
-                <SprintRetrospectiveBanner
-                    sprint={activeSprint}
-                    accentColor={accentColor}
-                    onStartNextSprintPrompt={() => setIsStartSprintModalOpen(true)}
-                    onEditRetrospectivePrompt={() => setSprintToComplete(activeSprint)}
-                />
-            )}
 
             {/* Main Content 2-Column Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">

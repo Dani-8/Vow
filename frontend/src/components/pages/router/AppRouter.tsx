@@ -89,8 +89,10 @@ interface AppRouterProps {
       summary: string;
       score?: number;
       keyLearnings?: string;
-    }
+    },
+    markChallengeCompleted?: boolean
   ) => Promise<void>;
+  onUpdateSprintRule?: (challengeId: string, sprintId: string, rule: string) => Promise<void>;
 }
 
 export const AppRouter: React.FC<AppRouterProps> = ({
@@ -129,6 +131,7 @@ export const AppRouter: React.FC<AppRouterProps> = ({
   onDeleteChallengeLog,
   onStartNextSprint,
   onCompleteSprint,
+  onUpdateSprintRule,
 }) => {
   if (activeView === 'task-detail') {
     const activeTaskParam = decodeURIComponent(location.pathname.replace('/app/task/', ''));
@@ -242,6 +245,7 @@ export const AppRouter: React.FC<AppRouterProps> = ({
           onDeleteLog={onDeleteChallengeLog}
           onStartNextSprint={onStartNextSprint}
           onCompleteSprint={onCompleteSprint}
+          onUpdateSprintRule={onUpdateSprintRule}
         />
       );
     }
