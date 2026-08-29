@@ -98,6 +98,8 @@ interface AppRouterProps {
 export const AppRouter: React.FC<AppRouterProps> = ({
   activeView,
   location,
+  user,
+  tasks,
   privateTasks,
   filteredTasks,
   stats,
@@ -126,8 +128,6 @@ export const AppRouter: React.FC<AppRouterProps> = ({
   onUpdateChallenge,
   onDeleteChallenge,
   onLogChallengeDay,
-  onDeleteChallengeLog,
-  onStartNextSprint,
   onCompleteSprint,
 }) => {
   if (activeView === 'task-detail') {
