@@ -248,12 +248,53 @@ export const StartNextSprintModal: React.FC<StartNextSprintModalProps> = ({
                     <div className="space-y-1.5">
                         <div className="flex items-center justify-between">
                             <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
-                            <Sparkles className="w-4 h-4" />
-                            <span>{isSubmitting ? 'Launching...' : 'Start Phase Sprint'}</span>
-                        </button>
+                                Phase Non-Negotiable Rule / Goal
+                            </label>
+                            {prevRule && (
+                                <button
+                                    type="button"
+                                    onClick={() => setRule(prevRule)}
+                                    className="text-[10px] font-bold flex items-center space-x-1 hover:underline"
+                                    style={{ color: accentColor }}
+                                >
+                                    <Copy className="w-3 h-3" />
+                                    <span>Copy previous rule</span>
+                                </button>
+                            )}
+                        </div>
+                        <textarea
+                            rows={2}
+                            value={rule}
+                            onChange={(e) => setRule(e.target.value)}
+                            placeholder="e.g. Increase daily study to 25 minutes + record 1 speaking clip."
+                            className="w-full px-3.5 py-2.5 rounded-xl neu-input text-xs font-medium resize-none"
+                        />
+                        <p className="text-[10px] text-[#717699] font-medium">
+                            Tip: Adapt or increase the difficulty for this new phase without altering previous phase history.
+                        </p>
                     </div>
-                </form>
-            </div>
-        </div>
-    );
-};
+
+                    {/* Seamless Date Preview Card */}
+                    <div className="neu-card p-3 rounded-xl bg-[#E0E5EC] flex items-center justify-between text-xs font-bold text-slate-700">
+                        <div className="flex items-center space-x-2">
+                            <Calendar className="w-4 h-4" style={{ color: accentColor }} />
+                            <span>
+                                {startObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                                {' → '}
+                                {endObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                            </span>
+                        </div>
+                        <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full neu-inset text-indigo-700">
+                            {activeDaysCount} Days Duration
+                        </span>
+                    </div>
+
+                    {/* Footer Actions */}
+                    <div className="pt-4 border-t border-slate-300/70 flex items-center justify-end space-x-2.5">
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="px-4 py-2 rounded-xl neu-button text-xs font-bold text-slate-600 hover:text-slate-900"
+                        >
+                            Cancel
+                        </button>
