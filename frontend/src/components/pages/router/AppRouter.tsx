@@ -248,6 +248,10 @@ export const AppRouter: React.FC<AppRouterProps> = ({
           onUpdateSprintRule={onUpdateSprintRule}
         />
       );
+    }
+  }
+
+  if (activeView === 'challenges') {
     return (
       <ChallengesPage
         challenges={challenges}
@@ -275,10 +279,6 @@ export const AppRouter: React.FC<AppRouterProps> = ({
         activeFilter={filter}
         onFilterChange={setFilter}
       />
-
-      {/* Private Vault Badge */}
-      {activeView === 'private' && (
-        <div className="neu-badge p-4 rounded-2xl flex items-center justify-between border border-purple-200">
           <div className="flex items-center space-x-3">
             <Unlock className="w-5 h-5 text-purple-600" />
             <div>
