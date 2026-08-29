@@ -128,36 +128,36 @@ router.get('/:id', authenticateToken, async (req: AuthenticatedRequest, res: Res
         console.error('Error fetching challenge:', err);
         return res.status(500).json({ error: 'Failed to fetch challenge' });
     }
-        console.error('Error creating challenge:', err);
-        return res.status(500).json({ error: 'Failed to create challenge' });
-    }
 });
 
-// Update an existing challenge
-router.put('/:id', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+// Create a new challenge
+router.post('/', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
     try {
-        const challenge = await Challenge.findOne({ id: req.params.id, userId: req.userId });
-        if (!challenge) {
-            // Create if doesn't exist
-            const created = await Challenge.create({
-                id: req.params.id,
-                userId: req.userId,
-                ...req.body,
-            });
-            return res.json({ challenge: created.toObject() });
+        const {
+            id,
+            title,
+            description,
+            category,
+            color,
+            icon,
+            targetDays,
+            startDate,
+            targetEndDate,
+            rule,
+            tags,
+            status,
+            logs,
+        } = req.body;
+
+        if (!title || typeof title !== 'string') {
+            return res.status(400).json({ error: 'Challenge title is required' });
         }
 
-        if (req.body.title !== undefined) challenge.title = String(req.body.title).trim();
-        if (req.body.description !== undefined) challenge.description = String(req.body.description);
-        if (req.body.category !== undefined) challenge.category = String(req.body.category);
-        if (req.body.color !== undefined) challenge.color = String(req.body.color);
-        if (req.body.icon !== undefined) challenge.icon = String(req.body.icon);
-        if (req.body.targetDays !== undefined) challenge.targetDays = Number(req.body.targetDays);
-        if (req.body.startDate !== undefined) challenge.startDate = String(req.body.startDate);
-        if (req.body.targetEndDate !== undefined) challenge.targetEndDate = String(req.body.targetEndDate);
-        if (req.body.rule !== undefined) challenge.rule = String(req.body.rule);
-        if (Array.isArray(req.body.tags)) challenge.tags = req.body.tags;
-        if (req.body.status !== undefined) challenge.status = req.body.status;
+        const created = await Challenge.create({
+            id,
+            userId: req.userId,
+            title: title.trim(),
+            description: description || '',
         if (Array.isArray(req.body.logs)) challenge.logs = req.body.logs;
         if (Array.isArray(req.body.sprints)) challenge.sprints = req.body.sprints;
         if (req.body.currentSprintId !== undefined) challenge.currentSprintId = req.body.currentSprintId;
