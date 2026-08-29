@@ -188,6 +188,9 @@ export const AppRouter: React.FC<AppRouterProps> = ({
             navigate('/app/vault');
           } else {
             navigate('/app/tasks');
+          }
+        }}
+      />
     );
   }
 
@@ -215,9 +218,6 @@ export const AppRouter: React.FC<AppRouterProps> = ({
   if (activeView === 'task-map') {
     return <TaskMapPage tasks={[...tasks, ...privateTasks]} onBackToHome={() => navigateToView('home')} />;
   }
-
-  if (activeView === 'challenge-detail' || (selectedChallenge && activeView === 'challenges' && location.pathname.startsWith('/app/challenges/'))) {
-    const challengeParam = decodeURIComponent(location.pathname.replace('/app/challenges/', ''));
     const currentChallenge =
       challenges.find(
         (c) =>
