@@ -41,6 +41,29 @@ router.get('/', authenticateToken, async (req: AuthenticatedRequest, res: Respon
                     }
                 }
             }
+
+            // Also enrich or complete the 30 Days of Deep Reading demo challenge
+            const readingDemo = INITIAL_DEMO_CHALLENGES_SERVER.find(
+                (c) => c.id === 'ch-reading-30' || c.title === '30 Days of Deep Reading'
+            );
+            if (readingDemo) {
+                for (const ch of rawChallenges) {
+                    if (
+                        (ch.id === 'ch-reading-30' ||
+                            ch.title === '30 Days of Deep Reading') &&
+                        (!ch.sprints || ch.sprints.length <= 1 || ch.status !== 'completed')
+                    ) {
+                        ch.sprints = readingDemo.sprints;
+                        ch.currentSprintId = readingDemo.currentSprintId;
+                        ch.targetDays = readingDemo.targetDays;
+                        ch.rule = readingDemo.rule;
+                        ch.logs = readingDemo.logs;
+                        ch.status = 'completed';
+                        ch.tags = readingDemo.tags;
+                        await ch.save();
+                    }
+                }
+            }
         }
 
         const challenges = rawChallenges.map((c) => c.toObject());
@@ -75,6 +98,27 @@ router.get('/:id', authenticateToken, async (req: AuthenticatedRequest, res: Res
                 challenge.targetDays = russianDemo.targetDays;
                 challenge.rule = russianDemo.rule;
                 challenge.logs = russianDemo.logs;
+                await challenge.save();
+            }
+        }
+
+        // Migrate reading challenge if needed
+        if (
+            (challenge.id === 'ch-reading-30' ||
+                challenge.title === '30 Days of Deep Reading') &&
+            (!challenge.sprints || challenge.sprints.length <= 1 || challenge.status !== 'completed')
+        ) {
+            const readingDemo = INITIAL_DEMO_CHALLENGES_SERVER.find(
+                (c) => c.id === 'ch-reading-30' || c.title === '30 Days of Deep Reading'
+            );
+            if (readingDemo) {
+                challenge.sprints = readingDemo.sprints;
+                challenge.currentSprintId = readingDemo.currentSprintId;
+                challenge.targetDays = readingDemo.targetDays;
+                challenge.rule = readingDemo.rule;
+                challenge.logs = readingDemo.logs;
+                challenge.status = 'completed';
+                challenge.tags = readingDemo.tags;
                 await challenge.save();
             }
         }
