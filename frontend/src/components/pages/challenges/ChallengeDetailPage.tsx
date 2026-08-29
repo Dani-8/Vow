@@ -428,36 +428,36 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                     />
 
                     <ChallengeRulesAndTags
+                        challenge={challenge}
+                        activeSprint={activeSprint}
+                        accentColor={accentColor}
+                        onEdit={() => setIsEditModalOpen(true)}
+                        onUpdateSprintRule={
+                            onUpdateSprintRule && activeSprint
+                                ? async (newRule) => {
+                                      await onUpdateSprintRule(challengeId, activeSprint.id, newRule);
+                                  }
+                                : undefined
+                        }
+                    />
+                </div>
 
-            {/* Start Next Sprint Modal */}
-            {isStartSprintModalOpen && (
-                <StartNextSprintModal
-                    isOpen={isStartSprintModalOpen}
-                    onClose={() => setIsStartSprintModalOpen(false)}
-                    challenge={challenge}
-                    accentColor={accentColor}
-                    onStartSprint={async (sprintData) => {
-                        const newSprintId = `sprint_${Date.now()}`;
-                        if (onStartNextSprint) {
-                            await onStartNextSprint(challengeId, sprintData);
-                        } else {
-                            const newSprint = {
-                                id: newSprintId,
-                                phaseNumber: (challenge.sprints?.length || 0) + 1,
-                                title: sprintData.title,
-                                targetDays: sprintData.targetDays,
-                                startDate: sprintData.startDate,
-                                targetEndDate: sprintData.targetEndDate,
-                                rule: sprintData.rule,
-                                status: 'active' as const,
-                                logs: [],
-                                createdAt: new Date().toISOString(),
-                            };
-                            await onUpdateChallenge(challengeId, {
-                                sprints: [...(challenge.sprints || []), newSprint],
-                                currentSprintId: newSprintId,
-                                status: 'active',
-                            });
+                {/* Right Column: Daily Reflection Logs Feed */}
+                <div className="lg:col-span-4 space-y-4">
+                    <ChallengeReflectionFeed
+                        logs={phaseLogs}
+                        accentColor={accentColor}
+                        onOpenDayModal={handleOpenDayModal}
+                        onLogFirst={() =>
+                            handleOpenDayModal(
+                                currentDayNumber,
+                                new Date().toISOString().split('T')[0],
+                                todayLog
+                            )
+                        }
+                    />
+                </div>
+            </div>
                         }
                         // Automatically select the newly started phase
                         setSelectedSprintId(newSprintId);
