@@ -198,36 +198,36 @@ router.put('/:id', authenticateToken, async (req: AuthenticatedRequest, res: Res
         if (req.body.icon !== undefined) challenge.icon = String(req.body.icon);
         if (req.body.targetDays !== undefined) challenge.targetDays = Number(req.body.targetDays);
         if (req.body.startDate !== undefined) challenge.startDate = String(req.body.startDate);
-            challenge.logs[existingIndex] = newLog;
-        } else {
-            challenge.logs.unshift(newLog);
-        }
-
-        // Also sync log to target sprint if sprints exist
-        const targetSprintId = sprintId || challenge.currentSprintId || (challenge.sprints && challenge.sprints.length > 0 ? challenge.sprints[challenge.sprints.length - 1].id : undefined);
-        if (targetSprintId && Array.isArray(challenge.sprints)) {
-            challenge.sprints = challenge.sprints.map((s: any) => {
-                if (s.id === targetSprintId) {
-                    const sLogs = Array.isArray(s.logs) ? s.logs : [];
-                    const sIdx = sLogs.findIndex((l: any) => Number(l.dayNumber) === targetDay);
-                    let newSLogs = [...sLogs];
-                    if (sIdx >= 0) {
-                        newSLogs[sIdx] = newLog;
-                    } else {
-                        newSLogs.unshift(newLog);
-                    }
-                    newSLogs.sort((a: any, b: any) => Number(b.dayNumber) - Number(a.dayNumber));
-                    return { ...s, logs: newSLogs, updatedAt: new Date().toISOString() };
-                }
-                return s;
-            });
-        }
-
-        // Sort logs descending by dayNumber
-        challenge.logs.sort((a, b) => Number(b.dayNumber) - Number(a.dayNumber));
+        if (req.body.targetEndDate !== undefined) challenge.targetEndDate = String(req.body.targetEndDate);
+        if (req.body.rule !== undefined) challenge.rule = String(req.body.rule);
+        if (Array.isArray(req.body.tags)) challenge.tags = req.body.tags;
+        if (req.body.status !== undefined) challenge.status = req.body.status;
+        if (Array.isArray(req.body.logs)) challenge.logs = req.body.logs;
+        if (Array.isArray(req.body.sprints)) challenge.sprints = req.body.sprints;
+        if (req.body.currentSprintId !== undefined) challenge.currentSprintId = req.body.currentSprintId;
 
         await challenge.save();
-        return res.json({ challenge: challenge.toObject(), log: newLog });
+        return res.json({ challenge: challenge.toObject() });
+    } catch (err: any) {
+        console.error('Error updating challenge:', err);
+        return res.status(500).json({ error: 'Failed to update challenge' });
+    }
+});
+
+// Add or update a day log in a challenge
+router.post('/:id/log', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        const challenge = await Challenge.findOne({ id: req.params.id, userId: req.userId });
+        if (!challenge) {
+            return res.status(404).json({ error: 'Challenge not found' });
+        }
+
+        const { dayNumber, date, status, note, timeSpent, imageUrl, sprintId } = req.body;
+        const targetDay = Number(dayNumber) || 1;
+        const logDate = date || new Date().toISOString().split('T')[0];
+        const logStatus = status || 'completed';
+
+        const existingIndex = challenge.logs.findIndex((l) => Number(l.dayNumber) === targetDay);
     } catch (err: any) {
         console.error('Error logging day for challenge:', err);
         return res.status(500).json({ error: 'Failed to log day' });
