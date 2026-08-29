@@ -298,3 +298,17 @@ export const StartNextSprintModal: React.FC<StartNextSprintModalProps> = ({
                         >
                             Cancel
                         </button>
+                        <button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="px-5 py-2.5 rounded-xl neu-button-primary text-xs font-bold text-white shadow-md disabled:opacity-50 flex items-center space-x-1.5"
+                        >
+                            <Sparkles className="w-4 h-4" />
+                            <span>{isSubmitting ? 'Launching...' : `Launch Phase ${nextPhaseNumber}`}</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+};
