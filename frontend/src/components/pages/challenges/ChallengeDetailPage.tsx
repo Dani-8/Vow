@@ -185,8 +185,8 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
         const currentPhaseLogs = activeSprint?.logs && activeSprint.logs.length > 0
             ? activeSprint.logs
             : (activeSprint?.phaseNumber === 1 || !activeSprint)
-            ? challenge.logs || []
-            : activeSprint?.logs || [];
+                ? challenge.logs || []
+                : activeSprint?.logs || [];
 
         const completed = currentPhaseLogs.filter((l) => l.status === 'completed').length;
         const rate = targetDays > 0 ? Math.round((completed / targetDays) * 100) : 0;
@@ -346,6 +346,75 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                 isTodayCompleted={todayLog?.status === 'completed'}
             />
 
+            {/* End-of-Challenge Finale / Victory Celebration Banner */}
+            {isChallengeCompleted && (
+                <div className="neu-card p-6 sm:p-7 bg-[#E0E5EC] border-2 border-amber-400/80 rounded-2xl space-y-4 shadow-md animate-in fade-in zoom-in-95 duration-300">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div className="flex items-center space-x-4">
+                            <div className="w-12 h-12 rounded-2xl neu-button flex items-center justify-center bg-amber-50 text-amber-500 shadow-sm shrink-0">
+                                <Trophy className="w-7 h-7" />
+                            </div>
+                            <div>
+                                <div className="flex items-center space-x-2">
+                                    <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full neu-inset text-amber-800 bg-amber-100">
+                                        🏆 Challenge Finale Completed!
+                                    </span>
+                                    <span className="text-xs font-bold text-emerald-700 bg-emerald-100/70 px-2 py-0.5 rounded-full neu-inset">
+                                        {totalPhasesCompletedCount} Phases Mastered
+                                    </span>
+                                </div>
+                                <h3 className="text-base sm:text-lg font-black text-[#1a1c35] mt-1">
+                                    Outstanding accomplishment! You conquered this challenge.
+                                </h3>
+                                <p className="text-xs font-bold text-[#717699]">
+                                    {totalChallengeCompletedDays} total daily check-ins logged. You can keep pushing forward by launching a bonus sprint.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-wrap items-center gap-2.5">
+                            {challenge.status === 'completed' && (
+                                <button
+                                    onClick={async () => {
+                                        await onUpdateChallenge(challengeId, { status: 'active' });
+                                    }}
+                                    className="px-3.5 py-2 rounded-xl neu-button text-xs font-bold text-slate-700 hover:text-slate-900 flex items-center space-x-1.5"
+                                >
+                                    <RotateCcw className="w-3.5 h-3.5" />
+                                    <span>Re-open Challenge</span>
+                                </button>
+                            )}
+                            <button
+                                onClick={() => setIsStartSprintModalOpen(true)}
+                                className="px-5 py-2.5 rounded-xl neu-button-primary text-xs font-bold text-white shadow-md flex items-center space-x-2"
+                            >
+                                <Sparkles className="w-4 h-4" />
+                                <span>Extend / Start Next Sprint</span>
+                                <ArrowRight className="w-4 h-4" />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Sprints Navigator */}
+            <SprintPhaseNavigator
+                sprints={sprints}
+                activeSprintId={activeSprint?.id || sprints[0]?.id}
+                accentColor={accentColor}
+                onSelectSprint={(id) => setSelectedSprintId(id)}
+                onCompleteCurrentSprintPrompt={(sprint) => setSprintToComplete(sprint)}
+            />
+
+            {/* Retrospective Summary Banner if active phase is completed */}
+            {activeSprint && activeSprint.status === 'completed' && activeSprint.retrospective && (
+                <SprintRetrospectiveBanner
+                    sprint={activeSprint}
+                    accentColor={accentColor}
+                    onEditRetrospectivePrompt={() => setSprintToComplete(activeSprint)}
+                />
+            )}
+
             {/* Main Content 2-Column Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 {/* Left Column: Progress Matrix & Sub-Cards */}
@@ -360,8 +429,16 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
 
                     <ChallengeRulesAndTags
                         challenge={challenge}
+                        activeSprint={activeSprint}
                         accentColor={accentColor}
                         onEdit={() => setIsEditModalOpen(true)}
+                        onUpdateSprintRule={
+                            onUpdateSprintRule && activeSprint
+                                ? async (newRule) => {
+                                    await onUpdateSprintRule(challengeId, activeSprint.id, newRule);
+                                }
+                                : undefined
+                        }
                     />
                 </div>
 
@@ -413,16 +490,30 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                     onClose={() => setSprintToComplete(null)}
                     sprint={sprintToComplete}
                     accentColor={accentColor}
-                    onConfirmComplete={async (retro) => {
+                    isFinalSprint={
+                        sprints.length === 0 ||
+                        sprintToComplete.id === sprints[sprints.length - 1].id
+                    }
+                    onConfirmComplete={async (retro, actionAfter) => {
+                        const markChallengeCompleted = actionAfter === 'complete_challenge';
                         if (onCompleteSprint) {
-                            await onCompleteSprint(challengeId, sprintToComplete.id, retro);
+                            await onCompleteSprint(
+                                challengeId,
+                                sprintToComplete.id,
+                                retro,
+                                markChallengeCompleted
+                            );
                         } else {
                             const updatedSprints = (challenge.sprints || []).map((s) =>
                                 s.id === sprintToComplete.id
                                     ? { ...s, status: 'completed' as const, retrospective: retro }
                                     : s
                             );
-                            await onUpdateChallenge(challengeId, { sprints: updatedSprints });
+                            const updates: Partial<Challenge> = { sprints: updatedSprints };
+                            if (markChallengeCompleted) {
+                                updates.status = 'completed';
+                            }
+                            await onUpdateChallenge(challengeId, updates);
                         }
                     }}
                     onStartNextSprintPrompt={() => setIsStartSprintModalOpen(true)}
