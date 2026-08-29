@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { X, Plus, Calendar, Sparkles } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Plus, Calendar, Sparkles, Copy, ArrowRight, ShieldCheck } from 'lucide-react';
 import { Challenge } from '../../../../../types';
 
 interface StartNextSprintModalProps {
@@ -31,7 +31,11 @@ export const StartNextSprintModal: React.FC<StartNextSprintModalProps> = ({
     accentColor,
     onStartSprint,
 }) => {
-    const nextPhaseNumber = (challenge.sprints?.length || 0) + 1;
+    const existingSprints = challenge.sprints || [];
+    const lastSprint = existingSprints.length > 0 ? existingSprints[existingSprints.length - 1] : null;
+    const nextPhaseNumber = existingSprints.length + 1;
+    const isExtension = challenge.status === 'completed' || (lastSprint && lastSprint.status === 'completed');
+
     const [title, setTitle] = useState('');
     const [targetDays, setTargetDays] = useState<number>(14);
     const [isCustomDays, setIsCustomDays] = useState(false);
@@ -41,13 +45,9 @@ export const StartNextSprintModal: React.FC<StartNextSprintModalProps> = ({
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
 
-    // Reset fields whenever modal opens
-    React.useEffect(() => {
+    // Compute default start date seamlessly from previous sprint
+    useEffect(() => {
         if (isOpen) {
-            setTitle('');
-            setTargetDays(14);
-            setIsCustomDays(false);
-            setCustomDaysInput('14');
             setStartDate(new Date().toISOString().split('T')[0]);
             setRule('');
             setError('');
