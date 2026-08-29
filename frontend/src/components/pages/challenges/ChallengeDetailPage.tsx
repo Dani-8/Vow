@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { Trophy, Sparkles, RotateCcw, CheckCircle2, ArrowRight, Star, Flame, Calendar, Award } from 'lucide-react';
 import { Challenge, ChallengeLog, ChallengeSprint, SprintRetrospective } from '../../../types';
 import { ChallengeDetailHeader } from './components/detail/ChallengeDetailHeader';
 import { ChallengeProgressMatrix } from './components/detail/ChallengeProgressMatrix';
@@ -25,6 +26,8 @@ interface ChallengeDetailPageProps {
             status?: 'completed' | 'rest' | 'missed';
             note?: string;
             timeSpent?: string;
+            imageUrl?: string;
+            sprintId?: string;
         }
     ) => Promise<void>;
     onDeleteLog: (challengeId: string, logId: string) => Promise<void>;
@@ -41,13 +44,10 @@ interface ChallengeDetailPageProps {
     onCompleteSprint?: (
         challengeId: string,
         sprintId: string,
-        retrospective: SprintRetrospective
+        retrospective: SprintRetrospective,
+        markChallengeCompleted?: boolean
     ) => Promise<void>;
-}
-
-const getAccentColor = (challenge?: Partial<Challenge>): string => {
-    if (!challenge?.color) return '#549acb';
-    if (challenge.color.startsWith('#')) return challenge.color;
+    onUpdateSprintRule?: (challengeId: string, sprintId: string, rule: string) => Promise<void>;
     const map: Record<string, string> = {
         purple: '#8b5cf6',
         blue: '#549acb',
