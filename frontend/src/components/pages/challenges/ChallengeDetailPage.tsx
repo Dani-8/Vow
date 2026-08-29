@@ -148,6 +148,26 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
     }, [challenge.logs]);
 
     const totalPhasesCompletedCount = useMemo(() => {
+        return sprints.filter((s) => s.status === 'completed').length;
+    }, [sprints]);
+
+    // Calculate elapsed days and stats scoped to the active phase/sprint
+    const {
+        currentDayNumber,
+        isUpcoming,
+        daysUntilStart,
+        startDateObj,
+        targetEndDateObj,
+        completedDaysCount,
+        successRate,
+        remainingDays,
+        streak,
+        phaseTargetDays,
+        phaseLogs,
+    } = useMemo(() => {
+        const targetDays = activeSprint?.targetDays || challenge.targetDays;
+        const start = new Date(activeSprint?.startDate || challenge.startDate || new Date());
+        const startMidnight = new Date(start.getFullYear(), start.getMonth(), start.getDate());
         const nowMidnight = new Date();
         nowMidnight.setHours(0, 0, 0, 0);
 
@@ -165,8 +185,8 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
         const currentPhaseLogs = activeSprint?.logs && activeSprint.logs.length > 0
             ? activeSprint.logs
             : (activeSprint?.phaseNumber === 1 || !activeSprint)
-                ? challenge.logs || []
-                : activeSprint?.logs || [];
+            ? challenge.logs || []
+            : activeSprint?.logs || [];
 
         const completed = currentPhaseLogs.filter((l) => l.status === 'completed').length;
         const rate = targetDays > 0 ? Math.round((completed / targetDays) * 100) : 0;
@@ -178,26 +198,6 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
             const todayLog = currentPhaseLogs.find((l) => Number(l.dayNumber) === currentDay);
             let checkDay = todayLog?.status === 'completed' ? currentDay : currentDay - 1;
             while (checkDay >= 1) {
-                const log = currentPhaseLogs.find((l) => Number(l.dayNumber) === checkDay);
-                if (log?.status === 'completed') {
-                    currentStreak++;
-                    checkDay--;
-                } else if (log?.status === 'rest') {
-                    checkDay--;
-                } else {
-                    break;
-                }
-            }
-        }
-
-        return {
-            currentDayNumber: currentDay,
-            isUpcoming: upcoming,
-            daysUntilStart: untilStart,
-            startDateObj: start,
-            targetEndDateObj: targetEnd,
-            completedDaysCount: completed,
-            successRate: rate,
             remainingDays: remaining,
             streak: currentStreak,
             phaseTargetDays: targetDays,
