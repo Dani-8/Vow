@@ -258,23 +258,33 @@ router.post('/:id/log', authenticateToken, async (req: AuthenticatedRequest, res
                     if (sIdx >= 0) {
                         newSLogs[sIdx] = newLog;
                     } else {
+                        newSLogs.unshift(newLog);
+                    }
+                    newSLogs.sort((a: any, b: any) => Number(b.dayNumber) - Number(a.dayNumber));
+                    return { ...s, logs: newSLogs, updatedAt: new Date().toISOString() };
+                }
+                return s;
+            });
+        }
 
-        return res.json({ challenge: challenge.toObject() });
+        // Sort logs descending by dayNumber
+        challenge.logs.sort((a, b) => Number(b.dayNumber) - Number(a.dayNumber));
+
+        await challenge.save();
+        return res.json({ challenge: challenge.toObject(), log: newLog });
     } catch (err: any) {
-        console.error('Error deleting log:', err);
-        return res.status(500).json({ error: 'Failed to delete log' });
+        console.error('Error logging day for challenge:', err);
+        return res.status(500).json({ error: 'Failed to log day' });
     }
 });
 
-// Delete an entire challenge
-router.delete('/:id', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+// Delete a day log
+router.delete('/:id/log/:logId', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
     try {
-        await Challenge.deleteOne({ id: req.params.id, userId: req.userId });
-        return res.json({ success: true });
-    } catch (err: any) {
-        console.error('Error deleting challenge:', err);
-        return res.status(500).json({ error: 'Failed to delete challenge' });
-    }
-});
+        const challenge = await Challenge.findOne({ id: req.params.id, userId: req.userId });
+        if (!challenge) {
+            return res.status(404).json({ error: 'Challenge not found' });
+        }
 
-export default router;
+        const logId = req.params.logId;
+        challenge.logs = challenge.logs.filter((l) => l.id !== logId && String(l.dayNumber) !== logId);
