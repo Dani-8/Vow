@@ -158,36 +158,36 @@ router.post('/', authenticateToken, async (req: AuthenticatedRequest, res: Respo
             userId: req.userId,
             title: title.trim(),
             description: description || '',
-        if (Array.isArray(req.body.logs)) challenge.logs = req.body.logs;
-        if (Array.isArray(req.body.sprints)) challenge.sprints = req.body.sprints;
-        if (req.body.currentSprintId !== undefined) challenge.currentSprintId = req.body.currentSprintId;
+            category: category || 'engineering',
+            color: color || 'purple',
+            icon: icon || 'target',
+            targetDays: Number(targetDays) || 30,
+            startDate: startDate || new Date().toISOString(),
+            targetEndDate,
+            rule: rule || '',
+            tags: Array.isArray(tags) ? tags : [],
+            status: status || 'active',
+            logs: Array.isArray(logs) ? logs : [],
+        });
 
-        await challenge.save();
-        return res.json({ challenge: challenge.toObject() });
+        return res.status(201).json({ challenge: created.toObject() });
     } catch (err: any) {
-        console.error('Error updating challenge:', err);
-        return res.status(500).json({ error: 'Failed to update challenge' });
+        console.error('Error creating challenge:', err);
+        return res.status(500).json({ error: 'Failed to create challenge' });
     }
 });
 
-// Add or update a day log in a challenge
-router.post('/:id/log', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+// Update an existing challenge
+router.put('/:id', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
     try {
         const challenge = await Challenge.findOne({ id: req.params.id, userId: req.userId });
         if (!challenge) {
-            return res.status(404).json({ error: 'Challenge not found' });
-        }
-
-        const { dayNumber, date, status, note, timeSpent, imageUrl, sprintId } = req.body;
-        const targetDay = Number(dayNumber) || 1;
-        const logDate = date || new Date().toISOString().split('T')[0];
-        const logStatus = status || 'completed';
-
-        const existingIndex = challenge.logs.findIndex((l) => Number(l.dayNumber) === targetDay);
-
-        const newLog: IChallengeLog = {
-            id: existingIndex >= 0 ? challenge.logs[existingIndex].id : `log_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
-            dayNumber: targetDay,
+            // Create if doesn't exist
+            const created = await Challenge.create({
+                id: req.params.id,
+                userId: req.userId,
+                ...req.body,
+            });
             date: logDate,
             status: logStatus,
             note: note || '',
