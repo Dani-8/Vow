@@ -298,6 +298,26 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
     const todayLog = phaseLogs.find((l) => Number(l.dayNumber) === currentDayNumber);
 
     const handleOpenDayModal = (dayNumber: number, dateStr: string, log?: ChallengeLog) => {
+        setSelectedDayForModal({
+            dayNumber,
+            dateStr,
+            existingLog: log || null,
+        });
+    };
+
+    return (
+        <div className="space-y-6 animate-in fade-in duration-300 pb-12">
+            {/* Top Navigation & Challenge Header Card */}
+            <ChallengeDetailHeader
+                challenge={challenge}
+                accentColor={accentColor}
+                phaseTargetDays={phaseTargetDays}
+                onBack={onBack}
+                onEdit={() => setIsEditModalOpen(true)}
+                onDelete={() => setIsDeleteModalOpen(true)}
+                onTogglePause={async () => {
+                    const newStatus = challenge.status === 'paused' ? 'active' : 'paused';
+                    await onUpdateChallenge(challengeId, { status: newStatus });
                 }}
                 onCheckIn={() => {
                     if (isUpcoming) {
@@ -325,26 +345,6 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                 targetEndDateObj={targetEndDateObj}
                 isTodayCompleted={todayLog?.status === 'completed'}
             />
-
-            {/* Sprints Navigator */}
-            <SprintPhaseNavigator
-                sprints={sprints}
-                activeSprintId={activeSprint?.id || sprints[0]?.id}
-                accentColor={accentColor}
-                onSelectSprint={(id) => setSelectedSprintId(id)}
-                onStartNextSprintPrompt={() => setIsStartSprintModalOpen(true)}
-                onCompleteCurrentSprintPrompt={(sprint) => setSprintToComplete(sprint)}
-            />
-
-            {/* Retrospective Summary Banner if active phase is completed */}
-            {activeSprint && activeSprint.status === 'completed' && activeSprint.retrospective && (
-                <SprintRetrospectiveBanner
-                    sprint={activeSprint}
-                    accentColor={accentColor}
-                    onStartNextSprintPrompt={() => setIsStartSprintModalOpen(true)}
-                    onEditRetrospectivePrompt={() => setSprintToComplete(activeSprint)}
-                />
-            )}
 
             {/* Main Content 2-Column Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
