@@ -518,3 +518,33 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                     }}
                     onStartNextSprintPrompt={() => setIsStartSprintModalOpen(true)}
                 />
+            )}
+
+            {/* Start Next Sprint Modal */}
+            {isStartSprintModalOpen && (
+                <StartNextSprintModal
+                    isOpen={isStartSprintModalOpen}
+                    onClose={() => setIsStartSprintModalOpen(false)}
+                    challenge={challenge}
+                    accentColor={accentColor}
+                    onStartSprint={async (sprintData) => {
+                        const newSprintId = `sprint_${Date.now()}`;
+                        if (onStartNextSprint) {
+                            await onStartNextSprint(challengeId, sprintData);
+                        } else {
+                            const newSprint = {
+                                id: newSprintId,
+                                phaseNumber: (challenge.sprints?.length || 0) + 1,
+                                title: sprintData.title,
+                                targetDays: sprintData.targetDays,
+                                startDate: sprintData.startDate,
+                                targetEndDate: sprintData.targetEndDate,
+                                rule: sprintData.rule,
+                                status: 'active' as const,
+                                logs: [],
+                                createdAt: new Date().toISOString(),
+                            };
+                            await onUpdateChallenge(challengeId, {
+                                sprints: [...(challenge.sprints || []), newSprint],
+                                currentSprintId: newSprintId,
+                                status: 'active',
