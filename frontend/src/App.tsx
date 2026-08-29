@@ -137,6 +137,7 @@ export default function App() {
         onDeleteChallengeLog={challengeState.deleteLog}
         onStartNextSprint={challengeState.startNextSprint}
         onCompleteSprint={challengeState.completeSprint}
+        onUpdateSprintRule={challengeState.updateSprintRule}
       />
 
       <GlobalModals
@@ -147,7 +148,6 @@ export default function App() {
         onSubmitTask={async (data) => {
           await taskData.handleCreateOrUpdateTask(
             data,
-            modalState.editingTask?._id
           );
           modalState.setIsTaskModalOpen(false);
         }}
