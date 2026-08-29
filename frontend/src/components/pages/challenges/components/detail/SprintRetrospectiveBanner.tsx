@@ -48,17 +48,8 @@ export const SprintRetrospectiveBanner: React.FC<SprintRetrospectiveBannerProps>
                             className="px-3 py-1.5 rounded-xl neu-button text-xs font-bold text-slate-600 hover:text-slate-900"
                         >
                             Edit Takeaway
-                        >
-                            Edit Takeaway
                         </button>
                     )}
-                    <button
-                        onClick={onStartNextSprintPrompt}
-                        className="px-4 py-2 rounded-xl neu-button-primary text-xs font-bold text-white flex items-center space-x-1.5 shadow-sm"
-                    >
-                        <span>Start Next Phase</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
                 </div>
             </div>
 
