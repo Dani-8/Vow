@@ -48,23 +48,46 @@ export const StartNextSprintModal: React.FC<StartNextSprintModalProps> = ({
     // Compute default start date seamlessly from previous sprint
     useEffect(() => {
         if (isOpen) {
-            setStartDate(new Date().toISOString().split('T')[0]);
-            setRule('');
+            let defaultStart = new Date().toISOString().split('T')[0];
+            if (lastSprint?.targetEndDate) {
+                const prevEnd = new Date(lastSprint.targetEndDate);
+                // The day after previous sprint ends
+                const nextDay = new Date(prevEnd.getTime() + 86400000);
+                const nextDayStr = nextDay.toISOString().split('T')[0];
+                // If the day after previous sprint is today or future, use it
+                const todayStr = new Date().toISOString().split('T')[0];
+                defaultStart = nextDayStr >= todayStr ? nextDayStr : todayStr;
+            }
+
+            const previousRule = lastSprint?.rule || challenge.rule || '';
+            setTitle(`Phase ${nextPhaseNumber}: ${challenge.title} (Part ${nextPhaseNumber})`);
+            setTargetDays(14);
+            setIsCustomDays(false);
+            setCustomDaysInput('14');
+            setStartDate(defaultStart);
+            setRule(previousRule);
             setError('');
             setIsSubmitting(false);
         }
-    }, [isOpen]);
+    }, [isOpen, challenge, lastSprint, nextPhaseNumber]);
 
     if (!isOpen) return null;
 
     const activeDaysCount = isCustomDays ? parseInt(customDaysInput, 10) || targetDays : targetDays;
     const startObj = new Date(startDate || new Date());
-    const endObj = new Date(startObj.getTime() + activeDaysCount * 86400000);
+    // End date calculation: startDate + (activeDaysCount - 1) days
+    const endObj = new Date(startObj.getTime() + Math.max(0, activeDaysCount - 1) * 86400000);
+    const prevRule = lastSprint?.rule || challenge.rule || '';
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!title.trim()) {
             setError('Please enter a sprint/phase title.');
+            return;
+        }
+
+        if (activeDaysCount <= 0) {
+            setError('Sprint duration must be at least 1 day.');
             return;
         }
 
@@ -75,29 +98,6 @@ export const StartNextSprintModal: React.FC<StartNextSprintModalProps> = ({
                 title: title.trim(),
                 targetDays: activeDaysCount,
                 startDate,
-                targetEndDate: endObj.toISOString().split('T')[0],
-                rule: rule.trim() || undefined,
-            });
-            onClose();
-        } catch (err: any) {
-            setError(err.message || 'Failed to start sprint');
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
-
-    return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-            <div className="neu-card w-full max-w-lg p-6 sm:p-7 bg-[#E0E5EC] relative max-h-[92vh] overflow-y-auto">
-                <button
-                    onClick={onClose}
-                    className="absolute top-5 right-5 p-2 rounded-xl neu-button text-[#717699] hover:text-[#1a1c35] transition-colors"
-                    title="Close"
-                >
-                    <X className="w-4 h-4" />
-                </button>
-
-                {/* Header */}
                 <div className="flex items-center space-x-3 mb-6 pb-4 border-b border-slate-300/70">
                     <div
                         className="w-11 h-11 rounded-2xl neu-button flex items-center justify-center shrink-0 shadow-sm"
