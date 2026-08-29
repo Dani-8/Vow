@@ -48,6 +48,11 @@ interface ChallengeDetailPageProps {
         markChallengeCompleted?: boolean
     ) => Promise<void>;
     onUpdateSprintRule?: (challengeId: string, sprintId: string, rule: string) => Promise<void>;
+}
+
+const getAccentColor = (challenge?: Partial<Challenge>): string => {
+    if (!challenge?.color) return '#549acb';
+    if (challenge.color.startsWith('#')) return challenge.color;
     const map: Record<string, string> = {
         purple: '#8b5cf6',
         blue: '#549acb',
@@ -69,6 +74,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
     onDeleteLog,
     onStartNextSprint,
     onCompleteSprint,
+    onUpdateSprintRule,
 }) => {
     const accentColor = getAccentColor(challenge);
     const challengeId = challenge.id || challenge._id;
@@ -92,12 +98,6 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
             updatedAt: challenge.updatedAt || new Date().toISOString(),
         };
         return [defaultSprint];
-    }, [challenge]);
-
-    const [selectedSprintId, setSelectedSprintId] = useState<string | undefined>(
-        challenge.currentSprintId || (sprints.length > 0 ? sprints[sprints.length - 1].id : undefined)
-    );
-
     // Keep selectedSprintId synchronized whenever the challenge or its sprints change
     useEffect(() => {
         if (challenge.currentSprintId && sprints.some((s) => s.id === challenge.currentSprintId)) {
