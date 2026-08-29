@@ -98,36 +98,36 @@ router.get('/:id', authenticateToken, async (req: AuthenticatedRequest, res: Res
                 challenge.targetDays = russianDemo.targetDays;
                 challenge.rule = russianDemo.rule;
                 challenge.logs = russianDemo.logs;
-            targetEndDate,
-            rule,
-            tags,
-            status,
-            logs,
-        } = req.body;
-
-        if (!title || typeof title !== 'string') {
-            return res.status(400).json({ error: 'Challenge title is required' });
+                await challenge.save();
+            }
         }
 
-        const created = await Challenge.create({
-            id,
-            userId: req.userId,
-            title: title.trim(),
-            description: description || '',
-            category: category || 'engineering',
-            color: color || 'purple',
-            icon: icon || 'target',
-            targetDays: Number(targetDays) || 30,
-            startDate: startDate || new Date().toISOString(),
-            targetEndDate,
-            rule: rule || '',
-            tags: Array.isArray(tags) ? tags : [],
-            status: status || 'active',
-            logs: Array.isArray(logs) ? logs : [],
-        });
+        // Migrate reading challenge if needed
+        if (
+            (challenge.id === 'ch-reading-30' ||
+                challenge.title === '30 Days of Deep Reading') &&
+            (!challenge.sprints || challenge.sprints.length <= 1 || challenge.status !== 'completed')
+        ) {
+            const readingDemo = INITIAL_DEMO_CHALLENGES_SERVER.find(
+                (c) => c.id === 'ch-reading-30' || c.title === '30 Days of Deep Reading'
+            );
+            if (readingDemo) {
+                challenge.sprints = readingDemo.sprints;
+                challenge.currentSprintId = readingDemo.currentSprintId;
+                challenge.targetDays = readingDemo.targetDays;
+                challenge.rule = readingDemo.rule;
+                challenge.logs = readingDemo.logs;
+                challenge.status = 'completed';
+                challenge.tags = readingDemo.tags;
+                await challenge.save();
+            }
+        }
 
-        return res.status(201).json({ challenge: created.toObject() });
+        return res.json({ challenge: challenge.toObject() });
     } catch (err: any) {
+        console.error('Error fetching challenge:', err);
+        return res.status(500).json({ error: 'Failed to fetch challenge' });
+    }
         console.error('Error creating challenge:', err);
         return res.status(500).json({ error: 'Failed to create challenge' });
     }
