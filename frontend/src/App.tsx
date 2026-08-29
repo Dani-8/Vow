@@ -148,6 +148,7 @@ export default function App() {
         onSubmitTask={async (data) => {
           await taskData.handleCreateOrUpdateTask(
             data,
+            modalState.editingTask?._id
           );
           modalState.setIsTaskModalOpen(false);
         }}
