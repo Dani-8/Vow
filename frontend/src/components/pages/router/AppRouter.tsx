@@ -158,6 +158,9 @@ export const AppRouter: React.FC<AppRouterProps> = ({
         title: 'Draft Q3 Personal Growth Blueprint',
         description:
           'Outline key milestones for skill acquisition and daily habit consistency for Q3.',
+        tags: ['GROWTH', 'STRATEGY'],
+        status: 'in_progress',
+        priority: 'High',
         isPrivate: false,
         isHabit: false,
         currentStreak: 4,
@@ -185,9 +188,6 @@ export const AppRouter: React.FC<AppRouterProps> = ({
             navigate('/app/vault');
           } else {
             navigate('/app/tasks');
-          }
-        }}
-      />
     );
   }
 
