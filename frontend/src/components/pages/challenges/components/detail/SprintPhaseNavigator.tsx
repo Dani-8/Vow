@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layers, CheckCircle2, Clock, Plus, Award } from 'lucide-react';
+import { Layers, CheckCircle2, Clock, Award } from 'lucide-react';
 import { ChallengeSprint } from '../../../../../types';
 
 interface SprintPhaseNavigatorProps {
@@ -7,7 +7,6 @@ interface SprintPhaseNavigatorProps {
     activeSprintId?: string;
     accentColor: string;
     onSelectSprint: (sprintId: string) => void;
-    onStartNextSprintPrompt: () => void;
     onCompleteCurrentSprintPrompt?: (sprint: ChallengeSprint) => void;
 }
 
@@ -16,7 +15,6 @@ export const SprintPhaseNavigator: React.FC<SprintPhaseNavigatorProps> = ({
     activeSprintId,
     accentColor,
     onSelectSprint,
-    onStartNextSprintPrompt,
     onCompleteCurrentSprintPrompt,
 }) => {
     if (!sprints || sprints.length === 0) return null;
@@ -31,21 +29,13 @@ export const SprintPhaseNavigator: React.FC<SprintPhaseNavigatorProps> = ({
                     <h3 className="text-sm font-black text-[#1a1c35]">Challenge Phases &amp; Sprints</h3>
                 </div>
                 <div className="flex items-center space-x-2">
-                    {currentSelectedSprint && currentSelectedSprint.status === 'active' && onCompleteCurrentSprintPrompt ? (
+                    {currentSelectedSprint && currentSelectedSprint.status === 'active' && onCompleteCurrentSprintPrompt && (
                         <button
                             onClick={() => onCompleteCurrentSprintPrompt(currentSelectedSprint)}
-                            className="px-3 py-1.5 rounded-xl neu-button text-xs font-bold text-emerald-700 bg-emerald-50/60 hover:bg-emerald-100 flex items-center space-x-1.5 transition-all shadow-sm"
+                            className="px-3.5 py-1.5 rounded-xl neu-button text-xs font-bold text-emerald-700 bg-emerald-50/70 hover:bg-emerald-100 flex items-center space-x-1.5 transition-all shadow-sm"
                         >
                             <Award className="w-3.5 h-3.5 text-emerald-600" />
-                            <span>Complete Phase</span>
-                        </button>
-                    ) : (
-                        <button
-                            onClick={onStartNextSprintPrompt}
-                            className="px-3 py-1.5 rounded-xl neu-button text-xs font-bold text-slate-700 hover:text-slate-900 flex items-center space-x-1.5 transition-all"
-                        >
-                            <Plus className="w-3.5 h-3.5" />
-                            <span>Add Next Phase</span>
+                            <span>Finish Sprint</span>
                         </button>
                     )}
                 </div>
