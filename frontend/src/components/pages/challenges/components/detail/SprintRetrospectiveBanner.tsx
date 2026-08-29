@@ -1,18 +1,16 @@
 import React from 'react';
-import { Award, Star, BookOpen, ArrowRight } from 'lucide-react';
+import { Award, Star, BookOpen } from 'lucide-react';
 import { ChallengeSprint } from '../../../../../types';
 
 interface SprintRetrospectiveBannerProps {
     sprint: ChallengeSprint;
     accentColor: string;
-    onStartNextSprintPrompt: () => void;
     onEditRetrospectivePrompt?: () => void;
 }
 
 export const SprintRetrospectiveBanner: React.FC<SprintRetrospectiveBannerProps> = ({
     sprint,
     accentColor,
-    onStartNextSprintPrompt,
     onEditRetrospectivePrompt,
 }) => {
     const retro = sprint.retrospective;
@@ -48,6 +46,8 @@ export const SprintRetrospectiveBanner: React.FC<SprintRetrospectiveBannerProps>
                         <button
                             onClick={onEditRetrospectivePrompt}
                             className="px-3 py-1.5 rounded-xl neu-button text-xs font-bold text-slate-600 hover:text-slate-900"
+                        >
+                            Edit Takeaway
                         >
                             Edit Takeaway
                         </button>
