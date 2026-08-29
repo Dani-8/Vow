@@ -98,6 +98,16 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
             updatedAt: challenge.updatedAt || new Date().toISOString(),
         };
         return [defaultSprint];
+    }, [challenge]);
+
+    const isChallengeCompleted =
+        challenge.status === 'completed' ||
+        (sprints.length > 0 && sprints.every((s) => s.status === 'completed'));
+
+    const [selectedSprintId, setSelectedSprintId] = useState<string | undefined>(
+        challenge.currentSprintId || (sprints.length > 0 ? sprints[sprints.length - 1].id : undefined)
+    );
+
     // Keep selectedSprintId synchronized whenever the challenge or its sprints change
     useEffect(() => {
         if (challenge.currentSprintId && sprints.some((s) => s.id === challenge.currentSprintId)) {
@@ -131,23 +141,13 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
     const [isStartSprintModalOpen, setIsStartSprintModalOpen] = useState(false);
     const [sprintToComplete, setSprintToComplete] = useState<ChallengeSprint | null>(null);
 
-    // Calculate elapsed days and stats scoped to the active phase/sprint
-    const {
-        currentDayNumber,
-        isUpcoming,
-        daysUntilStart,
-        startDateObj,
-        targetEndDateObj,
-        completedDaysCount,
-        successRate,
-        remainingDays,
-        streak,
-        phaseTargetDays,
-        phaseLogs,
-    } = useMemo(() => {
-        const targetDays = activeSprint?.targetDays || challenge.targetDays;
-        const start = new Date(activeSprint?.startDate || challenge.startDate || new Date());
-        const startMidnight = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+    // Overall totals across entire challenge
+    const totalChallengeCompletedDays = useMemo(() => {
+        const allLogs = challenge.logs || [];
+        return allLogs.filter((l) => l.status === 'completed').length;
+    }, [challenge.logs]);
+
+    const totalPhasesCompletedCount = useMemo(() => {
         const nowMidnight = new Date();
         nowMidnight.setHours(0, 0, 0, 0);
 
