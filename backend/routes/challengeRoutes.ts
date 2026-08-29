@@ -41,13 +41,13 @@ router.get('/', authenticateToken, async (req: AuthenticatedRequest, res: Respon
                     }
                 }
             }
-        }
 
-        const challenges = rawChallenges.map((c) => c.toObject());
-        return res.json({ challenges });
-    } catch (err: any) {
-        console.error('Error fetching challenges:', err);
-        return res.status(500).json({ error: 'Failed to fetch challenges' });
+            // Also enrich or complete the 30 Days of Deep Reading demo challenge
+            const readingDemo = INITIAL_DEMO_CHALLENGES_SERVER.find(
+                (c) => c.id === 'ch-reading-30' || c.title === '30 Days of Deep Reading'
+            );
+            if (readingDemo) {
+                for (const ch of rawChallenges) {
     }
 });
 
