@@ -1,12 +1,26 @@
-import React, { useState } from 'react';
-import { Task, SubTask } from '../../../types';
+import React, { useState, useEffect } from 'react';
+import { Task, SubTask, TaskAttachment, TaskActivityItem } from '../../../types';
 import { TaskDetailHeader } from './components/TaskDetailHeader';
 import { TaskDetailTabs, TaskTabType } from './components/TaskDetailTabs';
+import { TaskOverviewTab } from './components/TaskOverviewTab';
+import { TaskNotesTab } from './components/TaskNotesTab';
+import { TaskFilesTab } from './components/TaskFilesTab';
+import { TaskActivityTab } from './components/TaskActivityTab';
 import { SubTaskTimeline } from './subtasks/SubTaskTimeline';
 import { SubTaskDetailPanel } from './subtasks/SubTaskDetailPanel';
 import { AddSubTaskModal } from './subtasks/AddSubTaskModal';
-import { EmptyTabPlaceholder } from './components/EmptyTabPlaceholder';
 import { useSubTasks } from './hooks/useSubTasks';
+import {
+    getTaskNote,
+    saveTaskNote,
+    getTaskAttachments,
+    addTaskAttachment,
+    deleteTaskAttachment,
+    getTaskActivities,
+    addTaskActivity,
+    deleteTaskActivity,
+    TASK_DETAIL_UPDATED_EVENT,
+} from '../../../utils/taskDetailStorage';
 
 interface TaskDetailPageProps {
     task: Task;
@@ -25,29 +39,15 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
     onEditTask,
     onDeleteTask,
 }) => {
-    const [activeTab, setActiveTab] = useState<TaskTabType>('sub-tasks');
+    const [activeTab, setActiveTab] = useState<TaskTabType>('overview');
     const [selectedSubTask, setSelectedSubTask] = useState<SubTask | null>(null);
 
+    // Detail States (Notes, Attachments, Activities)
+    const [note, setNote] = useState<string>(() => getTaskNote(task._id));
+    const [attachments, setAttachments] = useState<TaskAttachment[]>(() => getTaskAttachments(task._id));
+    const [activities, setActivities] = useState<TaskActivityItem[]>(() => getTaskActivities(task._id));
+
     // Sub-task Modal state
-    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-    const [editingSubTask, setEditingSubTask] = useState<SubTask | null>(null);
-
-    // Custom hook for sub-tasks logic
-    const {
-        subTasks,
-        addSubTask,
-        updateSubTask,
-        toggleSubTaskStatus,
-        setSubTaskStatus,
-        deleteSubTask,
-        reorderSubTasks,
-        completedCount,
-        totalCount,
-        progressPercent,
-    } = useSubTasks(task._id, task.subTasks);
-
-    // Sync selected sub-task if updated in subTasks list
-    const activeSelectedSubTask = selectedSubTask
         ? subTasks.find((st) => st.id === selectedSubTask.id) || null
         : null;
 
