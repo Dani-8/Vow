@@ -95,3 +95,62 @@ export const TaskNotesTab: React.FC<TaskNotesTabProps> = ({
     setContent(newContent);
     setSaveStatus('dirty');
 
+    // Auto save
+    if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+    saveTimeoutRef.current = setTimeout(() => {
+      onSaveNote(newContent);
+      setSaveStatus('saved');
+    }, 600);
+
+    setTimeout(() => {
+      textarea.focus();
+      textarea.setSelectionRange(
+        start + prefix.length,
+        start + prefix.length + selectedText.length
+      );
+    }, 0);
+  };
+
+  // Convert lines into Subtasks detector
+  const handleDetectSubtasks = () => {
+    const lines = content.split('\n');
+    const detected: string[] = [];
+
+    lines.forEach((line) => {
+      const trimmed = line.trim();
+      // Match markdown checklists, bullet points, or numbered lists
+      if (trimmed.startsWith('- [ ]') || trimmed.startsWith('- [x]') || trimmed.startsWith('* [ ]')) {
+        const text = trimmed.replace(/^[-*]\s*\[[ x]\]\s*/, '').trim();
+        if (text.length > 2) detected.push(text);
+      } else if (trimmed.startsWith('- ') || trimmed.startsWith('* ') || /^\d+\.\s+/.test(trimmed)) {
+        const text = trimmed.replace(/^[-*]|\d+\.\s*/, '').trim();
+        if (text.length > 2 && !text.startsWith('#')) detected.push(text);
+      }
+    });
+
+    // Remove duplicates
+    const unique = Array.from(new Set(detected));
+    setDetectedTasks(unique);
+    setSelectedTasksToImport(unique);
+    setExtractModalOpen(true);
+  };
+
+  const handleImportSubtasks = () => {
+    if (!onAddSubTask || selectedTasksToImport.length === 0) {
+      setExtractModalOpen(false);
+      return;
+    }
+
+    selectedTasksToImport.forEach((title) => {
+      onAddSubTask({
+        taskId,
+        title,
+        dateLabel: 'From Note',
+        status: 'pending',
+        priority: 'Medium',
+      });
+    });
+
+    setExtractModalOpen(false);
+  };
+
