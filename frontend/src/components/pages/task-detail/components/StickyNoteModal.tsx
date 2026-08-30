@@ -327,3 +327,62 @@ export const StickyNoteModal: React.FC<StickyNoteModalProps> = ({
                 </button>
               </>
             )}
+
+            {/* If in edit mode and editing existing note, allow switching back to view mode */}
+            {isEditing && note && (
+              <button
+                type="button"
+                onClick={() => setIsEditing(false)}
+                className="px-3 py-1.5 rounded-xl bg-black/5 hover:bg-black/10 text-slate-700 text-xs font-bold transition-colors"
+              >
+                View
+              </button>
+            )}
+
+            {/* Close modal */}
+            <button
+              type="button"
+              onClick={onClose}
+              className="p-2 rounded-xl bg-black/5 hover:bg-black/10 text-slate-700 transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* MODE 1: CLEAN PAPER NOTE VIEW (Default when clicking a note) */}
+        {!isEditing && !extractMode && (
+          <div className="p-6 space-y-6">
+            {/* Note Body (Rendered with lined paper look and feel) */}
+            <div
+              className="min-h-[200px] max-h-[360px] overflow-y-auto pr-2 space-y-3 font-sans"
+              style={{
+                backgroundImage: `repeating-linear-gradient(transparent, transparent 27px, ${currentTheme.ruledLineColor} 28px)`,
+                lineHeight: '28px',
+              }}
+            >
+              {content.split('\n').map((line, idx) => {
+                if (line.startsWith('- [ ]') || line.startsWith('- [x]')) {
+                  const isChecked = line.startsWith('- [x]');
+                  return (
+                    <div
+                      key={idx}
+                      onClick={() => handleToggleCheckbox(idx)}
+                      className="flex items-center space-x-2.5 text-xs font-medium cursor-pointer group/check select-none"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={isChecked}
+                        readOnly
+                        className="rounded text-indigo-600 focus:ring-0 w-4 h-4 cursor-pointer"
+                      />
+                      <span
+                        className={`${currentTheme.bodyTextColor} leading-snug transition-all ${
+                          isChecked ? 'line-through opacity-50' : 'group-hover/check:opacity-80'
+                        }`}
+                      >
+                        {line.replace(/^-\s*\[[ x]\]\s*/, '')}
+                      </span>
+                    </div>
+                  );
+                }
