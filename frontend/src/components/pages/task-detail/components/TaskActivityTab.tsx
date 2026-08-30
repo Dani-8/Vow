@@ -142,3 +142,51 @@ export const TaskActivityTab: React.FC<TaskActivityTabProps> = ({
             className="w-full p-3 rounded-xl neu-inset bg-[#dbe2ee]/60 text-xs font-medium text-[#1a1c35] focus:outline-none placeholder:text-slate-400 resize-none"
           />
 
+          <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+            {/* Category chips with clean Lucide SVG icons */}
+            <div className="flex items-center space-x-2">
+              <span className="text-[11px] font-bold text-[#717699]">Type:</span>
+              <button
+                type="button"
+                onClick={() => setCommentCategory('update')}
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 ${
+                  commentCategory === 'update'
+                    ? 'neu-inset text-indigo-700 font-black'
+                    : 'neu-button text-[#717699] hover:text-[#1a1c35]'
+                }`}
+              >
+                <TrendingUp className="w-3.5 h-3.5 text-indigo-600" />
+                <span>Progress Update</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setCommentCategory('blocker')}
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 ${
+                  commentCategory === 'blocker'
+                    ? 'neu-inset text-rose-700 font-black'
+                    : 'neu-button text-[#717699] hover:text-rose-600'
+                }`}
+              >
+                <AlertTriangle className="w-3.5 h-3.5 text-rose-600" />
+                <span>Blocker</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setCommentCategory('milestone')}
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 ${
+                  commentCategory === 'milestone'
+                    ? 'neu-inset text-emerald-700 font-black'
+                    : 'neu-button text-[#717699] hover:text-emerald-600'
+                }`}
+              >
+                <Target className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Milestone</span>
+              </button>
+            </div>
+
+            {/* Submit button */}
+            <button
+              type="submit"
+              disabled={!commentText.trim()}
+              className="px-4 py-2 rounded-xl neu-button-primary text-xs font-bold text-white flex items-center space-x-1.5 disabled:opacity-50 shadow-sm"
+            >
