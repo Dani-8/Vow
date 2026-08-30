@@ -150,8 +150,8 @@ export const TaskActivityTab: React.FC<TaskActivityTabProps> = ({
                                 type="button"
                                 onClick={() => setCommentCategory('update')}
                                 className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 ${commentCategory === 'update'
-                                        ? 'neu-inset text-indigo-700 font-black'
-                                        : 'neu-button text-[#717699] hover:text-[#1a1c35]'
+                                    ? 'neu-inset text-indigo-700 font-black'
+                                    : 'neu-button text-[#717699] hover:text-[#1a1c35]'
                                     }`}
                             >
                                 <TrendingUp className="w-3.5 h-3.5 text-indigo-600" />
@@ -161,8 +161,8 @@ export const TaskActivityTab: React.FC<TaskActivityTabProps> = ({
                                 type="button"
                                 onClick={() => setCommentCategory('blocker')}
                                 className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 ${commentCategory === 'blocker'
-                                        ? 'neu-inset text-rose-700 font-black'
-                                        : 'neu-button text-[#717699] hover:text-rose-600'
+                                    ? 'neu-inset text-rose-700 font-black'
+                                    : 'neu-button text-[#717699] hover:text-rose-600'
                                     }`}
                             >
                                 <AlertTriangle className="w-3.5 h-3.5 text-rose-600" />
@@ -172,8 +172,8 @@ export const TaskActivityTab: React.FC<TaskActivityTabProps> = ({
                                 type="button"
                                 onClick={() => setCommentCategory('milestone')}
                                 className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 ${commentCategory === 'milestone'
-                                        ? 'neu-inset text-emerald-700 font-black'
-                                        : 'neu-button text-[#717699] hover:text-emerald-600'
+                                    ? 'neu-inset text-emerald-700 font-black'
+                                    : 'neu-button text-[#717699] hover:text-emerald-600'
                                     }`}
                             >
                                 <Target className="w-3.5 h-3.5 text-emerald-600" />
