@@ -141,6 +141,22 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
         deleteTaskActivity(task._id, activityId);
         setActivities(getTaskActivities(task._id));
     };
+
+    // Sync selected sub-task if updated in subTasks list
+    const activeSelectedSubTask = selectedSubTask
+        ? subTasks.find((st) => st.id === selectedSubTask.id) || null
+        : null;
+
+    return (
+        <div className="space-y-6 w-full pb-10 animate-fadeIn">
+            {/* 1. Header Section */}
+            <TaskDetailHeader
+                task={task}
+                onBack={onBack}
+                onToggleComplete={onToggleComplete}
+                completedCount={completedCount}
+                totalCount={totalCount}
+                progressPercent={progressPercent}
                 onTogglePrivate={onTogglePrivate}
                 onEditTask={onEditTask}
                 onDeleteTask={onDeleteTask}
@@ -154,7 +170,7 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
                 <TaskOverviewTab
                     task={task}
                     subTasks={subTasks}
-                    note={note}
+                    stickyNotes={stickyNotes}
                     attachments={attachments}
                     activities={activities}
                     completedCount={completedCount}
@@ -224,13 +240,15 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
             {activeTab === 'notes' && (
                 <TaskNotesTab
                     taskId={task._id}
-                    initialNote={note}
-                    onSaveNote={handleSaveNote}
+                    stickyNotes={stickyNotes}
+                    onAddStickyNote={handleAddStickyNote}
+                    onUpdateStickyNote={handleUpdateStickyNote}
+                    onDeleteStickyNote={handleDeleteStickyNote}
                     onAddSubTask={(newSt) => {
                         addSubTask(newSt);
                         addTaskActivity(task._id, {
                             type: 'subtask_add',
-                            message: `Imported subtask from notes: "${newSt.title}"`,
+                            message: `Imported subtask from sticky notes: "${newSt.title}"`,
                             user: 'Alex Rivera',
                         });
                         setActivities(getTaskActivities(task._id));
@@ -275,4 +293,3 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
         </div>
     );
 };
-
