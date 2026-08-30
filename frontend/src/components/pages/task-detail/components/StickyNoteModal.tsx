@@ -278,3 +278,52 @@ export const StickyNoteModal: React.FC<StickyNoteModalProps> = ({
       >
         {/* Paper Mask Tape Accent at top center */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-4 rounded-b-md backdrop-blur-xs shadow-xs z-10 opacity-80 rotate-[-1deg] border-b border-black/10 flex items-center justify-center bg-white/50" />
+
+        {/* Modal Top Bar */}
+        <div className={`px-6 pt-5 pb-3.5 border-b ${currentTheme.lineBorder} flex items-center justify-between`}>
+          <div className="flex items-center space-x-2.5">
+            <div className={`p-2 rounded-xl shadow-xs ${currentTheme.pinBg}`}>
+              <StickyNote className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="flex items-center space-x-2">
+                <span className="text-[10px] font-black uppercase tracking-wider opacity-70">
+                  {isEditing ? 'Editing Note' : 'Paper Sticky Note'}
+                </span>
+                {isPinned && (
+                  <span className={`px-1.5 py-0.2 rounded text-[9px] font-black uppercase tracking-wider flex items-center space-x-0.5 ${currentTheme.pinBg}`}>
+                    <Pin className="w-2.5 h-2.5 fill-current" />
+                    <span>Pinned</span>
+                  </span>
+                )}
+              </div>
+              <h3 className={`text-base font-black tracking-tight ${currentTheme.textColor} truncate max-w-xs`}>
+                {title || (isEditing ? 'Untitled Note' : 'Sticky Note')}
+              </h3>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-1.5">
+            {/* If in view mode, show Edit button & Copy button */}
+            {!isEditing && !extractMode && (
+              <>
+                <button
+                  type="button"
+                  onClick={handleCopyNote}
+                  className="p-2 rounded-xl bg-black/5 hover:bg-black/10 text-slate-700 transition-colors"
+                  title="Copy note text"
+                >
+                  {copied ? <CheckCheck className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setIsEditing(true)}
+                  className="px-3 py-1.5 rounded-xl bg-black/10 hover:bg-black/15 text-slate-800 text-xs font-bold flex items-center space-x-1.5 transition-colors"
+                  title="Edit note content & colors"
+                >
+                  <Edit3 className="w-3.5 h-3.5" />
+                  <span>Edit</span>
+                </button>
+              </>
+            )}
