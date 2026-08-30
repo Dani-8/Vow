@@ -49,3 +49,55 @@ const DEFAULT_TASK_ATTACHMENTS: Record<string, TaskAttachment[]> = {
       url: 'https://en.openrussian.org/',
       uploadedAt: new Date(Date.now() - 86400000 * 3).toISOString(),
     },
+    {
+      id: 'att_ru_3',
+      name: 'Grammar_Noun_Cases_Summary.docx',
+      type: 'doc',
+      size: '420 KB',
+      url: '#',
+      uploadedAt: new Date(Date.now() - 86400000).toISOString(),
+    },
+  ],
+  'task_ui_revamp_m3p9q': [
+    {
+      id: 'att_ui_1',
+      name: 'Figma Design System & Component Library',
+      type: 'link',
+      url: 'https://www.figma.com',
+      uploadedAt: new Date(Date.now() - 86400000 * 5).toISOString(),
+    },
+    {
+      id: 'att_ui_2',
+      name: 'Design_Tokens_Specification.pdf',
+      type: 'pdf',
+      size: '2.8 MB',
+      url: '#',
+      uploadedAt: new Date(Date.now() - 86400000 * 2).toISOString(),
+    },
+  ],
+};
+
+// Default initial activity logs seed
+const DEFAULT_TASK_ACTIVITIES: Record<string, TaskActivityItem[]> = {
+  'task_russian_mastery_r7u2k': [
+    {
+      id: 'act_ru_1',
+      type: 'created',
+      message: 'Created task "Russian Language Learning: Daily Fluency & Grammar Path"',
+      user: 'Alex Rivera',
+      timestamp: new Date(Date.now() - 86400000 * 10).toISOString(),
+    },
+    {
+      id: 'act_ru_2',
+      type: 'subtask_complete',
+      message: 'Completed subtask: "Cyrillic Alphabet & Phonetic Pronunciation Drills"',
+      user: 'Alex Rivera',
+      timestamp: new Date(Date.now() - 86400000 * 2).toISOString(),
+    },
+    {
+      id: 'act_ru_3',
+      type: 'attachment_add',
+      message: 'Attached reference link: "OpenRussian Dictionary & Declensions"',
+      user: 'Alex Rivera',
+      timestamp: new Date(Date.now() - 86400000).toISOString(),
+    },
