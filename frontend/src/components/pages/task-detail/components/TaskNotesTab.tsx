@@ -294,3 +294,63 @@ export const TaskNotesTab: React.FC<TaskNotesTabProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Editor & Preview Area */}
+      <div className="neu-card p-6 bg-[#E0E5EC] min-h-[420px] relative">
+        {isPreview ? (
+          <div className="prose prose-slate max-w-none text-[#1a1c35] space-y-4">
+            {content ? (
+              <div className="space-y-3 leading-relaxed">
+                {content.split('\n').map((line, idx) => {
+                  if (line.startsWith('# ')) {
+                    return <h1 key={idx} className="text-xl font-black text-[#1a1c35] border-b border-slate-300 pb-2">{line.substring(2)}</h1>;
+                  }
+                  if (line.startsWith('## ')) {
+                    return <h2 key={idx} className="text-lg font-black text-[#1a1c35] pt-2">{line.substring(3)}</h2>;
+                  }
+                  if (line.startsWith('### ')) {
+                    return <h3 key={idx} className="text-sm font-black text-[#1a1c35]">{line.substring(4)}</h3>;
+                  }
+                  if (line.startsWith('> ')) {
+                    return (
+                      <blockquote key={idx} className="p-3 rounded-xl neu-inset bg-[#dbe2ee]/60 border-l-4 border-blue-500 italic text-xs text-[#2b2e4a]">
+                        {line.substring(2)}
+                      </blockquote>
+                    );
+                  }
+                  if (line.startsWith('- [ ]') || line.startsWith('- [x]')) {
+                    const isChecked = line.startsWith('- [x]');
+                    return (
+                      <div key={idx} className="flex items-center space-x-2 text-xs font-medium text-[#1a1c35]">
+                        <input type="checkbox" checked={isChecked} readOnly className="rounded text-blue-600" />
+                        <span className={isChecked ? 'line-through text-slate-400' : ''}>{line.replace(/^-\s*\[[ x]\]\s*/, '')}</span>
+                      </div>
+                    );
+                  }
+                  if (line.startsWith('- ') || line.startsWith('* ')) {
+                    return (
+                      <li key={idx} className="text-xs text-[#2b2e4a] ml-4 list-disc">
+                        {line.substring(2)}
+                      </li>
+                    );
+                  }
+                  if (line.trim() === '') {
+                    return <div key={idx} className="h-2" />;
+                  }
+                  return <p key={idx} className="text-xs text-[#2b2e4a] leading-relaxed">{line}</p>;
+                })}
+              </div>
+            ) : (
+              <p className="text-xs italic text-slate-400">Empty note preview. Click edit to start typing.</p>
+            )}
+          </div>
+        ) : (
+          <textarea
+            ref={textareaRef}
+            value={content}
+            onChange={handleChange}
+            placeholder="Write task notes, specifications, meeting bullet points, or markdown checklists (- [ ] task)..."
+            className="w-full h-[400px] bg-transparent resize-y border-none focus:outline-none text-xs sm:text-sm font-mono text-[#1a1c35] leading-relaxed placeholder:text-slate-400"
+          />
+        )}
+      </div>
