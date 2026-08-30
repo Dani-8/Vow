@@ -1,356 +1,354 @@
 import React, { useState, useRef } from 'react';
 import {
-  Paperclip,
-  UploadCloud,
-  Link2,
-  FileText,
-  Image as ImageIcon,
-  FileSpreadsheet,
-  FileCode,
-  ExternalLink,
-  Trash2,
-  Download,
-  Plus,
-  Search,
-  Filter,
-  CheckCircle2,
-  Globe
+    Paperclip,
+    UploadCloud,
+    Link2,
+    FileText,
+    Image as ImageIcon,
+    FileSpreadsheet,
+    FileCode,
+    ExternalLink,
+    Trash2,
+    Download,
+    Plus,
+    Search,
+    Filter,
+    CheckCircle2,
+    Globe
 } from 'lucide-react';
 import { TaskAttachment } from '../../../../types';
 
 interface TaskFilesTabProps {
-  taskId: string;
-  attachments: TaskAttachment[];
-  onAddAttachment: (attachment: Omit<TaskAttachment, 'id' | 'uploadedAt'>) => void;
-  onDeleteAttachment: (attachmentId: string) => void;
+    taskId: string;
+    attachments: TaskAttachment[];
+    onAddAttachment: (attachment: Omit<TaskAttachment, 'id' | 'uploadedAt'>) => void;
+    onDeleteAttachment: (attachmentId: string) => void;
 }
 
 export const TaskFilesTab: React.FC<TaskFilesTabProps> = ({
-  taskId,
-  attachments,
-  onAddAttachment,
-  onDeleteAttachment,
+    taskId,
+    attachments,
+    onAddAttachment,
+    onDeleteAttachment,
 }) => {
-  const [filterType, setFilterType] = useState<'all' | 'doc' | 'image' | 'link'>('all');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
-  const [linkUrl, setLinkUrl] = useState('');
-  const [linkName, setLinkName] = useState('');
-  const [isDragging, setIsDragging] = useState(false);
+    const [filterType, setFilterType] = useState<'all' | 'doc' | 'image' | 'link'>('all');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
+    const [linkUrl, setLinkUrl] = useState('');
+    const [linkName, setLinkName] = useState('');
+    const [isDragging, setIsDragging] = useState(false);
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Filter attachments
-  const filteredAttachments = attachments.filter((att) => {
-    const matchesSearch = att.name.toLowerCase().includes(searchQuery.toLowerCase());
-    if (!matchesSearch) return false;
+    // Filter attachments
+    const filteredAttachments = attachments.filter((att) => {
+        const matchesSearch = att.name.toLowerCase().includes(searchQuery.toLowerCase());
+        if (!matchesSearch) return false;
 
-    if (filterType === 'all') return true;
-    if (filterType === 'link') return att.type === 'link';
-    if (filterType === 'image') return att.type === 'image';
-    if (filterType === 'doc') return att.type === 'doc' || att.type === 'pdf' || att.type === 'file';
-    return true;
-  });
-
-  // Handle local file uploads
-  const handleFileUpload = (files: FileList | null) => {
-    if (!files || files.length === 0) return;
-
-    Array.from(files).forEach((file) => {
-      let type: TaskAttachment['type'] = 'file';
-      if (file.type.startsWith('image/')) type = 'image';
-      else if (file.type.includes('pdf')) type = 'pdf';
-      else if (file.type.includes('word') || file.type.includes('document')) type = 'doc';
-
-      // Format size
-      let sizeStr = `${(file.size / 1024).toFixed(1)} KB`;
-      if (file.size > 1024 * 1024) {
-        sizeStr = `${(file.size / (1024 * 1024)).toFixed(1)} MB`;
-      }
-
-      // Create object URL for client preview
-      const previewUrl = URL.createObjectURL(file);
-
-      onAddAttachment({
-        name: file.name,
-        type,
-        size: sizeStr,
-        url: previewUrl,
-        previewUrl: type === 'image' ? previewUrl : undefined,
-      });
-    });
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-    handleFileUpload(e.dataTransfer.files);
-  };
-
-  const handleAddLink = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!linkUrl.trim()) return;
-
-    let cleanUrl = linkUrl.trim();
-    if (!cleanUrl.startsWith('http://') && !cleanUrl.startsWith('https://')) {
-      cleanUrl = `https://${cleanUrl}`;
-    }
-
-    const title = linkName.trim() || new URL(cleanUrl).hostname;
-
-    onAddAttachment({
-      name: title,
-      type: 'link',
-      url: cleanUrl,
-      size: 'Web Bookmark',
+        if (filterType === 'all') return true;
+        if (filterType === 'link') return att.type === 'link';
+        if (filterType === 'image') return att.type === 'image';
+        if (filterType === 'doc') return att.type === 'doc' || att.type === 'pdf' || att.type === 'file';
+        return true;
     });
 
-    setLinkUrl('');
-    setLinkName('');
-    setIsLinkModalOpen(false);
-  };
+    // Handle local file uploads
+    const handleFileUpload = (files: FileList | null) => {
+        if (!files || files.length === 0) return;
 
-  const getAttachmentIcon = (att: TaskAttachment) => {
-    switch (att.type) {
-      case 'link':
-        return <Globe className="w-5 h-5 text-sky-600" />;
-      case 'image':
-        return <ImageIcon className="w-5 h-5 text-violet-600" />;
-      case 'pdf':
-      case 'doc':
-        return <FileText className="w-5 h-5 text-rose-600" />;
-      default:
-        return <Paperclip className="w-5 h-5 text-slate-600" />;
-    }
-  };
+        Array.from(files).forEach((file) => {
+            let type: TaskAttachment['type'] = 'file';
+            if (file.type.startsWith('image/')) type = 'image';
+            else if (file.type.includes('pdf')) type = 'pdf';
+            else if (file.type.includes('word') || file.type.includes('document')) type = 'doc';
 
-  return (
-    <div className="space-y-6 animate-fadeIn max-w-5xl">
-      {/* Upload Zone & Action Buttons */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Drag & Drop Card */}
-        <div
-          onDragOver={(e) => {
-            e.preventDefault();
-            setIsDragging(true);
-          }}
-          onDragLeave={() => setIsDragging(false)}
-          onDrop={handleDrop}
-          onClick={() => fileInputRef.current?.click()}
-          className={`md:col-span-2 p-6 rounded-2xl border-2 border-dashed transition-all cursor-pointer flex flex-col items-center justify-center text-center space-y-2.5 ${
-            isDragging
-              ? 'border-indigo-500 bg-indigo-50/50 scale-[1.01]'
-              : 'border-[#c8d0e0] hover:border-indigo-400 bg-[#E0E5EC] neu-inset'
-          }`}
-        >
-          <input
-            ref={fileInputRef}
-            type="file"
-            multiple
-            className="hidden"
-            onChange={(e) => handleFileUpload(e.target.files)}
-          />
-          <div className="p-3 rounded-2xl neu-button text-indigo-600">
-            <UploadCloud className="w-6 h-6" />
-          </div>
-          <div>
-            <p className="text-xs sm:text-sm font-bold text-[#1a1c35]">
-              Drop files here, or <span className="text-indigo-600 underline">browse device</span>
-            </p>
-            <p className="text-[11px] text-slate-400">Supports PDFs, Images, Word Docs, Sheets &amp; Diagrams</p>
-          </div>
-        </div>
+            // Format size
+            let sizeStr = `${(file.size / 1024).toFixed(1)} KB`;
+            if (file.size > 1024 * 1024) {
+                sizeStr = `${(file.size / (1024 * 1024)).toFixed(1)} MB`;
+            }
 
-        {/* Add Link / Bookmark Card */}
-        <div
-          onClick={() => setIsLinkModalOpen(true)}
-          className="p-6 rounded-2xl neu-card bg-[#E0E5EC] hover:scale-[1.01] transition-transform cursor-pointer flex flex-col items-center justify-center text-center space-y-2.5"
-        >
-          <div className="p-3 rounded-2xl neu-button text-sky-600">
-            <Link2 className="w-6 h-6" />
-          </div>
-          <div>
-            <p className="text-xs sm:text-sm font-bold text-[#1a1c35]">
-              Bookmark Reference URL
-            </p>
-            <p className="text-[11px] text-slate-400">Save Figma specs, GitHub PRs, Google Docs &amp; articles</p>
-          </div>
-        </div>
-      </div>
+            // Create object URL for client preview
+            const previewUrl = URL.createObjectURL(file);
 
-      {/* Filter and Search Bar */}
-      <div className="neu-card p-4 bg-[#E0E5EC] flex flex-wrap items-center justify-between gap-3">
-        {/* Search */}
-        <div className="flex items-center space-x-2 px-3 py-1.5 rounded-xl neu-inset bg-[#dbe2ee]/60 max-w-xs w-full">
-          <Search className="w-3.5 h-3.5 text-slate-400" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search attachments..."
-            className="bg-transparent border-none text-xs focus:outline-none w-full text-[#1a1c35]"
-          />
-        </div>
+            onAddAttachment({
+                name: file.name,
+                type,
+                size: sizeStr,
+                url: previewUrl,
+                previewUrl: type === 'image' ? previewUrl : undefined,
+            });
+        });
+    };
 
-        {/* Filter Pills */}
-        <div className="flex items-center space-x-1.5">
-          {(
-            [
-              { id: 'all', label: 'All' },
-              { id: 'doc', label: 'Documents' },
-              { id: 'image', label: 'Images' },
-              { id: 'link', label: 'Links' },
-            ] as const
-          ).map((t) => (
-            <button
-              key={t.id}
-              onClick={() => setFilterType(t.id)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                filterType === t.id
-                  ? 'neu-inset text-indigo-700 font-black'
-                  : 'neu-button text-[#717699] hover:text-[#1a1c35]'
-              }`}
-            >
-              {t.label}
-            </button>
-          ))}
-        </div>
-      </div>
+    const handleDrop = (e: React.DragEvent) => {
+        e.preventDefault();
+        setIsDragging(false);
+        handleFileUpload(e.dataTransfer.files);
+    };
 
-      {/* Files Grid */}
-      {filteredAttachments.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredAttachments.map((att) => (
-            <div
-              key={att.id}
-              className="neu-card p-4 bg-[#E0E5EC] space-y-3 hover:scale-[1.01] transition-transform relative group"
-            >
-              {/* Top Row */}
-              <div className="flex items-start justify-between">
-                <div className="p-2.5 rounded-xl neu-inset bg-[#dbe2ee]/70 shrink-0">
-                  {getAttachmentIcon(att)}
+    const handleAddLink = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!linkUrl.trim()) return;
+
+        let cleanUrl = linkUrl.trim();
+        if (!cleanUrl.startsWith('http://') && !cleanUrl.startsWith('https://')) {
+            cleanUrl = `https://${cleanUrl}`;
+        }
+
+        const title = linkName.trim() || new URL(cleanUrl).hostname;
+
+        onAddAttachment({
+            name: title,
+            type: 'link',
+            url: cleanUrl,
+            size: 'Web Bookmark',
+        });
+
+        setLinkUrl('');
+        setLinkName('');
+        setIsLinkModalOpen(false);
+    };
+
+    const getAttachmentIcon = (att: TaskAttachment) => {
+        switch (att.type) {
+            case 'link':
+                return <Globe className="w-5 h-5 text-sky-600" />;
+            case 'image':
+                return <ImageIcon className="w-5 h-5 text-violet-600" />;
+            case 'pdf':
+            case 'doc':
+                return <FileText className="w-5 h-5 text-rose-600" />;
+            default:
+                return <Paperclip className="w-5 h-5 text-slate-600" />;
+        }
+    };
+
+    return (
+        <div className="space-y-6 animate-fadeIn max-w-5xl">
+            {/* Upload Zone & Action Buttons */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Drag & Drop Card */}
+                <div
+                    onDragOver={(e) => {
+                        e.preventDefault();
+                        setIsDragging(true);
+                    }}
+                    onDragLeave={() => setIsDragging(false)}
+                    onDrop={handleDrop}
+                    onClick={() => fileInputRef.current?.click()}
+                    className={`md:col-span-2 p-6 rounded-2xl border-2 border-dashed transition-all cursor-pointer flex flex-col items-center justify-center text-center space-y-2.5 ${isDragging
+                            ? 'border-indigo-500 bg-indigo-50/50 scale-[1.01]'
+                            : 'border-[#c8d0e0] hover:border-indigo-400 bg-[#E0E5EC] neu-inset'
+                        }`}
+                >
+                    <input
+                        ref={fileInputRef}
+                        type="file"
+                        multiple
+                        className="hidden"
+                        onChange={(e) => handleFileUpload(e.target.files)}
+                    />
+                    <div className="p-3 rounded-2xl neu-button text-indigo-600">
+                        <UploadCloud className="w-6 h-6" />
+                    </div>
+                    <div>
+                        <p className="text-xs sm:text-sm font-bold text-[#1a1c35]">
+                            Drop files here, or <span className="text-indigo-600 underline">browse device</span>
+                        </p>
+                        <p className="text-[11px] text-slate-400">Supports PDFs, Images, Word Docs, Sheets &amp; Diagrams</p>
+                    </div>
                 </div>
 
-                <div className="flex items-center space-x-1">
-                  {att.url && att.url !== '#' && (
-                    <a
-                      href={att.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-1.5 rounded-lg neu-button text-slate-500 hover:text-indigo-600"
-                      title="Open resource"
-                    >
-                      <ExternalLink className="w-3.5 h-3.5" />
-                    </a>
-                  )}
-                  <button
-                    onClick={() => onDeleteAttachment(att.id)}
-                    className="p-1.5 rounded-lg neu-button text-slate-400 hover:text-rose-600 transition-colors"
-                    title="Delete attachment"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
+                {/* Add Link / Bookmark Card */}
+                <div
+                    onClick={() => setIsLinkModalOpen(true)}
+                    className="p-6 rounded-2xl neu-card bg-[#E0E5EC] hover:scale-[1.01] transition-transform cursor-pointer flex flex-col items-center justify-center text-center space-y-2.5"
+                >
+                    <div className="p-3 rounded-2xl neu-button text-sky-600">
+                        <Link2 className="w-6 h-6" />
+                    </div>
+                    <div>
+                        <p className="text-xs sm:text-sm font-bold text-[#1a1c35]">
+                            Bookmark Reference URL
+                        </p>
+                        <p className="text-[11px] text-slate-400">Save Figma specs, GitHub PRs, Google Docs &amp; articles</p>
+                    </div>
                 </div>
-              </div>
-
-              {/* Image Preview if applicable */}
-              {att.type === 'image' && att.previewUrl && (
-                <div className="h-28 w-full rounded-xl overflow-hidden neu-inset bg-slate-900/10">
-                  <img
-                    src={att.previewUrl}
-                    alt={att.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
-
-              {/* Title & Metadata */}
-              <div className="space-y-1">
-                <p className="text-xs font-bold text-[#1a1c35] line-clamp-2" title={att.name}>
-                  {att.name}
-                </p>
-                <div className="flex items-center justify-between text-[10px] text-slate-400">
-                  <span>{att.size || 'Web link'}</span>
-                  <span>
-                    {att.uploadedAt ? new Date(att.uploadedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : 'Today'}
-                  </span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="neu-card p-10 bg-[#E0E5EC] text-center space-y-2">
-          <Paperclip className="w-8 h-8 text-slate-400 mx-auto" />
-          <p className="text-xs font-bold text-[#1a1c35]">No attachments found</p>
-          <p className="text-[11px] text-slate-400 max-w-sm mx-auto">
-            {searchQuery
-              ? 'No files matching your search term. Try adjusting your query or filter.'
-              : 'Upload project briefs, design screenshots, reference documents, or save external links to keep everything in one place.'}
-          </p>
-        </div>
-      )}
-
-      {/* Add Link Bookmark Modal */}
-      {isLinkModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fadeIn">
-          <div className="neu-card p-6 bg-[#E0E5EC] max-w-md w-full space-y-4 shadow-2xl">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Globe className="w-5 h-5 text-sky-600" />
-                <h3 className="text-base font-black text-[#1a1c35]">Add URL Bookmark</h3>
-              </div>
-              <button
-                onClick={() => setIsLinkModalOpen(false)}
-                className="text-xs font-bold text-slate-500 hover:text-slate-800"
-              >
-                ✕
-              </button>
             </div>
 
-            <form onSubmit={handleAddLink} className="space-y-4">
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-[#717699]">Resource URL *</label>
-                <input
-                  type="text"
-                  required
-                  value={linkUrl}
-                  onChange={(e) => setLinkUrl(e.target.value)}
-                  placeholder="https://figma.com/file/... or github.com/..."
-                  className="w-full px-3.5 py-2.5 rounded-xl neu-inset bg-[#dbe2ee]/60 text-xs font-medium focus:outline-none text-[#1a1c35]"
-                />
-              </div>
+            {/* Filter and Search Bar */}
+            <div className="neu-card p-4 bg-[#E0E5EC] flex flex-wrap items-center justify-between gap-3">
+                {/* Search */}
+                <div className="flex items-center space-x-2 px-3 py-1.5 rounded-xl neu-inset bg-[#dbe2ee]/60 max-w-xs w-full">
+                    <Search className="w-3.5 h-3.5 text-slate-400" />
+                    <input
+                        type="text"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        placeholder="Search attachments..."
+                        className="bg-transparent border-none text-xs focus:outline-none w-full text-[#1a1c35]"
+                    />
+                </div>
 
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-[#717699]">Custom Title (Optional)</label>
-                <input
-                  type="text"
-                  value={linkName}
-                  onChange={(e) => setLinkName(e.target.value)}
-                  placeholder="e.g. Design Specs &amp; Flow Diagram"
-                  className="w-full px-3.5 py-2.5 rounded-xl neu-inset bg-[#dbe2ee]/60 text-xs font-medium focus:outline-none text-[#1a1c35]"
-                />
-              </div>
+                {/* Filter Pills */}
+                <div className="flex items-center space-x-1.5">
+                    {(
+                        [
+                            { id: 'all', label: 'All' },
+                            { id: 'doc', label: 'Documents' },
+                            { id: 'image', label: 'Images' },
+                            { id: 'link', label: 'Links' },
+                        ] as const
+                    ).map((t) => (
+                        <button
+                            key={t.id}
+                            onClick={() => setFilterType(t.id)}
+                            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${filterType === t.id
+                                    ? 'neu-inset text-indigo-700 font-black'
+                                    : 'neu-button text-[#717699] hover:text-[#1a1c35]'
+                                }`}
+                        >
+                            {t.label}
+                        </button>
+                    ))}
+                </div>
+            </div>
 
-              <div className="flex items-center justify-end space-x-3 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setIsLinkModalOpen(false)}
-                  className="px-4 py-2 rounded-xl neu-button text-xs font-bold text-slate-600"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 rounded-xl neu-button-primary text-xs font-bold text-white shadow-sm"
-                >
-                  Save Bookmark
-                </button>
-              </div>
-            </form>
-          </div>
+            {/* Files Grid */}
+            {filteredAttachments.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {filteredAttachments.map((att) => (
+                        <div
+                            key={att.id}
+                            className="neu-card p-4 bg-[#E0E5EC] space-y-3 hover:scale-[1.01] transition-transform relative group"
+                        >
+                            {/* Top Row */}
+                            <div className="flex items-start justify-between">
+                                <div className="p-2.5 rounded-xl neu-inset bg-[#dbe2ee]/70 shrink-0">
+                                    {getAttachmentIcon(att)}
+                                </div>
+
+                                <div className="flex items-center space-x-1">
+                                    {att.url && att.url !== '#' && (
+                                        <a
+                                            href={att.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="p-1.5 rounded-lg neu-button text-slate-500 hover:text-indigo-600"
+                                            title="Open resource"
+                                        >
+                                            <ExternalLink className="w-3.5 h-3.5" />
+                                        </a>
+                                    )}
+                                    <button
+                                        onClick={() => onDeleteAttachment(att.id)}
+                                        className="p-1.5 rounded-lg neu-button text-slate-400 hover:text-rose-600 transition-colors"
+                                        title="Delete attachment"
+                                    >
+                                        <Trash2 className="w-3.5 h-3.5" />
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Image Preview if applicable */}
+                            {att.type === 'image' && att.previewUrl && (
+                                <div className="h-28 w-full rounded-xl overflow-hidden neu-inset bg-slate-900/10">
+                                    <img
+                                        src={att.previewUrl}
+                                        alt={att.name}
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                            )}
+
+                            {/* Title & Metadata */}
+                            <div className="space-y-1">
+                                <p className="text-xs font-bold text-[#1a1c35] line-clamp-2" title={att.name}>
+                                    {att.name}
+                                </p>
+                                <div className="flex items-center justify-between text-[10px] text-slate-400">
+                                    <span>{att.size || 'Web link'}</span>
+                                    <span>
+                                        {att.uploadedAt ? new Date(att.uploadedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : 'Today'}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            ) : (
+                <div className="neu-card p-10 bg-[#E0E5EC] text-center space-y-2">
+                    <Paperclip className="w-8 h-8 text-slate-400 mx-auto" />
+                    <p className="text-xs font-bold text-[#1a1c35]">No attachments found</p>
+                    <p className="text-[11px] text-slate-400 max-w-sm mx-auto">
+                        {searchQuery
+                            ? 'No files matching your search term. Try adjusting your query or filter.'
+                            : 'Upload project briefs, design screenshots, reference documents, or save external links to keep everything in one place.'}
+                    </p>
+                </div>
+            )}
+
+            {/* Add Link Bookmark Modal */}
+            {isLinkModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fadeIn">
+                    <div className="neu-card p-6 bg-[#E0E5EC] max-w-md w-full space-y-4 shadow-2xl">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-2">
+                                <Globe className="w-5 h-5 text-sky-600" />
+                                <h3 className="text-base font-black text-[#1a1c35]">Add URL Bookmark</h3>
+                            </div>
+                            <button
+                                onClick={() => setIsLinkModalOpen(false)}
+                                className="text-xs font-bold text-slate-500 hover:text-slate-800"
+                            >
+                                ✕
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleAddLink} className="space-y-4">
+                            <div className="space-y-1.5">
+                                <label className="text-xs font-bold text-[#717699]">Resource URL *</label>
+                                <input
+                                    type="text"
+                                    required
+                                    value={linkUrl}
+                                    onChange={(e) => setLinkUrl(e.target.value)}
+                                    placeholder="https://figma.com/file/... or github.com/..."
+                                    className="w-full px-3.5 py-2.5 rounded-xl neu-inset bg-[#dbe2ee]/60 text-xs font-medium focus:outline-none text-[#1a1c35]"
+                                />
+                            </div>
+
+                            <div className="space-y-1.5">
+                                <label className="text-xs font-bold text-[#717699]">Custom Title (Optional)</label>
+                                <input
+                                    type="text"
+                                    value={linkName}
+                                    onChange={(e) => setLinkName(e.target.value)}
+                                    placeholder="e.g. Design Specs &amp; Flow Diagram"
+                                    className="w-full px-3.5 py-2.5 rounded-xl neu-inset bg-[#dbe2ee]/60 text-xs font-medium focus:outline-none text-[#1a1c35]"
+                                />
+                            </div>
+
+                            <div className="flex items-center justify-end space-x-3 pt-2">
+                                <button
+                                    type="button"
+                                    onClick={() => setIsLinkModalOpen(false)}
+                                    className="px-4 py-2 rounded-xl neu-button text-xs font-bold text-slate-600"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="px-4 py-2 rounded-xl neu-button-primary text-xs font-bold text-white shadow-sm"
+                                >
+                                    Save Bookmark
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
-      )}
-    </div>
-  );
+    );
 };
