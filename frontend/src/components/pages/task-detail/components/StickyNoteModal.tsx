@@ -492,8 +492,8 @@ export const StickyNoteModal: React.FC<StickyNoteModalProps> = ({
                                             type="button"
                                             onClick={() => setColor(c)}
                                             className={`p-2 rounded-xl border text-center flex flex-col items-center space-y-1 transition-all ${theme.paperBg} ${theme.border} ${isSelected
-                                                    ? 'ring-2 ring-indigo-600 ring-offset-1 scale-105 shadow-sm font-black'
-                                                    : 'opacity-70 hover:opacity-100 hover:scale-102'
+                                                ? 'ring-2 ring-indigo-600 ring-offset-1 scale-105 shadow-sm font-black'
+                                                : 'opacity-70 hover:opacity-100 hover:scale-102'
                                                 }`}
                                         >
                                             <span className={`w-3.5 h-3.5 rounded-full ${theme.accentDot} shadow-xs`} />
@@ -602,8 +602,8 @@ export const StickyNoteModal: React.FC<StickyNoteModalProps> = ({
                                         <label
                                             key={idx}
                                             className={`p-3 rounded-xl border flex items-center space-x-3 cursor-pointer transition-all ${isChecked
-                                                    ? 'bg-white border-indigo-300 shadow-xs'
-                                                    : 'bg-white/50 border-black/10 opacity-75'
+                                                ? 'bg-white border-indigo-300 shadow-xs'
+                                                : 'bg-white/50 border-black/10 opacity-75'
                                                 }`}
                                         >
                                             <input
