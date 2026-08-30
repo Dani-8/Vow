@@ -94,3 +94,51 @@ export const TaskActivityTab: React.FC<TaskActivityTabProps> = ({
     const category = item.meta?.category;
     if (!category && item.type !== 'comment') return null;
 
+    if (category === 'blocker') {
+      return (
+        <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md bg-rose-100 text-rose-800 border border-rose-200 text-[10px] font-black uppercase tracking-wider">
+          <AlertTriangle className="w-3 h-3 text-rose-600" />
+          <span>Blocker</span>
+        </span>
+      );
+    }
+
+    if (category === 'milestone') {
+      return (
+        <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 border border-emerald-200 text-[10px] font-black uppercase tracking-wider">
+          <Target className="w-3 h-3 text-emerald-600" />
+          <span>Milestone</span>
+        </span>
+      );
+    }
+
+    if (category === 'update') {
+      return (
+        <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md bg-indigo-100 text-indigo-800 border border-indigo-200 text-[10px] font-black uppercase tracking-wider">
+          <TrendingUp className="w-3 h-3 text-indigo-600" />
+          <span>Progress Update</span>
+        </span>
+      );
+    }
+
+    return null;
+  };
+
+  return (
+    <div className="space-y-6 animate-fadeIn max-w-4xl">
+      {/* Post Check-in / Comment Box */}
+      <div className="neu-card p-5 bg-[#E0E5EC] space-y-4">
+        <div className="flex items-center space-x-2">
+          <MessageSquare className="w-4 h-4 text-indigo-600" />
+          <h3 className="text-sm font-black text-[#1a1c35]">Log Check-in &amp; Progress Note</h3>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-3">
+          <textarea
+            value={commentText}
+            onChange={(e) => setCommentText(e.target.value)}
+            placeholder="Share a status update, highlight a blocker, or record a key milestone reached..."
+            rows={3}
+            className="w-full p-3 rounded-xl neu-inset bg-[#dbe2ee]/60 text-xs font-medium text-[#1a1c35] focus:outline-none placeholder:text-slate-400 resize-none"
+          />
+
