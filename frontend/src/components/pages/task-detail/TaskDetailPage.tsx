@@ -148,3 +148,53 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
 
             {/* 2. Navigation Tabs Bar */}
             <TaskDetailTabs activeTab={activeTab} onTabChange={setActiveTab} />
+
+            {/* 3. Main Tab Content Workspace */}
+            {activeTab === 'overview' && (
+                <TaskOverviewTab
+                    task={task}
+                    subTasks={subTasks}
+                    note={note}
+                    attachments={attachments}
+                    activities={activities}
+                    completedCount={completedCount}
+                    totalCount={totalCount}
+                    progressPercent={progressPercent}
+                    onTabChange={setActiveTab}
+                    onToggleComplete={onToggleComplete}
+                />
+            )}
+
+            {activeTab === 'sub-tasks' && (
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start transition-all">
+                    {/* Left / Main Column: Sub-Tasks Timeline */}
+                    <div
+                        className={`transition-all duration-300 ${activeSelectedSubTask ? 'lg:col-span-7' : 'lg:col-span-12 max-w-4xl'
+                            }`}
+                    >
+                        <SubTaskTimeline
+                            subTasks={subTasks}
+                            selectedSubTaskId={activeSelectedSubTask?.id || null}
+                            onSelectSubTask={(st) => setSelectedSubTask(st)}
+                            onToggleStatus={(id) => {
+                                toggleSubTaskStatus(id);
+                                const target = subTasks.find((s) => s.id === id);
+                                if (target) {
+                                    const willBeCompleted = target.status !== 'completed';
+                                    addTaskActivity(task._id, {
+                                        type: willBeCompleted ? 'subtask_complete' : 'status_change',
+                                        message: willBeCompleted
+                                            ? `Completed subtask: "${target.title}"`
+                                            : `Reopened subtask: "${target.title}"`,
+                                        user: 'Alex Rivera',
+                                    });
+                                    setActivities(getTaskActivities(task._id));
+                                }
+                            }}
+                            onOpenAddModal={() => {
+                                setEditingSubTask(null);
+                                setIsAddModalOpen(true);
+                            }}
+                            onReorderSubTasks={reorderSubTasks}
+                        />
+                    </div>
