@@ -98,31 +98,53 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
     // Handle add attachment
     const handleAddAttachment = (attachmentData: Omit<TaskAttachment, 'id' | 'uploadedAt'>) => {
         const newAtt = addTaskAttachment(task._id, attachmentData);
-                                onEdit={(st) => {
-                                    setEditingSubTask(st);
-                                    setIsAddModalOpen(true);
-                                }}
-                                onDelete={(id) => {
-                                    deleteSubTask(id);
-                                    setSelectedSubTask(null);
-                                }}
-                            />
-                        </div>
-                    )}
-                </div>
-            ) : (
-                /* Empty State Placeholder for Overview, Notes, Files, Activity */
-                <EmptyTabPlaceholder tabName={activeTab} />
-            )}
+        setAttachments(getTaskAttachments(task._id));
+        setActivities(getTaskActivities(task._id));
+    };
 
-            {/* Add / Edit Sub-Task Modal */}
-            <AddSubTaskModal
-                isOpen={isAddModalOpen}
-                onClose={() => setIsAddModalOpen(false)}
-                onSave={addSubTask}
-                editingSubTask={editingSubTask}
-                onUpdate={updateSubTask}
+    // Handle delete attachment
+    const handleDeleteAttachment = (attachmentId: string) => {
+        deleteTaskAttachment(task._id, attachmentId);
+        setAttachments(getTaskAttachments(task._id));
+        setActivities(getTaskActivities(task._id));
+    };
+
+    // Handle manual comment / check-in
+    const handleAddComment = (message: string, commentCategory?: string) => {
+        addTaskActivity(task._id, {
+            type: 'comment',
+            message,
+            user: 'Alex Rivera',
+            meta: { category: commentCategory },
+        });
+        setActivities(getTaskActivities(task._id));
+    };
+
+    // Handle delete activity
+    const handleDeleteActivity = (activityId: string) => {
+        deleteTaskActivity(task._id, activityId);
+        setActivities(getTaskActivities(task._id));
+    };
+
+    // Sync selected sub-task if updated in subTasks list
+    const activeSelectedSubTask = selectedSubTask
+        ? subTasks.find((st) => st.id === selectedSubTask.id) || null
+        : null;
+
+    return (
+        <div className="space-y-6 w-full pb-10 animate-fadeIn">
+            {/* 1. Header Section */}
+            <TaskDetailHeader
+                task={task}
+                onBack={onBack}
+                onToggleComplete={onToggleComplete}
+                completedCount={completedCount}
+                totalCount={totalCount}
+                progressPercent={progressPercent}
+                onTogglePrivate={onTogglePrivate}
+                onEditTask={onEditTask}
+                onDeleteTask={onDeleteTask}
             />
-        </div>
-    );
-};
+
+            {/* 2. Navigation Tabs Bar */}
+            <TaskDetailTabs activeTab={activeTab} onTabChange={setActiveTab} />
