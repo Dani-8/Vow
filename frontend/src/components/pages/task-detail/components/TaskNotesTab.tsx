@@ -235,3 +235,62 @@ export const TaskNotesTab: React.FC<TaskNotesTabProps> = ({
           </button>
         </div>
 
+        {/* Right Actions: Auto-save status, convert to subtasks, mode toggle */}
+        <div className="flex items-center space-x-2 sm:space-x-3">
+          {/* Save Status Pill */}
+          <div className="flex items-center space-x-1.5 text-xs font-medium text-[#717699] px-2 py-1">
+            {saveStatus === 'saved' && (
+              <>
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                <span className="text-emerald-700 font-bold hidden sm:inline">Saved</span>
+              </>
+            )}
+            {saveStatus === 'saving' && (
+              <>
+                <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping" />
+                <span className="text-blue-600 font-bold">Saving...</span>
+              </>
+            )}
+            {saveStatus === 'dirty' && (
+              <button
+                onClick={handleManualSave}
+                className="text-amber-700 font-bold hover:underline flex items-center space-x-1"
+              >
+                <Save className="w-3.5 h-3.5" />
+                <span>Save Note</span>
+              </button>
+            )}
+          </div>
+
+          {/* Convert to Subtasks action */}
+          {onAddSubTask && (
+            <button
+              onClick={handleDetectSubtasks}
+              className="px-3 py-1.5 rounded-xl neu-button text-xs font-bold text-indigo-700 bg-indigo-50/50 hover:bg-indigo-100/70 flex items-center space-x-1.5 transition-all shadow-sm"
+              title="Convert bullet points & checklists to Sub-tasks"
+            >
+              <ListPlus className="w-3.5 h-3.5 text-indigo-600" />
+              <span className="hidden sm:inline">Convert to Subtasks</span>
+              <span className="sm:hidden">Extract</span>
+            </button>
+          )}
+
+          {/* Toggle View Mode */}
+          <button
+            onClick={() => setIsPreview(!isPreview)}
+            className="px-3 py-1.5 rounded-xl neu-button text-xs font-bold text-[#1a1c35] flex items-center space-x-1.5"
+          >
+            {isPreview ? (
+              <>
+                <Edit3 className="w-3.5 h-3.5 text-[#2563eb]" />
+                <span>Edit</span>
+              </>
+            ) : (
+              <>
+                <Eye className="w-3.5 h-3.5 text-[#2563eb]" />
+                <span>Preview</span>
+              </>
+            )}
+          </button>
+        </div>
+      </div>
