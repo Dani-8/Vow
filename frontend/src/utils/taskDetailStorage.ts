@@ -157,3 +157,51 @@ export function getTaskAttachments(taskId: string): TaskAttachment[] {
   } catch (e) {
     console.warn(`Error reading attachments for task ${taskId}:`, e);
   }
+
+  if (DEFAULT_TASK_ATTACHMENTS[taskId]) {
+    try {
+      localStorage.setItem(key, JSON.stringify(DEFAULT_TASK_ATTACHMENTS[taskId]));
+    } catch {
+      // ignore
+    }
+    return DEFAULT_TASK_ATTACHMENTS[taskId];
+  }
+
+  return [];
+}
+
+export function saveTaskAttachments(taskId: string, attachments: TaskAttachment[]): void {
+  if (!taskId) return;
+  const key = `vow_task_attachments_${taskId}`;
+  try {
+    localStorage.setItem(key, JSON.stringify(attachments));
+  } catch (e) {
+    console.error(`Error saving attachments for task ${taskId}:`, e);
+  }
+
+  notifyTaskDetailUpdated(taskId, 'attachments');
+}
+
+export function addTaskAttachment(
+  taskId: string,
+  attachmentData: Omit<TaskAttachment, 'id' | 'uploadedAt'>
+): TaskAttachment {
+  const current = getTaskAttachments(taskId);
+  const newAttachment: TaskAttachment = {
+    ...attachmentData,
+    id: `att_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+    uploadedAt: new Date().toISOString(),
+  };
+
+  const updated = [newAttachment, ...current];
+  saveTaskAttachments(taskId, updated);
+
+  // Auto record activity
+  addTaskActivity(taskId, {
+    type: 'attachment_add',
+    message: `Added attachment: "${newAttachment.name}"`,
+    user: 'Alex Rivera',
+  });
+
+  return newAttachment;
+}
