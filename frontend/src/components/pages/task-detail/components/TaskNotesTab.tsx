@@ -1,428 +1,270 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import {
-    FileText,
-    Bold,
-    Italic,
-    List,
-    CheckSquare,
-    Code,
-    Quote,
-    Heading2,
-    Heading3,
-    Eye,
+    StickyNote,
+    Plus,
+    Pin,
+    PinOff,
+    Trash2,
     Edit3,
-    Save,
-    CheckCircle2,
+    Search,
     ListPlus,
-    Sparkles,
-    ArrowRight
+    Palette
 } from 'lucide-react';
-import { SubTask } from '../../../../types';
+import { TaskStickyNote, SubTask } from '../../../../types';
+import { StickyNoteModal, STICKY_COLOR_THEMES } from './StickyNoteModal';
 
 interface TaskNotesTabProps {
     taskId: string;
-    initialNote: string;
-    onSaveNote: (content: string) => void;
+    stickyNotes: TaskStickyNote[];
+    onAddStickyNote: (note: Omit<TaskStickyNote, 'id' | 'createdAt' | 'updatedAt'>) => void;
+    onUpdateStickyNote: (noteId: string, updates: Partial<Omit<TaskStickyNote, 'id' | 'createdAt'>>) => void;
+    onDeleteStickyNote: (noteId: string) => void;
     onAddSubTask?: (subTask: Omit<SubTask, 'id'>) => void;
 }
 
+type NoteColor = TaskStickyNote['color'];
+
 export const TaskNotesTab: React.FC<TaskNotesTabProps> = ({
     taskId,
-    initialNote,
-    onSaveNote,
+    stickyNotes,
+    onAddStickyNote,
+    onUpdateStickyNote,
+    onDeleteStickyNote,
     onAddSubTask,
 }) => {
-    const [content, setContent] = useState(initialNote);
-    const [isPreview, setIsPreview] = useState(false);
-    const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'dirty'>('saved');
-    const [extractModalOpen, setExtractModalOpen] = useState(false);
-    const [detectedTasks, setDetectedTasks] = useState<string[]>([]);
-    const [selectedTasksToImport, setSelectedTasksToImport] = useState<string[]>([]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [colorFilter, setColorFilter] = useState<NoteColor | 'all'>('all');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editingNote, setEditingNote] = useState<TaskStickyNote | null>(null);
 
-    const textareaRef = useRef<HTMLTextAreaElement>(null);
-    const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-    // Sync initialNote when taskId changes
-    useEffect(() => {
-        setContent(initialNote);
-        setSaveStatus('saved');
-    }, [taskId, initialNote]);
-
-    // Handle changes with debounce auto-save
-    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        const val = e.target.value;
-        setContent(val);
-        setSaveStatus('dirty');
-
-        if (saveTimeoutRef.current) {
-            clearTimeout(saveTimeoutRef.current);
-        }
-
-        saveTimeoutRef.current = setTimeout(() => {
-            setSaveStatus('saving');
-            onSaveNote(val);
-            setTimeout(() => {
-                setSaveStatus('saved');
-            }, 400);
-        }, 800);
+    // Open modal to add a new note
+    const handleOpenAdd = () => {
+        setEditingNote(null);
+        setIsModalOpen(true);
     };
 
-    const handleManualSave = () => {
-        if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
-        setSaveStatus('saving');
-        onSaveNote(content);
-        setTimeout(() => {
-            setSaveStatus('saved');
-        }, 300);
+    // Open modal to view/edit existing note
+    const handleOpenEdit = (note: TaskStickyNote) => {
+        setEditingNote(note);
+        setIsModalOpen(true);
     };
 
-    // Markdown formatting shortcuts
-    const insertFormatting = (prefix: string, suffix: string = '', defaultPlaceholder: string = '') => {
-        const textarea = textareaRef.current;
-        if (!textarea) return;
-
-        const start = textarea.selectionStart;
-        const end = textarea.selectionEnd;
-        const selectedText = content.substring(start, end) || defaultPlaceholder;
-
-        const newContent =
-            content.substring(0, start) +
-            prefix +
-            selectedText +
-            suffix +
-            content.substring(end);
-
-        setContent(newContent);
-        setSaveStatus('dirty');
-
-        // Auto save
-        if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
-        saveTimeoutRef.current = setTimeout(() => {
-            onSaveNote(newContent);
-            setSaveStatus('saved');
-        }, 600);
-
-        setTimeout(() => {
-            textarea.focus();
-            textarea.setSelectionRange(
-                start + prefix.length,
-                start + prefix.length + selectedText.length
-            );
-        }, 0);
-    };
-
-    // Convert lines into Subtasks detector
-    const handleDetectSubtasks = () => {
-        const lines = content.split('\n');
-        const detected: string[] = [];
-
-        lines.forEach((line) => {
-            const trimmed = line.trim();
-            // Match markdown checklists, bullet points, or numbered lists
-            if (trimmed.startsWith('- [ ]') || trimmed.startsWith('- [x]') || trimmed.startsWith('* [ ]')) {
-                const text = trimmed.replace(/^[-*]\s*\[[ x]\]\s*/, '').trim();
-                if (text.length > 2) detected.push(text);
-            } else if (trimmed.startsWith('- ') || trimmed.startsWith('* ') || /^\d+\.\s+/.test(trimmed)) {
-                const text = trimmed.replace(/^[-*]|\d+\.\s*/, '').trim();
-                if (text.length > 2 && !text.startsWith('#')) detected.push(text);
-            }
-        });
-
-        // Remove duplicates
-        const unique = Array.from(new Set(detected));
-        setDetectedTasks(unique);
-        setSelectedTasksToImport(unique);
-        setExtractModalOpen(true);
-    };
-
-    const handleImportSubtasks = () => {
-        if (!onAddSubTask || selectedTasksToImport.length === 0) {
-            setExtractModalOpen(false);
-            return;
-        }
-
-        selectedTasksToImport.forEach((title) => {
-            onAddSubTask({
-                taskId,
-                title,
-                dateLabel: 'From Note',
-                status: 'pending',
-                priority: 'Medium',
-            });
-        });
-
-        setExtractModalOpen(false);
-    };
-
-    const toggleSelectTaskToImport = (item: string) => {
-        if (selectedTasksToImport.includes(item)) {
-            setSelectedTasksToImport(selectedTasksToImport.filter((t) => t !== item));
+    // Save handler passed into modal
+    const handleSaveModal = (data: {
+        title?: string;
+        content: string;
+        color: NoteColor;
+        isPinned?: boolean;
+    }) => {
+        if (editingNote) {
+            onUpdateStickyNote(editingNote.id, data);
         } else {
-            setSelectedTasksToImport([...selectedTasksToImport, item]);
+            onAddStickyNote(data);
         }
     };
+
+    // Filter and sort notes (Pinned first)
+    const filteredNotes = stickyNotes
+        .filter((n) => {
+            const matchesColor = colorFilter === 'all' || n.color === colorFilter;
+            const matchesSearch =
+                (n.title && n.title.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                n.content.toLowerCase().includes(searchQuery.toLowerCase());
+            return matchesColor && matchesSearch;
+        })
+        .sort((a, b) => {
+            if (a.isPinned && !b.isPinned) return -1;
+            if (!a.isPinned && b.isPinned) return 1;
+            return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+        });
 
     return (
-        <div className="space-y-4 animate-fadeIn max-w-5xl">
+        <div className="space-y-6 animate-fadeIn max-w-6xl">
             {/* Top Controls Toolbar */}
             <div className="neu-card p-4 bg-[#E0E5EC] flex flex-wrap items-center justify-between gap-3">
-                {/* Left Formatting Buttons */}
-                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                    <button
-                        type="button"
-                        onClick={() => insertFormatting('**', '**', 'bold text')}
-                        title="Bold (**text**)"
-                        className="p-2 rounded-xl neu-button text-slate-700 hover:text-[#2563eb] text-xs font-bold"
-                    >
-                        <Bold className="w-4 h-4" />
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => insertFormatting('*', '*', 'italic text')}
-                        title="Italic (*text*)"
-                        className="p-2 rounded-xl neu-button text-slate-700 hover:text-[#2563eb] text-xs font-bold"
-                    >
-                        <Italic className="w-4 h-4" />
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => insertFormatting('## ', '', 'Section Heading')}
-                        title="Heading 2 (## Heading)"
-                        className="p-2 rounded-xl neu-button text-slate-700 hover:text-[#2563eb] text-xs font-bold"
-                    >
-                        <Heading2 className="w-4 h-4" />
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => insertFormatting('### ', '', 'Subsection')}
-                        title="Heading 3 (### Subheading)"
-                        className="p-2 rounded-xl neu-button text-slate-700 hover:text-[#2563eb] text-xs font-bold"
-                    >
-                        <Heading3 className="w-4 h-4" />
-                    </button>
-                    <div className="h-5 w-[1px] bg-[#c8d0e0] mx-1" />
-                    <button
-                        type="button"
-                        onClick={() => insertFormatting('- [ ] ', '', 'Checklist item')}
-                        title="Checklist item (- [ ] Task)"
-                        className="p-2 rounded-xl neu-button text-slate-700 hover:text-[#2563eb] text-xs font-bold"
-                    >
-                        <CheckSquare className="w-4 h-4" />
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => insertFormatting('- ', '', 'Bullet point')}
-                        title="Bullet List (- item)"
-                        className="p-2 rounded-xl neu-button text-slate-700 hover:text-[#2563eb] text-xs font-bold"
-                    >
-                        <List className="w-4 h-4" />
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => insertFormatting('> ', '', 'Quoted insight')}
-                        title="Quote (> quote)"
-                        className="p-2 rounded-xl neu-button text-slate-700 hover:text-[#2563eb] text-xs font-bold"
-                    >
-                        <Quote className="w-4 h-4" />
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => insertFormatting('```\n', '\n```', 'code block')}
-                        title="Code block"
-                        className="p-2 rounded-xl neu-button text-slate-700 hover:text-[#2563eb] text-xs font-bold"
-                    >
-                        <Code className="w-4 h-4" />
-                    </button>
-                </div>
-
-                {/* Right Actions: Auto-save status, convert to subtasks, mode toggle */}
-                <div className="flex items-center space-x-2 sm:space-x-3">
-                    {/* Save Status Pill */}
-                    <div className="flex items-center space-x-1.5 text-xs font-medium text-[#717699] px-2 py-1">
-                        {saveStatus === 'saved' && (
-                            <>
-                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                                <span className="text-emerald-700 font-bold hidden sm:inline">Saved</span>
-                            </>
-                        )}
-                        {saveStatus === 'saving' && (
-                            <>
-                                <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping" />
-                                <span className="text-blue-600 font-bold">Saving...</span>
-                            </>
-                        )}
-                        {saveStatus === 'dirty' && (
-                            <button
-                                onClick={handleManualSave}
-                                className="text-amber-700 font-bold hover:underline flex items-center space-x-1"
-                            >
-                                <Save className="w-3.5 h-3.5" />
-                                <span>Save Note</span>
-                            </button>
-                        )}
+                {/* Left: Search & Filter */}
+                <div className="flex flex-wrap items-center gap-3">
+                    <div className="flex items-center space-x-2 px-3 py-1.5 rounded-xl neu-inset bg-[#dbe2ee]/60 w-48 sm:w-64">
+                        <Search className="w-3.5 h-3.5 text-slate-400" />
+                        <input
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Search sticky notes..."
+                            className="bg-transparent border-none text-xs focus:outline-none w-full text-[#1a1c35]"
+                        />
                     </div>
 
-                    {/* Convert to Subtasks action */}
-                    {onAddSubTask && (
+                    {/* Color Filter Dots */}
+                    <div className="flex items-center space-x-1.5 pl-1">
                         <button
-                            onClick={handleDetectSubtasks}
-                            className="px-3 py-1.5 rounded-xl neu-button text-xs font-bold text-indigo-700 bg-indigo-50/50 hover:bg-indigo-100/70 flex items-center space-x-1.5 transition-all shadow-sm"
-                            title="Convert bullet points & checklists to Sub-tasks"
+                            onClick={() => setColorFilter('all')}
+                            className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${colorFilter === 'all'
+                                    ? 'neu-inset text-indigo-700 font-black'
+                                    : 'neu-button text-slate-500 hover:text-slate-800'
+                                }`}
                         >
-                            <ListPlus className="w-3.5 h-3.5 text-indigo-600" />
-                            <span className="hidden sm:inline">Convert to Subtasks</span>
-                            <span className="sm:hidden">Extract</span>
+                            All
                         </button>
-                    )}
-
-                    {/* Toggle View Mode */}
-                    <button
-                        onClick={() => setIsPreview(!isPreview)}
-                        className="px-3 py-1.5 rounded-xl neu-button text-xs font-bold text-[#1a1c35] flex items-center space-x-1.5"
-                    >
-                        {isPreview ? (
-                            <>
-                                <Edit3 className="w-3.5 h-3.5 text-[#2563eb]" />
-                                <span>Edit</span>
-                            </>
-                        ) : (
-                            <>
-                                <Eye className="w-3.5 h-3.5 text-[#2563eb]" />
-                                <span>Preview</span>
-                            </>
-                        )}
-                    </button>
+                        {(['yellow', 'green', 'blue', 'purple', 'rose', 'gray'] as NoteColor[]).map((c) => {
+                            const theme = STICKY_COLOR_THEMES[c];
+                            return (
+                                <button
+                                    key={c}
+                                    onClick={() => setColorFilter(c)}
+                                    className={`w-6 h-6 rounded-full transition-transform flex items-center justify-center ${theme.accentDot} ${colorFilter === c ? 'scale-125 ring-2 ring-indigo-500 ring-offset-2 ring-offset-[#E0E5EC]' : 'hover:scale-110 opacity-80 hover:opacity-100'
+                                        }`}
+                                    title={`Filter ${theme.name}`}
+                                />
+                            );
+                        })}
+                    </div>
                 </div>
+
+                {/* Right: Add Note Button */}
+                <button
+                    onClick={handleOpenAdd}
+                    className="px-4 py-2 rounded-xl neu-button-primary text-xs font-bold text-white flex items-center space-x-1.5 shadow-sm"
+                >
+                    <Plus className="w-4 h-4" />
+                    <span>Pin Sticky Note</span>
+                </button>
             </div>
 
-            {/* Editor & Preview Area */}
-            <div className="neu-card p-6 bg-[#E0E5EC] min-h-[420px] relative">
-                {isPreview ? (
-                    <div className="prose prose-slate max-w-none text-[#1a1c35] space-y-4">
-                        {content ? (
-                            <div className="space-y-3 leading-relaxed">
-                                {content.split('\n').map((line, idx) => {
-                                    if (line.startsWith('# ')) {
-                                        return <h1 key={idx} className="text-xl font-black text-[#1a1c35] border-b border-slate-300 pb-2">{line.substring(2)}</h1>;
-                                    }
-                                    if (line.startsWith('## ')) {
-                                        return <h2 key={idx} className="text-lg font-black text-[#1a1c35] pt-2">{line.substring(3)}</h2>;
-                                    }
-                                    if (line.startsWith('### ')) {
-                                        return <h3 key={idx} className="text-sm font-black text-[#1a1c35]">{line.substring(4)}</h3>;
-                                    }
-                                    if (line.startsWith('> ')) {
-                                        return (
-                                            <blockquote key={idx} className="p-3 rounded-xl neu-inset bg-[#dbe2ee]/60 border-l-4 border-blue-500 italic text-xs text-[#2b2e4a]">
-                                                {line.substring(2)}
-                                            </blockquote>
-                                        );
-                                    }
-                                    if (line.startsWith('- [ ]') || line.startsWith('- [x]')) {
-                                        const isChecked = line.startsWith('- [x]');
-                                        return (
-                                            <div key={idx} className="flex items-center space-x-2 text-xs font-medium text-[#1a1c35]">
-                                                <input type="checkbox" checked={isChecked} readOnly className="rounded text-blue-600" />
-                                                <span className={isChecked ? 'line-through text-slate-400' : ''}>{line.replace(/^-\s*\[[ x]\]\s*/, '')}</span>
-                                            </div>
-                                        );
-                                    }
-                                    if (line.startsWith('- ') || line.startsWith('* ')) {
-                                        return (
-                                            <li key={idx} className="text-xs text-[#2b2e4a] ml-4 list-disc">
-                                                {line.substring(2)}
-                                            </li>
-                                        );
-                                    }
-                                    if (line.trim() === '') {
-                                        return <div key={idx} className="h-2" />;
-                                    }
-                                    return <p key={idx} className="text-xs text-[#2b2e4a] leading-relaxed">{line}</p>;
-                                })}
-                            </div>
-                        ) : (
-                            <p className="text-xs italic text-slate-400">Empty note preview. Click edit to start typing.</p>
-                        )}
-                    </div>
-                ) : (
-                    <textarea
-                        ref={textareaRef}
-                        value={content}
-                        onChange={handleChange}
-                        placeholder="Write task notes, specifications, meeting bullet points, or markdown checklists (- [ ] task)..."
-                        className="w-full h-[400px] bg-transparent resize-y border-none focus:outline-none text-xs sm:text-sm font-mono text-[#1a1c35] leading-relaxed placeholder:text-slate-400"
-                    />
-                )}
-            </div>
+            {/* Sticky Notes Corkboard Grid */}
+            {filteredNotes.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                    {filteredNotes.map((note) => {
+                        const colorCfg = STICKY_COLOR_THEMES[note.color || 'yellow'] || STICKY_COLOR_THEMES.yellow;
 
-            {/* Convert to Subtasks Modal */}
-            {extractModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fadeIn">
-                    <div className="neu-card p-6 bg-[#E0E5EC] max-w-lg w-full space-y-5 shadow-2xl">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-2">
-                                <Sparkles className="w-5 h-5 text-indigo-600" />
-                                <h3 className="text-base font-black text-[#1a1c35]">Convert Notes to Subtasks</h3>
-                            </div>
-                            <button
-                                onClick={() => setExtractModalOpen(false)}
-                                className="text-xs font-bold text-slate-500 hover:text-slate-800"
+                        return (
+                            <div
+                                key={note.id}
+                                onClick={() => handleOpenEdit(note)}
+                                className={`group relative rounded-2xl p-5 border-2 transition-all duration-200 flex flex-col justify-between min-h-[220px] cursor-pointer ${colorCfg.paperBg} ${colorCfg.border} ${colorCfg.shadow} hover:-translate-y-1 hover:shadow-xl`}
+                                style={{
+                                    boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.05)',
+                                }}
                             >
-                                ✕
-                            </button>
-                        </div>
+                                {/* Paper Tape accent */}
+                                <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-20 h-4 rounded-xs bg-white/40 backdrop-blur-2xs shadow-2xs border-b border-black/10 opacity-80 rotate-[-1deg]" />
 
-                        <p className="text-xs text-[#717699]">
-                            We found {detectedTasks.length} action items in your notes. Select the items you want to add to your Subtasks timeline:
-                        </p>
+                                {/* Card Header */}
+                                <div className="flex items-start justify-between mb-3 pt-1">
+                                    <div className="flex items-center space-x-2">
+                                        {note.isPinned && (
+                                            <span className={`px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider flex items-center space-x-1 ${colorCfg.pinBg}`}>
+                                                <Pin className="w-3 h-3 fill-current" />
+                                                <span>Pinned</span>
+                                            </span>
+                                        )}
+                                        {note.title && (
+                                            <h4 className={`text-sm font-black tracking-tight ${colorCfg.textColor} line-clamp-1`}>
+                                                {note.title}
+                                            </h4>
+                                        )}
+                                    </div>
 
-                        {detectedTasks.length > 0 ? (
-                            <div className="max-h-60 overflow-y-auto space-y-2 pr-1">
-                                {detectedTasks.map((item, idx) => {
-                                    const isSelected = selectedTasksToImport.includes(item);
-                                    return (
-                                        <label
-                                            key={idx}
-                                            className="p-3 rounded-xl neu-flat bg-[#E0E5EC] flex items-center space-x-3 cursor-pointer hover:bg-slate-200/50 transition-colors"
+                                    {/* Actions Bar on card */}
+                                    <div
+                                        className="flex items-center space-x-1 opacity-90 group-hover:opacity-100 transition-opacity"
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        <button
+                                            onClick={() => onUpdateStickyNote(note.id, { isPinned: !note.isPinned })}
+                                            className="p-1.5 rounded-lg bg-black/5 hover:bg-black/10 text-slate-700 transition-colors"
+                                            title={note.isPinned ? 'Unpin note' : 'Pin note to top'}
                                         >
-                                            <input
-                                                type="checkbox"
-                                                checked={isSelected}
-                                                onChange={() => toggleSelectTaskToImport(item)}
-                                                className="rounded text-indigo-600 focus:ring-indigo-500 w-4 h-4"
-                                            />
-                                            <span className="text-xs font-bold text-[#1a1c35] leading-snug flex-1">{item}</span>
-                                        </label>
-                                    );
-                                })}
-                            </div>
-                        ) : (
-                            <p className="text-xs italic text-slate-400 p-4 rounded-xl neu-inset bg-[#dbe2ee]/50 text-center">
-                                No bullet points or checkbox items found in this note. Write lines starting with "- [ ] " or "- " to extract them.
-                            </p>
-                        )}
+                                            {note.isPinned ? <PinOff className="w-3.5 h-3.5" /> : <Pin className="w-3.5 h-3.5" />}
+                                        </button>
 
-                        <div className="flex items-center justify-end space-x-3 pt-2">
-                            <button
-                                type="button"
-                                onClick={() => setExtractModalOpen(false)}
-                                className="px-4 py-2 rounded-xl neu-button text-xs font-bold text-slate-600"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                type="button"
-                                disabled={selectedTasksToImport.length === 0}
-                                onClick={handleImportSubtasks}
-                                className="px-4 py-2 rounded-xl neu-button-primary text-xs font-bold text-white flex items-center space-x-1.5 disabled:opacity-50"
-                            >
-                                <span>Import {selectedTasksToImport.length} Subtasks</span>
-                                <ArrowRight className="w-3.5 h-3.5" />
-                            </button>
-                        </div>
-                    </div>
+                                        <button
+                                            onClick={() => handleOpenEdit(note)}
+                                            className="p-1.5 rounded-lg bg-black/5 hover:bg-black/10 text-slate-700 transition-colors"
+                                            title="Open full note modal"
+                                        >
+                                            <Edit3 className="w-3.5 h-3.5" />
+                                        </button>
+
+                                        <button
+                                            onClick={() => onDeleteStickyNote(note.id)}
+                                            className="p-1.5 rounded-lg bg-black/5 hover:bg-rose-500/20 text-rose-700 transition-colors"
+                                            title="Delete note"
+                                        >
+                                            <Trash2 className="w-3.5 h-3.5" />
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* Content Body (Render line items) */}
+                                <div className={`text-xs ${colorCfg.textColor} leading-relaxed font-sans flex-1 overflow-hidden space-y-1.5`}>
+                                    {note.content.split('\n').slice(0, 8).map((line, idx) => {
+                                        if (line.startsWith('- [ ]') || line.startsWith('- [x]')) {
+                                            const isChecked = line.startsWith('- [x]');
+                                            return (
+                                                <div key={idx} className="flex items-center space-x-1.5 font-medium">
+                                                    <input type="checkbox" checked={isChecked} readOnly className="rounded text-indigo-600 w-3.5 h-3.5" />
+                                                    <span className={isChecked ? 'line-through opacity-60' : ''}>
+                                                        {line.replace(/^-\s*\[[ x]\]\s*/, '')}
+                                                    </span>
+                                                </div>
+                                            );
+                                        }
+                                        if (line.startsWith('- ') || line.startsWith('• ') || line.startsWith('* ')) {
+                                            return (
+                                                <li key={idx} className="ml-4 list-disc">
+                                                    {line.replace(/^[-*•]\s*/, '')}
+                                                </li>
+                                            );
+                                        }
+                                        if (line.startsWith('> ')) {
+                                            return (
+                                                <p key={idx} className="italic opacity-80 pl-2 border-l-2 border-slate-400">
+                                                    {line.substring(2)}
+                                                </p>
+                                            );
+                                        }
+                                        if (line.trim() === '') return <div key={idx} className="h-1" />;
+                                        return <p key={idx} className="line-clamp-2">{line}</p>;
+                                    })}
+                                </div>
+
+                                {/* Bottom Footer */}
+                                <div className={`pt-3 mt-2 border-t ${colorCfg.lineBorder} flex items-center justify-between text-[10px] opacity-75 font-medium`}>
+                                    <span>{new Date(note.updatedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span>
+                                    <span className="capitalize">{colorCfg.name.split(' ')[0]}</span>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            ) : (
+                <div className="neu-card p-10 bg-[#E0E5EC] text-center space-y-3">
+                    <StickyNote className="w-10 h-10 text-amber-500/80 mx-auto" />
+                    <p className="text-sm font-black text-[#1a1c35]">No sticky notes pinned yet</p>
+                    <p className="text-xs text-[#717699] max-w-md mx-auto">
+                        Pin paper notes for guidelines, research findings, vocabulary, or quick thoughts. Choose custom paper colors and pin your highest priority notes to the top.
+                    </p>
+                    <button
+                        onClick={handleOpenAdd}
+                        className="px-4 py-2 rounded-xl neu-button-primary text-xs font-bold text-white inline-flex items-center space-x-1.5 shadow-sm"
+                    >
+                        <Plus className="w-4 h-4" />
+                        <span>Create First Note</span>
+                    </button>
                 </div>
             )}
+
+            {/* Extracted Dedicated Modal */}
+            <StickyNoteModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                note={editingNote}
+                taskId={taskId}
+                onSave={handleSaveModal}
+                onDelete={onDeleteStickyNote}
+                onAddSubTask={onAddSubTask}
+            />
         </div>
     );
 };

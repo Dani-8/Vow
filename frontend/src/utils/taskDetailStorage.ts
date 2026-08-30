@@ -1,35 +1,203 @@
-import { TaskAttachment, TaskActivityItem } from '../types';
+import { TaskAttachment, TaskActivityItem, TaskStickyNote } from '../types';
 
 export const TASK_DETAIL_UPDATED_EVENT = 'vow_task_detail_updated';
 
-// Default initial notes seed
-const DEFAULT_TASK_NOTES: Record<string, string> = {
-    'task_russian_mastery_r7u2k': `# Russian Language Learning Roadmap
+// Default initial sticky notes seed
+const DEFAULT_TASK_STICKY_NOTES: Record<string, TaskStickyNote[]> = {
+    'task_russian_mastery_r7u2k': [
+        {
+            id: 'sn_ru_1',
+            title: 'Grammar Pillar & Rules',
+            content: `Master Prepositional case endings first (*о ком? о чём?*), then Accusative for direct objects.
 
-## Core Focus Areas
-- **Alphabet Mastery**: Memorize Cyrillic letters (especially false friends like *В, Н, Р, С, У, Х*).
-- **Daily Vocabulary**: 20 new Anki flashcards every morning.
-- **Grammar Pillar**: Master Prepositional case endings first (*о ком? о чём?*), then Accusative for direct objects.
+- [ ] Memorize masculine vs feminine noun endings
+- [ ] Practice 10 prepositions with locative nouns`,
+            color: 'yellow',
+            isPinned: true,
+            createdAt: new Date(Date.now() - 86400000 * 5).toISOString(),
+            updatedAt: new Date(Date.now() - 86400000 * 5).toISOString(),
+        },
+        {
+            id: 'sn_ru_2',
+            title: 'Cyrillic False Friends ⚠️',
+            content: `Be careful with Latin lookalikes:
+• В = V sound
+• Н = N sound
+• Р = R sound (rolled)
+• С = S sound
+• У = OO sound
+• Х = KH sound`,
+            color: 'rose',
+            isPinned: true,
+            createdAt: new Date(Date.now() - 86400000 * 4).toISOString(),
+            updatedAt: new Date(Date.now() - 86400000 * 3).toISOString(),
+        },
+        {
+            id: 'sn_ru_3',
+            title: 'Daily Vocab Goal',
+            content: `Target: 20 new Anki flashcards every morning before breakfast.
 
-### Useful Tips
-> Consistent 30-minute daily practice yields 4x better retention than a single 3-hour weekly cram session.
+> "Consistent 25-minute practice beats 3-hour weekly cramming."`,
+            color: 'green',
+            isPinned: false,
+            createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
+            updatedAt: new Date(Date.now() - 86400000 * 2).toISOString(),
+        },
+        {
+            id: 'sn_ru_4',
+            title: 'Audio Resources & Podcasts',
+            content: `1. Russian with Max (Slow Russian)
+2. Comprehensible Russian with Inhabitant
+3. In Russian From Afar`,
+            color: 'blue',
+            isPinned: false,
+            createdAt: new Date(Date.now() - 86400000).toISOString(),
+            updatedAt: new Date(Date.now() - 86400000).toISOString(),
+        },
+    ],
 
-- [ ] Practice vocal pronunciation with audio recordings
-- [ ] Write 5 original sentences using new vocabulary
-- [ ] Review Russian noun gender rules (-а/-я vs consonants vs -о/-е)`,
-
-    'task_ui_revamp_m3p9q': `# Design System & UI Overhaul Notes
-
-## Objectives
-1. Harmonize neumorphic shadows and elevation levels across all modal views.
-2. Refine typography hierarchy using high-contrast bold titles and readable slate body text.
-3. Optimize responsive grid layouts for tablet and mobile screens.
-
-### Checklist
-- [ ] Audit all primary action buttons for unified padding
-- [ ] Update color tokens in Tailwind configuration
-- [ ] Review contrast ratios to meet WCAG AA standards`,
+    'task_ui_revamp_m3p9q': [
+        {
+            id: 'sn_ui_1',
+            title: 'Elevation Tokens & Shadows',
+            content: `Standardize neumorphic bevels across all cards and modal sheets:
+- Outer shadows: rgba(163, 177, 198, 0.6)
+- Inner highlights: rgba(255, 255, 255, 0.8)`,
+            color: 'purple',
+            isPinned: true,
+            createdAt: new Date(Date.now() - 86400000 * 3).toISOString(),
+            updatedAt: new Date(Date.now() - 86400000 * 3).toISOString(),
+        },
+        {
+            id: 'sn_ui_2',
+            title: 'Action Items Checklist',
+            content: `- [ ] Audit primary action buttons for unified 2:1 padding ratio
+- [ ] Ensure WCAG AA contrast on slate text`,
+            color: 'yellow',
+            isPinned: false,
+            createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
+            updatedAt: new Date(Date.now() - 86400000 * 2).toISOString(),
+        },
+    ],
 };
+
+export function getTaskStickyNotes(taskId: string): TaskStickyNote[] {
+    if (!taskId) return [];
+    const key = `vow_task_sticky_notes_${taskId}`;
+    try {
+        const saved = localStorage.getItem(key);
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            if (Array.isArray(parsed)) return parsed;
+        }
+    } catch (e) {
+        console.warn(`Error reading sticky notes for task ${taskId}:`, e);
+    }
+
+    if (DEFAULT_TASK_STICKY_NOTES[taskId]) {
+        try {
+            localStorage.setItem(key, JSON.stringify(DEFAULT_TASK_STICKY_NOTES[taskId]));
+        } catch {
+            // ignore
+        }
+        return DEFAULT_TASK_STICKY_NOTES[taskId];
+    }
+
+    // If there's an existing single note in legacy storage, migrate it to a sticky note
+    const legacyNote = getTaskNote(taskId);
+    if (legacyNote && legacyNote.trim().length > 0) {
+        const migrated: TaskStickyNote[] = [
+            {
+                id: `sn_${Date.now()}`,
+                title: 'Task Overview & Scratchpad',
+                content: legacyNote,
+                color: 'yellow',
+                isPinned: true,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+            },
+        ];
+        try {
+            localStorage.setItem(key, JSON.stringify(migrated));
+        } catch {
+            // ignore
+        }
+        return migrated;
+    }
+
+    return [];
+}
+
+export function saveTaskStickyNotes(taskId: string, notes: TaskStickyNote[]): void {
+    if (!taskId) return;
+    const key = `vow_task_sticky_notes_${taskId}`;
+    try {
+        localStorage.setItem(key, JSON.stringify(notes));
+    } catch (e) {
+        console.error(`Error saving sticky notes for task ${taskId}:`, e);
+    }
+
+    notifyTaskDetailUpdated(taskId, 'note');
+}
+
+export function addTaskStickyNote(
+    taskId: string,
+    noteData: Omit<TaskStickyNote, 'id' | 'createdAt' | 'updatedAt'>
+): TaskStickyNote {
+    const current = getTaskStickyNotes(taskId);
+    const newNote: TaskStickyNote = {
+        ...noteData,
+        id: `sn_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+    };
+
+    const updated = [newNote, ...current];
+    saveTaskStickyNotes(taskId, updated);
+
+    addTaskActivity(taskId, {
+        type: 'note_update',
+        message: `Pinned new sticky note: "${newNote.title || 'Untitled Note'}"`,
+        user: 'Alex Rivera',
+    });
+
+    return newNote;
+}
+
+export function updateTaskStickyNote(
+    taskId: string,
+    noteId: string,
+    updates: Partial<Omit<TaskStickyNote, 'id' | 'createdAt'>>
+): void {
+    const current = getTaskStickyNotes(taskId);
+    const updated = current.map((n) => {
+        if (n.id === noteId) {
+            return {
+                ...n,
+                ...updates,
+                updatedAt: new Date().toISOString(),
+            };
+        }
+        return n;
+    });
+
+    saveTaskStickyNotes(taskId, updated);
+}
+
+export function deleteTaskStickyNote(taskId: string, noteId: string): void {
+    const current = getTaskStickyNotes(taskId);
+    const deleted = current.find((n) => n.id === noteId);
+    const updated = current.filter((n) => n.id !== noteId);
+    saveTaskStickyNotes(taskId, updated);
+
+    if (deleted) {
+        addTaskActivity(taskId, {
+            type: 'note_update',
+            message: `Removed sticky note: "${deleted.title || 'Note'}"`,
+            user: 'Alex Rivera',
+        });
+    }
+}
 
 // Default initial attachments seed
 const DEFAULT_TASK_ATTACHMENTS: Record<string, TaskAttachment[]> = {
@@ -119,15 +287,6 @@ export function getTaskNote(taskId: string): string {
         if (saved !== null) return saved;
     } catch (e) {
         console.warn(`Error reading note for task ${taskId}:`, e);
-    }
-
-    if (DEFAULT_TASK_NOTES[taskId]) {
-        try {
-            localStorage.setItem(key, DEFAULT_TASK_NOTES[taskId]);
-        } catch {
-            // ignore
-        }
-        return DEFAULT_TASK_NOTES[taskId];
     }
 
     return '';
