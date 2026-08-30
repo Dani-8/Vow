@@ -48,56 +48,56 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
     const [activities, setActivities] = useState<TaskActivityItem[]>(() => getTaskActivities(task._id));
 
     // Sub-task Modal state
-        ? subTasks.find((st) => st.id === selectedSubTask.id) || null
-        : null;
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [editingSubTask, setEditingSubTask] = useState<SubTask | null>(null);
 
-    return (
-        <div className="space-y-6 w-full pb-10 animate-fadeIn">
-            {/* 1. Header Section */}
-            <TaskDetailHeader
-                task={task}
-                onBack={onBack}
-                onToggleComplete={onToggleComplete}
-                completedCount={completedCount}
-                totalCount={totalCount}
-                progressPercent={progressPercent}
-                onTogglePrivate={onTogglePrivate}
-                onEditTask={onEditTask}
-                onDeleteTask={onDeleteTask}
-            />
+    // Custom hook for sub-tasks logic
+    const {
+        subTasks,
+        addSubTask,
+        updateSubTask,
+        toggleSubTaskStatus,
+        setSubTaskStatus,
+        deleteSubTask,
+        reorderSubTasks,
+        completedCount,
+        totalCount,
+        progressPercent,
+    } = useSubTasks(task._id, task.subTasks);
 
-            {/* 2. Navigation Tabs Bar */}
-            <TaskDetailTabs activeTab={activeTab} onTabChange={setActiveTab} />
+    // Sync task detail data when taskId changes
+    useEffect(() => {
+        setNote(getTaskNote(task._id));
+        setAttachments(getTaskAttachments(task._id));
+        setActivities(getTaskActivities(task._id));
+    }, [task._id]);
 
-            {/* 3. Main Tab Content Workspace */}
-            {activeTab === 'sub-tasks' ? (
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start transition-all">
-                    {/* Left / Main Column: Sub-Tasks Timeline */}
-                    <div
-                        className={`transition-all duration-300 ${activeSelectedSubTask ? 'lg:col-span-7' : 'lg:col-span-12 max-w-4xl'
-                            }`}
-                    >
-                        <SubTaskTimeline
-                            subTasks={subTasks}
-                            selectedSubTaskId={activeSelectedSubTask?.id || null}
-                            onSelectSubTask={(st) => setSelectedSubTask(st)}
-                            onToggleStatus={toggleSubTaskStatus}
-                            onOpenAddModal={() => {
-                                setEditingSubTask(null);
-                                setIsAddModalOpen(true);
-                            }}
-                            onReorderSubTasks={reorderSubTasks}
-                        />
-                    </div>
+    // Listen for storage events for real-time synchronization
+    useEffect(() => {
+        const handleDetailUpdate = (e: Event) => {
+            const custom = e as CustomEvent<{ taskId: string; updateType: string }>;
+            if (custom.detail && custom.detail.taskId === task._id) {
+                setNote(getTaskNote(task._id));
+                setAttachments(getTaskAttachments(task._id));
+                setActivities(getTaskActivities(task._id));
+            }
+        };
 
-                    {/* Right Column: Closeable Sub-Task Detail Panel */}
-                    {activeSelectedSubTask && (
-                        <div className="lg:col-span-5 sticky top-4">
-                            <SubTaskDetailPanel
-                                subTask={activeSelectedSubTask}
-                                onClose={() => setSelectedSubTask(null)}
-                                onToggleStatus={toggleSubTaskStatus}
-                                onSetStatus={setSubTaskStatus}
+        window.addEventListener(TASK_DETAIL_UPDATED_EVENT, handleDetailUpdate);
+        return () => {
+            window.removeEventListener(TASK_DETAIL_UPDATED_EVENT, handleDetailUpdate);
+        };
+    }, [task._id]);
+
+    // Handle note save
+    const handleSaveNote = (newContent: string) => {
+        setNote(newContent);
+        saveTaskNote(task._id, newContent);
+    };
+
+    // Handle add attachment
+    const handleAddAttachment = (attachmentData: Omit<TaskAttachment, 'id' | 'uploadedAt'>) => {
+        const newAtt = addTaskAttachment(task._id, attachmentData);
                                 onEdit={(st) => {
                                     setEditingSubTask(st);
                                     setIsAddModalOpen(true);
