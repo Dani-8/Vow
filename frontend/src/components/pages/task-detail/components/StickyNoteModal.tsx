@@ -122,3 +122,63 @@ export const STICKY_COLOR_THEMES: Record<
     lineBorder: 'border-[#fcc2d7]/50',
     ruledLineColor: 'rgba(230, 73, 128, 0.15)',
   },
+  gray: {
+    name: 'Clean Kraft / Slate',
+    paperBg: 'bg-[#f8f9fa]',
+    headerBg: 'bg-[#e9ecef]/60',
+    border: 'border-[#868e96]/30',
+    textColor: 'text-[#212529]',
+    bodyTextColor: 'text-[#343a40]',
+    tapeBg: 'bg-[#dee2e6]/70',
+    pinBg: 'bg-[#adb5bd] text-[#212529]',
+    accentDot: 'bg-[#868e96]',
+    shadow: 'shadow-[0_20px_40px_rgba(73,80,87,0.15)]',
+    lineBorder: 'border-[#ced4da]/50',
+    ruledLineColor: 'rgba(108, 117, 125, 0.15)',
+  },
+};
+
+export const StickyNoteModal: React.FC<StickyNoteModalProps> = ({
+  isOpen,
+  onClose,
+  note,
+  initialEditMode = false,
+  taskId,
+  onSave,
+  onDelete,
+  onAddSubTask,
+}) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [color, setColor] = useState<NoteColor>('yellow');
+  const [isPinned, setIsPinned] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  // Subtask extraction state inside modal
+  const [extractMode, setExtractMode] = useState(false);
+  const [detectedTasks, setDetectedTasks] = useState<string[]>([]);
+  const [selectedToImport, setSelectedToImport] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (note) {
+      setTitle(note.title || '');
+      setContent(note.content || '');
+      setColor(note.color || 'yellow');
+      setIsPinned(!!note.isPinned);
+      setIsEditing(initialEditMode);
+    } else {
+      // Creating a new note -> always start in edit mode
+      setTitle('');
+      setContent('');
+      setColor('yellow');
+      setIsPinned(false);
+      setIsEditing(true);
+    }
+    setExtractMode(false);
+    setDetectedTasks([]);
+    setSelectedToImport([]);
+    setCopied(false);
+  }, [note, isOpen, initialEditMode]);
+
+  if (!isOpen) return null;
