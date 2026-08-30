@@ -47,3 +47,51 @@ export const TaskNotesTab: React.FC<TaskNotesTabProps> = ({
     setContent(initialNote);
     setSaveStatus('saved');
   }, [taskId, initialNote]);
+
+  // Handle changes with debounce auto-save
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const val = e.target.value;
+    setContent(val);
+    setSaveStatus('dirty');
+
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
+
+    saveTimeoutRef.current = setTimeout(() => {
+      setSaveStatus('saving');
+      onSaveNote(val);
+      setTimeout(() => {
+        setSaveStatus('saved');
+      }, 400);
+    }, 800);
+  };
+
+  const handleManualSave = () => {
+    if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+    setSaveStatus('saving');
+    onSaveNote(content);
+    setTimeout(() => {
+      setSaveStatus('saved');
+    }, 300);
+  };
+
+  // Markdown formatting shortcuts
+  const insertFormatting = (prefix: string, suffix: string = '', defaultPlaceholder: string = '') => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = content.substring(start, end) || defaultPlaceholder;
+
+    const newContent =
+      content.substring(0, start) +
+      prefix +
+      selectedText +
+      suffix +
+      content.substring(end);
+
+    setContent(newContent);
+    setSaveStatus('dirty');
+
