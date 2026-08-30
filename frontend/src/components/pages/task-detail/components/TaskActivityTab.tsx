@@ -114,8 +114,8 @@ export const TaskActivityTab: React.FC<TaskActivityTabProps> = ({
                                 type="button"
                                 onClick={() => setCommentCategory('update')}
                                 className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${commentCategory === 'update'
-                                        ? 'neu-inset text-indigo-700 font-black'
-                                        : 'neu-button text-[#717699] hover:text-[#1a1c35]'
+                                    ? 'neu-inset text-indigo-700 font-black'
+                                    : 'neu-button text-[#717699] hover:text-[#1a1c35]'
                                     }`}
                             >
                                 Progress Update
@@ -124,8 +124,8 @@ export const TaskActivityTab: React.FC<TaskActivityTabProps> = ({
                                 type="button"
                                 onClick={() => setCommentCategory('blocker')}
                                 className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${commentCategory === 'blocker'
-                                        ? 'neu-inset text-rose-700 font-black'
-                                        : 'neu-button text-[#717699] hover:text-rose-600'
+                                    ? 'neu-inset text-rose-700 font-black'
+                                    : 'neu-button text-[#717699] hover:text-rose-600'
                                     }`}
                             >
                                 ⚠️ Blocker
@@ -134,8 +134,8 @@ export const TaskActivityTab: React.FC<TaskActivityTabProps> = ({
                                 type="button"
                                 onClick={() => setCommentCategory('milestone')}
                                 className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${commentCategory === 'milestone'
-                                        ? 'neu-inset text-emerald-700 font-black'
-                                        : 'neu-button text-[#717699] hover:text-emerald-600'
+                                    ? 'neu-inset text-emerald-700 font-black'
+                                    : 'neu-button text-[#717699] hover:text-emerald-600'
                                     }`}
                             >
                                 🎯 Milestone
@@ -174,43 +174,43 @@ export const TaskActivityTab: React.FC<TaskActivityTabProps> = ({
                                     {getActivityIcon(item.type)}
                                 </div>
 
-                <div className="neu-card p-4 bg-[#E0E5EC] space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <span className="text-xs font-black text-[#1a1c35]">
-                        {item.user || 'Alex Rivera'}
-                      </span>
-                      <span className="text-[10px] text-slate-400 font-medium">
-                        • {formatTimestamp(item.timestamp)}
-                      </span>
+                                <div className="neu-card p-4 bg-[#E0E5EC] space-y-1.5">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center space-x-2">
+                                            <span className="text-xs font-black text-[#1a1c35]">
+                                                {item.user || 'Alex Rivera'}
+                                            </span>
+                                            <span className="text-[10px] text-slate-400 font-medium">
+                                                • {formatTimestamp(item.timestamp)}
+                                            </span>
+                                        </div>
+
+                                        {onDeleteActivity && (
+                                            <button
+                                                onClick={() => onDeleteActivity(item.id)}
+                                                className="opacity-0 group-hover:opacity-100 p-1 rounded neu-button text-slate-400 hover:text-rose-600 transition-all text-xs"
+                                                title="Delete log entry"
+                                            >
+                                                <Trash2 className="w-3 h-3" />
+                                            </button>
+                                        )}
+                                    </div>
+
+                                    <p className="text-xs text-[#2b2e4a] leading-relaxed font-medium">
+                                        {item.message}
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
                     </div>
-
-                    {onDeleteActivity && (
-                      <button
-                        onClick={() => onDeleteActivity(item.id)}
-                        className="opacity-0 group-hover:opacity-100 p-1 rounded neu-button text-slate-400 hover:text-rose-600 transition-all text-xs"
-                        title="Delete log entry"
-                      >
-                        <Trash2 className="w-3 h-3" />
-                      </button>
-                    )}
-                  </div>
-
-                  <p className="text-xs text-[#2b2e4a] leading-relaxed font-medium">
-                    {item.message}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-8 space-y-2">
-            <Clock className="w-8 h-8 text-slate-400 mx-auto" />
-            <p className="text-xs font-bold text-[#1a1c35]">No activity logged yet</p>
-            <p className="text-[11px] text-slate-400">All check-ins, edits, and subtask completions will appear here automatically.</p>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+                ) : (
+                    <div className="text-center py-8 space-y-2">
+                        <Clock className="w-8 h-8 text-slate-400 mx-auto" />
+                        <p className="text-xs font-bold text-[#1a1c35]">No activity logged yet</p>
+                        <p className="text-[11px] text-slate-400">All check-ins, edits, and subtask completions will appear here automatically.</p>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
 };
