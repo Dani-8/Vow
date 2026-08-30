@@ -1,12 +1,26 @@
-import React, { useState } from 'react';
-import { Task, SubTask } from '../../../types';
+import React, { useState, useEffect } from 'react';
+import { Task, SubTask, TaskAttachment, TaskActivityItem } from '../../../types';
 import { TaskDetailHeader } from './components/TaskDetailHeader';
 import { TaskDetailTabs, TaskTabType } from './components/TaskDetailTabs';
+import { TaskOverviewTab } from './components/TaskOverviewTab';
+import { TaskNotesTab } from './components/TaskNotesTab';
+import { TaskFilesTab } from './components/TaskFilesTab';
+import { TaskActivityTab } from './components/TaskActivityTab';
 import { SubTaskTimeline } from './subtasks/SubTaskTimeline';
 import { SubTaskDetailPanel } from './subtasks/SubTaskDetailPanel';
 import { AddSubTaskModal } from './subtasks/AddSubTaskModal';
-import { EmptyTabPlaceholder } from './components/EmptyTabPlaceholder';
 import { useSubTasks } from './hooks/useSubTasks';
+import {
+    getTaskNote,
+    saveTaskNote,
+    getTaskAttachments,
+    addTaskAttachment,
+    deleteTaskAttachment,
+    getTaskActivities,
+    addTaskActivity,
+    deleteTaskActivity,
+    TASK_DETAIL_UPDATED_EVENT,
+} from '../../../utils/taskDetailStorage';
 
 interface TaskDetailPageProps {
     task: Task;
@@ -25,8 +39,13 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
     onEditTask,
     onDeleteTask,
 }) => {
-    const [activeTab, setActiveTab] = useState<TaskTabType>('sub-tasks');
+    const [activeTab, setActiveTab] = useState<TaskTabType>('overview');
     const [selectedSubTask, setSelectedSubTask] = useState<SubTask | null>(null);
+
+    // Detail States (Notes, Attachments, Activities)
+    const [note, setNote] = useState<string>(() => getTaskNote(task._id));
+    const [attachments, setAttachments] = useState<TaskAttachment[]>(() => getTaskAttachments(task._id));
+    const [activities, setActivities] = useState<TaskActivityItem[]>(() => getTaskActivities(task._id));
 
     // Sub-task Modal state
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -45,6 +64,67 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
         totalCount,
         progressPercent,
     } = useSubTasks(task._id, task.subTasks);
+
+    // Sync task detail data when taskId changes
+    useEffect(() => {
+        setNote(getTaskNote(task._id));
+        setAttachments(getTaskAttachments(task._id));
+        setActivities(getTaskActivities(task._id));
+    }, [task._id]);
+
+    // Listen for storage events for real-time synchronization
+    useEffect(() => {
+        const handleDetailUpdate = (e: Event) => {
+            const custom = e as CustomEvent<{ taskId: string; updateType: string }>;
+            if (custom.detail && custom.detail.taskId === task._id) {
+                setNote(getTaskNote(task._id));
+                setAttachments(getTaskAttachments(task._id));
+                setActivities(getTaskActivities(task._id));
+            }
+        };
+
+        window.addEventListener(TASK_DETAIL_UPDATED_EVENT, handleDetailUpdate);
+        return () => {
+            window.removeEventListener(TASK_DETAIL_UPDATED_EVENT, handleDetailUpdate);
+        };
+    }, [task._id]);
+
+    // Handle note save
+    const handleSaveNote = (newContent: string) => {
+        setNote(newContent);
+        saveTaskNote(task._id, newContent);
+    };
+
+    // Handle add attachment
+    const handleAddAttachment = (attachmentData: Omit<TaskAttachment, 'id' | 'uploadedAt'>) => {
+        const newAtt = addTaskAttachment(task._id, attachmentData);
+        setAttachments(getTaskAttachments(task._id));
+        setActivities(getTaskActivities(task._id));
+    };
+
+    // Handle delete attachment
+    const handleDeleteAttachment = (attachmentId: string) => {
+        deleteTaskAttachment(task._id, attachmentId);
+        setAttachments(getTaskAttachments(task._id));
+        setActivities(getTaskActivities(task._id));
+    };
+
+    // Handle manual comment / check-in
+    const handleAddComment = (message: string, commentCategory?: string) => {
+        addTaskActivity(task._id, {
+            type: 'comment',
+            message,
+            user: 'Alex Rivera',
+            meta: { category: commentCategory },
+        });
+        setActivities(getTaskActivities(task._id));
+    };
+
+    // Handle delete activity
+    const handleDeleteActivity = (activityId: string) => {
+        deleteTaskActivity(task._id, activityId);
+        setActivities(getTaskActivities(task._id));
+    };
 
     // Sync selected sub-task if updated in subTasks list
     const activeSelectedSubTask = selectedSubTask
@@ -70,7 +150,22 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
             <TaskDetailTabs activeTab={activeTab} onTabChange={setActiveTab} />
 
             {/* 3. Main Tab Content Workspace */}
-            {activeTab === 'sub-tasks' ? (
+            {activeTab === 'overview' && (
+                <TaskOverviewTab
+                    task={task}
+                    subTasks={subTasks}
+                    note={note}
+                    attachments={attachments}
+                    activities={activities}
+                    completedCount={completedCount}
+                    totalCount={totalCount}
+                    progressPercent={progressPercent}
+                    onTabChange={setActiveTab}
+                    onToggleComplete={onToggleComplete}
+                />
+            )}
+
+            {activeTab === 'sub-tasks' && (
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start transition-all">
                     {/* Left / Main Column: Sub-Tasks Timeline */}
                     <div
@@ -81,7 +176,21 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
                             subTasks={subTasks}
                             selectedSubTaskId={activeSelectedSubTask?.id || null}
                             onSelectSubTask={(st) => setSelectedSubTask(st)}
-                            onToggleStatus={toggleSubTaskStatus}
+                            onToggleStatus={(id) => {
+                                toggleSubTaskStatus(id);
+                                const target = subTasks.find((s) => s.id === id);
+                                if (target) {
+                                    const willBeCompleted = target.status !== 'completed';
+                                    addTaskActivity(task._id, {
+                                        type: willBeCompleted ? 'subtask_complete' : 'status_change',
+                                        message: willBeCompleted
+                                            ? `Completed subtask: "${target.title}"`
+                                            : `Reopened subtask: "${target.title}"`,
+                                        user: 'Alex Rivera',
+                                    });
+                                    setActivities(getTaskActivities(task._id));
+                                }
+                            }}
                             onOpenAddModal={() => {
                                 setEditingSubTask(null);
                                 setIsAddModalOpen(true);
@@ -110,19 +219,60 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
                         </div>
                     )}
                 </div>
-            ) : (
-                /* Empty State Placeholder for Overview, Notes, Files, Activity */
-                <EmptyTabPlaceholder tabName={activeTab} />
+            )}
+
+            {activeTab === 'notes' && (
+                <TaskNotesTab
+                    taskId={task._id}
+                    initialNote={note}
+                    onSaveNote={handleSaveNote}
+                    onAddSubTask={(newSt) => {
+                        addSubTask(newSt);
+                        addTaskActivity(task._id, {
+                            type: 'subtask_add',
+                            message: `Imported subtask from notes: "${newSt.title}"`,
+                            user: 'Alex Rivera',
+                        });
+                        setActivities(getTaskActivities(task._id));
+                    }}
+                />
+            )}
+
+            {activeTab === 'files' && (
+                <TaskFilesTab
+                    taskId={task._id}
+                    attachments={attachments}
+                    onAddAttachment={handleAddAttachment}
+                    onDeleteAttachment={handleDeleteAttachment}
+                />
+            )}
+
+            {activeTab === 'activity' && (
+                <TaskActivityTab
+                    taskId={task._id}
+                    activities={activities}
+                    onAddComment={handleAddComment}
+                    onDeleteActivity={handleDeleteActivity}
+                />
             )}
 
             {/* Add / Edit Sub-Task Modal */}
             <AddSubTaskModal
                 isOpen={isAddModalOpen}
                 onClose={() => setIsAddModalOpen(false)}
-                onSave={addSubTask}
+                onSave={(newSt) => {
+                    addSubTask(newSt);
+                    addTaskActivity(task._id, {
+                        type: 'subtask_add',
+                        message: `Added new subtask: "${newSt.title}"`,
+                        user: 'Alex Rivera',
+                    });
+                    setActivities(getTaskActivities(task._id));
+                }}
                 editingSubTask={editingSubTask}
                 onUpdate={updateSubTask}
             />
         </div>
     );
 };
+
