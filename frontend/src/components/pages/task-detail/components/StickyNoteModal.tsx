@@ -386,3 +386,76 @@ export const StickyNoteModal: React.FC<StickyNoteModalProps> = ({
                     </div>
                   );
                 }
+
+                if (line.startsWith('- ') || line.startsWith('• ') || line.startsWith('* ')) {
+                  return (
+                    <li key={idx} className={`ml-4 list-disc text-xs ${currentTheme.bodyTextColor} font-medium leading-relaxed`}>
+                      {line.replace(/^[-*•]\s*/, '')}
+                    </li>
+                  );
+                }
+
+                if (line.startsWith('> ')) {
+                  return (
+                    <blockquote
+                      key={idx}
+                      className="p-2.5 rounded-lg bg-black/5 border-l-4 border-black/20 italic text-xs font-medium opacity-90 my-1"
+                    >
+                      {line.substring(2)}
+                    </blockquote>
+                  );
+                }
+
+                if (line.trim() === '') {
+                  return <div key={idx} className="h-4" />;
+                }
+
+                return (
+                  <p key={idx} className={`text-xs ${currentTheme.bodyTextColor} font-medium leading-relaxed`}>
+                    {line}
+                  </p>
+                );
+              })}
+            </div>
+
+            {/* Bottom Footer Details & Actions */}
+            <div className={`pt-4 border-t ${currentTheme.lineBorder} flex flex-wrap items-center justify-between gap-3 text-xs`}>
+              <div className="flex items-center space-x-3 text-[11px] opacity-75 font-medium">
+                <span className="flex items-center space-x-1">
+                  <Calendar className="w-3 h-3" />
+                  <span>{note?.updatedAt ? new Date(note.updatedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : 'Today'}</span>
+                </span>
+                <span>•</span>
+                <span className="capitalize">{currentTheme.name}</span>
+              </div>
+
+              <div className="flex items-center space-x-2">
+                {onAddSubTask && (
+                  <button
+                    type="button"
+                    onClick={handleOpenExtract}
+                    className="px-3 py-1.5 rounded-xl bg-black/5 hover:bg-black/10 text-slate-800 text-xs font-bold flex items-center space-x-1.5 transition-colors"
+                    title="Extract checkboxes/bullets to task timeline"
+                  >
+                    <ListPlus className="w-3.5 h-3.5" />
+                    <span>Extract to Subtasks</span>
+                  </button>
+                )}
+
+                {note && onDelete && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onDelete(note.id);
+                      onClose();
+                    }}
+                    className="p-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-700 transition-colors"
+                    title="Delete note"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
