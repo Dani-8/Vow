@@ -87,7 +87,6 @@ export const TaskActivityTab: React.FC<TaskActivityTabProps> = ({
         }
     };
 
-
     return (
         <div className="space-y-6 animate-fadeIn max-w-4xl">
             {/* Post Check-in / Comment Box */}
@@ -114,8 +113,8 @@ export const TaskActivityTab: React.FC<TaskActivityTabProps> = ({
                                 type="button"
                                 onClick={() => setCommentCategory('update')}
                                 className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${commentCategory === 'update'
-                                    ? 'neu-inset text-indigo-700 font-black'
-                                    : 'neu-button text-[#717699] hover:text-[#1a1c35]'
+                                        ? 'neu-inset text-indigo-700 font-black'
+                                        : 'neu-button text-[#717699] hover:text-[#1a1c35]'
                                     }`}
                             >
                                 Progress Update
@@ -124,8 +123,8 @@ export const TaskActivityTab: React.FC<TaskActivityTabProps> = ({
                                 type="button"
                                 onClick={() => setCommentCategory('blocker')}
                                 className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${commentCategory === 'blocker'
-                                    ? 'neu-inset text-rose-700 font-black'
-                                    : 'neu-button text-[#717699] hover:text-rose-600'
+                                        ? 'neu-inset text-rose-700 font-black'
+                                        : 'neu-button text-[#717699] hover:text-rose-600'
                                     }`}
                             >
                                 ⚠️ Blocker
@@ -134,8 +133,8 @@ export const TaskActivityTab: React.FC<TaskActivityTabProps> = ({
                                 type="button"
                                 onClick={() => setCommentCategory('milestone')}
                                 className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${commentCategory === 'milestone'
-                                    ? 'neu-inset text-emerald-700 font-black'
-                                    : 'neu-button text-[#717699] hover:text-emerald-600'
+                                        ? 'neu-inset text-emerald-700 font-black'
+                                        : 'neu-button text-[#717699] hover:text-emerald-600'
                                     }`}
                             >
                                 🎯 Milestone
