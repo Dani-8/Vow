@@ -154,3 +154,84 @@ export const TaskNotesTab: React.FC<TaskNotesTabProps> = ({
     setExtractModalOpen(false);
   };
 
+  const toggleSelectTaskToImport = (item: string) => {
+    if (selectedTasksToImport.includes(item)) {
+      setSelectedTasksToImport(selectedTasksToImport.filter((t) => t !== item));
+    } else {
+      setSelectedTasksToImport([...selectedTasksToImport, item]);
+    }
+  };
+
+  return (
+    <div className="space-y-4 animate-fadeIn max-w-5xl">
+      {/* Top Controls Toolbar */}
+      <div className="neu-card p-4 bg-[#E0E5EC] flex flex-wrap items-center justify-between gap-3">
+        {/* Left Formatting Buttons */}
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+          <button
+            type="button"
+            onClick={() => insertFormatting('**', '**', 'bold text')}
+            title="Bold (**text**)"
+            className="p-2 rounded-xl neu-button text-slate-700 hover:text-[#2563eb] text-xs font-bold"
+          >
+            <Bold className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => insertFormatting('*', '*', 'italic text')}
+            title="Italic (*text*)"
+            className="p-2 rounded-xl neu-button text-slate-700 hover:text-[#2563eb] text-xs font-bold"
+          >
+            <Italic className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => insertFormatting('## ', '', 'Section Heading')}
+            title="Heading 2 (## Heading)"
+            className="p-2 rounded-xl neu-button text-slate-700 hover:text-[#2563eb] text-xs font-bold"
+          >
+            <Heading2 className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => insertFormatting('### ', '', 'Subsection')}
+            title="Heading 3 (### Subheading)"
+            className="p-2 rounded-xl neu-button text-slate-700 hover:text-[#2563eb] text-xs font-bold"
+          >
+            <Heading3 className="w-4 h-4" />
+          </button>
+          <div className="h-5 w-[1px] bg-[#c8d0e0] mx-1" />
+          <button
+            type="button"
+            onClick={() => insertFormatting('- [ ] ', '', 'Checklist item')}
+            title="Checklist item (- [ ] Task)"
+            className="p-2 rounded-xl neu-button text-slate-700 hover:text-[#2563eb] text-xs font-bold"
+          >
+            <CheckSquare className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => insertFormatting('- ', '', 'Bullet point')}
+            title="Bullet List (- item)"
+            className="p-2 rounded-xl neu-button text-slate-700 hover:text-[#2563eb] text-xs font-bold"
+          >
+            <List className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => insertFormatting('> ', '', 'Quoted insight')}
+            title="Quote (> quote)"
+            className="p-2 rounded-xl neu-button text-slate-700 hover:text-[#2563eb] text-xs font-bold"
+          >
+            <Quote className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => insertFormatting('```\n', '\n```', 'code block')}
+            title="Code block"
+            className="p-2 rounded-xl neu-button text-slate-700 hover:text-[#2563eb] text-xs font-bold"
+          >
+            <Code className="w-4 h-4" />
+          </button>
+        </div>
+
