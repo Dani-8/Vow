@@ -198,3 +198,53 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
                             onReorderSubTasks={reorderSubTasks}
                         />
                     </div>
+
+                    {/* Right Column: Closeable Sub-Task Detail Panel */}
+                    {activeSelectedSubTask && (
+                        <div className="lg:col-span-5 sticky top-4">
+                            <SubTaskDetailPanel
+                                subTask={activeSelectedSubTask}
+                                onClose={() => setSelectedSubTask(null)}
+                                onToggleStatus={toggleSubTaskStatus}
+                                onSetStatus={setSubTaskStatus}
+                                onEdit={(st) => {
+                                    setEditingSubTask(st);
+                                    setIsAddModalOpen(true);
+                                }}
+                                onDelete={(id) => {
+                                    deleteSubTask(id);
+                                    setSelectedSubTask(null);
+                                }}
+                            />
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {activeTab === 'notes' && (
+                <TaskNotesTab
+                    taskId={task._id}
+                    initialNote={note}
+                    onSaveNote={handleSaveNote}
+                    onAddSubTask={(newSt) => {
+                        addSubTask(newSt);
+                        addTaskActivity(task._id, {
+                            type: 'subtask_add',
+                            message: `Imported subtask from notes: "${newSt.title}"`,
+                            user: 'Alex Rivera',
+                        });
+                        setActivities(getTaskActivities(task._id));
+                    }}
+                />
+            )}
+
+            {activeTab === 'files' && (
+                <TaskFilesTab
+                    taskId={task._id}
+                    attachments={attachments}
+                    onAddAttachment={handleAddAttachment}
+                    onDeleteAttachment={handleDeleteAttachment}
+                />
+            )}
+
+            {activeTab === 'activity' && (
