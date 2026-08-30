@@ -354,3 +354,75 @@ export const TaskNotesTab: React.FC<TaskNotesTabProps> = ({
           />
         )}
       </div>
+
+      {/* Convert to Subtasks Modal */}
+      {extractModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fadeIn">
+          <div className="neu-card p-6 bg-[#E0E5EC] max-w-lg w-full space-y-5 shadow-2xl">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Sparkles className="w-5 h-5 text-indigo-600" />
+                <h3 className="text-base font-black text-[#1a1c35]">Convert Notes to Subtasks</h3>
+              </div>
+              <button
+                onClick={() => setExtractModalOpen(false)}
+                className="text-xs font-bold text-slate-500 hover:text-slate-800"
+              >
+                ✕
+              </button>
+            </div>
+
+            <p className="text-xs text-[#717699]">
+              We found {detectedTasks.length} action items in your notes. Select the items you want to add to your Subtasks timeline:
+            </p>
+
+            {detectedTasks.length > 0 ? (
+              <div className="max-h-60 overflow-y-auto space-y-2 pr-1">
+                {detectedTasks.map((item, idx) => {
+                  const isSelected = selectedTasksToImport.includes(item);
+                  return (
+                    <label
+                      key={idx}
+                      className="p-3 rounded-xl neu-flat bg-[#E0E5EC] flex items-center space-x-3 cursor-pointer hover:bg-slate-200/50 transition-colors"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => toggleSelectTaskToImport(item)}
+                        className="rounded text-indigo-600 focus:ring-indigo-500 w-4 h-4"
+                      />
+                      <span className="text-xs font-bold text-[#1a1c35] leading-snug flex-1">{item}</span>
+                    </label>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="text-xs italic text-slate-400 p-4 rounded-xl neu-inset bg-[#dbe2ee]/50 text-center">
+                No bullet points or checkbox items found in this note. Write lines starting with "- [ ] " or "- " to extract them.
+              </p>
+            )}
+
+            <div className="flex items-center justify-end space-x-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setExtractModalOpen(false)}
+                className="px-4 py-2 rounded-xl neu-button text-xs font-bold text-slate-600"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={selectedTasksToImport.length === 0}
+                onClick={handleImportSubtasks}
+                className="px-4 py-2 rounded-xl neu-button-primary text-xs font-bold text-white flex items-center space-x-1.5 disabled:opacity-50"
+              >
+                <span>Import {selectedTasksToImport.length} Subtasks</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
