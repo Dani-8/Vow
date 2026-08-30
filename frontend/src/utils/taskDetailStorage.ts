@@ -101,3 +101,59 @@ const DEFAULT_TASK_ACTIVITIES: Record<string, TaskActivityItem[]> = {
       user: 'Alex Rivera',
       timestamp: new Date(Date.now() - 86400000).toISOString(),
     },
+    {
+      id: 'act_ru_4',
+      type: 'comment',
+      message: 'Completed today\'s flashcard set (45 cards). Feeling much more confident with pronunciation!',
+      user: 'Alex Rivera',
+      timestamp: new Date(Date.now() - 3600000 * 4).toISOString(),
+    },
+  ],
+};
+
+export function getTaskNote(taskId: string): string {
+  if (!taskId) return '';
+  const key = `vow_task_note_${taskId}`;
+  try {
+    const saved = localStorage.getItem(key);
+    if (saved !== null) return saved;
+  } catch (e) {
+    console.warn(`Error reading note for task ${taskId}:`, e);
+  }
+
+  if (DEFAULT_TASK_NOTES[taskId]) {
+    try {
+      localStorage.setItem(key, DEFAULT_TASK_NOTES[taskId]);
+    } catch {
+      // ignore
+    }
+    return DEFAULT_TASK_NOTES[taskId];
+  }
+
+  return '';
+}
+
+export function saveTaskNote(taskId: string, content: string): void {
+  if (!taskId) return;
+  const key = `vow_task_note_${taskId}`;
+  try {
+    localStorage.setItem(key, content);
+  } catch (e) {
+    console.error(`Error saving note for task ${taskId}:`, e);
+  }
+
+  notifyTaskDetailUpdated(taskId, 'note');
+}
+
+export function getTaskAttachments(taskId: string): TaskAttachment[] {
+  if (!taskId) return [];
+  const key = `vow_task_attachments_${taskId}`;
+  try {
+    const saved = localStorage.getItem(key);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed)) return parsed;
+    }
+  } catch (e) {
+    console.warn(`Error reading attachments for task ${taskId}:`, e);
+  }
