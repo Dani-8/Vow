@@ -138,8 +138,8 @@ export const TaskFilesTab: React.FC<TaskFilesTabProps> = ({
                     onDrop={handleDrop}
                     onClick={() => fileInputRef.current?.click()}
                     className={`md:col-span-2 p-6 rounded-2xl border-2 border-dashed transition-all cursor-pointer flex flex-col items-center justify-center text-center space-y-2.5 ${isDragging
-                            ? 'border-indigo-500 bg-indigo-50/50 scale-[1.01]'
-                            : 'border-[#c8d0e0] hover:border-indigo-400 bg-[#E0E5EC] neu-inset'
+                        ? 'border-indigo-500 bg-indigo-50/50 scale-[1.01]'
+                        : 'border-[#c8d0e0] hover:border-indigo-400 bg-[#E0E5EC] neu-inset'
                         }`}
                 >
                     <input
@@ -205,8 +205,8 @@ export const TaskFilesTab: React.FC<TaskFilesTabProps> = ({
                             key={t.id}
                             onClick={() => setFilterType(t.id)}
                             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${filterType === t.id
-                                    ? 'neu-inset text-indigo-700 font-black'
-                                    : 'neu-button text-[#717699] hover:text-[#1a1c35]'
+                                ? 'neu-inset text-indigo-700 font-black'
+                                : 'neu-button text-[#717699] hover:text-[#1a1c35]'
                                 }`}
                         >
                             {t.label}
