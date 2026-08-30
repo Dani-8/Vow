@@ -45,9 +45,9 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
     const [selectedSubTask, setSelectedSubTask] = useState<SubTask | null>(null);
 
     // Detail States (Sticky Notes, Attachments, Activities)
-    const [stickyNotes, setStickyNotes] = useState<TaskStickyNote[]>(() => getTaskStickyNotes(task._id));
-    const [attachments, setAttachments] = useState<TaskAttachment[]>(() => getTaskAttachments(task._id));
-    const [activities, setActivities] = useState<TaskActivityItem[]>(() => getTaskActivities(task._id));
+    const [stickyNotes, setStickyNotes] = useState<TaskStickyNote[]>(() => getTaskStickyNotes(task._id, task.title));
+    const [attachments, setAttachments] = useState<TaskAttachment[]>(() => getTaskAttachments(task._id, task.title));
+    const [activities, setActivities] = useState<TaskActivityItem[]>(() => getTaskActivities(task._id, task.title));
 
     // Sub-task Modal state
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -67,21 +67,21 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
         progressPercent,
     } = useSubTasks(task._id, task.subTasks);
 
-    // Sync task detail data when taskId changes
+    // Sync task detail data when task changes
     useEffect(() => {
-        setStickyNotes(getTaskStickyNotes(task._id));
-        setAttachments(getTaskAttachments(task._id));
-        setActivities(getTaskActivities(task._id));
-    }, [task._id]);
+        setStickyNotes(getTaskStickyNotes(task._id, task.title));
+        setAttachments(getTaskAttachments(task._id, task.title));
+        setActivities(getTaskActivities(task._id, task.title));
+    }, [task._id, task.title]);
 
     // Listen for storage events for real-time synchronization
     useEffect(() => {
         const handleDetailUpdate = (e: Event) => {
             const custom = e as CustomEvent<{ taskId: string; updateType: string }>;
-            if (custom.detail && custom.detail.taskId === task._id) {
-                setStickyNotes(getTaskStickyNotes(task._id));
-                setAttachments(getTaskAttachments(task._id));
-                setActivities(getTaskActivities(task._id));
+            if (custom.detail && (custom.detail.taskId === task._id || !custom.detail.taskId)) {
+                setStickyNotes(getTaskStickyNotes(task._id, task.title));
+                setAttachments(getTaskAttachments(task._id, task.title));
+                setActivities(getTaskActivities(task._id, task.title));
             }
         };
 
@@ -89,26 +89,26 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
         return () => {
             window.removeEventListener(TASK_DETAIL_UPDATED_EVENT, handleDetailUpdate);
         };
-    }, [task._id]);
+    }, [task._id, task.title]);
 
     // Handle sticky note creation
     const handleAddStickyNote = (noteData: Omit<TaskStickyNote, 'id' | 'createdAt' | 'updatedAt'>) => {
         addTaskStickyNote(task._id, noteData);
-        setStickyNotes(getTaskStickyNotes(task._id));
-        setActivities(getTaskActivities(task._id));
+        setStickyNotes(getTaskStickyNotes(task._id, task.title));
+        setActivities(getTaskActivities(task._id, task.title));
     };
 
     // Handle sticky note update
     const handleUpdateStickyNote = (noteId: string, updates: Partial<Omit<TaskStickyNote, 'id' | 'createdAt'>>) => {
         updateTaskStickyNote(task._id, noteId, updates);
-        setStickyNotes(getTaskStickyNotes(task._id));
+        setStickyNotes(getTaskStickyNotes(task._id, task.title));
     };
 
     // Handle sticky note deletion
     const handleDeleteStickyNote = (noteId: string) => {
         deleteTaskStickyNote(task._id, noteId);
-        setStickyNotes(getTaskStickyNotes(task._id));
-        setActivities(getTaskActivities(task._id));
+        setStickyNotes(getTaskStickyNotes(task._id, task.title));
+        setActivities(getTaskActivities(task._id, task.title));
     };
 
     // Handle add attachment
