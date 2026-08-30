@@ -87,8 +87,8 @@ export const TaskOverviewTab: React.FC<TaskOverviewTabProps> = ({
                         <button
                             onClick={() => onToggleComplete(task)}
                             className={`px-4 py-2 rounded-xl text-xs font-black tracking-wide flex items-center space-x-2 transition-all neu-button ${isCompleted
-                                    ? 'text-emerald-700 bg-emerald-500/15 hover:bg-emerald-500/25'
-                                    : 'text-slate-700 hover:text-[#1a1c35]'
+                                ? 'text-emerald-700 bg-emerald-500/15 hover:bg-emerald-500/25'
+                                : 'text-slate-700 hover:text-[#1a1c35]'
                                 }`}
                         >
                             <CheckCircle2 className={`w-4 h-4 ${isCompleted ? 'text-emerald-600' : 'text-slate-400'}`} />
