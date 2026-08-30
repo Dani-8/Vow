@@ -205,3 +205,52 @@ export function addTaskAttachment(
 
   return newAttachment;
 }
+
+export function deleteTaskAttachment(taskId: string, attachmentId: string): void {
+  const current = getTaskAttachments(taskId);
+  const deleted = current.find((a) => a.id === attachmentId);
+  const updated = current.filter((a) => a.id !== attachmentId);
+  saveTaskAttachments(taskId, updated);
+
+  if (deleted) {
+    addTaskActivity(taskId, {
+      type: 'attachment_add',
+      message: `Removed attachment: "${deleted.name}"`,
+      user: 'Alex Rivera',
+    });
+  }
+}
+
+export function getTaskActivities(taskId: string): TaskActivityItem[] {
+  if (!taskId) return [];
+  const key = `vow_task_activities_${taskId}`;
+  try {
+    const saved = localStorage.getItem(key);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed)) return parsed;
+    }
+  } catch (e) {
+    console.warn(`Error reading activities for task ${taskId}:`, e);
+  }
+
+  if (DEFAULT_TASK_ACTIVITIES[taskId]) {
+    try {
+      localStorage.setItem(key, JSON.stringify(DEFAULT_TASK_ACTIVITIES[taskId]));
+    } catch {
+      // ignore
+    }
+    return DEFAULT_TASK_ACTIVITIES[taskId];
+  }
+
+  // Generic created fallback
+  return [
+    {
+      id: `act_init_${taskId}`,
+      type: 'created',
+      message: 'Task initiated and organized in workspace',
+      user: 'Alex Rivera',
+      timestamp: new Date(Date.now() - 86400000 * 3).toISOString(),
+    },
+  ];
+}
