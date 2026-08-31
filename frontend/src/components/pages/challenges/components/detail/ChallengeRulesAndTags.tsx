@@ -69,7 +69,7 @@ export const ChallengeRulesAndTags: React.FC<ChallengeRulesAndTagsProps> = ({
                     <div className="flex items-center justify-between text-[11px] font-bold text-[#717699]">
                         <span>What counts as a completed day</span>
                         {isPhaseSpecific && (
-                            <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded neu-inset text-indigo-700">
+                            <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded neu-inset text-blue-600">
                                 Phase Custom
                             </span>
                         )}
