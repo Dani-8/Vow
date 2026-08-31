@@ -272,7 +272,7 @@ export const StickyNoteModal: React.FC<StickyNoteModalProps> = ({
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fadeIn">
             {/* Outer Paper Card Container */}
             <div
-                className={`relative w-full max-w-xl rounded-2xl border-2 transition-all duration-300 ${currentTheme.paperBg} ${currentTheme.border} ${currentTheme.shadow} flex flex-col overflow-hidden`}
+                className={`relative w-full max-w-xl rounded-2xl border-2 transition-all duration-300 ${currentTheme.paperBg} ${currentTheme.border} ${currentTheme.shadow} flex flex-col overflow-visible`}
                 style={{
                     boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0,0,0,0.05)',
                 }}
@@ -519,7 +519,7 @@ export const StickyNoteModal: React.FC<StickyNoteModalProps> = ({
                                         className="flex items-center space-x-1.5 px-2 py-0.5 rounded-lg bg-black/5 hover:bg-black/10 text-slate-700 text-[11px] font-bold transition-colors cursor-help"
                                         title="View formatting syntax & usecases"
                                     >
-                                        <HelpCircle className="w-3.5 h-3.5 text-indigo-600" />
+                                        <HelpCircle className="w-3.5 h-3.5" />
                                         <span>Formatting Guide</span>
                                     </button>
 
@@ -527,7 +527,6 @@ export const StickyNoteModal: React.FC<StickyNoteModalProps> = ({
                                     <div className="absolute right-0 top-full mt-1.5 w-72 sm:w-80 p-3.5 rounded-2xl bg-white/95 backdrop-blur-md shadow-2xl border border-slate-200/80 z-30 opacity-0 invisible group-hover/guide:opacity-100 group-hover/guide:visible transition-all duration-200 pointer-events-none group-hover/guide:pointer-events-auto text-left">
                                         <div className="flex items-center justify-between pb-2 border-b border-slate-100 mb-2.5">
                                             <div className="flex items-center space-x-1.5">
-                                                <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
                                                 <span className="text-xs font-black text-slate-800">Supported Note Formats</span>
                                             </div>
                                             <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Click to insert</span>
