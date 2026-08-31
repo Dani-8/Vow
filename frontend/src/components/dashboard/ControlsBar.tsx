@@ -34,7 +34,7 @@ export const ControlsBar: React.FC<ControlsBarProps> = ({
         <button
           onClick={() => onFilterChange('all')}
           className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${activeFilter === 'all'
-            ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+            ? 'neu-button !text-[#549acb] bg-[#E0E5EC]'
             : 'text-[#717699] hover:text-[#1a1c35]'
             }`}
         >
@@ -43,7 +43,7 @@ export const ControlsBar: React.FC<ControlsBarProps> = ({
         <button
           onClick={() => onFilterChange('habits')}
           className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${activeFilter === 'habits'
-            ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+            ? 'neu-button !text-[#549acb] bg-[#E0E5EC]'
             : 'text-[#717699] hover:text-[#1a1c35]'
             }`}
         >
@@ -52,7 +52,7 @@ export const ControlsBar: React.FC<ControlsBarProps> = ({
         <button
           onClick={() => onFilterChange('tasks')}
           className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${activeFilter === 'tasks'
-            ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+            ? 'neu-button !text-[#549acb] bg-[#E0E5EC]'
             : 'text-[#717699] hover:text-[#1a1c35]'
             }`}
         >
@@ -61,7 +61,7 @@ export const ControlsBar: React.FC<ControlsBarProps> = ({
         <button
           onClick={() => onFilterChange('todo')}
           className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${activeFilter === 'todo'
-            ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+            ? 'neu-button !text-[#549acb] bg-[#E0E5EC]'
             : 'text-[#717699] hover:text-[#1a1c35]'
             }`}
         >
@@ -70,7 +70,7 @@ export const ControlsBar: React.FC<ControlsBarProps> = ({
         <button
           onClick={() => onFilterChange('completed')}
           className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${activeFilter === 'completed'
-            ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+            ? 'neu-button !text-[#549acb] bg-[#E0E5EC]'
             : 'text-[#717699] hover:text-[#1a1c35]'
             }`}
         >

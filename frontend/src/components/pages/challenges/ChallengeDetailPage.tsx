@@ -357,7 +357,7 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                             <div>
                                 <div className="flex items-center space-x-2">
                                     <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full neu-inset text-amber-800 bg-amber-100">
-                                        🏆 Challenge Finale Completed!
+                                        Challenge Finale Completed!
                                     </span>
                                     <span className="text-xs font-bold text-emerald-700 bg-emerald-100/70 px-2 py-0.5 rounded-full neu-inset">
                                         {totalPhasesCompletedCount} Phases Mastered
