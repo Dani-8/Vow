@@ -100,7 +100,7 @@ export const TaskNotesTab: React.FC<TaskNotesTabProps> = ({
                         <button
                             onClick={() => setColorFilter('all')}
                             className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${colorFilter === 'all'
-                                ? 'neu-inset text-indigo-700 font-black'
+                                ? 'neu-inset text-[#549acb] font-black'
                                 : 'neu-button text-slate-500 hover:text-slate-800'
                                 }`}
                         >

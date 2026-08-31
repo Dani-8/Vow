@@ -138,8 +138,8 @@ export const TaskFilesTab: React.FC<TaskFilesTabProps> = ({
                     onDrop={handleDrop}
                     onClick={() => fileInputRef.current?.click()}
                     className={`md:col-span-2 p-6 rounded-2xl border-2 border-dashed transition-all cursor-pointer flex flex-col items-center justify-center text-center space-y-2.5 ${isDragging
-                        ? 'border-indigo-500 bg-indigo-50/50 scale-[1.01]'
-                        : 'border-[#c8d0e0] hover:border-indigo-400 bg-[#E0E5EC] neu-inset'
+                        ? 'border-[#549acb] bg-indigo-50/50 scale-[1.01]'
+                        : 'border-[#c8d0e0] hover:border-[#549acb] bg-[#E0E5EC] neu-inset'
                         }`}
                 >
                     <input
@@ -149,12 +149,12 @@ export const TaskFilesTab: React.FC<TaskFilesTabProps> = ({
                         className="hidden"
                         onChange={(e) => handleFileUpload(e.target.files)}
                     />
-                    <div className="p-3 rounded-2xl neu-button text-indigo-600">
+                    <div className="p-3 rounded-2xl neu-button !text-[#549acb]">
                         <UploadCloud className="w-6 h-6" />
                     </div>
                     <div>
                         <p className="text-xs sm:text-sm font-bold text-[#1a1c35]">
-                            Drop files here, or <span className="text-indigo-600 underline">browse device</span>
+                            Drop files here, or <span className="text-[#549acb] underline">browse device</span>
                         </p>
                         <p className="text-[11px] text-slate-400">Supports PDFs, Images, Word Docs, Sheets &amp; Diagrams</p>
                     </div>
@@ -205,7 +205,7 @@ export const TaskFilesTab: React.FC<TaskFilesTabProps> = ({
                             key={t.id}
                             onClick={() => setFilterType(t.id)}
                             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${filterType === t.id
-                                ? 'neu-inset text-indigo-700 font-black'
+                                ? 'neu-inset text-[#549acb] font-black'
                                 : 'neu-button text-[#717699] hover:text-[#1a1c35]'
                                 }`}
                         >
