@@ -123,3 +123,18 @@ export const STICKY_COLOR_THEMES: Record<
         lineBorder: 'border-[#fcc2d7]/50',
         ruledLineColor: 'rgba(230, 73, 128, 0.15)',
     },
+    gray: {
+        name: 'Clean Kraft / Slate',
+        paperBg: 'bg-[#f8f9fa]',
+        headerBg: 'bg-[#e9ecef]/60',
+        border: 'border-[#868e96]/30',
+        textColor: 'text-[#212529]',
+        bodyTextColor: 'text-[#343a40]',
+        tapeBg: 'bg-[#dee2e6]/70',
+        pinBg: 'bg-[#adb5bd] text-[#212529]',
+        accentDot: 'bg-[#868e96]',
+        shadow: 'shadow-[0_20px_40px_rgba(73,80,87,0.15)]',
+        lineBorder: 'border-[#ced4da]/50',
+        ruledLineColor: 'rgba(108, 117, 125, 0.15)',
+    },
+};
