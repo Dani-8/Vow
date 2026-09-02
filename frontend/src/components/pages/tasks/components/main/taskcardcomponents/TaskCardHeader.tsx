@@ -21,8 +21,8 @@ export const TaskCardHeader: React.FC<TaskCardHeaderProps> = ({
                     onToggleComplete(task);
                 }}
                 className={`mt-0.5 w-7 h-7 rounded-xl neu-button flex items-center justify-center shrink-0 transition-transform ${isCompleted
-                        ? 'bg-emerald-500 text-white shadow-inner scale-105 border-emerald-500'
-                        : 'text-[#717699] hover:text-[#549acb] hover:scale-110'
+                    ? 'bg-emerald-500 text-white shadow-inner scale-105 border-emerald-500'
+                    : 'text-[#717699] hover:text-[#549acb] hover:scale-110'
                     }`}
                 title={isCompleted ? 'Mark as incomplete' : 'Mark complete today'}
             >
