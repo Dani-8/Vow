@@ -467,3 +467,47 @@ export const StickyNoteModal: React.FC<StickyNoteModalProps> = ({
                                 })}
                             </div>
                         </div>
+
+                        {/* Note Content Textarea & Formatting Guide */}
+                        <div className="space-y-1 relative">
+                            <div className="flex items-center justify-between">
+                                <label className="text-[11px] font-black uppercase tracking-wider opacity-75 text-slate-700">
+                                    Note Content &amp; Rules *
+                                </label>
+
+                                {/* Interactive Formatting Guide Hover/Click Trigger */}
+                                <div className="relative group/guide">
+                                    <button
+                                        type="button"
+                                        className="flex items-center space-x-1.5 px-2 py-0.5 rounded-lg bg-black/5 hover:bg-black/10 text-slate-700 text-[11px] font-bold transition-colors cursor-help"
+                                        title="View formatting syntax & usecases"
+                                    >
+                                        <HelpCircle className="w-3.5 h-3.5" />
+                                        <span>Formatting Guide</span>
+                                    </button>
+
+                                    {/* Popover Card */}
+                                    <div className="absolute right-0 top-full mt-1.5 w-72 sm:w-80 p-3.5 rounded-2xl bg-white/95 backdrop-blur-md shadow-2xl border border-slate-200/80 z-30 opacity-0 invisible group-hover/guide:opacity-100 group-hover/guide:visible transition-all duration-200 pointer-events-none group-hover/guide:pointer-events-auto text-left">
+                                        <div className="flex items-center justify-between pb-2 border-b border-slate-100 mb-2.5">
+                                            <div className="flex items-center space-x-1.5">
+                                                <span className="text-xs font-black text-slate-800">Supported Note Formats</span>
+                                            </div>
+                                            <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Click to insert</span>
+                                        </div>
+
+                                        <div className="space-y-2 text-[11px]">
+                                            {/* Case 1: Checklists */}
+                                            <button
+                                                type="button"
+                                                onClick={() => setContent((prev) => prev ? `${prev}\n- [ ] New checklist item` : '- [ ] New checklist item')}
+                                                className="w-full p-2 rounded-xl bg-slate-50 hover:bg-indigo-50 border border-slate-200/60 hover:border-indigo-200 text-left transition-colors flex items-start space-x-2 group/item"
+                                            >
+                                                <span className="w-4 h-4 rounded border border-slate-400 bg-white flex items-center justify-center text-[10px] text-indigo-600 shrink-0 mt-0.5 group-hover/item:border-indigo-500">✓</span>
+                                                <div className="flex-1">
+                                                    <div className="font-bold text-slate-800 flex items-center justify-between">
+                                                        <span>Checklist Items</span>
+                                                        <code className="text-[10px] text-indigo-600 font-mono bg-white px-1 py-0.5 rounded border border-slate-200">- [ ]</code>
+                                                    </div>
+                                                    <p className="text-[10px] text-slate-500 mt-0.5 leading-tight">Interactive checkboxes in paper view. Can be extracted directly into subtasks!</p>
+                                                </div>
+                                            </button>
