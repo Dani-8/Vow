@@ -157,3 +157,48 @@ export const SubTaskTimeline: React.FC<SubTaskTimelineProps> = ({
                         No sub-tasks found matching the selected filter.
                     </div>
                 ) : (
+                    filteredSubTasks.map((st) => {
+                        const indexInFullList = subTasks.findIndex((item) => item.id === st.id);
+                        const isSelected = selectedSubTaskId === st.id;
+                        const isCompleted = st.status === 'completed';
+                        const isInProgress = st.status === 'in_progress';
+                        const isDragOver = dragOverIndex === indexInFullList;
+                        const isDragging = draggedIndex === indexInFullList;
+
+                        return (
+                            <div
+                                key={st.id}
+                                draggable
+                                onDragStart={(e) => handleDragStart(indexInFullList, e)}
+                                onDragOver={(e) => handleDragOver(indexInFullList, e)}
+                                onDrop={(e) => handleDrop(indexInFullList, e)}
+                                onDragEnd={handleDragEnd}
+                                onClick={() => onSelectSubTask(st)}
+                                className={`group flex items-center space-x-2 sm:space-x-3 p-3 rounded-2xl cursor-pointer transition-all ${isDragging
+                                    ? 'opacity-40 scale-98 bg-gray-200 border-2 border-dashed border-blue-400'
+                                    : isDragOver
+                                        ? 'border-2 border-blue-500 bg-blue-50/50'
+                                        : isSelected
+                                            ? 'neu-card bg-[#eef4f9] shadow-md border-l-4 border-l-[#2563eb]'
+                                            : 'hover:bg-[#e6ebf2]/60'
+                                    }`}
+                            >
+                                {/* 1. Arrow Reordering (Up / Down) */}
+                                <div className="flex flex-col items-center justify-center -space-y-0.5 shrink-0 text-[#94a3b8] group-hover:text-[#54597d] transition-colors">
+                                    <button
+                                        disabled={indexInFullList === 0}
+                                        onClick={(e) => handleMove(indexInFullList, 'up', e)}
+                                        className="p-0.5 hover:text-[#2563eb] hover:bg-white/80 rounded transition-all disabled:opacity-20 disabled:hover:bg-transparent"
+                                        title="Move Up"
+                                    >
+                                        <ChevronUp className="w-4 h-4" />
+                                    </button>
+                                    <button
+                                        disabled={indexInFullList === subTasks.length - 1}
+                                        onClick={(e) => handleMove(indexInFullList, 'down', e)}
+                                        className="p-0.5 hover:text-[#2563eb] hover:bg-white/80 rounded transition-all disabled:opacity-20 disabled:hover:bg-transparent"
+                                        title="Move Down"
+                                    >
+                                        <ChevronDown className="w-4 h-4" />
+                                    </button>
+                                </div>
