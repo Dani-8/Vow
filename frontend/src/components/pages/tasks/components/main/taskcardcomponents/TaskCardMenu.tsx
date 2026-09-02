@@ -101,3 +101,22 @@ export const TaskCardMenu: React.FC<TaskCardMenuProps> = ({
                             <Edit3 className="w-3.5 h-3.5 text-[#549acb]" />
                             <span>Edit Task</span>
                         </button>
+
+                        <div className="my-1 border-t border-gray-300/40" />
+
+                        <button
+                            onClick={() => {
+                                setIsMenuOpen(false);
+                                onDeleteTask(task);
+                            }}
+                            className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-rose-600 hover:bg-rose-50/60 flex items-center space-x-2 transition-colors"
+                        >
+                            <Trash2 className="w-3.5 h-3.5 text-rose-500" />
+                            <span>Delete Task</span>
+                        </button>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
