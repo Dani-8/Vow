@@ -21,8 +21,8 @@ export const TaskCardFooter: React.FC<TaskCardFooterProps> = ({
             <div className="flex items-center space-x-3 text-xs">
                 <div
                     className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-xl neu-badge ${currentStreak > 0
-                            ? 'text-[#549acb] bg-[#E0E5EC] font-bold border border-sky-200/50'
-                            : 'text-[#717699] font-medium'
+                        ? 'text-[#549acb] bg-[#E0E5EC] font-bold border border-sky-200/50'
+                        : 'text-[#717699] font-medium'
                         }`}
                 >
                     <Flame
@@ -49,10 +49,10 @@ export const TaskCardFooter: React.FC<TaskCardFooterProps> = ({
             {timeLeftStr && (
                 <div
                     className={`flex items-center space-x-1 text-xs font-bold px-2.5 py-1 rounded-xl neu-badge ${timeLeftStr === 'Overdue'
-                            ? 'text-rose-700 bg-rose-50 border border-rose-200'
-                            : isStruggling
-                                ? 'text-amber-700 bg-amber-50 border border-amber-200'
-                                : 'text-[#717699]'
+                        ? 'text-rose-700 bg-rose-50 border border-rose-200'
+                        : isStruggling
+                            ? 'text-amber-700 bg-amber-50 border border-amber-200'
+                            : 'text-[#717699]'
                         }`}
                 >
                     {timeLeftStr === 'Overdue' ? (
