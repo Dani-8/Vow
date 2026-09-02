@@ -58,3 +58,46 @@ export const TaskModal: React.FC<TaskModalProps> = ({
     });
 
     if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
+            <div className="neu-card w-full max-w-lg p-6 bg-[#E0E5EC] relative animate-in fade-in zoom-in-95 duration-200 max-h-[92vh] overflow-y-auto">
+                <button
+                    onClick={onClose}
+                    className="absolute top-4 right-4 p-2 rounded-xl neu-button text-[#717699] hover:text-[#1a1c35]"
+                >
+                    <X className="w-5 h-5" />
+                </button>
+
+                <div className="flex items-center space-x-3 mb-6">
+                    <div className="w-10 h-10 rounded-xl neu-button flex items-center justify-center text-[#6D5DFC] bg-[#E0E5EC]">
+                        <Sparkles className="w-5 h-5" />
+                    </div>
+                    <div>
+                        <h2 className="text-xl font-extrabold text-[#1a1c35]">
+                            {editingTask ? 'Edit Goal or Habit' : 'Create New Goal / Habit'}
+                        </h2>
+                        <p className="text-xs text-[#717699] font-medium">Set intentions, deadlines, and growth targets</p>
+                    </div>
+                </div>
+
+                {error && (
+                    <div className="mb-4 p-3 rounded-xl bg-rose-100 border border-rose-200 text-rose-700 text-xs font-semibold">
+                        {error}
+                    </div>
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                            Goal / Habit Title *
+                        </label>
+                        <input
+                            type="text"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            placeholder="e.g. Read 20 pages, Daily Meditation, Draft Q3 Plan..."
+                            className="w-full px-4 py-2.5 rounded-xl neu-input text-sm font-medium"
+                            required
+                        />
+                    </div>
