@@ -48,3 +48,51 @@ export function useSubTasks(taskId: string, initialSubTasks?: SubTask[]) {
         saveAndSetSubTasks(updated);
         return subTaskWithIds;
     };
+
+    const updateSubTask = (updatedItem: SubTask) => {
+        const updated = subTasks.map((st) => (st.id === updatedItem.id ? updatedItem : st));
+        saveAndSetSubTasks(updated);
+    };
+
+    const toggleSubTaskStatus = (id: string) => {
+        const updated = subTasks.map((st) => {
+            if (st.id === id) {
+                const nextStatus: SubTask['status'] =
+                    st.status === 'completed'
+                        ? 'in_progress'
+                        : st.status === 'in_progress'
+                            ? 'completed'
+                            : 'completed';
+                return {
+                    ...st,
+                    status: nextStatus,
+                    timeLeft: nextStatus === 'completed' ? 'Completed' : st.timeLeft || 'In progress',
+                };
+            }
+            return st;
+        });
+        saveAndSetSubTasks(updated);
+    };
+
+    const setSubTaskStatus = (id: string, status: SubTask['status']) => {
+        const updated = subTasks.map((st) => {
+            if (st.id === id) {
+                return {
+                    ...st,
+                    status,
+                    timeLeft: status === 'completed' ? 'Completed' : st.timeLeft || 'In progress',
+                };
+            }
+            return st;
+        });
+        saveAndSetSubTasks(updated);
+    };
+
+    const deleteSubTask = (id: string) => {
+        const updated = subTasks.filter((st) => st.id !== id);
+        saveAndSetSubTasks(updated);
+    };
+
+    const reorderSubTasks = (newOrder: SubTask[]) => {
+        saveAndSetSubTasks(newOrder);
+    };
