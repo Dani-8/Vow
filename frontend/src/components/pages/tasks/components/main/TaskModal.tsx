@@ -21,3 +21,40 @@ export interface TaskModalProps {
     editingTask?: Task | null;
     defaultIsPrivate?: boolean;
 }
+
+export const TaskModal: React.FC<TaskModalProps> = ({
+    isOpen,
+    onClose,
+    onSubmit,
+    editingTask,
+    defaultIsPrivate = false,
+}) => {
+    const {
+        title,
+        setTitle,
+        description,
+        setDescription,
+        consequenceOfSkipping,
+        setConsequenceOfSkipping,
+        consequencesOfSkipping,
+        setConsequencesOfSkipping,
+        tagsInput,
+        setTagsInput,
+        endTime,
+        setEndTime,
+        isHabit,
+        setIsHabit,
+        isPrivate,
+        setIsPrivate,
+        loading,
+        error,
+        handleSubmit,
+    } = useTaskForm({
+        editingTask,
+        isOpen,
+        defaultIsPrivate,
+        onSubmit,
+        onClose,
+    });
+
+    if (!isOpen) return null;
