@@ -111,3 +111,49 @@ export const SubTaskTimeline: React.FC<SubTaskTimelineProps> = ({
                     >
                         All <span className="ml-1 opacity-75">({allCount})</span>
                     </button>
+
+                    {/* In Progress */}
+                    <button
+                        onClick={() => setStatusFilter('in_progress')}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${statusFilter === 'in_progress'
+                            ? 'neu-inset text-blue-600 bg-blue-50'
+                            : 'text-[#717699] hover:text-[#1a1c35]'
+                            }`}
+                    >
+                        In Progress <span className="ml-1 opacity-75">({inProgressCount})</span>
+                    </button>
+
+                    {/* Completed */}
+                    <button
+                        onClick={() => setStatusFilter('completed')}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${statusFilter === 'completed'
+                            ? 'neu-inset text-emerald-600 bg-emerald-50'
+                            : 'text-[#717699] hover:text-[#1a1c35]'
+                            }`}
+                    >
+                        Completed <span className="ml-1 opacity-75">({completedCount})</span>
+                    </button>
+
+                    {/* Pending */}
+                    <button
+                        onClick={() => setStatusFilter('pending')}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${statusFilter === 'pending'
+                            ? 'neu-inset text-purple-600 bg-purple-50'
+                            : 'text-[#717699] hover:text-[#1a1c35]'
+                            }`}
+                    >
+                        Pending <span className="ml-1 opacity-75">({pendingCount})</span>
+                    </button>
+                </div>
+            </div>
+
+            {/* Timeline List */}
+            <div className="relative pl-1 sm:pl-2 space-y-3">
+                {/* Vertical Timeline Line */}
+                <div className="absolute left-[118px] sm:left-[134px] top-6 bottom-8 w-[2px] bg-[#cbd5e1] pointer-events-none" />
+
+                {filteredSubTasks.length === 0 ? (
+                    <div className="neu-card p-8 text-center text-xs font-bold text-[#717699]">
+                        No sub-tasks found matching the selected filter.
+                    </div>
+                ) : (
