@@ -41,3 +41,31 @@ export const TaskCardHeader: React.FC<TaskCardHeaderProps> = ({
                     >
                         {task.title}
                     </h3>
+
+                    {task.isHabit && (
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-lg neu-inset bg-[#E0E5EC] text-[#549acb] uppercase tracking-wide flex items-center space-x-1 shrink-0">
+                            <Repeat className="w-3 h-3 text-[#549acb]" />
+                            <span>Daily Habit</span>
+                        </span>
+                    )}
+
+                    {task.isPrivate && (
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-lg neu-inset bg-[#E0E5EC] text-purple-700 uppercase tracking-wide flex items-center space-x-1 shrink-0">
+                            <Lock className="w-3 h-3 text-purple-600" />
+                            <span>Growth Vault</span>
+                        </span>
+                    )}
+                </div>
+
+                {task.description && (
+                    <p
+                        className={`text-xs text-[#717699] mt-1 leading-snug line-clamp-2 break-words w-full ${isCompleted ? 'text-[#717699]/70' : ''
+                            }`}
+                    >
+                        {task.description}
+                    </p>
+                )}
+            </div>
+        </div>
+    );
+};
