@@ -202,3 +202,51 @@ export const SubTaskTimeline: React.FC<SubTaskTimelineProps> = ({
                                         <ChevronDown className="w-4 h-4" />
                                     </button>
                                 </div>
+
+                                {/* 2. Date Label */}
+                                <div className="w-14 sm:w-16 text-right text-xs font-extrabold text-[#717699] flex-shrink-0">
+                                    {st.dateLabel}
+                                </div>
+
+                                {/* 3. Timeline Indicator Node (with toggle on click) */}
+                                <button
+                                    type="button"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        if (onToggleStatus) {
+                                            onToggleStatus(st.id);
+                                        } else if (onSelectSubTask) {
+                                            onSelectSubTask(st);
+                                        }
+                                    }}
+                                    className="relative z-1 flex-shrink-0 flex items-center justify-center ml-1 sm:ml-2 mr-1 cursor-pointer group/node"
+                                    title="Click to toggle status (Pending -> Completed)"
+                                >
+                                    {isCompleted ? (
+                                        <div className="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-sm hover:scale-110 transition-transform">
+                                            <Check className="w-4 h-4 stroke-[3]" />
+                                        </div>
+                                    ) : isInProgress ? (
+                                        <div className="w-7 h-7 rounded-full bg-white border-2 border-[#2563eb] flex items-center justify-center shadow-md hover:scale-110 transition-transform">
+                                            <div className="w-3 h-3 rounded-full bg-[#2563eb]" />
+                                        </div>
+                                    ) : (
+                                        <div className="w-7 h-7 rounded-full bg-[#E0E5EC] border-2 border-[#a0aec0] flex items-center justify-center hover:scale-110 transition-transform">
+                                            <div className="w-2 h-2 rounded-full bg-[#a0aec0]" />
+                                        </div>
+                                    )}
+                                </button>
+
+                                {/* 4. Sub-Task Title */}
+                                <div className="flex-1 min-w-0">
+                                    <h4
+                                        className={`text-sm sm:text-base font-bold truncate transition-colors ${isSelected
+                                            ? 'text-[#1a1c35]'
+                                            : isCompleted
+                                                ? 'text-[#717699] line-through'
+                                                : 'text-[#2d3748] group-hover:text-[#1a1c35]'
+                                            }`}
+                                    >
+                                        {st.title}
+                                    </h4>
+                                </div>
