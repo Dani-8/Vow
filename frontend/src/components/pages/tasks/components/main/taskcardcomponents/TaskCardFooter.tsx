@@ -45,3 +45,24 @@ export const TaskCardFooter: React.FC<TaskCardFooterProps> = ({
                     </span>
                 )}
             </div>
+
+            {timeLeftStr && (
+                <div
+                    className={`flex items-center space-x-1 text-xs font-bold px-2.5 py-1 rounded-xl neu-badge ${timeLeftStr === 'Overdue'
+                            ? 'text-rose-700 bg-rose-50 border border-rose-200'
+                            : isStruggling
+                                ? 'text-amber-700 bg-amber-50 border border-amber-200'
+                                : 'text-[#717699]'
+                        }`}
+                >
+                    {timeLeftStr === 'Overdue' ? (
+                        <AlertCircle className="w-3.5 h-3.5 text-rose-500" />
+                    ) : (
+                        <Clock className="w-3.5 h-3.5 text-[#6D5DFC]" />
+                    )}
+                    <span>{timeLeftStr}</span>
+                </div>
+            )}
+        </div>
+    );
+};
