@@ -185,3 +185,49 @@ export const StickyNoteModal: React.FC<StickyNoteModalProps> = ({
     if (!isOpen) return null;
 
     const currentTheme = STICKY_COLOR_THEMES[color] || STICKY_COLOR_THEMES.yellow;
+
+        lines.forEach((line) => {
+            const trimmed = line.trim();
+            if (trimmed.startsWith('- [ ]') || trimmed.startsWith('- [x]') || trimmed.startsWith('* [ ]')) {
+                const text = trimmed.replace(/^[-*]\s*\[[ x]\]\s*/, '').trim();
+                if (text.length > 1) detected.push(text);
+            } else if (trimmed.startsWith('- ') || trimmed.startsWith('* ') || /^\d+\.\s+/.test(trimmed)) {
+                const text = trimmed.replace(/^[-*]|\d+\.\s*/, '').trim();
+                if (text.length > 1 && !text.startsWith('#')) detected.push(text);
+            }
+        });
+
+        const unique = Array.from(new Set(detected));
+        setDetectedTasks(unique);
+        setSelectedToImport(unique);
+        setExtractMode(true);
+    };
+
+    const handleImportSubtasks = () => {
+        if (!onAddSubTask || selectedToImport.length === 0) {
+            setExtractMode(false);
+            return;
+        }
+
+        selectedToImport.forEach((taskTitle) => {
+            onAddSubTask({
+                taskId,
+                title: taskTitle,
+                dateLabel: title || 'From Sticky Note',
+                status: 'pending',
+                priority: 'Medium',
+            });
+        });
+
+        setExtractMode(false);
+    };
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fadeIn">
+            {/* Outer Paper Card Container */}
+            <div
+                className={`relative w-full max-w-xl rounded-2xl border-2 transition-all duration-300 ${currentTheme.paperBg} ${currentTheme.border} ${currentTheme.shadow} flex flex-col overflow-visible`}
+                style={{
+                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0,0,0,0.05)',
+                }}
+            ></div>
