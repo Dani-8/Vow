@@ -35,10 +35,10 @@ export const TaskCard: React.FC<TaskCardProps> = ({
         <div
             onClick={() => onViewDetails && onViewDetails(task)}
             className={`neu-card p-4 transition-all duration-300 relative group cursor-pointer hover:shadow-md ${isCompleted
-                    ? 'opacity-85 bg-[#E0E5EC]/80 border-emerald-300/50'
-                    : isStruggling
-                        ? 'border-amber-300/80 neu-glow-orange'
-                        : ''
+                ? 'opacity-85 bg-[#E0E5EC]/80 border-emerald-300/50'
+                : isStruggling
+                    ? 'border-amber-300/80 neu-glow-orange'
+                    : ''
                 }`}
         >
             <div className="flex items-start justify-between gap-3 mb-2">
