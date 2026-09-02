@@ -340,3 +340,43 @@ export const StickyNoteModal: React.FC<StickyNoteModalProps> = ({
                                         </div>
                                     );
                                 }
+
+                                if (line.startsWith('- ') || line.startsWith('• ') || line.startsWith('* ')) {
+                                    return (
+                                        <li key={idx} className={`ml-4 list-disc text-xs ${currentTheme.bodyTextColor} font-medium leading-relaxed`}>
+                                            {line.replace(/^[-*•]\s*/, '')}
+                                        </li>
+                                    );
+                                }
+
+                                if (/^\d+\.\s+/.test(line)) {
+                                    return (
+                                        <div key={idx} className={`ml-2 flex items-start space-x-2 text-xs ${currentTheme.bodyTextColor} font-medium leading-relaxed`}>
+                                            <span className="font-bold opacity-75">{line.match(/^\d+\./)?.[0]}</span>
+                                            <span>{line.replace(/^\d+\.\s*/, '')}</span>
+                                        </div>
+                                    );
+                                }
+
+                                if (line.startsWith('> ')) {
+                                    return (
+                                        <blockquote
+                                            key={idx}
+                                            className="p-2.5 rounded-lg bg-black/5 border-l-4 border-black/20 italic text-xs font-medium opacity-90 my-1"
+                                        >
+                                            {line.substring(2)}
+                                        </blockquote>
+                                    );
+                                }
+
+                                if (line.trim() === '') {
+                                    return <div key={idx} className="h-4" />;
+                                }
+
+                                return (
+                                    <p key={idx} className={`text-xs ${currentTheme.bodyTextColor} font-medium leading-relaxed`}>
+                                        {line}
+                                    </p>
+                                );
+                            })}
+                        </div>
