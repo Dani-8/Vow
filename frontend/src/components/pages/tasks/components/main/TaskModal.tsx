@@ -101,3 +101,53 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                             required
                         />
                     </div>
+
+                    <div>
+                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                            Description / Notes
+                        </label>
+                        <textarea
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            placeholder="Add key context or micro-intentions..."
+                            rows={2}
+                            className="w-full px-4 py-2.5 rounded-xl neu-input text-sm font-medium resize-none"
+                        />
+                    </div>
+
+                    {/* Consequences of Skipping (Multi-item Chip Box) */}
+                    <ConsequenceChipInput
+                        consequences={consequencesOfSkipping}
+                        onChange={(newConsequences) => {
+                            setConsequencesOfSkipping(newConsequences);
+                            setConsequenceOfSkipping(newConsequences.join('\n'));
+                        }}
+                    />
+
+                    <div className="grid grid-cols-2 gap-3">
+                        <button
+                            type="button"
+                            onClick={() => setIsHabit(!isHabit)}
+                            className={`p-3 rounded-xl flex items-center justify-between text-xs font-bold transition-all ${isHabit ? 'neu-inset text-indigo-700 bg-indigo-50/50' : 'neu-button text-slate-700'
+                                }`}
+                        >
+                            <div className="flex items-center space-x-2">
+                                <Repeat className="w-4 h-4 text-indigo-600" />
+                                <span>Daily Habit</span>
+                            </div>
+                            {isHabit && <Check className="w-4 h-4 text-indigo-600" />}
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={() => setIsPrivate(!isPrivate)}
+                            className={`p-3 rounded-xl flex items-center justify-between text-xs font-bold transition-all ${isPrivate ? 'neu-inset text-purple-700 bg-purple-50/50' : 'neu-button text-slate-700'
+                                }`}
+                        >
+                            <div className="flex items-center space-x-2">
+                                {isPrivate ? <Lock className="w-4 h-4 text-purple-600" /> : <Unlock className="w-4 h-4 text-slate-500" />}
+                                <span>{isPrivate ? 'Growth Vault' : 'Public Task'}</span>
+                            </div>
+                            {isPrivate && <Check className="w-4 h-4 text-purple-600" />}
+                        </button>
+                    </div>
