@@ -89,3 +89,48 @@ export const AddSubTaskModal: React.FC<AddSubTaskModalProps> = ({
                         <X className="w-5 h-5" />
                     </button>
                 </div>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    {/* Sub-Task Title */}
+                    <div>
+                        <label className="block text-xs font-bold text-[#717699] uppercase tracking-wider mb-2">
+                            Sub-Task Title *
+                        </label>
+                        <input
+                            type="text"
+                            required
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            placeholder="e.g., Define main 3 goals"
+                            className="w-full px-4 py-2.5 rounded-xl neu-input text-sm font-medium"
+                        />
+                    </div>
+
+                    {/* Date Label & Due Date */}
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-xs font-bold text-[#717699] uppercase tracking-wider mb-2">
+                                Timeline Label (e.g. Aug 17)
+                            </label>
+                            <input
+                                type="text"
+                                value={dateLabel}
+                                onChange={(e) => setDateLabel(e.target.value)}
+                                placeholder="Aug 17"
+                                className="w-full px-4 py-2.5 rounded-xl neu-input text-sm font-medium"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-xs font-bold text-[#717699] uppercase tracking-wider mb-2">
+                                Due Date
+                            </label>
+                            <input
+                                type="text"
+                                value={dueDate}
+                                onChange={(e) => setDueDate(e.target.value)}
+                                placeholder="Aug 17, 2026"
+                                className="w-full px-4 py-2.5 rounded-xl neu-input text-sm font-medium"
+                            />
+                        </div>
+                    </div>
