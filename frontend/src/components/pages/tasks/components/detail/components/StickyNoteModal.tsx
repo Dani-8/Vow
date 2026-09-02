@@ -556,3 +556,47 @@ export const StickyNoteModal: React.FC<StickyNoteModalProps> = ({
                                     </div>
                                 </div>
                             </div>
+
+                            <textarea
+                                required
+                                rows={6}
+                                value={content}
+                                onChange={(e) => setContent(e.target.value)}
+                                placeholder="Type your notes, formulas, vocabulary, or thoughts here...&#10;- [ ] Checklist item&#10;- Bullet point&#10;> Quote or reflection"
+                                className={`w-full p-3.5 rounded-xl text-xs font-mono leading-relaxed focus:outline-none border ${currentTheme.lineBorder} bg-white/70 ${currentTheme.textColor} placeholder:text-slate-400 resize-none`}
+                            />
+                        </div>
+
+                        {/* Pin to Top Checkbox */}
+                        <label className="flex items-center space-x-2.5 cursor-pointer pt-0.5">
+                            <input
+                                type="checkbox"
+                                checked={isPinned}
+                                onChange={(e) => setIsPinned(e.target.checked)}
+                                className="rounded text-indigo-600 focus:ring-0 w-4 h-4"
+                            />
+                            <span className="text-xs font-bold text-slate-800 flex items-center space-x-1">
+                                <Pin className="w-3.5 h-3.5 text-amber-600" />
+                                <span>Pin this note to the top of the board</span>
+                            </span>
+                        </label>
+
+                        {/* Actions Bar */}
+                        <div className="flex items-center justify-between pt-2 border-t border-black/10">
+                            {note ? (
+                                <button
+                                    type="button"
+                                    onClick={() => setIsEditing(false)}
+                                    className="px-4 py-2 rounded-xl bg-black/5 hover:bg-black/10 text-xs font-bold text-slate-700"
+                                >
+                                    Cancel
+                                </button>
+                            ) : (
+                                <button
+                                    type="button"
+                                    onClick={onClose}
+                                    className="px-4 py-2 rounded-xl bg-black/5 hover:bg-black/10 text-xs font-bold text-slate-700"
+                                >
+                                    Cancel
+                                </button>
+                            )}
