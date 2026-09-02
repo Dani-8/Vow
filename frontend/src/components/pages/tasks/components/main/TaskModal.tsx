@@ -151,3 +151,52 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                             {isPrivate && <Check className="w-4 h-4 text-purple-600" />}
                         </button>
                     </div>
+
+                    <div>
+                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5 flex items-center space-x-1">
+                            <Calendar className="w-3.5 h-3.5 text-indigo-500" />
+                            <span>Target Deadline (Optional)</span>
+                        </label>
+                        <input
+                            type="datetime-local"
+                            value={endTime}
+                            onChange={(e) => setEndTime(e.target.value)}
+                            className="w-full px-4 py-2.5 rounded-xl neu-input text-sm font-medium text-slate-700"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5 flex items-center space-x-1">
+                            <Tag className="w-3.5 h-3.5 text-indigo-500" />
+                            <span>Tags (comma separated)</span>
+                        </label>
+                        <input
+                            type="text"
+                            value={tagsInput}
+                            onChange={(e) => setTagsInput(e.target.value)}
+                            placeholder="Wellness, Focus, Reading, Personal..."
+                            className="w-full px-4 py-2.5 rounded-xl neu-input text-sm font-medium"
+                        />
+                    </div>
+
+                    <div className="flex items-center justify-end space-x-3 pt-4 border-t border-slate-200">
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="px-5 py-2.5 rounded-xl neu-button text-slate-600 font-semibold text-sm"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="px-6 py-2.5 rounded-xl neu-button-primary font-semibold text-sm disabled:opacity-50"
+                        >
+                            {loading ? 'Saving...' : editingTask ? 'Update Goal' : 'Save Goal'}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+};
