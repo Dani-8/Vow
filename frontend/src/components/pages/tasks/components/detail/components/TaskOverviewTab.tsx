@@ -33,3 +33,17 @@ interface TaskOverviewTabProps {
   onToggleComplete: (task: Task) => void;
   onEditTask?: (task: Task) => void;
 }
+
+export const TaskOverviewTab: React.FC<TaskOverviewTabProps> = ({
+  task,
+  subTasks,
+  stickyNotes,
+  attachments,
+  activities,
+  completedCount,
+  totalCount,
+  progressPercent,
+  onTabChange,
+  onToggleComplete,
+  onEditTask,
+}) => {
