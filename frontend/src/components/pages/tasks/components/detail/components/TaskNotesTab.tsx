@@ -94,3 +94,45 @@ export const TaskNotesTab: React.FC<TaskNotesTabProps> = ({
                             className="bg-transparent border-none text-xs focus:outline-none w-full text-[#1a1c35]"
                         />
                     </div>
+
+                    {/* Color Filter Dots */}
+                    <div className="flex items-center space-x-1.5 pl-1">
+                        <button
+                            onClick={() => setColorFilter('all')}
+                            className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${colorFilter === 'all'
+                                ? 'neu-inset text-[#549acb] font-black'
+                                : 'neu-button text-slate-500 hover:text-slate-800'
+                                }`}
+                        >
+                            All
+                        </button>
+                        {(['yellow', 'green', 'blue', 'purple', 'rose', 'gray'] as NoteColor[]).map((c) => {
+                            const theme = STICKY_COLOR_THEMES[c];
+                            return (
+                                <button
+                                    key={c}
+                                    onClick={() => setColorFilter(c)}
+                                    className={`w-6 h-6 rounded-full transition-transform flex items-center justify-center ${theme.accentDot} ${colorFilter === c ? 'scale-125 ring-2 ring-indigo-500 ring-offset-2 ring-offset-[#E0E5EC]' : 'hover:scale-110 opacity-80 hover:opacity-100'
+                                        }`}
+                                    title={`Filter ${theme.name}`}
+                                />
+                            );
+                        })}
+                    </div>
+                </div>
+
+                {/* Right: Add Note Button */}
+                <button
+                    onClick={handleOpenAdd}
+                    className="px-4 py-2 rounded-xl neu-button-primary text-xs font-bold text-white flex items-center space-x-1.5 shadow-sm"
+                >
+                    <Plus className="w-4 h-4" />
+                    <span>Pin Sticky Note</span>
+                </button>
+            </div>
+
+            {/* Sticky Notes Corkboard Grid */}
+            {filteredNotes.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                    {filteredNotes.map((note) => {
+                        const colorCfg = STICKY_COLOR_THEMES[note.color || 'yellow'] || STICKY_COLOR_THEMES.yellow;
