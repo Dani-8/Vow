@@ -214,3 +214,38 @@ export const TaskDetailHeader: React.FC<TaskDetailHeaderProps> = ({
                             </div>
                         </div>
                     </div>
+
+                    {/* Description */}
+                    <p className="text-sm text-[#54597d] leading-relaxed max-w-2xl font-medium pt-1">
+                        {task.description ||
+                            'Outline key milestones for skill acquisition and daily habit consistency for Q3.'}
+                    </p>
+
+                    {/* Info Pills Row */}
+                    <div className="flex flex-wrap items-center gap-3 pt-2">
+                        {/* Due Date Pill */}
+                        <div className="neu-button px-4 py-2 rounded-2xl flex items-center space-x-2 text-xs font-bold text-[#1a1c35]">
+                            <Calendar className="w-4 h-4 text-[#549acb]" />
+                            <span>Due: Aug 20, 2026</span>
+                        </div>
+
+                        {/* Time Left Pill */}
+                        <div className="neu-button px-4 py-2 rounded-2xl flex items-center space-x-2 text-xs font-bold text-[#1a1c35]">
+                            <Clock className="w-4 h-4 text-purple-500" />
+                            <span>Time Left: 1h 34m</span>
+                        </div>
+
+                        {/* Status Pill */}
+                        <div className="neu-button px-4 py-2 rounded-2xl flex items-center space-x-2 text-xs font-bold text-[#1a1c35]">
+                            <PlayCircle className="w-4 h-4 text-blue-500" />
+                            <span>
+                                Status:{' '}
+                                {task.status === 'completed'
+                                    ? 'Completed'
+                                    : task.status === 'in_progress'
+                                        ? 'In Progress'
+                                        : 'In Progress'}
+                            </span>
+                        </div>
+                    </div>
+                </div>
