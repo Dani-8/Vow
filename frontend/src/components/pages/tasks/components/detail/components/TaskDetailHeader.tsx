@@ -171,3 +171,46 @@ export const TaskDetailHeader: React.FC<TaskDetailHeaderProps> = ({
                                 </div>
                             )}
                         </button>
+
+                        {/* Title & Tags */}
+                        <div className="space-y-3">
+                            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#1a1c35] tracking-tight leading-tight">
+                                {task.title || 'Draft Q3 Personal Growth Blueprint'}
+                            </h1>
+
+                            {/* Tags & Priority Row */}
+                            <div className="flex flex-wrap items-center gap-2">
+                                {task.tags && task.tags.length > 0 ? (
+                                    task.tags.map((tag, idx) => (
+                                        <span
+                                            key={idx}
+                                            className="px-3 py-1 rounded-xl text-[11px] font-bold uppercase tracking-wider text-[#549acb] bg-[#eef4f9] border border-blue-100/60 shadow-sm flex items-center space-x-1"
+                                        >
+                                            <Tag className="w-3 h-3" />
+                                            <span>{tag}</span>
+                                        </span>
+                                    ))
+                                ) : (
+                                    <>
+                                        <span className="px-3 py-1 rounded-xl text-[11px] font-bold uppercase tracking-wider text-[#549acb] bg-[#eef4f9] border border-blue-100/60 flex items-center space-x-1">
+                                            <Tag className="w-3 h-3" />
+                                            <span>GROWTH</span>
+                                        </span>
+                                        <span className="px-3 py-1 rounded-xl text-[11px] font-bold uppercase tracking-wider text-[#549acb] bg-[#eef4f9] border border-blue-100/60 flex items-center space-x-1">
+                                            <Tag className="w-3 h-3" />
+                                            <span>STRATEGY</span>
+                                        </span>
+                                    </>
+                                )}
+
+                                <span
+                                    className={`px-3 py-1 rounded-xl text-[11px] font-bold uppercase tracking-wider border flex items-center space-x-1 ${getPriorityStyle(
+                                        task.priority || 'High'
+                                    )}`}
+                                >
+                                    <Flame className="w-3 h-3" />
+                                    <span>{task.priority || 'High'}</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
