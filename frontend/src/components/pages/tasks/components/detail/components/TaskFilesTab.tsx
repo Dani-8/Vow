@@ -214,3 +214,50 @@ export const TaskFilesTab: React.FC<TaskFilesTabProps> = ({
                     ))}
                 </div>
             </div>
+
+            {/* Files Grid */}
+            {filteredAttachments.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {filteredAttachments.map((att) => (
+                        <div
+                            key={att.id}
+                            className="neu-card p-4 bg-[#E0E5EC] space-y-3 hover:scale-[1.01] transition-transform relative group"
+                        >
+                            {/* Top Row */}
+                            <div className="flex items-start justify-between">
+                                <div className="p-2.5 rounded-xl neu-inset bg-[#dbe2ee]/70 shrink-0">
+                                    {getAttachmentIcon(att)}
+                                </div>
+
+                                <div className="flex items-center space-x-1">
+                                    {att.url && att.url !== '#' && (
+                                        <a
+                                            href={att.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="p-1.5 rounded-lg neu-button text-slate-500 hover:text-indigo-600"
+                                            title="Open resource"
+                                        >
+                                            <ExternalLink className="w-3.5 h-3.5" />
+                                        </a>
+                                    )}
+                                    <button
+                                        onClick={() => onDeleteAttachment(att.id)}
+                                        className="p-1.5 rounded-lg neu-button text-slate-400 hover:text-rose-600 transition-colors"
+                                        title="Delete attachment"
+                                    >
+                                        <Trash2 className="w-3.5 h-3.5" />
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Image Preview if applicable */}
+                            {att.type === 'image' && att.previewUrl && (
+                                <div className="h-28 w-full rounded-xl overflow-hidden neu-inset bg-slate-900/10">
+                                    <img
+                                        src={att.previewUrl}
+                                        alt={att.name}
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                            )}
