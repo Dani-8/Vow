@@ -159,3 +159,58 @@ export const TaskFilesTab: React.FC<TaskFilesTabProps> = ({
                         <p className="text-[11px] text-slate-400">Supports PDFs, Images, Word Docs, Sheets &amp; Diagrams</p>
                     </div>
                 </div>
+
+                {/* Add Link / Bookmark Card */}
+                <div
+                    onClick={() => setIsLinkModalOpen(true)}
+                    className="p-6 rounded-2xl neu-card bg-[#E0E5EC] hover:scale-[1.01] transition-transform cursor-pointer flex flex-col items-center justify-center text-center space-y-2.5"
+                >
+                    <div className="p-3 rounded-2xl neu-button text-sky-600">
+                        <Link2 className="w-6 h-6" />
+                    </div>
+                    <div>
+                        <p className="text-xs sm:text-sm font-bold text-[#1a1c35]">
+                            Bookmark Reference URL
+                        </p>
+                        <p className="text-[11px] text-slate-400">Save Figma specs, GitHub PRs, Google Docs &amp; articles</p>
+                    </div>
+                </div>
+            </div>
+
+            {/* Filter and Search Bar */}
+            <div className="neu-card p-4 bg-[#E0E5EC] flex flex-wrap items-center justify-between gap-3">
+                {/* Search */}
+                <div className="flex items-center space-x-2 px-3 py-1.5 rounded-xl neu-inset bg-[#dbe2ee]/60 max-w-xs w-full">
+                    <Search className="w-3.5 h-3.5 text-slate-400" />
+                    <input
+                        type="text"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        placeholder="Search attachments..."
+                        className="bg-transparent border-none text-xs focus:outline-none w-full text-[#1a1c35]"
+                    />
+                </div>
+
+                {/* Filter Pills */}
+                <div className="flex items-center space-x-1.5">
+                    {(
+                        [
+                            { id: 'all', label: 'All' },
+                            { id: 'doc', label: 'Documents' },
+                            { id: 'image', label: 'Images' },
+                            { id: 'link', label: 'Links' },
+                        ] as const
+                    ).map((t) => (
+                        <button
+                            key={t.id}
+                            onClick={() => setFilterType(t.id)}
+                            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${filterType === t.id
+                                ? 'neu-inset text-[#549acb] font-black'
+                                : 'neu-button text-[#717699] hover:text-[#1a1c35]'
+                                }`}
+                        >
+                            {t.label}
+                        </button>
+                    ))}
+                </div>
+            </div>
