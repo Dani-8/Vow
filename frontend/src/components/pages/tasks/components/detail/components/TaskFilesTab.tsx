@@ -109,3 +109,53 @@ export const TaskFilesTab: React.FC<TaskFilesTabProps> = ({
         setLinkName('');
         setIsLinkModalOpen(false);
     };
+
+    const getAttachmentIcon = (att: TaskAttachment) => {
+        switch (att.type) {
+            case 'link':
+                return <Globe className="w-5 h-5 text-sky-600" />;
+            case 'image':
+                return <ImageIcon className="w-5 h-5 text-violet-600" />;
+            case 'pdf':
+            case 'doc':
+                return <FileText className="w-5 h-5 text-rose-600" />;
+            default:
+                return <Paperclip className="w-5 h-5 text-slate-600" />;
+        }
+    };
+
+    return (
+        <div className="space-y-6 animate-fadeIn max-w-5xl">
+            {/* Upload Zone & Action Buttons */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Drag & Drop Card */}
+                <div
+                    onDragOver={(e) => {
+                        e.preventDefault();
+                        setIsDragging(true);
+                    }}
+                    onDragLeave={() => setIsDragging(false)}
+                    onDrop={handleDrop}
+                    onClick={() => fileInputRef.current?.click()}
+                    className={`md:col-span-2 p-6 rounded-2xl border-2 border-dashed transition-all cursor-pointer flex flex-col items-center justify-center text-center space-y-2.5 ${isDragging
+                        ? 'border-[#549acb] bg-indigo-50/50 scale-[1.01]'
+                        : 'border-[#c8d0e0] hover:border-[#549acb] bg-[#E0E5EC] neu-inset'
+                        }`}
+                >
+                    <input
+                        ref={fileInputRef}
+                        type="file"
+                        multiple
+                        className="hidden"
+                        onChange={(e) => handleFileUpload(e.target.files)}
+                    />
+                    <div className="p-3 rounded-2xl neu-button !text-[#549acb]">
+                        <UploadCloud className="w-6 h-6" />
+                    </div>
+                    <div>
+                        <p className="text-xs sm:text-sm font-bold text-[#1a1c35]">
+                            Drop files here, or <span className="text-[#549acb] underline">browse device</span>
+                        </p>
+                        <p className="text-[11px] text-slate-400">Supports PDFs, Images, Word Docs, Sheets &amp; Diagrams</p>
+                    </div>
+                </div>
