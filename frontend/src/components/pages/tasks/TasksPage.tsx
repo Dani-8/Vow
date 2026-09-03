@@ -25,3 +25,25 @@ interface TasksPageProps {
   onOpenPinModal?: () => void;
   onLockVault?: () => void;
 }
+
+export const TasksPage: React.FC<TasksPageProps> = ({
+  tasks,
+  searchQuery,
+  onSearchChange,
+  activeFilter,
+  onFilterChange,
+  onToggleComplete,
+  onTogglePrivate,
+  onOpenAIAssist,
+  onEditTask,
+  onDeleteTask,
+  onViewDetails,
+  onCreateNewGoal,
+  isVaultView = false,
+  isVaultUnlocked = false,
+  onOpenPinModal,
+  onLockVault,
+}) => {
+  if (isVaultView && !isVaultUnlocked) {
+    return <LockedVaultCard onEnterPin={onOpenPinModal || (() => {})} />;
+  }
