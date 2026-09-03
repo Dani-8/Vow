@@ -254,3 +254,48 @@ export const TaskOverviewTab: React.FC<TaskOverviewTabProps> = ({
                       <span className="text-[10px] text-slate-400">{att.size || 'Resource link'}</span>
                     </div>
                   </div>
+
+                  {att.url && att.url !== '#' && (
+                    <a
+                      href={att.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-1.5 rounded-lg neu-button text-slate-500 hover:text-indigo-600 shrink-0 ml-2"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div
+              onClick={() => onTabChange('files')}
+              className="p-5 rounded-xl border border-dashed border-[#c8d0e0] text-center cursor-pointer hover:bg-slate-200/30 transition-all space-y-1"
+            >
+              <p className="text-xs font-bold text-[#4a4e69]">No files or links attached yet.</p>
+              <p className="text-[11px] text-slate-400">Click to upload documents, screenshots, or Figma/GitHub bookmarks.</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Right Column: Metadata & Recent Activity Timeline */}
+      <div className="lg:col-span-4 space-y-6">
+        {/* Metadata Details Card */}
+        <div className="neu-card p-5 bg-[#E0E5EC] space-y-4">
+          <h3 className="text-xs font-black uppercase tracking-wider text-[#717699]">
+            Task Attributes
+          </h3>
+
+          <div className="space-y-3 text-xs">
+            {/* Streak if habit */}
+            {task.isHabit && (
+              <div className="flex items-center justify-between p-3 rounded-xl neu-inset bg-[#dbe2ed]/60">
+                <div className="flex items-center space-x-2 text-amber-600">
+                  <Flame className="w-4 h-4 fill-amber-500 text-amber-500" />
+                  <span className="font-bold text-[#1a1c35]">Current Streak</span>
+                </div>
+                <span className="font-black text-amber-600 text-sm">{task.currentStreak || 0} days</span>
+              </div>
+            )}
