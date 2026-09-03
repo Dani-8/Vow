@@ -23,3 +23,12 @@ import {
     deleteTaskActivity,
     TASK_DETAIL_UPDATED_EVENT,
 } from '../../../utils/taskDetailStorage';
+
+interface TaskDetailPageProps {
+    task: Task;
+    onBack: () => void;
+    onToggleComplete: (task: Task) => void;
+    onTogglePrivate?: (task: Task) => void;
+    onEditTask?: (task: Task) => void;
+    onDeleteTask?: (task: Task) => void;
+}
