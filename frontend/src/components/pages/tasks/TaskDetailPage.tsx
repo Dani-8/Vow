@@ -135,3 +135,49 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
         });
         setActivities(getTaskActivities(task._id));
     };
+
+    // Handle delete activity
+    const handleDeleteActivity = (activityId: string) => {
+        deleteTaskActivity(task._id, activityId);
+        setActivities(getTaskActivities(task._id));
+    };
+
+    // Sync selected sub-task if updated in subTasks list
+    const activeSelectedSubTask = selectedSubTask
+        ? subTasks.find((st) => st.id === selectedSubTask.id) || null
+        : null;
+
+    return (
+        <div className="space-y-6 w-full pb-10 animate-fadeIn">
+            {/* 1. Header Section */}
+            <TaskDetailHeader
+                task={task}
+                onBack={onBack}
+                onToggleComplete={onToggleComplete}
+                completedCount={completedCount}
+                totalCount={totalCount}
+                progressPercent={progressPercent}
+                onTogglePrivate={onTogglePrivate}
+                onEditTask={onEditTask}
+                onDeleteTask={onDeleteTask}
+            />
+
+            {/* 2. Navigation Tabs Bar */}
+            <TaskDetailTabs activeTab={activeTab} onTabChange={setActiveTab} />
+
+            {/* 3. Main Tab Content Workspace */}
+            {activeTab === 'overview' && (
+                <TaskOverviewTab
+                    task={task}
+                    subTasks={subTasks}
+                    stickyNotes={stickyNotes}
+                    attachments={attachments}
+                    activities={activities}
+                    completedCount={completedCount}
+                    totalCount={totalCount}
+                    progressPercent={progressPercent}
+                    onTabChange={setActiveTab}
+                    onToggleComplete={onToggleComplete}
+                    onEditTask={onEditTask}
+                />
+            )}
