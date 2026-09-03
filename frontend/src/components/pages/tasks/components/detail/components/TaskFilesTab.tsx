@@ -67,3 +67,45 @@ export const TaskFilesTab: React.FC<TaskFilesTabProps> = ({
             if (file.size > 1024 * 1024) {
                 sizeStr = `${(file.size / (1024 * 1024)).toFixed(1)} MB`;
             }
+
+            // Create object URL for client preview
+            const previewUrl = URL.createObjectURL(file);
+
+            onAddAttachment({
+                name: file.name,
+                type,
+                size: sizeStr,
+                url: previewUrl,
+                previewUrl: type === 'image' ? previewUrl : undefined,
+            });
+        });
+    };
+
+    const handleDrop = (e: React.DragEvent) => {
+        e.preventDefault();
+        setIsDragging(false);
+        handleFileUpload(e.dataTransfer.files);
+    };
+
+    const handleAddLink = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!linkUrl.trim()) return;
+
+        let cleanUrl = linkUrl.trim();
+        if (!cleanUrl.startsWith('http://') && !cleanUrl.startsWith('https://')) {
+            cleanUrl = `https://${cleanUrl}`;
+        }
+
+        const title = linkName.trim() || new URL(cleanUrl).hostname;
+
+        onAddAttachment({
+            name: title,
+            type: 'link',
+            url: cleanUrl,
+            size: 'Web Bookmark',
+        });
+
+        setLinkUrl('');
+        setLinkName('');
+        setIsLinkModalOpen(false);
+    };
