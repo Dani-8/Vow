@@ -43,3 +43,50 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
 }) => {
     const [activeTab, setActiveTab] = useState<TaskTabType>('overview');
     const [selectedSubTask, setSelectedSubTask] = useState<SubTask | null>(null);
+
+    // Detail States (Sticky Notes, Attachments, Activities)
+    const [stickyNotes, setStickyNotes] = useState<TaskStickyNote[]>(() => getTaskStickyNotes(task._id, task.title));
+    const [attachments, setAttachments] = useState<TaskAttachment[]>(() => getTaskAttachments(task._id, task.title));
+    const [activities, setActivities] = useState<TaskActivityItem[]>(() => getTaskActivities(task._id, task.title));
+
+    // Sub-task Modal state
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [editingSubTask, setEditingSubTask] = useState<SubTask | null>(null);
+
+    // Custom hook for sub-tasks logic
+    const {
+        subTasks,
+        addSubTask,
+        updateSubTask,
+        toggleSubTaskStatus,
+        setSubTaskStatus,
+        deleteSubTask,
+        reorderSubTasks,
+        completedCount,
+        totalCount,
+        progressPercent,
+    } = useSubTasks(task._id, task.subTasks);
+
+    // Sync task detail data when task changes
+    useEffect(() => {
+        setStickyNotes(getTaskStickyNotes(task._id, task.title));
+        setAttachments(getTaskAttachments(task._id, task.title));
+        setActivities(getTaskActivities(task._id, task.title));
+    }, [task._id, task.title]);
+
+    // Listen for storage events for real-time synchronization
+    useEffect(() => {
+        const handleDetailUpdate = (e: Event) => {
+            const custom = e as CustomEvent<{ taskId: string; updateType: string }>;
+            if (custom.detail && (custom.detail.taskId === task._id || !custom.detail.taskId)) {
+                setStickyNotes(getTaskStickyNotes(task._id, task.title));
+                setAttachments(getTaskAttachments(task._id, task.title));
+                setActivities(getTaskActivities(task._id, task.title));
+            }
+        };
+
+        window.addEventListener(TASK_DETAIL_UPDATED_EVENT, handleDetailUpdate);
+        return () => {
+            window.removeEventListener(TASK_DETAIL_UPDATED_EVENT, handleDetailUpdate);
+        };
+    }, [task._id, task.title]);
