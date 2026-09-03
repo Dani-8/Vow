@@ -15,3 +15,15 @@ import {
     Trash2,
 } from 'lucide-react';
 import { Task } from '../../../../../../types';
+
+interface TaskDetailHeaderProps {
+    task: Task;
+    onBack: () => void;
+    onToggleComplete: (task: Task) => void;
+    completedCount: number;
+    totalCount: number;
+    progressPercent: number;
+    onTogglePrivate?: (task: Task) => void;
+    onEditTask?: (task: Task) => void;
+    onDeleteTask?: (task: Task) => void;
+}
