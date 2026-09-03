@@ -136,3 +136,52 @@ export const TaskNotesTab: React.FC<TaskNotesTabProps> = ({
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                     {filteredNotes.map((note) => {
                         const colorCfg = STICKY_COLOR_THEMES[note.color || 'yellow'] || STICKY_COLOR_THEMES.yellow;
+
+                        return (
+                            <div
+                                key={note.id}
+                                onClick={() => handleOpenEdit(note)}
+                                className={`group relative rounded-2xl p-5 border-2 transition-all duration-200 flex flex-col justify-between min-h-[220px] cursor-pointer ${colorCfg.paperBg} ${colorCfg.border} ${colorCfg.shadow} hover:-translate-y-1 hover:shadow-xl`}
+                                style={{
+                                    boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.05)',
+                                }}
+                            >
+                                {/* Paper Tape accent */}
+                                <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-20 h-4 rounded-xs bg-white/40 backdrop-blur-2xs shadow-2xs border-b border-black/10 opacity-80 rotate-[-1deg]" />
+
+                                {/* Card Header */}
+                                <div className="flex items-start justify-between mb-3 pt-1">
+                                    <div className="flex items-center space-x-2">
+                                        {note.isPinned && (
+                                            <span className={`px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider flex items-center space-x-1 ${colorCfg.pinBg}`}>
+                                                <Pin className="w-3 h-3 fill-current" />
+                                                <span>Pinned</span>
+                                            </span>
+                                        )}
+                                        {note.title && (
+                                            <h4 className={`text-sm font-black tracking-tight ${colorCfg.textColor} line-clamp-1`}>
+                                                {note.title}
+                                            </h4>
+                                        )}
+                                    </div>
+
+                                    {/* Actions Bar on card */}
+                                    <div
+                                        className="flex items-center space-x-1 opacity-90 group-hover:opacity-100 transition-opacity"
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        <button
+                                            onClick={() => onUpdateStickyNote(note.id, { isPinned: !note.isPinned })}
+                                            className="p-1.5 rounded-lg bg-black/5 hover:bg-black/10 text-slate-700 transition-colors"
+                                            title={note.isPinned ? 'Unpin note' : 'Pin note to top'}
+                                        >
+                                            {note.isPinned ? <PinOff className="w-3.5 h-3.5" /> : <Pin className="w-3.5 h-3.5" />}
+                                        </button>
+
+                                        <button
+                                            onClick={() => handleOpenEdit(note)}
+                                            className="p-1.5 rounded-lg bg-black/5 hover:bg-black/10 text-slate-700 transition-colors"
+                                            title="Open full note modal"
+                                        >
+                                            <Edit3 className="w-3.5 h-3.5" />
+                                        </button>
