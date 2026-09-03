@@ -87,3 +87,49 @@ export const TaskOverviewTab: React.FC<TaskOverviewTabProps> = ({
                 </span>
               )}
             </div>
+
+            <button
+              onClick={() => onToggleComplete(task)}
+              className={`px-4 py-2 rounded-xl text-xs font-black tracking-wide flex items-center space-x-2 transition-all neu-button ${
+                isCompleted
+                  ? 'text-emerald-700 bg-emerald-500/15 hover:bg-emerald-500/25'
+                  : 'text-slate-700 hover:text-[#1a1c35]'
+              }`}
+            >
+              <CheckCircle2 className={`w-4 h-4 ${isCompleted ? 'text-emerald-600' : 'text-slate-400'}`} />
+              <span>{isCompleted ? 'Completed' : 'Mark as Complete'}</span>
+            </button>
+          </div>
+
+          {/* Description */}
+          {task.description ? (
+            <p className="text-sm font-medium text-[#4a4e69] leading-relaxed">
+              {task.description}
+            </p>
+          ) : (
+            <p className="text-sm italic text-slate-400">
+              No description added yet. You can edit this task to add clear goals and requirements.
+            </p>
+          )}
+
+          {/* Consequences of Skipping / Cost of Inaction Banner */}
+          <RotatingConsequenceBanner
+            consequences={task.consequencesOfSkipping}
+            consequenceOfSkipping={task.consequenceOfSkipping}
+            onEdit={onEditTask ? () => onEditTask(task) : undefined}
+            title="Consequences of Skipping"
+            badgeLabel="Cost of Inaction"
+          />
+
+          {/* Subtask Progress Bar */}
+          <div className="pt-2 space-y-2 border-t border-[#c8d0e0]/70">
+            <div className="flex items-center justify-between text-xs font-bold text-[#717699]">
+              <div className="flex items-center space-x-1.5 text-[#1a1c35]">
+                <ListTodo className="w-4 h-4 text-[#2563eb]" />
+                <span className="font-black">Sub-task Breakdown</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <span>{completedCount} of {totalCount} completed</span>
+                <span className="text-[#2563eb] font-black">({progressPercent}%)</span>
+              </div>
+            </div>
