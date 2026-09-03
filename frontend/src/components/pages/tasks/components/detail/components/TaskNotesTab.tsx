@@ -23,3 +23,28 @@ interface TaskNotesTabProps {
 }
 
 type NoteColor = TaskStickyNote['color'];
+
+export const TaskNotesTab: React.FC<TaskNotesTabProps> = ({
+    taskId,
+    stickyNotes,
+    onAddStickyNote,
+    onUpdateStickyNote,
+    onDeleteStickyNote,
+    onAddSubTask,
+}) => {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [colorFilter, setColorFilter] = useState<NoteColor | 'all'>('all');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editingNote, setEditingNote] = useState<TaskStickyNote | null>(null);
+
+    // Open modal to add a new note
+    const handleOpenAdd = () => {
+        setEditingNote(null);
+        setIsModalOpen(true);
+    };
+
+    // Open modal to view/edit existing note
+    const handleOpenEdit = (note: TaskStickyNote) => {
+        setEditingNote(note);
+        setIsModalOpen(true);
+    };
