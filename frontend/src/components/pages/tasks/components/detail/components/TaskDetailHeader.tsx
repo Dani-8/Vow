@@ -27,3 +27,17 @@ interface TaskDetailHeaderProps {
     onEditTask?: (task: Task) => void;
     onDeleteTask?: (task: Task) => void;
 }
+
+export const TaskDetailHeader: React.FC<TaskDetailHeaderProps> = ({
+    task,
+    onBack,
+    onToggleComplete,
+    completedCount,
+    totalCount,
+    progressPercent,
+    onTogglePrivate,
+    onEditTask,
+    onDeleteTask,
+}) => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
