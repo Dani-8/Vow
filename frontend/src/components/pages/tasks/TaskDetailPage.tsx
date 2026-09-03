@@ -32,3 +32,14 @@ interface TaskDetailPageProps {
     onEditTask?: (task: Task) => void;
     onDeleteTask?: (task: Task) => void;
 }
+
+export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
+    task,
+    onBack,
+    onToggleComplete,
+    onTogglePrivate,
+    onEditTask,
+    onDeleteTask,
+}) => {
+    const [activeTab, setActiveTab] = useState<TaskTabType>('overview');
+    const [selectedSubTask, setSelectedSubTask] = useState<SubTask | null>(null);
