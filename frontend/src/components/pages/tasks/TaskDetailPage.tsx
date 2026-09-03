@@ -90,3 +90,48 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
             window.removeEventListener(TASK_DETAIL_UPDATED_EVENT, handleDetailUpdate);
         };
     }, [task._id, task.title]);
+
+    // Handle sticky note creation
+    const handleAddStickyNote = (noteData: Omit<TaskStickyNote, 'id' | 'createdAt' | 'updatedAt'>) => {
+        addTaskStickyNote(task._id, noteData);
+        setStickyNotes(getTaskStickyNotes(task._id, task.title));
+        setActivities(getTaskActivities(task._id, task.title));
+    };
+
+    // Handle sticky note update
+    const handleUpdateStickyNote = (noteId: string, updates: Partial<Omit<TaskStickyNote, 'id' | 'createdAt'>>) => {
+        updateTaskStickyNote(task._id, noteId, updates);
+        setStickyNotes(getTaskStickyNotes(task._id, task.title));
+    };
+
+    // Handle sticky note deletion
+    const handleDeleteStickyNote = (noteId: string) => {
+        deleteTaskStickyNote(task._id, noteId);
+        setStickyNotes(getTaskStickyNotes(task._id, task.title));
+        setActivities(getTaskActivities(task._id, task.title));
+    };
+
+    // Handle add attachment
+    const handleAddAttachment = (attachmentData: Omit<TaskAttachment, 'id' | 'uploadedAt'>) => {
+        addTaskAttachment(task._id, attachmentData);
+        setAttachments(getTaskAttachments(task._id));
+        setActivities(getTaskActivities(task._id));
+    };
+
+    // Handle delete attachment
+    const handleDeleteAttachment = (attachmentId: string) => {
+        deleteTaskAttachment(task._id, attachmentId);
+        setAttachments(getTaskAttachments(task._id));
+        setActivities(getTaskActivities(task._id));
+    };
+
+    // Handle manual comment / check-in
+    const handleAddComment = (message: string, commentCategory?: string) => {
+        addTaskActivity(task._id, {
+            type: 'comment',
+            message,
+            user: 'Alex Rivera',
+            meta: { category: commentCategory },
+        });
+        setActivities(getTaskActivities(task._id));
+    };
