@@ -6,6 +6,8 @@ export const INITIAL_DEMO_TASK_MAPS: TaskMap[] = [
         name: 'Master Milestone Roadmap (Russian + AI Eng + MERN)',
         description:
             'End-to-end multi-disciplinary mastery roadmap interconnecting Russian language immersion, autonomous AI systems engineering, and scalable MERN full-stack cloud deployment.',
+        category: 'Mastery Path',
+        icon: 'Network',
         color: 'purple',
         isPrimary: true,
         updatedAt: 'Today',
@@ -175,6 +177,8 @@ export const INITIAL_DEMO_TASK_MAPS: TaskMap[] = [
         name: 'Russian Fluency & Conversational Mastery',
         description:
             'A structured visual progression from phonetic alphabets to conversational shadowing and natural Russian dialogue mastery.',
+        category: 'Language',
+        icon: 'BookOpen',
         color: 'emerald',
         isPrimary: false,
         updatedAt: 'Yesterday',
@@ -273,6 +277,8 @@ export const INITIAL_DEMO_TASK_MAPS: TaskMap[] = [
         name: 'AI Engineering & Autonomous Agents Path',
         description:
             'Step-by-step technical dependency roadmap covering Gemini SDK orchestration, tools calling, RAG knowledge retrieval, and agent evaluation.',
+        category: 'AI Engineering',
+        icon: 'Cpu',
         color: 'sky',
         isPrimary: false,
         updatedAt: '2 days ago',
@@ -371,6 +377,8 @@ export const INITIAL_DEMO_TASK_MAPS: TaskMap[] = [
         name: 'MERN Full-Stack Delivery Pipeline',
         description:
             'Complete end-to-end architecture pipeline spanning backend APIs, database persistence, modern React frontend, and production Cloud Run deployment.',
+        category: 'Full Stack',
+        icon: 'Layers',
         color: 'amber',
         isPrimary: false,
         updatedAt: '3 days ago',
