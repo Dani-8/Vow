@@ -130,4 +130,48 @@ export const RotatingConsequenceBanner: React.FC<RotatingConsequenceBannerProps>
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             className={`neu-card p-4.5 bg-gradient-to-r from-rose-50/90 via-[#E0E5EC] to-amber-50/70 border border-rose-200/80 rounded-xl space-y-2.5 shadow-sm relative overflow-hidden transition-all group ${className}`}
-        ></div>
+        >
+            {/* Top Bar: Header, Badge, Navigation & Edit */}
+            <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2 text-rose-700">
+                    <Flame className="w-4 h-4 fill-rose-500 text-rose-600 animate-pulse shrink-0" />
+                    <div className="flex items-center space-x-1.5">
+                        <span className="text-[11px] font-black uppercase tracking-wider">
+                            {title}
+                        </span>
+                        {stakes.length > 1 && (
+                            <span className="text-[10px] font-extrabold text-rose-600/90 bg-rose-100/80 px-1.5 py-0.2 rounded-md">
+                                {currentIndex + 1}/{stakes.length}
+                            </span>
+                        )}
+                    </div>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                    <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full neu-inset text-rose-700 bg-rose-100/70 shadow-2xs">
+                        {badgeLabel}
+                    </span>
+
+                    {/* Navigation Arrows for Multiple Stakes */}
+                    {stakes.length > 1 && (
+                        <div className="flex items-center space-x-1 bg-white/50 rounded-lg p-0.5 border border-rose-200/60 shadow-2xs">
+                            <button
+                                type="button"
+                                onClick={handlePrev}
+                                className="p-1 rounded hover:bg-rose-100/80 text-rose-700 transition-colors"
+                                title="Previous consequence"
+                                aria-label="Previous consequence"
+                            >
+                                <ChevronLeft className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleNext}
+                                className="p-1 rounded hover:bg-rose-100/80 text-rose-700 transition-colors"
+                                title="Next consequence"
+                                aria-label="Next consequence"
+                            >
+                                <ChevronRight className="w-3.5 h-3.5" />
+                            </button>
+                        </div>
+                    )}</div>
