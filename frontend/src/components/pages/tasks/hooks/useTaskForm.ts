@@ -95,3 +95,38 @@ export function useTaskForm({
                 consequencesOfSkipping: cleanConsequences,
                 consequenceOfSkipping: cleanConsequences.join('\n') || consequenceOfSkipping.trim() || '',
                 tags,
+                endTime: endTime ? new Date(endTime).toISOString() : null,
+                isHabit,
+                isPrivate,
+            });
+
+            onClose();
+        } catch (err: any) {
+            setError(err.message || 'Failed to save task');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return {
+        title,
+        setTitle,
+        description,
+        setDescription,
+        consequenceOfSkipping,
+        setConsequenceOfSkipping,
+        consequencesOfSkipping,
+        setConsequencesOfSkipping,
+        tagsInput,
+        setTagsInput,
+        endTime,
+        setEndTime,
+        isHabit,
+        setIsHabit,
+        isPrivate,
+        setIsPrivate,
+        loading,
+        error,
+        handleSubmit,
+    };
+}
