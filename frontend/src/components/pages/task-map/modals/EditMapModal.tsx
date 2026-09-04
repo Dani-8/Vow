@@ -129,3 +129,59 @@ export const EditMapModal: React.FC<EditMapModalProps> = ({
                             className="w-full px-4 py-2 rounded-2xl neu-input text-xs font-medium text-[#1a1c35] placeholder:text-[#a3b1c6] focus:outline-none resize-none"
                         />
                     </div>
+
+                    {/* Color Accent Picker */}
+                    <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-[#717699]">Map Theme Accent</label>
+                        <div className="flex items-center space-x-3 pt-1">
+                            {COLORS.map((c) => (
+                                <button
+                                    key={c.key}
+                                    type="button"
+                                    onClick={() => setSelectedColor(c.key)}
+                                    className={`w-7 h-7 rounded-full ${c.bg} transition-transform ${
+                                        selectedColor === c.key
+                                            ? 'scale-125 ring-2 ring-offset-2 ring-[#E0E5EC] shadow-md'
+                                            : 'hover:scale-110 opacity-70 hover:opacity-100'
+                                    }`}
+                                    title={c.name}
+                                />
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Primary toggle */}
+                    <label className="flex items-center space-x-2.5 cursor-pointer pt-1">
+                        <input
+                            type="checkbox"
+                            checked={isPrimary}
+                            onChange={(e) => setIsPrimary(e.target.checked)}
+                            className="rounded text-purple-600 focus:ring-purple-500 w-4 h-4"
+                        />
+                        <span className="text-xs font-bold text-[#1a1c35]">
+                            Set as Primary Roadmap (opened by default)
+                        </span>
+                    </label>
+
+                    {/* Actions */}
+                    <div className="flex items-center justify-end space-x-3 pt-4 border-t border-slate-300/60">
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="px-4 py-2 rounded-2xl neu-button text-xs font-bold text-[#717699] hover:text-[#1a1c35]"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            disabled={!name.trim()}
+                            className="px-5 py-2 rounded-2xl neu-button-primary text-xs font-black text-white disabled:opacity-50 shadow-md hover:scale-105 transition-transform"
+                        >
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+};
