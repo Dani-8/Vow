@@ -144,14 +144,22 @@ router.post('/', authenticateToken, async (req: AuthenticatedRequest, res: Respo
             startDate,
             targetEndDate,
             rule,
+            consequenceOfSkipping,
+            consequencesOfSkipping,
             tags,
             status,
             logs,
+            sprints,
+            currentSprintId,
         } = req.body;
 
         if (!title || typeof title !== 'string') {
             return res.status(400).json({ error: 'Challenge title is required' });
         }
+
+        const consequences = Array.isArray(consequencesOfSkipping)
+            ? consequencesOfSkipping
+            : (consequenceOfSkipping ? [consequenceOfSkipping] : []);
 
         const created = await Challenge.create({
             id,
@@ -165,9 +173,13 @@ router.post('/', authenticateToken, async (req: AuthenticatedRequest, res: Respo
             startDate: startDate || new Date().toISOString(),
             targetEndDate,
             rule: rule || '',
+            consequenceOfSkipping: consequenceOfSkipping || (consequences[0] || ''),
+            consequencesOfSkipping: consequences,
             tags: Array.isArray(tags) ? tags : [],
             status: status || 'active',
             logs: Array.isArray(logs) ? logs : [],
+            sprints: Array.isArray(sprints) ? sprints : [],
+            currentSprintId,
         });
 
         return res.status(201).json({ challenge: created.toObject() });
@@ -200,6 +212,13 @@ router.put('/:id', authenticateToken, async (req: AuthenticatedRequest, res: Res
         if (req.body.startDate !== undefined) challenge.startDate = String(req.body.startDate);
         if (req.body.targetEndDate !== undefined) challenge.targetEndDate = String(req.body.targetEndDate);
         if (req.body.rule !== undefined) challenge.rule = String(req.body.rule);
+        if (req.body.consequencesOfSkipping !== undefined) {
+            challenge.consequencesOfSkipping = Array.isArray(req.body.consequencesOfSkipping) ? req.body.consequencesOfSkipping : [];
+            challenge.consequenceOfSkipping = challenge.consequencesOfSkipping[0] || '';
+        } else if (req.body.consequenceOfSkipping !== undefined) {
+            challenge.consequenceOfSkipping = String(req.body.consequenceOfSkipping);
+            challenge.consequencesOfSkipping = challenge.consequenceOfSkipping ? [challenge.consequenceOfSkipping] : [];
+        }
         if (Array.isArray(req.body.tags)) challenge.tags = req.body.tags;
         if (req.body.status !== undefined) challenge.status = req.body.status;
         if (Array.isArray(req.body.logs)) challenge.logs = req.body.logs;
