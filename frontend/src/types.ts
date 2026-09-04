@@ -26,6 +26,8 @@ export interface ChallengeSprint {
   startDate: string;
   targetEndDate?: string;
   rule?: string;
+  consequenceOfSkipping?: string;
+  consequencesOfSkipping?: string[];
   status: 'active' | 'completed' | 'paused';
   logs: ChallengeLog[];
   retrospective?: SprintRetrospective;
@@ -46,6 +48,8 @@ export interface Challenge {
   startDate: string;
   targetEndDate: string;
   rule?: string;
+  consequenceOfSkipping?: string;
+  consequencesOfSkipping?: string[];
   tags: string[];
   status: 'active' | 'completed' | 'paused';
   logs: ChallengeLog[];
@@ -125,6 +129,8 @@ export interface Task {
   userId: string;
   title: string;
   description?: string;
+  consequenceOfSkipping?: string;
+  consequencesOfSkipping?: string[];
   tags: string[];
   startTime?: string | null;
   endTime?: string | null;
