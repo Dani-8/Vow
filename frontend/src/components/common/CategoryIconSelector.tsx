@@ -82,13 +82,12 @@ export const CategoryIconSelector: React.FC<CategoryIconSelectorProps> = ({
                     <button
                         type="button"
                         onClick={() => setIsPopoverOpen((prev) => !prev)}
-                        className={`w-12 h-11 rounded-xl flex items-center justify-center transition-all cursor-pointer relative select-none ${
-                            !hasSelectedIcon
-                                ? 'neu-button bg-[#E0E5EC] border-2 neu-icon-glow-pulse'
-                                : isPopoverOpen
-                                    ? 'neu-inset bg-[#E0E5EC] border-2 border-sky-500 shadow-inner'
-                                    : 'neu-button bg-[#E0E5EC] border border-white/80 hover:border-sky-400/60 hover:scale-105'
-                        }`}
+                        className={`w-12 h-11 rounded-xl flex items-center justify-center transition-all cursor-pointer relative select-none ${!hasSelectedIcon
+                            ? 'neu-button bg-[#E0E5EC] border-2 neu-icon-glow-pulse'
+                            : isPopoverOpen
+                                ? 'neu-inset bg-[#E0E5EC] border-2 border-sky-500 shadow-inner'
+                                : 'neu-button bg-[#E0E5EC] border border-white/80 hover:border-sky-400/60 hover:scale-105'
+                            }`}
                         title={hasSelectedIcon ? `Selected icon: ${currentIconOption?.label}` : 'Click to pick an icon'}
                         style={
                             hasSelectedIcon
@@ -146,11 +145,10 @@ export const CategoryIconSelector: React.FC<CategoryIconSelectorProps> = ({
                                         key={opt.id}
                                         type="button"
                                         onClick={() => handleSelectIcon(opt.id)}
-                                        className={`relative group/btn flex flex-col items-center justify-center p-2 rounded-xl transition-all aspect-square cursor-pointer ${
-                                            isSelected
-                                                ? 'neu-inset text-sky-600 border border-sky-400 font-black shadow-inner'
-                                                : 'neu-button text-slate-600 hover:text-slate-900 hover:scale-105'
-                                        }`}
+                                        className={`relative group/btn flex flex-col items-center justify-center p-2 rounded-xl transition-all aspect-square cursor-pointer ${isSelected
+                                            ? 'neu-inset text-sky-600 border border-sky-400 font-black shadow-inner'
+                                            : 'neu-button text-slate-600 hover:text-slate-900 hover:scale-105'
+                                            }`}
                                         title={opt.label}
                                         aria-label={opt.label}
                                     >
