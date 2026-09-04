@@ -199,11 +199,10 @@ export const StartNextSprintModal: React.FC<StartNextSprintModalProps> = ({
                                             setIsCustomDays(false);
                                             setTargetDays(preset.days);
                                         }}
-                                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                                            isSelected
-                                                ? 'neu-button-primary text-white shadow-sm'
-                                                : 'neu-button text-slate-600 hover:text-slate-900'
-                                        }`}
+                                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${isSelected
+                                            ? 'neu-button-primary text-white shadow-sm'
+                                            : 'neu-button text-slate-600 hover:text-slate-900'
+                                            }`}
                                     >
                                         {preset.label}
                                     </button>
@@ -212,11 +211,10 @@ export const StartNextSprintModal: React.FC<StartNextSprintModalProps> = ({
                             <button
                                 type="button"
                                 onClick={() => setIsCustomDays(true)}
-                                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                                    isCustomDays
-                                        ? 'neu-button-primary text-white shadow-sm'
-                                        : 'neu-button text-slate-600 hover:text-slate-900'
-                                }`}
+                                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${isCustomDays
+                                    ? 'neu-button-primary text-white shadow-sm'
+                                    : 'neu-button text-slate-600 hover:text-slate-900'
+                                    }`}
                             >
                                 Custom
                             </button>
