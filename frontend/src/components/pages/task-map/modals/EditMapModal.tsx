@@ -139,11 +139,10 @@ export const EditMapModal: React.FC<EditMapModalProps> = ({
                                     key={c.key}
                                     type="button"
                                     onClick={() => setSelectedColor(c.key)}
-                                    className={`w-7 h-7 rounded-full ${c.bg} transition-transform ${
-                                        selectedColor === c.key
-                                            ? 'scale-125 ring-2 ring-offset-2 ring-[#E0E5EC] shadow-md'
-                                            : 'hover:scale-110 opacity-70 hover:opacity-100'
-                                    }`}
+                                    className={`w-7 h-7 rounded-full ${c.bg} transition-transform ${selectedColor === c.key
+                                        ? 'scale-125 ring-2 ring-offset-2 ring-[#E0E5EC] shadow-md'
+                                        : 'hover:scale-110 opacity-70 hover:opacity-100'
+                                        }`}
                                     title={c.name}
                                 />
                             ))}
