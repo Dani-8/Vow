@@ -16,6 +16,8 @@ export interface ITask {
     userId: string;
     title: string;
     description?: string;
+    consequenceOfSkipping?: string;
+    consequencesOfSkipping?: string[];
     tags: string[];
     startTime?: Date | string | null;
     endTime?: Date | string | null;
@@ -38,6 +40,8 @@ export class TaskInstance implements ITask {
     userId: string;
     title: string;
     description?: string;
+    consequenceOfSkipping?: string;
+    consequencesOfSkipping?: string[];
     tags: string[];
     startTime?: Date | string | null;
     endTime?: Date | string | null;
@@ -57,6 +61,10 @@ export class TaskInstance implements ITask {
         this.userId = String(data.userId || '');
         this.title = data.title || '';
         this.description = data.description || '';
+        this.consequenceOfSkipping = data.consequenceOfSkipping || '';
+        this.consequencesOfSkipping = Array.isArray(data.consequencesOfSkipping)
+            ? data.consequencesOfSkipping
+            : (data.consequenceOfSkipping ? [data.consequenceOfSkipping] : []);
         this.tags = Array.isArray(data.tags) ? data.tags : [];
         this.startTime = data.startTime ? new Date(data.startTime) : null;
         this.endTime = data.endTime ? new Date(data.endTime) : null;
@@ -84,6 +92,8 @@ export class TaskInstance implements ITask {
             userId: String(this.userId),
             title: this.title,
             description: this.description || '',
+            consequenceOfSkipping: this.consequenceOfSkipping || (this.consequencesOfSkipping && this.consequencesOfSkipping[0]) || '',
+            consequencesOfSkipping: this.consequencesOfSkipping || [],
             tags: this.tags || [],
             startTime: this.startTime ? new Date(this.startTime).toISOString() : null,
             endTime: this.endTime ? new Date(this.endTime).toISOString() : null,
@@ -120,6 +130,8 @@ export class TaskInstance implements ITask {
             userId: this.userId,
             title: this.title,
             description: this.description,
+            consequenceOfSkipping: this.consequenceOfSkipping,
+            consequencesOfSkipping: this.consequencesOfSkipping,
             tags: this.tags,
             startTime: this.startTime ? new Date(this.startTime).toISOString() : null,
             endTime: this.endTime ? new Date(this.endTime).toISOString() : null,
@@ -223,10 +235,16 @@ export const Task = {
         }
 
         const now = new Date().toISOString();
+        const consequences = Array.isArray(data.consequencesOfSkipping)
+            ? data.consequencesOfSkipping
+            : (data.consequenceOfSkipping ? [data.consequenceOfSkipping] : []);
+
         const payload = {
             userId: String(data.userId || ''),
             title: data.title || '',
             description: data.description || '',
+            consequenceOfSkipping: data.consequenceOfSkipping || (consequences[0] || ''),
+            consequencesOfSkipping: consequences,
             tags: Array.isArray(data.tags) ? data.tags : [],
             startTime: data.startTime ? new Date(data.startTime).toISOString() : null,
             endTime: data.endTime ? new Date(data.endTime).toISOString() : null,

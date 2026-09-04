@@ -154,7 +154,7 @@ router.post('/private-list', authenticateToken, async (req: AuthenticatedRequest
 // Create task or habit
 router.post('/', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
     try {
-        const { title, description, tags, startTime, endTime, isPrivate, isHabit } = req.body;
+        const { title, description, consequenceOfSkipping, consequencesOfSkipping, tags, startTime, endTime, isPrivate, isHabit } = req.body;
 
         if (!title || typeof title !== 'string' || !title.trim()) {
             return res.status(400).json({ error: 'Task title is required' });
@@ -165,10 +165,16 @@ router.post('/', authenticateToken, async (req: AuthenticatedRequest, res: Respo
             if (!pinVerified) return;
         }
 
+        const consequences = Array.isArray(consequencesOfSkipping)
+            ? consequencesOfSkipping
+            : (consequenceOfSkipping ? [consequenceOfSkipping] : []);
+
         const task = await Task.create({
             userId: req.userId,
             title: title.trim(),
             description: description || '',
+            consequenceOfSkipping: consequenceOfSkipping || (consequences[0] || ''),
+            consequencesOfSkipping: consequences,
             tags: Array.isArray(tags) ? tags : [],
             startTime: startTime ? new Date(startTime) : null,
             endTime: endTime ? new Date(endTime) : null,
@@ -191,7 +197,7 @@ router.post('/', authenticateToken, async (req: AuthenticatedRequest, res: Respo
 router.put('/:id', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
     try {
         const { id } = req.params;
-        const { title, description, tags, startTime, endTime, status, isHabit } = req.body;
+        const { title, description, consequenceOfSkipping, consequencesOfSkipping, tags, startTime, endTime, status, isHabit } = req.body;
 
         const task = await Task.findOne({ _id: id, userId: req.userId });
         if (!task) {
@@ -205,6 +211,13 @@ router.put('/:id', authenticateToken, async (req: AuthenticatedRequest, res: Res
 
         if (title !== undefined) task.title = title;
         if (description !== undefined) task.description = description;
+        if (consequencesOfSkipping !== undefined) {
+            task.consequencesOfSkipping = Array.isArray(consequencesOfSkipping) ? consequencesOfSkipping : [];
+            task.consequenceOfSkipping = task.consequencesOfSkipping[0] || '';
+        } else if (consequenceOfSkipping !== undefined) {
+            task.consequenceOfSkipping = consequenceOfSkipping;
+            task.consequencesOfSkipping = consequenceOfSkipping ? [consequenceOfSkipping] : [];
+        }
         if (tags !== undefined) task.tags = tags;
         if (startTime !== undefined) task.startTime = startTime ? new Date(startTime) : null;
         if (endTime !== undefined) task.endTime = endTime ? new Date(endTime) : null;

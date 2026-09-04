@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { ClipboardCheck, Tag, Edit3, Lightbulb, ChevronRight, Layers, Check, X } from 'lucide-react';
+import { ClipboardCheck, Tag, Edit3, Lightbulb, ChevronRight, Layers, Check, X, Flame, AlertOctagon } from 'lucide-react';
 import { Challenge, ChallengeSprint } from '../../../../../types';
+import { RotatingConsequenceBanner } from '../../../../common/RotatingConsequenceBanner';
 
 interface ChallengeRulesAndTagsProps {
     challenge: Challenge;
@@ -23,6 +24,12 @@ export const ChallengeRulesAndTags: React.FC<ChallengeRulesAndTagsProps> = ({
 
     const activeRule = activeSprint?.rule || challenge.rule || 'Complete your core daily commitment for this challenge.';
     const isPhaseSpecific = Boolean(activeSprint?.rule && activeSprint.rule !== challenge.rule);
+
+    const consequencesList = (activeSprint?.consequencesOfSkipping && activeSprint.consequencesOfSkipping.length > 0)
+        ? activeSprint.consequencesOfSkipping
+        : (challenge.consequencesOfSkipping && challenge.consequencesOfSkipping.length > 0)
+            ? challenge.consequencesOfSkipping
+            : (activeSprint?.consequenceOfSkipping || challenge.consequenceOfSkipping);
 
     const handleSaveRule = async () => {
         if (!onUpdateSprintRule) {
@@ -142,6 +149,16 @@ export const ChallengeRulesAndTags: React.FC<ChallengeRulesAndTagsProps> = ({
                     </div>
                 </div>
             </div>
+
+            {/* Consequences of Skipping / Stakes Rotating Banner */}
+            <RotatingConsequenceBanner
+                consequences={consequencesList}
+                consequenceOfSkipping={challenge.consequenceOfSkipping}
+                onEdit={onEdit}
+                title="Consequences of Skipping"
+                badgeLabel="Cost of Inaction"
+                accentColor={accentColor}
+            />
 
             {/* Motivational Tip Banner */}
             <div className="neu-card p-4 bg-[#E0E5EC] flex items-center justify-between">

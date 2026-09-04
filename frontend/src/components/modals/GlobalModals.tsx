@@ -1,7 +1,7 @@
 import React from 'react';
 import { Task, User } from '../../types';
 import { api } from '../../api';
-import { TaskModal } from '../tasks/components/TaskModal';
+import { TaskModal } from '../pages/tasks/components/main/TaskModal';
 import { PrivatePinModal } from './PrivatePinModal';
 import { AIAssistModal } from './AIAssistModal';
 import { AuthModal } from './AuthModal';
@@ -14,6 +14,8 @@ interface GlobalModalsProps {
     onSubmitTask: (taskData: {
         title: string;
         description?: string;
+        consequenceOfSkipping?: string;
+        consequencesOfSkipping?: string[];
         tags?: string[];
         startTime?: string | null;
         endTime?: string | null;

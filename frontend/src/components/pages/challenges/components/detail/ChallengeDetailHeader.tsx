@@ -9,13 +9,10 @@ import {
     Edit3,
     Trash2,
     Coffee,
-    Code,
-    Dumbbell,
-    BookOpen,
-    ClipboardCheck,
-    Sparkles,
+    Target,
 } from 'lucide-react';
 import { Challenge } from '../../../../../types';
+import { getCategoryIconComponent } from '../../../../common/categoryIcons';
 
 interface ChallengeDetailHeaderProps {
     challenge: Challenge;
@@ -37,14 +34,6 @@ interface ChallengeDetailHeaderProps {
     targetEndDateObj: Date;
     isTodayCompleted: boolean;
 }
-
-const CATEGORY_ICONS: Record<string, any> = {
-    engineering: Code,
-    fitness: Dumbbell,
-    learning: BookOpen,
-    discipline: ClipboardCheck,
-    mindfulness: Sparkles,
-};
 
 export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
     challenge,
@@ -88,7 +77,7 @@ export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
         }
     };
 
-    const CategoryIcon = CATEGORY_ICONS[challenge.category] || Code;
+    const CategoryIcon = getCategoryIconComponent(challenge.icon || challenge.category, Target);
 
     return (
         <div className="space-y-4">

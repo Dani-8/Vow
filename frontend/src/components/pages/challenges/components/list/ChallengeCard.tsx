@@ -1,10 +1,5 @@
 import React from 'react';
 import {
-    Code,
-    Dumbbell,
-    BookOpen,
-    ClipboardCheck,
-    Sparkles,
     Calendar,
     ChevronRight,
     MoreVertical,
@@ -12,8 +7,10 @@ import {
     Trash2,
     Coffee,
     Flame,
+    Target,
 } from 'lucide-react';
 import { Challenge } from '../../../../../types';
+import { getCategoryIconComponent } from '../../../../common/categoryIcons';
 
 interface ChallengeCardProps {
     challenge: Challenge;
@@ -24,14 +21,6 @@ interface ChallengeCardProps {
     isMenuOpen: boolean;
     onToggleMenu: (id: string) => void;
 }
-
-const CATEGORY_ICONS: Record<string, any> = {
-    engineering: Code,
-    fitness: Dumbbell,
-    learning: BookOpen,
-    discipline: ClipboardCheck,
-    mindfulness: Sparkles,
-};
 
 const getAccentColor = (challenge?: Partial<Challenge>): string => {
     if (!challenge?.color) return '#549acb';
@@ -59,7 +48,7 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({
     isMenuOpen,
     onToggleMenu,
 }) => {
-    const IconComponent = CATEGORY_ICONS[challenge.category] || Code;
+    const IconComponent = getCategoryIconComponent(challenge.icon || challenge.category, Target);
     const cardAccent = getAccentColor(challenge);
     const challengeId = challenge.id || challenge._id || '';
 

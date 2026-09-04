@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { X, Plus, Calendar, Sparkles, Copy, ArrowRight, ShieldCheck } from 'lucide-react';
+import { X, Plus, Calendar, Sparkles, Copy, ArrowRight, ShieldCheck, Flame } from 'lucide-react';
 import { Challenge } from '../../../../../types';
+import { ConsequenceChipInput } from '../../../../common/ConsequenceChipInput';
 
 interface StartNextSprintModalProps {
     isOpen: boolean;
@@ -13,6 +14,8 @@ interface StartNextSprintModalProps {
         startDate: string;
         targetEndDate?: string;
         rule?: string;
+        consequencesOfSkipping?: string[];
+        consequenceOfSkipping?: string;
     }) => Promise<void>;
 }
 
@@ -42,6 +45,7 @@ export const StartNextSprintModal: React.FC<StartNextSprintModalProps> = ({
     const [customDaysInput, setCustomDaysInput] = useState('14');
     const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]);
     const [rule, setRule] = useState('');
+    const [consequencesOfSkipping, setConsequencesOfSkipping] = useState<string[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
 
@@ -60,12 +64,19 @@ export const StartNextSprintModal: React.FC<StartNextSprintModalProps> = ({
             }
 
             const previousRule = lastSprint?.rule || challenge.rule || '';
+            const previousConsequences = (lastSprint?.consequencesOfSkipping && lastSprint.consequencesOfSkipping.length > 0)
+                ? lastSprint.consequencesOfSkipping
+                : (challenge.consequencesOfSkipping && challenge.consequencesOfSkipping.length > 0)
+                    ? challenge.consequencesOfSkipping
+                    : (lastSprint?.consequenceOfSkipping ? [lastSprint.consequenceOfSkipping] : (challenge.consequenceOfSkipping ? [challenge.consequenceOfSkipping] : []));
+
             setTitle(`Phase ${nextPhaseNumber}: ${challenge.title} (Part ${nextPhaseNumber})`);
             setTargetDays(14);
             setIsCustomDays(false);
             setCustomDaysInput('14');
             setStartDate(defaultStart);
             setRule(previousRule);
+            setConsequencesOfSkipping(previousConsequences);
             setError('');
             setIsSubmitting(false);
         }
@@ -91,6 +102,8 @@ export const StartNextSprintModal: React.FC<StartNextSprintModalProps> = ({
             return;
         }
 
+        const cleanConsequences = consequencesOfSkipping.map((s) => s.trim()).filter(Boolean);
+
         try {
             setIsSubmitting(true);
             setError('');
@@ -100,6 +113,8 @@ export const StartNextSprintModal: React.FC<StartNextSprintModalProps> = ({
                 startDate,
                 targetEndDate: endObj.toISOString().split('T')[0],
                 rule: rule.trim() || undefined,
+                consequencesOfSkipping: cleanConsequences,
+                consequenceOfSkipping: cleanConsequences.join('\n') || undefined,
             });
             onClose();
         } catch (err: any) {
@@ -271,6 +286,12 @@ export const StartNextSprintModal: React.FC<StartNextSprintModalProps> = ({
                             Tip: Adapt or increase the difficulty for this new phase without altering previous phase history.
                         </p>
                     </div>
+
+                    {/* Consequences of Skipping (Stakes / Cost of Inaction) */}
+                    <ConsequenceChipInput
+                        consequences={consequencesOfSkipping}
+                        onChange={setConsequencesOfSkipping}
+                    />
 
                     {/* Seamless Date Preview Card */}
                     <div className="neu-card p-3 rounded-xl bg-[#E0E5EC] flex items-center justify-between text-xs font-bold text-slate-700">

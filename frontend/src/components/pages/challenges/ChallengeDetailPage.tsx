@@ -39,6 +39,8 @@ interface ChallengeDetailPageProps {
             startDate: string;
             targetEndDate?: string;
             rule?: string;
+            consequencesOfSkipping?: string[];
+            consequenceOfSkipping?: string;
         }
     ) => Promise<void>;
     onCompleteSprint?: (
@@ -540,6 +542,8 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                 startDate: sprintData.startDate,
                                 targetEndDate: sprintData.targetEndDate,
                                 rule: sprintData.rule,
+                                consequencesOfSkipping: sprintData.consequencesOfSkipping,
+                                consequenceOfSkipping: sprintData.consequenceOfSkipping,
                                 status: 'active' as const,
                                 logs: [],
                                 createdAt: new Date().toISOString(),
