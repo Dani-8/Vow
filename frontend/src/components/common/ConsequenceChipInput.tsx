@@ -123,11 +123,10 @@ export const ConsequenceChipInput: React.FC<ConsequenceChipInputProps> = ({
                             type="button"
                             onClick={handleAdd}
                             disabled={!inputValue.trim()}
-                            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all shrink-0 ${
-                                inputValue.trim()
-                                    ? 'neu-button text-rose-700 bg-rose-50 hover:bg-rose-100 shadow-sm cursor-pointer hover:scale-105 active:scale-95'
-                                    : 'opacity-50 text-slate-400 cursor-not-allowed bg-slate-100'
-                            }`}
+                            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all shrink-0 ${inputValue.trim()
+                                ? 'neu-button text-rose-700 bg-rose-50 hover:bg-rose-100 shadow-sm cursor-pointer hover:scale-105 active:scale-95'
+                                : 'opacity-50 text-slate-400 cursor-not-allowed bg-slate-100'
+                                }`}
                             title="Add consequence"
                         >
                             <Plus className="w-3.5 h-3.5 text-rose-600" />
