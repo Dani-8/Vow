@@ -8,10 +8,12 @@ import {
     GitFork,
     Briefcase,
     Wand2,
+    Network,
 } from 'lucide-react';
 import { TaskMap } from '../types';
 import { Task } from '../../../../types';
 import { getNodeDynamicStatusAndProgress } from '../../../../utils/subtaskStorage';
+import { getCategoryIconComponent } from '../../../common/categoryIcons';
 
 interface CanvasHeaderProps {
     currentMap: TaskMap;
@@ -68,20 +70,36 @@ export const CanvasHeader: React.FC<CanvasHeaderProps> = ({
 
                     <div className="h-6 w-[1px] bg-slate-300/80 shrink-0" />
 
-                    <div className="min-w-0">
-                        <div className="flex items-center space-x-2">
-                            <h1 className="text-lg sm:text-xl font-black text-[#1a1c35] truncate">
-                                {currentMap.name}
-                            </h1>
-                            <span className="hidden sm:inline-flex text-[10px] px-2.5 py-0.5 rounded-full font-extrabold uppercase neu-badge text-[#549acb]">
-                                {currentMap.color}
-                            </span>
+                    <div className="flex items-center space-x-3 min-w-0">
+                        {(() => {
+                            const IconComp = getCategoryIconComponent(currentMap.icon || currentMap.category, Network);
+                            return (
+                                <div className="w-10 h-10 rounded-2xl neu-inset p-2 flex items-center justify-center bg-[#E0E5EC] shrink-0 text-[#549acb]">
+                                    <IconComp className="w-5 h-5" />
+                                </div>
+                            );
+                        })()}
+
+                        <div className="min-w-0">
+                            <div className="flex items-center space-x-2">
+                                <h1 className="text-lg sm:text-xl font-black text-[#1a1c35] truncate">
+                                    {currentMap.name}
+                                </h1>
+                                {currentMap.category && (
+                                    <span className="hidden sm:inline-flex text-[9px] px-2.5 py-0.5 rounded-full font-extrabold uppercase neu-badge text-[#717699] tracking-wider">
+                                        {currentMap.category}
+                                    </span>
+                                )}
+                                <span className="hidden sm:inline-flex text-[10px] px-2.5 py-0.5 rounded-full font-extrabold uppercase neu-badge text-[#549acb]">
+                                    {currentMap.color}
+                                </span>
+                            </div>
+                            {currentMap.description && (
+                                <p className="text-xs text-[#717699] font-medium truncate max-w-md sm:max-w-xl">
+                                    {currentMap.description}
+                                </p>
+                            )}
                         </div>
-                        {currentMap.description && (
-                            <p className="text-xs text-[#717699] font-medium truncate max-w-md sm:max-w-xl">
-                                {currentMap.description}
-                            </p>
-                        )}
                     </div>
                 </div>
 
