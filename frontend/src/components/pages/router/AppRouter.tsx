@@ -16,15 +16,16 @@ export const getTaskSlug = (task: Task): string => {
   return slug ? (shortId ? `${slug}-${shortId}` : slug) : task._id;
 };
 
-import { TaskDetailPage } from '../tasks/TaskDetailPage';
-import { TasksPage } from '../tasks/TasksPage';
+import { TaskDetailPage } from '../task-detail/TaskDetailPage';
 import { StatsView } from '../stats/StatsView';
 import { HomeView } from '../home/HomeView';
 import { TaskMapPage } from '../task-map/TaskMapPage';
 import { ChallengesPage } from '../challenges/ChallengesPage';
 import { ChallengeDetailPage } from '../challenges/ChallengeDetailPage';
 
-import { FilterCategory } from '../tasks/components/main/TaskControlsBar';
+import { ControlsBar, FilterCategory } from '../../dashboard/ControlsBar';
+import { LockedVaultCard } from '../../dashboard/LockedVaultCard';
+import { TaskGrid } from '../../dashboard/TaskGrid';
 import { Challenge } from '../../../types';
 
 interface AppRouterProps {
@@ -265,31 +266,62 @@ export const AppRouter: React.FC<AppRouterProps> = ({
     );
   }
 
+  if (activeView === 'private' && !isPrivateUnlocked) {
+    return <LockedVaultCard onEnterPin={onOpenPinModal} />;
+  }
+
   return (
-    <TasksPage
-      tasks={filteredTasks}
-      searchQuery={searchQuery}
-      onSearchChange={setSearchQuery}
-      activeFilter={filter}
-      onFilterChange={setFilter}
-      onToggleComplete={onToggleComplete}
-      onTogglePrivate={(t) => onTogglePrivate(t)}
-      onOpenAIAssist={onOpenAIAssist}
-      onEditTask={onEditTask}
-      onDeleteTask={onDeleteTask}
-      onViewDetails={(t) => {
-        setSelectedTaskForDetail(t);
-        navigate(`/app/task/${getTaskSlug(t)}`);
-      }}
-      onCreateNewGoal={onOpenCreateModal}
-      isVaultView={activeView === 'private'}
-      isVaultUnlocked={isPrivateUnlocked}
-      onOpenPinModal={onOpenPinModal}
-      onLockVault={() => {
-        clearStoredPin();
-        setIsPrivateUnlocked(false);
-        navigateToView('visible');
-      }}
-    />
+    <div className="space-y-6">
+      {/* Controls Bar */}
+      <ControlsBar
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        activeFilter={filter}
+        onFilterChange={setFilter}
+      />
+
+      {/* Private Vault Badge */}
+      {activeView === 'private' && (
+        <div className="neu-badge p-4 rounded-2xl flex items-center justify-between border border-purple-200">
+          <div className="flex items-center space-x-3">
+            <Unlock className="w-5 h-5 text-purple-600" />
+            <div>
+              <h3 className="text-sm font-extrabold text-[#1a1c35]">
+                Growth Vault Unlocked
+              </h3>
+              <p className="text-xs text-[#717699]">
+                Confidential personal habits and growth targets
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => {
+              clearStoredPin();
+              setIsPrivateUnlocked(false);
+              navigateToView('visible');
+            }}
+            className="neu-button px-3 py-1.5 rounded-xl text-xs font-bold text-[#717699] hover:text-purple-600"
+          >
+            Lock Vault
+          </button>
+        </div>
+      )}
+
+      {/* Task Cards Grid */}
+      <TaskGrid
+        tasks={filteredTasks}
+        searchQuery={searchQuery}
+        onToggleComplete={onToggleComplete}
+        onTogglePrivate={(t) => onTogglePrivate(t)}
+        onOpenAIAssist={onOpenAIAssist}
+        onEditTask={onEditTask}
+        onDeleteTask={onDeleteTask}
+        onViewDetails={(t) => {
+          setSelectedTaskForDetail(t);
+          navigate(`/app/task/${getTaskSlug(t)}`);
+        }}
+        onCreateNewGoal={onOpenCreateModal}
+      />
+    </div>
   );
 };
