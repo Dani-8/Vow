@@ -36,6 +36,8 @@ export interface IChallenge {
     startDate: string;
     targetEndDate: string;
     rule?: string;
+    consequenceOfSkipping?: string;
+    consequencesOfSkipping?: string[];
     tags: string[];
     status: 'active' | 'completed' | 'paused';
     logs: IChallengeLog[];
@@ -60,6 +62,8 @@ export class ChallengeInstance implements IChallenge {
     startDate: string;
     targetEndDate: string;
     rule?: string;
+    consequenceOfSkipping?: string;
+    consequencesOfSkipping?: string[];
     tags: string[];
     status: 'active' | 'completed' | 'paused';
     logs: IChallengeLog[];
@@ -81,6 +85,10 @@ export class ChallengeInstance implements IChallenge {
         this.startDate = data.startDate || new Date().toISOString();
         this.targetEndDate = data.targetEndDate || new Date(Date.now() + this.targetDays * 86400000).toISOString();
         this.rule = data.rule || '';
+        this.consequenceOfSkipping = data.consequenceOfSkipping || '';
+        this.consequencesOfSkipping = Array.isArray(data.consequencesOfSkipping)
+            ? data.consequencesOfSkipping
+            : (data.consequenceOfSkipping ? [data.consequenceOfSkipping] : []);
         this.tags = Array.isArray(data.tags) ? data.tags : [];
         this.status = data.status || 'active';
         this.logs = Array.isArray(data.logs) ? data.logs : [];
@@ -104,6 +112,8 @@ export class ChallengeInstance implements IChallenge {
             startDate: this.startDate,
             targetEndDate: this.targetEndDate,
             rule: this.rule,
+            consequenceOfSkipping: this.consequenceOfSkipping,
+            consequencesOfSkipping: this.consequencesOfSkipping,
             tags: this.tags,
             status: this.status,
             logs: this.logs,
@@ -128,6 +138,8 @@ export class ChallengeInstance implements IChallenge {
             startDate: this.startDate,
             targetEndDate: this.targetEndDate,
             rule: this.rule,
+            consequenceOfSkipping: this.consequenceOfSkipping || (this.consequencesOfSkipping && this.consequencesOfSkipping[0]) || '',
+            consequencesOfSkipping: this.consequencesOfSkipping || [],
             tags: this.tags,
             status: this.status,
             logs: this.logs,
@@ -251,6 +263,10 @@ export const Challenge = {
         const startDate = data.startDate || now;
         const targetEndDate = data.targetEndDate || new Date(new Date(startDate).getTime() + targetDays * 86400000).toISOString();
 
+        const consequences = Array.isArray(data.consequencesOfSkipping)
+            ? data.consequencesOfSkipping
+            : (data.consequenceOfSkipping ? [data.consequenceOfSkipping] : []);
+
         const payload = {
             id: explicitId || `ch_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
             userId: String(data.userId || ''),
@@ -263,9 +279,13 @@ export const Challenge = {
             startDate,
             targetEndDate,
             rule: data.rule || '',
+            consequenceOfSkipping: data.consequenceOfSkipping || (consequences[0] || ''),
+            consequencesOfSkipping: consequences,
             tags: Array.isArray(data.tags) ? data.tags : [],
             status: data.status || 'active',
             logs: Array.isArray(data.logs) ? data.logs : [],
+            sprints: Array.isArray(data.sprints) ? data.sprints : [],
+            currentSprintId: data.currentSprintId || undefined,
             createdAt: now,
             updatedAt: now,
         };
