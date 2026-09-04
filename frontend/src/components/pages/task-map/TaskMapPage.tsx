@@ -174,13 +174,17 @@ export const TaskMapPage: React.FC<TaskMapPageProps> = ({ tasks }) => {
     const handleCreateMap = (
         name: string,
         description?: string,
-        color: MapAccentColor = 'sky'
+        color: MapAccentColor = 'sky',
+        category?: string,
+        icon?: string
     ) => {
         const shortId = generateRandom5CharId();
         const newMap: TaskMap = {
             id: `map-${shortId}`,
             name,
             description,
+            category: category?.trim() || undefined,
+            icon: icon || undefined,
             color,
             updatedAt: 'Just now',
             nodes: [],
@@ -239,6 +243,7 @@ export const TaskMapPage: React.FC<TaskMapPageProps> = ({ tasks }) => {
                     tasks={tasks}
                     onOpenMap={(id) => navigateToMapById(id)}
                     onCreateMap={() => setIsCreateModalOpen(true)}
+                    onUpdateMap={handleUpdateMap}
                     onDeleteMap={handleDeleteMap}
                 />
             ) : (
