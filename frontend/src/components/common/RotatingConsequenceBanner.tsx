@@ -88,3 +88,46 @@ export const RotatingConsequenceBanner: React.FC<RotatingConsequenceBannerProps>
         setCurrentIndex((prev) => (prev + 1) % stakes.length);
         setProgress(0);
     };
+
+    const handleSelectDot = (idx: number, e: React.MouseEvent) => {
+        e.stopPropagation();
+        setCurrentIndex(idx);
+        setProgress(0);
+    };
+
+    // If no consequences are defined
+    if (stakes.length === 0) {
+        return (
+            <div
+                onClick={onEdit}
+                className={`neu-card p-4 bg-gradient-to-r from-rose-50/40 via-[#E0E5EC] to-amber-50/30 border border-dashed border-rose-200/80 rounded-xl flex items-center justify-between transition-all ${
+                    onEdit ? 'cursor-pointer hover:bg-rose-50/60' : ''
+                } ${className}`}
+            >
+                <div className="flex items-center space-x-2.5 text-xs text-rose-800/80">
+                    <Flame className="w-4 h-4 text-rose-500 shrink-0" />
+                    <span className="font-semibold">
+                        <strong>Cost of Inaction:</strong> No consequences defined yet. Add what happens if you skip or quit.
+                    </span>
+                </div>
+                {onEdit && (
+                    <button
+                        type="button"
+                        className="text-[11px] font-bold text-rose-700 hover:text-rose-900 underline shrink-0 ml-3 flex items-center space-x-1"
+                    >
+                        <Edit3 className="w-3 h-3" />
+                        <span>Define Stakes</span>
+                    </button>
+                )}
+            </div>
+        );
+    }
+
+    const currentStake = stakes[currentIndex] || stakes[0];
+
+    return (
+        <div
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            className={`neu-card p-4.5 bg-gradient-to-r from-rose-50/90 via-[#E0E5EC] to-amber-50/70 border border-rose-200/80 rounded-xl space-y-2.5 shadow-sm relative overflow-hidden transition-all group ${className}`}
+        ></div>
