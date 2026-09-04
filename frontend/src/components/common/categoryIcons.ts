@@ -142,3 +142,39 @@ export const CATEGORY_ICON_OPTIONS: CategoryIconOption[] = [
     { id: 'coffee', label: 'Habits & Break', icon: Coffee, categoryGroup: 'Lifestyle' },
     { id: 'smile', label: 'Mood & Joy', icon: Smile, categoryGroup: 'Lifestyle' },
     { id: 'sun', label: 'Morning Routine', icon: Sun, categoryGroup: 'Lifestyle' },
+    { id: 'moon', label: 'Night Routine & Sleep', icon: Moon, categoryGroup: 'Lifestyle' },
+    { id: 'feather', label: 'Journaling & Writing', icon: Feather, categoryGroup: 'Creative' },
+    { id: 'send', label: 'Publish & Outreach', icon: Send, categoryGroup: 'Communication' },
+    { id: 'rocket', label: 'Product Launch', icon: Rocket, categoryGroup: 'Growth' },
+    { id: 'bookmark', label: 'Curate & Save', icon: Bookmark, categoryGroup: 'Productivity' },
+    { id: 'check-circle', label: 'Done & Success', icon: CheckCircle2, categoryGroup: 'Productivity' },
+];
+
+/**
+ * Quick helper to resolve icon component by ID or fallback
+ */
+export const getCategoryIconComponent = (iconId?: string, fallback: LucideIcon = Target): LucideIcon => {
+    if (!iconId) return fallback;
+    const match = CATEGORY_ICON_OPTIONS.find(
+        (item) => item.id.toLowerCase() === iconId.toLowerCase()
+    );
+    if (match) return match.icon;
+
+    // Handle legacy alias mappings
+    const legacyMap: Record<string, LucideIcon> = {
+        engineering: Code,
+        code: Code,
+        fitness: Dumbbell,
+        dumbbell: Dumbbell,
+        learning: BookOpen,
+        book: BookOpen,
+        'book-open': BookOpen,
+        discipline: Clipboard,
+        clipboard: Clipboard,
+        'clipboard-check': Clipboard,
+        mindfulness: Sparkles,
+        sparkles: Sparkles,
+    };
+
+    return legacyMap[iconId.toLowerCase()] || fallback;
+};
