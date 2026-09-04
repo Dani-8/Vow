@@ -218,7 +218,7 @@ export function getTaskStickyNotes(taskId: string, taskTitle?: string): TaskStic
   if (!taskId && !taskTitle) return [];
   const key = `vow_task_sticky_notes_${taskId || 'default'}`;
   const seedKey = findSeedKey(DEFAULT_TASK_STICKY_NOTES, taskId, taskTitle);
-
+  
   // Check if user previously saved custom sticky notes
   try {
     const saved = localStorage.getItem(key);
