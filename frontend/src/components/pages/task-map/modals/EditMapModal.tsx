@@ -40,3 +40,50 @@ export const EditMapModal: React.FC<EditMapModalProps> = ({
     const [description, setDescription] = useState('');
     const [selectedColor, setSelectedColor] = useState<MapAccentColor>('purple');
     const [isPrimary, setIsPrimary] = useState(false);
+
+    useEffect(() => {
+        if (map) {
+            setName(map.name || '');
+            setCategory(map.category || '');
+            setSelectedIcon(map.icon || '');
+            setDescription(map.description || '');
+            setSelectedColor(map.color || 'purple');
+            setIsPrimary(!!map.isPrimary);
+        }
+    }, [map, isOpen]);
+
+    if (!isOpen || !map) return null;
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!name.trim()) return;
+
+        const updated: TaskMap = {
+            ...map,
+            name: name.trim(),
+            description: description.trim(),
+            category: category.trim() || undefined,
+            icon: selectedIcon || undefined,
+            color: selectedColor,
+            isPrimary,
+            updatedAt: 'Just now',
+        };
+
+        onUpdateMap(updated);
+        onClose();
+    };
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200">
+            <div className="neu-card w-full max-w-md p-6 rounded-3xl space-y-6 relative border border-white/80 bg-[#E0E5EC] shadow-2xl">
+                {/* Header */}
+                <div className="flex items-center justify-between pb-2 border-b border-slate-300/60">
+                    <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 rounded-2xl neu-inset p-2 flex items-center justify-center text-[#549acb]">
+                            <Sparkles className="w-5 h-5" />
+                        </div>
+                        <div>
+                            <h2 className="text-lg font-black text-[#1a1c35]">Edit Task Map</h2>
+                            <p className="text-xs text-[#717699] font-medium">Update roadmap settings, category & icon</p>
+                        </div>
+                    </div>
