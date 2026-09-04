@@ -9,13 +9,10 @@ import {
     Edit3,
     Trash2,
     Coffee,
-    Code,
-    Dumbbell,
-    BookOpen,
-    ClipboardCheck,
-    Sparkles,
+    Target,
 } from 'lucide-react';
 import { Challenge } from '../../../../../types';
+import { getCategoryIconComponent } from '../../../../common/categoryIcons';
 
 interface ChallengeDetailHeaderProps {
     challenge: Challenge;
@@ -37,14 +34,6 @@ interface ChallengeDetailHeaderProps {
     targetEndDateObj: Date;
     isTodayCompleted: boolean;
 }
-
-const CATEGORY_ICONS: Record<string, any> = {
-    engineering: Code,
-    fitness: Dumbbell,
-    learning: BookOpen,
-    discipline: ClipboardCheck,
-    mindfulness: Sparkles,
-};
 
 export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
     challenge,
@@ -88,7 +77,7 @@ export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
         }
     };
 
-    const CategoryIcon = CATEGORY_ICONS[challenge.category] || Code;
+    const CategoryIcon = getCategoryIconComponent(challenge.icon || challenge.category, Target);
 
     return (
         <div className="space-y-4">
@@ -275,10 +264,11 @@ export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
                         ) : (
                             <button
                                 onClick={onCheckIn}
-                                className={`px-5 py-3 rounded-2xl font-bold text-xs flex items-center justify-center space-x-2 shadow-md transition-all shrink-0 ${isTodayCompleted
-                                    ? 'neu-button bg-emerald-50 text-emerald-700 border border-emerald-300'
-                                    : 'neu-button-primary text-white hover:scale-105'
-                                    }`}
+                                className={`px-5 py-3 rounded-2xl font-bold text-xs flex items-center justify-center space-x-2 shadow-md transition-all shrink-0 ${
+                                    isTodayCompleted
+                                        ? 'neu-button bg-emerald-50 text-emerald-700 border border-emerald-300'
+                                        : 'neu-button-primary text-white hover:scale-105'
+                                }`}
                             >
                                 <Calendar className="w-4 h-4" />
                                 <span>
