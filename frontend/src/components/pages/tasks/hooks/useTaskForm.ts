@@ -46,4 +46,52 @@ export function useTaskForm({
                 : (editingTask.consequenceOfSkipping ? editingTask.consequenceOfSkipping.split('\n').map((s) => s.trim()).filter(Boolean) : []);
             setConsequencesOfSkipping(rawConsequences);
             setConsequenceOfSkipping(editingTask.consequenceOfSkipping || rawConsequences.join('\n') || '');
-            setTagsInput(editing
+            setTagsInput(editingTask.tags ? editingTask.tags.join(', ') : '');
+            setIsHabit(editingTask.isHabit);
+            setIsPrivate(editingTask.isPrivate);
+            if (editingTask.endTime) {
+                const d = new Date(editingTask.endTime);
+                const isoStr = new Date(d.getTime() - d.getTimezoneOffset() * 60000)
+                    .toISOString()
+                    .slice(0, 16);
+                setEndTime(isoStr);
+            } else {
+                setEndTime('');
+            }
+        } else {
+            setTitle('');
+            setDescription('');
+            setConsequenceOfSkipping('');
+            setConsequencesOfSkipping([]);
+            setTagsInput('');
+            setEndTime('');
+            setIsHabit(false);
+            setIsPrivate(defaultIsPrivate);
+        }
+        setError(null);
+    }, [editingTask, isOpen, defaultIsPrivate]);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!title.trim()) {
+            setError('Title is required');
+            return;
+        }
+
+        try {
+            setLoading(true);
+            setError(null);
+
+            const tags = tagsInput
+                .split(',')
+                .map((t) => t.trim())
+                .filter(Boolean);
+
+            const cleanConsequences = consequencesOfSkipping.map((s) => s.trim()).filter(Boolean);
+
+            await onSubmit({
+                title: title.trim(),
+                description: description.trim(),
+                consequencesOfSkipping: cleanConsequences,
+                consequenceOfSkipping: cleanConsequences.join('\n') || consequenceOfSkipping.trim() || '',
+                tags,
