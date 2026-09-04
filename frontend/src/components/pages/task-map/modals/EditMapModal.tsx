@@ -87,3 +87,45 @@ export const EditMapModal: React.FC<EditMapModalProps> = ({
                             <p className="text-xs text-[#717699] font-medium">Update roadmap settings, category & icon</p>
                         </div>
                     </div>
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        className="p-2 rounded-2xl neu-button text-[#717699] hover:text-[#1a1c35] transition-colors"
+                    >
+                        <X className="w-4 h-4" />
+                    </button>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    {/* Category & Icon Selector */}
+                    <CategoryIconSelector
+                        categoryName={category}
+                        onCategoryNameChange={setCategory}
+                        selectedIconId={selectedIcon}
+                        onSelectIcon={setSelectedIcon}
+                        placeholder="e.g. Engineering, Roadmap, Q4 Launch..."
+                        accentColor={COLOR_HEX[selectedColor] || '#549acb'}
+                    />
+
+                    <div className="space-y-1">
+                        <label className="text-xs font-bold text-[#717699]">Map Name</label>
+                        <input
+                            type="text"
+                            required
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            placeholder="e.g., Master Milestone Roadmap"
+                            className="w-full px-4 py-2.5 rounded-2xl neu-input text-sm font-bold text-[#1a1c35] placeholder:text-[#a3b1c6] focus:outline-none"
+                        />
+                    </div>
+
+                    <div className="space-y-1">
+                        <label className="text-xs font-bold text-[#717699]">Description</label>
+                        <textarea
+                            rows={2}
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            placeholder="Briefly describe what this roadmap accomplishes..."
+                            className="w-full px-4 py-2 rounded-2xl neu-input text-xs font-medium text-[#1a1c35] placeholder:text-[#a3b1c6] focus:outline-none resize-none"
+                        />
+                    </div>
