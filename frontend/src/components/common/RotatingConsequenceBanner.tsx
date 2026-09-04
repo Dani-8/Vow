@@ -100,9 +100,8 @@ export const RotatingConsequenceBanner: React.FC<RotatingConsequenceBannerProps>
         return (
             <div
                 onClick={onEdit}
-                className={`neu-card p-4 bg-gradient-to-r from-rose-50/40 via-[#E0E5EC] to-amber-50/30 border border-dashed border-rose-200/80 rounded-xl flex items-center justify-between transition-all ${
-                    onEdit ? 'cursor-pointer hover:bg-rose-50/60' : ''
-                } ${className}`}
+                className={`neu-card p-4 bg-gradient-to-r from-rose-50/40 via-[#E0E5EC] to-amber-50/30 border border-dashed border-rose-200/80 rounded-xl flex items-center justify-between transition-all ${onEdit ? 'cursor-pointer hover:bg-rose-50/60' : ''
+                    } ${className}`}
             >
                 <div className="flex items-center space-x-2.5 text-xs text-rose-800/80">
                     <Flame className="w-4 h-4 text-rose-500 shrink-0" />
@@ -209,11 +208,10 @@ export const RotatingConsequenceBanner: React.FC<RotatingConsequenceBannerProps>
                                 key={idx}
                                 type="button"
                                 onClick={(e) => handleSelectDot(idx, e)}
-                                className={`transition-all duration-300 rounded-full ${
-                                    idx === currentIndex
-                                        ? 'w-5 h-1.5 bg-rose-600'
-                                        : 'w-1.5 h-1.5 bg-rose-300/80 hover:bg-rose-400'
-                                }`}
+                                className={`transition-all duration-300 rounded-full ${idx === currentIndex
+                                    ? 'w-5 h-1.5 bg-rose-600'
+                                    : 'w-1.5 h-1.5 bg-rose-300/80 hover:bg-rose-400'
+                                    }`}
                                 title={`Jump to stake ${idx + 1}`}
                                 aria-label={`Jump to stake ${idx + 1}`}
                             />
