@@ -44,3 +44,47 @@ export const RotatingConsequenceBanner: React.FC<RotatingConsequenceBannerProps>
             setCurrentIndex(0);
         }
     }, [stakes.length, currentIndex]);
+
+    // Timer & Progress handling for 8-second auto-rotation
+    useEffect(() => {
+        if (stakes.length <= 1 || isHovered) {
+            setProgress(0);
+            if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+            return;
+        }
+
+        const stepTime = 100; // update progress every 100ms
+        const totalSteps = rotationIntervalMs / stepTime;
+        let stepCount = 0;
+        setProgress(0);
+
+        progressIntervalRef.current = setInterval(() => {
+            stepCount += 1;
+            const newProgress = Math.min(100, (stepCount / totalSteps) * 100);
+            setProgress(newProgress);
+
+            if (stepCount >= totalSteps) {
+                stepCount = 0;
+                setProgress(0);
+                setCurrentIndex((prev) => (prev + 1) % stakes.length);
+            }
+        }, stepTime);
+
+        return () => {
+            if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+        };
+    }, [stakes.length, isHovered, currentIndex, rotationIntervalMs]);
+
+    const handlePrev = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (stakes.length <= 1) return;
+        setCurrentIndex((prev) => (prev - 1 + stakes.length) % stakes.length);
+        setProgress(0);
+    };
+
+    const handleNext = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (stakes.length <= 1) return;
+        setCurrentIndex((prev) => (prev + 1) % stakes.length);
+        setProgress(0);
+    };
