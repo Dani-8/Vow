@@ -174,4 +174,48 @@ export const RotatingConsequenceBanner: React.FC<RotatingConsequenceBannerProps>
                                 <ChevronRight className="w-3.5 h-3.5" />
                             </button>
                         </div>
-                    )}</div>
+                    )}
+
+                    {onEdit && (
+                        <button
+                            type="button"
+                            onClick={onEdit}
+                            className="text-[10px] font-bold text-rose-700 hover:text-rose-900 flex items-center space-x-1 hover:cursor-pointer px-1.5 py-0.5 rounded hover:bg-rose-100/50 transition-colors"
+                            title="Edit consequences"
+                        >
+                            <Edit3 className="w-3 h-3" />
+                            <span>Edit</span>
+                        </button>
+                    )}
+                </div>
+            </div>
+
+            {/* Consequence Content Box */}
+            <div className="relative min-h-[44px] flex items-center">
+                <div
+                    key={currentIndex}
+                    className="w-full pl-3 pr-2 py-1 border-l-3 border-rose-500 text-xs sm:text-[13px] font-semibold text-rose-950/90 leading-relaxed italic bg-white/40 rounded-r-xl neu-inset animate-in fade-in slide-in-from-bottom-1 duration-300"
+                >
+                    &ldquo;{currentStake}&rdquo;
+                </div>
+            </div>
+
+            {/* Bottom Row: Indicator Dots & Hover Status */}
+            {stakes.length > 1 && (
+                <div className="flex items-center justify-between pt-1 border-t border-rose-200/40 text-[10px] font-bold text-rose-700/80">
+                    <div className="flex items-center space-x-1.5">
+                        {stakes.map((_, idx) => (
+                            <button
+                                key={idx}
+                                type="button"
+                                onClick={(e) => handleSelectDot(idx, e)}
+                                className={`transition-all duration-300 rounded-full ${
+                                    idx === currentIndex
+                                        ? 'w-5 h-1.5 bg-rose-600'
+                                        : 'w-1.5 h-1.5 bg-rose-300/80 hover:bg-rose-400'
+                                }`}
+                                title={`Jump to stake ${idx + 1}`}
+                                aria-label={`Jump to stake ${idx + 1}`}
+                            />
+                        ))}
+                    </div></div>
