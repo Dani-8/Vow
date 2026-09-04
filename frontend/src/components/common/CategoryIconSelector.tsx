@@ -101,3 +101,83 @@ export const CategoryIconSelector: React.FC<CategoryIconSelectorProps> = ({
                         ) : null}
                     </button>
                 </div>
+
+                {/* Category Name Input Field (Pic 1 Style) */}
+                <div className="relative">
+                    <input
+                        type="text"
+                        value={categoryName}
+                        onChange={(e) => onCategoryNameChange(e.target.value)}
+                        placeholder={placeholder}
+                        className="w-full px-4 py-2.5 rounded-xl neu-input text-xs font-bold text-slate-800 placeholder:text-slate-400 focus:outline-none transition-all"
+                    />
+                </div>
+            </div>
+
+            {/* Dropdown / Popover Icon Matrix (Clean Light Neumorphic Style + Bottom Fade Shadow) */}
+            {isPopoverOpen && (
+                <div className="absolute top-[68px] left-0 z-50 w-72 sm:w-84 p-3.5 neu-card bg-[#E0E5EC] rounded-2xl shadow-2xl border border-white/80 animate-in fade-in zoom-in-95 duration-150">
+                    {/* Header with Search and Count */}
+                    <div className="flex items-center justify-between gap-2 pb-2.5 mb-2.5 border-b border-slate-300/60">
+                        <div className="relative flex-1">
+                            <Search className="w-3.5 h-3.5 text-slate-500 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                            <input
+                                type="text"
+                                autoFocus
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                placeholder="Search icons (e.g. code, dumbbell, book)..."
+                                className="w-full pl-8 pr-2.5 py-1.5 rounded-lg neu-input text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:outline-none"
+                            />
+                        </div>
+                        <span className="text-[10px] font-extrabold text-slate-600 neu-badge px-2 py-1 rounded-md shrink-0">
+                            {filteredIcons.length}
+                        </span>
+                    </div>
+
+                    {/* Icon Matrix Container with Bottom Shadow / Fade Gradient Overlay */}
+                    <div className="relative">
+                        <div className="grid grid-cols-6 gap-2 max-h-56 overflow-y-auto p-1 pr-1.5 pb-6 [scrollbar-width:thin] [scrollbar-color:#a3b1c6_#E0E5EC]">
+                            {filteredIcons.map((opt) => {
+                                const IconComp = opt.icon;
+                                const isSelected = (selectedIconId || '').toLowerCase() === opt.id.toLowerCase();
+                                return (
+                                    <button
+                                        key={opt.id}
+                                        type="button"
+                                        onClick={() => handleSelectIcon(opt.id)}
+                                        className={`relative group/btn flex flex-col items-center justify-center p-2 rounded-xl transition-all aspect-square cursor-pointer ${
+                                            isSelected
+                                                ? 'neu-inset text-sky-600 border border-sky-400 font-black shadow-inner'
+                                                : 'neu-button text-slate-600 hover:text-slate-900 hover:scale-105'
+                                        }`}
+                                        title={opt.label}
+                                        aria-label={opt.label}
+                                    >
+                                        <IconComp className="w-4.5 h-4.5 transition-transform group-hover/btn:scale-110" />
+
+                                        {isSelected && (
+                                            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-sky-500 rounded-full flex items-center justify-center shadow-xs">
+                                                <Check className="w-1.5 h-1.5 text-white" strokeWidth={3} />
+                                            </span>
+                                        )}
+                                    </button>
+                                );
+                            })}
+                        </div>
+
+                        {/* Bottom Shadow Fade Mask to make bottom icons look elegantly peeked / hidden */}
+                        <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-7 bg-gradient-to-t from-[#E0E5EC] via-[#E0E5EC]/85 to-transparent rounded-b-xl" />
+                    </div>
+
+                    {filteredIcons.length === 0 && (
+                        <div className="py-6 text-center text-xs text-slate-500 flex flex-col items-center justify-center space-y-1">
+                            <HelpCircle className="w-5 h-5 text-slate-400" />
+                            <span>No icons match &ldquo;{searchQuery}&rdquo;</span>
+                        </div>
+                    )}
+                </div>
+            )}
+        </div>
+    );
+};
