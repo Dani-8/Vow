@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
     Network,
     CheckSquare,
@@ -9,11 +9,11 @@ import {
     List,
     MoreVertical,
     Briefcase,
-    Target,
-    BookOpen,
-    GraduationCap,
     Lightbulb,
     Clock,
+    Edit3,
+    Trash2,
+    Star,
 } from 'lucide-react';
 import { TaskMap } from '../types';
 import { Task } from '../../../../types';
@@ -21,12 +21,15 @@ import {
     SUBTASKS_UPDATED_EVENT,
     getNodeDynamicStatusAndProgress,
 } from '../../../../utils/subtaskStorage';
+import { getCategoryIconComponent } from '../../../common/categoryIcons';
+import { EditMapModal } from '../modals/EditMapModal';
 
 interface SavedMapsViewProps {
     maps: TaskMap[];
     tasks?: Task[];
     onOpenMap: (mapId: string) => void;
     onCreateMap: () => void;
+    onUpdateMap?: (updatedMap: TaskMap) => void;
     onDeleteMap?: (mapId: string) => void;
 }
 
@@ -75,17 +78,10 @@ const COLOR_MAP: Record<string, { border: string; bg: string; text: string; icon
     },
 };
 
-const getMapIcon = (index: number) => {
-    switch (index % 4) {
-        case 0:
-            return <Network className="w-6 h-6 text-purple-600" />;
-        case 1:
-            return <Target className="w-6 h-6 text-emerald-600" />;
-        case 2:
-            return <BookOpen className="w-6 h-6 text-amber-600" />;
-        default:
-            return <GraduationCap className="w-6 h-6 text-rose-600" />;
-    }
+const renderMapIcon = (map: TaskMap, sizeClass = 'w-6 h-6') => {
+    const IconComp = getCategoryIconComponent(map.icon || map.category, Network);
+    const theme = COLOR_MAP[map.color] || COLOR_MAP.purple;
+    return <IconComp className={`${sizeClass} ${theme.text}`} />;
 };
 
 export const SavedMapsView: React.FC<SavedMapsViewProps> = ({
@@ -93,11 +89,21 @@ export const SavedMapsView: React.FC<SavedMapsViewProps> = ({
     tasks = [],
     onOpenMap,
     onCreateMap,
+    onUpdateMap,
     onDeleteMap,
 }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+    const [activeMenuMapId, setActiveMenuMapId] = useState<string | null>(null);
+    const [editingMap, setEditingMap] = useState<TaskMap | null>(null);
     const [, setTick] = useState(0);
+
+    // Close dropdown on outside click
+    useEffect(() => {
+        const handleClickOutside = () => setActiveMenuMapId(null);
+        window.addEventListener('click', handleClickOutside);
+        return () => window.removeEventListener('click', handleClickOutside);
+    }, []);
 
     // Subscribe to real-time subtask changes
     useEffect(() => {
@@ -246,7 +252,7 @@ export const SavedMapsView: React.FC<SavedMapsViewProps> = ({
                                 <div className="flex items-start justify-between">
                                     <div className="flex items-center space-x-4">
                                         <div className="w-14 h-14 rounded-2xl neu-inset p-2.5 flex items-center justify-center bg-[#E0E5EC] shrink-0 group-hover:scale-105 transition-transform">
-                                            {getMapIcon(idx)}
+                                            {renderMapIcon(map, 'w-6 h-6')}
                                         </div>
 
                                         <div className="space-y-1">
@@ -255,6 +261,11 @@ export const SavedMapsView: React.FC<SavedMapsViewProps> = ({
                                                 <h3 className="text-base font-black text-[#1a1c35] group-hover:text-[#549acb] transition-colors">
                                                     {map.name}
                                                 </h3>
+                                                {map.category && (
+                                                    <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-[#E0E5EC] neu-badge text-[#717699] uppercase tracking-wider">
+                                                        {map.category}
+                                                    </span>
+                                                )}
                                                 {map.isPrimary && (
                                                     <span className="text-[9px] font-black px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 border border-purple-200">
                                                         Primary
@@ -267,17 +278,71 @@ export const SavedMapsView: React.FC<SavedMapsViewProps> = ({
                                         </div>
                                     </div>
 
-                                    {onDeleteMap && (
+                                    {/* 3-Dot Action Menu */}
+                                    <div className="relative">
                                         <button
+                                            type="button"
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                if (confirm(`Delete map "${map.name}"?`)) onDeleteMap(map.id);
+                                                setActiveMenuMapId((prev) => (prev === map.id ? null : map.id));
                                             }}
-                                            className="p-1.5 rounded-xl neu-button text-[#717699] hover:text-rose-600 opacity-60 hover:opacity-100"
+                                            className="p-2 rounded-xl neu-button text-[#717699] hover:text-[#1a1c35] transition-all hover:scale-105"
+                                            title="Map options"
                                         >
                                             <MoreVertical className="w-4 h-4" />
                                         </button>
-                                    )}
+
+                                        {activeMenuMapId === map.id && (
+                                            <div
+                                                onClick={(e) => e.stopPropagation()}
+                                                className="absolute right-0 top-10 z-30 w-44 p-1.5 rounded-2xl neu-card bg-[#E0E5EC] border border-white/80 shadow-xl animate-in fade-in zoom-in-95 duration-150 space-y-1"
+                                            >
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setActiveMenuMapId(null);
+                                                        setEditingMap(map);
+                                                    }}
+                                                    className="w-full px-3 py-2 rounded-xl text-left text-xs font-bold text-[#1a1c35] hover:bg-slate-200/60 flex items-center space-x-2 transition-colors"
+                                                >
+                                                    <Edit3 className="w-3.5 h-3.5 text-[#549acb]" />
+                                                    <span>Edit Details</span>
+                                                </button>
+
+                                                {onUpdateMap && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            setActiveMenuMapId(null);
+                                                            onUpdateMap({ ...map, isPrimary: !map.isPrimary });
+                                                        }}
+                                                        className="w-full px-3 py-2 rounded-xl text-left text-xs font-bold text-[#1a1c35] hover:bg-slate-200/60 flex items-center space-x-2 transition-colors"
+                                                    >
+                                                        <Star className={`w-3.5 h-3.5 ${map.isPrimary ? 'text-amber-500 fill-amber-500' : 'text-[#717699]'}`} />
+                                                        <span>{map.isPrimary ? 'Remove Primary' : 'Set as Primary'}</span>
+                                                    </button>
+                                                )}
+
+                                                {onDeleteMap && (
+                                                    <div className="pt-1 border-t border-slate-300/60">
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => {
+                                                                setActiveMenuMapId(null);
+                                                                if (confirm(`Delete roadmap "${map.name}"?`)) {
+                                                                    onDeleteMap(map.id);
+                                                                }
+                                                            }}
+                                                            className="w-full px-3 py-2 rounded-xl text-left text-xs font-bold text-rose-600 hover:bg-rose-50 flex items-center space-x-2 transition-colors"
+                                                        >
+                                                            <Trash2 className="w-3.5 h-3.5 text-rose-500" />
+                                                            <span>Delete Map</span>
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
 
                                 {/* Progress Bar */}
@@ -352,24 +417,112 @@ export const SavedMapsView: React.FC<SavedMapsViewProps> = ({
                             >
                                 <div className="flex items-center space-x-3 min-w-0">
                                     <div className="w-10 h-10 rounded-xl neu-inset flex items-center justify-center shrink-0">
-                                        {getMapIcon(idx)}
+                                        {renderMapIcon(map, 'w-5 h-5')}
                                     </div>
                                     <div className="min-w-0">
-                                        <h4 className="text-sm font-black text-[#1a1c35] truncate">{map.name}</h4>
+                                        <div className="flex items-center space-x-2">
+                                            <h4 className="text-sm font-black text-[#1a1c35] truncate">{map.name}</h4>
+                                            {map.category && (
+                                                <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-[#E0E5EC] neu-badge text-[#717699] uppercase tracking-wider shrink-0">
+                                                    {map.category}
+                                                </span>
+                                            )}
+                                        </div>
                                         <p className="text-xs text-[#717699] truncate font-medium">{map.description}</p>
                                     </div>
                                 </div>
 
-                                <div className="flex items-center space-x-6 text-xs font-extrabold shrink-0">
-                                    <span className="text-purple-600">{progress}% complete</span>
-                                    <span className="text-[#1a1c35]">{map.nodes.length} nodes</span>
-                                    <span className="text-emerald-600">{map.connections.length} links</span>
-                                    <span className="text-[#717699] text-[11px]">{map.updatedAt}</span>
+                                <div className="flex items-center space-x-4 shrink-0">
+                                    <div className="hidden sm:flex items-center space-x-5 text-xs font-extrabold">
+                                        <span className="text-purple-600">{progress}% complete</span>
+                                        <span className="text-[#1a1c35]">{map.nodes.length} nodes</span>
+                                        <span className="text-emerald-600">{map.connections.length} links</span>
+                                        <span className="text-[#717699] text-[11px]">{map.updatedAt}</span>
+                                    </div>
+
+                                    {/* 3-Dot Action Menu for List View */}
+                                    <div className="relative">
+                                        <button
+                                            type="button"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setActiveMenuMapId((prev) => (prev === map.id ? null : map.id));
+                                            }}
+                                            className="p-1.5 rounded-xl neu-button text-[#717699] hover:text-[#1a1c35] transition-all hover:scale-105"
+                                            title="Map options"
+                                        >
+                                            <MoreVertical className="w-4 h-4" />
+                                        </button>
+
+                                        {activeMenuMapId === map.id && (
+                                            <div
+                                                onClick={(e) => e.stopPropagation()}
+                                                className="absolute right-0 top-9 z-30 w-44 p-1.5 rounded-2xl neu-card bg-[#E0E5EC] border border-white/80 shadow-xl animate-in fade-in zoom-in-95 duration-150 space-y-1"
+                                            >
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setActiveMenuMapId(null);
+                                                        setEditingMap(map);
+                                                    }}
+                                                    className="w-full px-3 py-2 rounded-xl text-left text-xs font-bold text-[#1a1c35] hover:bg-slate-200/60 flex items-center space-x-2 transition-colors"
+                                                >
+                                                    <Edit3 className="w-3.5 h-3.5 text-[#549acb]" />
+                                                    <span>Edit Details</span>
+                                                </button>
+
+                                                {onUpdateMap && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            setActiveMenuMapId(null);
+                                                            onUpdateMap({ ...map, isPrimary: !map.isPrimary });
+                                                        }}
+                                                        className="w-full px-3 py-2 rounded-xl text-left text-xs font-bold text-[#1a1c35] hover:bg-slate-200/60 flex items-center space-x-2 transition-colors"
+                                                    >
+                                                        <Star className={`w-3.5 h-3.5 ${map.isPrimary ? 'text-amber-500 fill-amber-500' : 'text-[#717699]'}`} />
+                                                        <span>{map.isPrimary ? 'Remove Primary' : 'Set as Primary'}</span>
+                                                    </button>
+                                                )}
+
+                                                {onDeleteMap && (
+                                                    <div className="pt-1 border-t border-slate-300/60">
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => {
+                                                                setActiveMenuMapId(null);
+                                                                if (confirm(`Delete roadmap "${map.name}"?`)) {
+                                                                    onDeleteMap(map.id);
+                                                                }
+                                                            }}
+                                                            className="w-full px-3 py-2 rounded-xl text-left text-xs font-bold text-rose-600 hover:bg-rose-50 flex items-center space-x-2 transition-colors"
+                                                        >
+                                                            <Trash2 className="w-3.5 h-3.5 text-rose-500" />
+                                                            <span>Delete Map</span>
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         );
                     })}
                 </div>
+            )}
+
+            {/* Edit Map Modal */}
+            {editingMap && (
+                <EditMapModal
+                    isOpen={!!editingMap}
+                    onClose={() => setEditingMap(null)}
+                    map={editingMap}
+                    onUpdateMap={(updated) => {
+                        if (onUpdateMap) onUpdateMap(updated);
+                        setEditingMap(null);
+                    }}
+                />
             )}
 
             {/* Bottom Tip Pill */}

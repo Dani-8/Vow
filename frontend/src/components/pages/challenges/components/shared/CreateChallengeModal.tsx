@@ -2,17 +2,15 @@ import React, { useState, useEffect, useMemo } from 'react';
 import {
     X,
     Target,
-    Code,
-    Dumbbell,
-    BookOpen,
-    ClipboardCheck,
-    Sparkles,
-    Calendar,
     Check,
     Clock,
     Flame,
+    Calendar,
 } from 'lucide-react';
 import { Challenge } from '../../../../../types';
+import { ConsequenceChipInput } from '../../../../common/ConsequenceChipInput';
+import { CategoryIconSelector } from '../../../../common/CategoryIconSelector';
+import { getCategoryIconComponent } from '../../../../common/categoryIcons';
 
 interface CreateChallengeModalProps {
     isOpen: boolean;
@@ -20,14 +18,6 @@ interface CreateChallengeModalProps {
     onSubmit: (challengeData: Partial<Challenge>) => Promise<void>;
     editingChallenge?: Challenge | null;
 }
-
-const CATEGORIES = [
-    { id: 'engineering', label: 'Engineering', icon: Code, defaultColor: '#549acb' },
-    { id: 'fitness', label: 'Fitness', icon: Dumbbell, defaultColor: '#10b981' },
-    { id: 'learning', label: 'Learning', icon: BookOpen, defaultColor: '#f59e0b' },
-    { id: 'discipline', label: 'Discipline', icon: ClipboardCheck, defaultColor: '#f43f5e' },
-    { id: 'mindfulness', label: 'Mindfulness', icon: Sparkles, defaultColor: '#6366f1' },
-];
 
 const ACCENT_COLORS = [
     { id: 'blue', label: 'Brand Blue', hex: '#549acb' },
@@ -57,13 +47,16 @@ export const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
 }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [category, setCategory] = useState('engineering');
+    const [category, setCategory] = useState('');
+    const [selectedIcon, setSelectedIcon] = useState<string>('');
     const [color, setColor] = useState('#549acb');
     const [targetDays, setTargetDays] = useState<number>(100);
     const [isCustomDays, setIsCustomDays] = useState(false);
     const [customDaysInput, setCustomDaysInput] = useState('100');
     const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]);
     const [rule, setRule] = useState('');
+    const [consequenceOfSkipping, setConsequenceOfSkipping] = useState('');
+    const [consequencesOfSkipping, setConsequencesOfSkipping] = useState<string[]>([]);
     const [tagsInput, setTagsInput] = useState('Discipline, Focus, Growth');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -72,7 +65,8 @@ export const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
         if (editingChallenge) {
             setTitle(editingChallenge.title);
             setDescription(editingChallenge.description || '');
-            setCategory(editingChallenge.category || 'engineering');
+            setCategory(editingChallenge.category || 'General');
+            setSelectedIcon(editingChallenge.icon || 'target');
             setColor(editingChallenge.color || '#549acb');
             setTargetDays(editingChallenge.targetDays || 100);
             setCustomDaysInput(String(editingChallenge.targetDays || 100));
@@ -82,17 +76,25 @@ export const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
                 editingChallenge.startDate ? editingChallenge.startDate.split('T')[0] : new Date().toISOString().split('T')[0]
             );
             setRule(editingChallenge.rule || '');
+            const rawConsequences = Array.isArray(editingChallenge.consequencesOfSkipping) && editingChallenge.consequencesOfSkipping.length > 0
+                ? editingChallenge.consequencesOfSkipping
+                : (editingChallenge.consequenceOfSkipping ? editingChallenge.consequenceOfSkipping.split('\n').map((s) => s.trim()).filter(Boolean) : []);
+            setConsequencesOfSkipping(rawConsequences);
+            setConsequenceOfSkipping(editingChallenge.consequenceOfSkipping || rawConsequences.join('\n') || '');
             setTagsInput(editingChallenge.tags ? editingChallenge.tags.join(', ') : '');
         } else {
             setTitle('');
             setDescription('');
-            setCategory('engineering');
+            setCategory('');
+            setSelectedIcon('');
             setColor('#549acb');
             setTargetDays(100);
             setCustomDaysInput('100');
             setIsCustomDays(false);
             setStartDate(new Date().toISOString().split('T')[0]);
             setRule('');
+            setConsequenceOfSkipping('');
+            setConsequencesOfSkipping([]);
             setTagsInput('Discipline, Focus, Growth');
         }
         setError(null);
@@ -139,6 +141,10 @@ export const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
 
         const startDateTime = new Date(startDate);
         const targetEndDateTime = new Date(startDateTime.getTime() + finalDays * 86400000);
+        const cleanConsequences = consequencesOfSkipping.map((s) => s.trim()).filter(Boolean);
+
+        const finalCategory = category.trim() || 'General';
+        const finalIcon = selectedIcon || 'target';
 
         try {
             setIsSubmitting(true);
@@ -146,22 +152,15 @@ export const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
             await onSubmit({
                 title: title.trim(),
                 description: description.trim(),
-                category,
+                category: finalCategory,
                 color,
-                icon:
-                    category === 'engineering'
-                        ? 'code'
-                        : category === 'fitness'
-                            ? 'dumbbell'
-                            : category === 'learning'
-                                ? 'book'
-                                : category === 'discipline'
-                                    ? 'clipboard-check'
-                                    : 'sparkles',
+                icon: finalIcon,
                 targetDays: finalDays,
                 startDate: startDateTime.toISOString(),
                 targetEndDate: targetEndDateTime.toISOString(),
                 rule: rule.trim(),
+                consequencesOfSkipping: cleanConsequences,
+                consequenceOfSkipping: cleanConsequences.join('\n') || consequenceOfSkipping.trim(),
                 tags: finalTags,
                 status: editingChallenge ? editingChallenge.status : 'active',
             });
@@ -251,37 +250,15 @@ export const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
                                     />
                                 </div>
 
-                                {/* Category Selector */}
-                                <div className="space-y-2">
-                                    <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
-                                        Category
-                                    </label>
-                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-                                        {CATEGORIES.map((cat) => {
-                                            const IconComponent = cat.icon;
-                                            const isSelected = category === cat.id;
-                                            return (
-                                                <button
-                                                    key={cat.id}
-                                                    type="button"
-                                                    onClick={() => {
-                                                        setCategory(cat.id);
-                                                        if (!editingChallenge) {
-                                                            setColor(cat.defaultColor);
-                                                        }
-                                                    }}
-                                                    className={`flex items-center space-x-2 p-2.5 rounded-xl text-xs font-bold transition-all ${isSelected
-                                                        ? 'neu-inset text-[#1a1c35] font-black'
-                                                        : 'neu-button text-slate-600 hover:text-slate-900'
-                                                        }`}
-                                                >
-                                                    <IconComponent className="w-3.5 h-3.5 shrink-0" />
-                                                    <span className="truncate">{cat.label}</span>
-                                                </button>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
+                                {/* Category & Icon Selector (Custom Name + Glowing Icon Picker Popover) */}
+                                <CategoryIconSelector
+                                    categoryName={category}
+                                    onCategoryNameChange={setCategory}
+                                    selectedIconId={selectedIcon}
+                                    onSelectIcon={setSelectedIcon}
+                                    placeholder="e.g. Engineering, AI, Fitness..."
+                                    accentColor={color}
+                                />
 
                                 {/* Accent Theme Color */}
                                 <div className="space-y-2">
@@ -443,6 +420,15 @@ export const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
                                         className="w-full px-4 py-2.5 rounded-xl neu-input text-xs font-medium resize-none"
                                     />
                                 </div>
+
+                                {/* Consequences of Skipping (Multi-item Chip Box) */}
+                                <ConsequenceChipInput
+                                    consequences={consequencesOfSkipping}
+                                    onChange={(newConsequences) => {
+                                        setConsequencesOfSkipping(newConsequences);
+                                        setConsequenceOfSkipping(newConsequences.join('\n'));
+                                    }}
+                                />
                             </div>
                         </div>
 

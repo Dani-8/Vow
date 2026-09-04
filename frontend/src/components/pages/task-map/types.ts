@@ -34,6 +34,8 @@ export interface TaskMap {
     id: string;
     name: string;
     description: string;
+    category?: string;
+    icon?: string;
     color: MapAccentColor;
     isPrimary?: boolean;
     updatedAt: string;

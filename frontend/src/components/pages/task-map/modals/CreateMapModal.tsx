@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
 import { X, Network, Sparkles, Check } from 'lucide-react';
 import { MapAccentColor } from '../types';
+import { CategoryIconSelector } from '../../../common/CategoryIconSelector';
 
 interface CreateMapModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onCreateMap: (name: string, description: string, color: MapAccentColor) => void;
+    onCreateMap: (
+        name: string,
+        description: string,
+        color: MapAccentColor,
+        category?: string,
+        icon?: string
+    ) => void;
 }
 
 const COLORS: { key: MapAccentColor; name: string; bg: string; ring: string }[] = [
@@ -17,12 +24,23 @@ const COLORS: { key: MapAccentColor; name: string; bg: string; ring: string }[] 
     { key: 'indigo', name: 'Indigo', bg: 'bg-indigo-500', ring: 'ring-indigo-500' },
 ];
 
+const COLOR_HEX: Record<MapAccentColor, string> = {
+    purple: '#a855f7',
+    emerald: '#10b981',
+    amber: '#f59e0b',
+    rose: '#f43f5e',
+    sky: '#549acb',
+    indigo: '#6366f1',
+};
+
 export const CreateMapModal: React.FC<CreateMapModalProps> = ({
     isOpen,
     onClose,
     onCreateMap,
 }) => {
     const [name, setName] = useState('');
+    const [category, setCategory] = useState('');
+    const [selectedIcon, setSelectedIcon] = useState('');
     const [description, setDescription] = useState('');
     const [selectedColor, setSelectedColor] = useState<MapAccentColor>('purple');
 
@@ -31,8 +49,16 @@ export const CreateMapModal: React.FC<CreateMapModalProps> = ({
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!name.trim()) return;
-        onCreateMap(name.trim(), description.trim(), selectedColor);
+        onCreateMap(
+            name.trim(),
+            description.trim(),
+            selectedColor,
+            category.trim() || undefined,
+            selectedIcon || undefined
+        );
         setName('');
+        setCategory('');
+        setSelectedIcon('');
         setDescription('');
         onClose();
     };
@@ -61,6 +87,16 @@ export const CreateMapModal: React.FC<CreateMapModalProps> = ({
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
+                    {/* Category & Icon Selector (Glowing Icon Box + Custom Name Field) */}
+                    <CategoryIconSelector
+                        categoryName={category}
+                        onCategoryNameChange={setCategory}
+                        selectedIconId={selectedIcon}
+                        onSelectIcon={setSelectedIcon}
+                        placeholder="e.g. Engineering, Roadmap, Q4 Launch..."
+                        accentColor={COLOR_HEX[selectedColor] || '#549acb'}
+                    />
+
                     <div className="space-y-1">
                         <label className="text-xs font-bold text-[#717699]">Map Name</label>
                         <input
