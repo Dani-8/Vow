@@ -218,4 +218,32 @@ export const RotatingConsequenceBanner: React.FC<RotatingConsequenceBannerProps>
                                 aria-label={`Jump to stake ${idx + 1}`}
                             />
                         ))}
-                    </div></div>
+                    </div>
+
+                    <div className="flex items-center space-x-1 text-[10px] font-medium text-rose-600/70">
+                        {isHovered ? (
+                            <span className="flex items-center space-x-1">
+                                <Pause className="w-2.5 h-2.5 text-rose-500" />
+                                <span>Paused on hover</span>
+                            </span>
+                        ) : (
+                            <span className="flex items-center space-x-1">
+                                <span>Rotating every 8s</span>
+                            </span>
+                        )}
+                    </div>
+                </div>
+            )}
+
+            {/* Active Auto-Rotation Progress Bar at bottom */}
+            {stakes.length > 1 && !isHovered && (
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-rose-200/50 overflow-hidden">
+                    <div
+                        className="h-full bg-rose-500 transition-all ease-linear"
+                        style={{ width: `${progress}%`, transitionDuration: '100ms' }}
+                    />
+                </div>
+            )}
+        </div>
+    );
+};
