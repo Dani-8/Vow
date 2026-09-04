@@ -139,6 +139,8 @@ export const api = {
   async createTask(taskData: {
     title: string;
     description?: string;
+    consequenceOfSkipping?: string;
+    consequencesOfSkipping?: string[];
     tags?: string[];
     startTime?: string | null;
     endTime?: string | null;
