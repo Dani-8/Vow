@@ -96,3 +96,66 @@ export const CreateMapModal: React.FC<CreateMapModalProps> = ({
                         placeholder="e.g. Engineering, Roadmap, Q4 Launch..."
                         accentColor={COLOR_HEX[selectedColor] || '#549acb'}
                     />
+
+                    <div className="space-y-1">
+                        <label className="text-xs font-bold text-[#717699]">Map Name</label>
+                        <input
+                            type="text"
+                            required
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            placeholder="e.g. Q4 Product Launch Roadmap"
+                            className="w-full px-4 py-3 rounded-2xl neu-input text-xs font-bold text-[#1a1c35]"
+                        />
+                    </div>
+
+                    <div className="space-y-1">
+                        <label className="text-xs font-bold text-[#717699]">Description</label>
+                        <textarea
+                            rows={3}
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            placeholder="Briefly describe the purpose or scope of this map..."
+                            className="w-full px-4 py-3 rounded-2xl neu-input text-xs font-medium text-[#1a1c35]"
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-xs font-bold text-[#717699]">Accent Theme Color</label>
+                        <div className="flex items-center space-x-3">
+                            {COLORS.map((c) => (
+                                <button
+                                    key={c.key}
+                                    type="button"
+                                    onClick={() => setSelectedColor(c.key)}
+                                    className={`w-8 h-8 rounded-full ${c.bg} flex items-center justify-center text-white transition-transform ${selectedColor === c.key ? `ring-4 ${c.ring} ring-offset-2 scale-110` : 'opacity-80 hover:opacity-100'
+                                        }`}
+                                    title={c.name}
+                                >
+                                    {selectedColor === c.key && <Check className="w-4 h-4" />}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="pt-3 flex items-center justify-end space-x-3">
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="px-4 py-2.5 rounded-2xl neu-button text-xs font-bold text-[#717699]"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            className="px-6 py-2.5 rounded-2xl neu-button-primary font-extrabold text-xs text-white shadow-lg flex items-center space-x-2"
+                        >
+                            <Sparkles className="w-4 h-4" />
+                            <span>Create Map</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+};
