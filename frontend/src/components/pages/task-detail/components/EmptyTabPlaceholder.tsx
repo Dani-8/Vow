@@ -1,18 +1,4 @@
 
-            icon: <PackageOpen className="w-10 h-10 text-[#549acb]" />,
-            title: 'Notes & Growth Journal',
-            subtitle: "We're currently building a rich Markdown note editor and reflection space for your task.",
-        },
-        files: {
-            icon: <PackageOpen className="w-10 h-10 text-[#549acb]" />,
-            title: 'Resource Vault & Attachments',
-            subtitle: "We're engineering an encrypted document & attachment sync feature for this section.",
-        },
-        activity: {
-            icon: <Construction className="w-10 h-10 text-[#549acb]" />,
-            title: 'Audit Trail & Activity Log',
-            subtitle: "We're assembling a real-time timeline history and streak checkpoint monitor for your goals.",
-        },
     };
 
     const current = tabDetails[tabName.toLowerCase()] || {
