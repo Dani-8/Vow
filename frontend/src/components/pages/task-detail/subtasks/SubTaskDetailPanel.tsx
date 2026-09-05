@@ -1,25 +1,4 @@
 
-
-                    <span className="px-3 py-1.5 rounded-xl text-xs font-bold text-amber-700 bg-amber-100/80 border border-amber-200 flex items-center space-x-1.5 ml-auto">
-                        <Flame className="w-3.5 h-3.5 text-amber-600" />
-                        <span>{subTask.priority || 'High'}</span>
-                    </span>
-                </div>
-            </div>
-
-            {/* Info Grid 2x2 */}
-            <div className="grid grid-cols-2 gap-3 p-4 rounded-2xl neu-inset bg-[#eef4f9]/50">
-                {/* Due Date */}
-                <div className="space-y-1">
-                    <div className="flex items-center space-x-1.5 text-xs text-[#717699] font-medium">
-                        <Calendar className="w-3.5 h-3.5 text-[#549acb]" />
-                        <span>Due Date</span>
-                    </div>
-                    <div className="text-xs font-bold text-[#1a1c35]">
-                        {subTask.dueDate || 'Aug 17, 2026'}
-                    </div>
-                </div>
-
                 {/* Time Left */}
                 <div className="space-y-1">
                     <div className="flex items-center space-x-1.5 text-xs text-[#717699] font-medium">
