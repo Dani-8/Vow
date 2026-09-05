@@ -1,35 +1,4 @@
 
-                            <div className="flex items-center space-x-2">
-                                {onAddSubTask && (
-                                    <button
-                                        type="button"
-                                        onClick={handleOpenExtract}
-                                        className="px-3 py-1.5 rounded-xl bg-black/5 hover:bg-black/10 text-slate-800 text-xs font-bold flex items-center space-x-1.5 transition-colors"
-                                        title="Extract checkboxes/bullets to task timeline"
-                                    >
-                                        <ListPlus className="w-3.5 h-3.5" />
-                                        <span>Extract to Subtasks</span>
-                                    </button>
-                                )}
-
-                                {note && onDelete && (
-                                    <button
-                                        type="button"
-                                        onClick={() => {
-                                            onDelete(note.id);
-                                            onClose();
-                                        }}
-                                        className="p-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-700 transition-colors"
-                                        title="Delete note"
-                                    >
-                                        <Trash2 className="w-4 h-4" />
-                                    </button>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                )}
-
                 {/* MODE 2: EDIT / COMPOSE FORM (Triggered by Edit button or when creating a new note) */}
                 {isEditing && !extractMode && (
                     <form onSubmit={handleSaveSubmit} className="p-6 space-y-4">
