@@ -1,27 +1,4 @@
 
-                                    setActivities(getTaskActivities(task._id));
-                                }
-                            }}
-                            onOpenAddModal={() => {
-                                setEditingSubTask(null);
-                                setIsAddModalOpen(true);
-                            }}
-                            onReorderSubTasks={reorderSubTasks}
-                        />
-                    </div>
-
-                    {/* Right Column: Closeable Sub-Task Detail Panel */}
-                    {activeSelectedSubTask && (
-                        <div className="lg:col-span-5 sticky top-4">
-                            <SubTaskDetailPanel
-                                subTask={activeSelectedSubTask}
-                                onClose={() => setSelectedSubTask(null)}
-                                onToggleStatus={toggleSubTaskStatus}
-                                onSetStatus={setSubTaskStatus}
-                                onEdit={(st) => {
-                                    setEditingSubTask(st);
-                                    setIsAddModalOpen(true);
-                                }}
                                 onDelete={(id) => {
                                     deleteSubTask(id);
                                     setSelectedSubTask(null);
