@@ -122,3 +122,51 @@ export const AppRouter: React.FC<AppRouterProps> = ({
   onOpenPinModal,
   challenges,
   selectedChallenge,
+  setSelectedChallenge,
+  onCreateChallenge,
+  onUpdateChallenge,
+  onDeleteChallenge,
+  onLogChallengeDay,
+  onDeleteChallengeLog,
+  onStartNextSprint,
+  onCompleteSprint,
+  onUpdateSprintRule,
+}) => {
+  if (activeView === 'task-detail') {
+    const activeTaskParam = decodeURIComponent(location.pathname.replace('/app/task/', ''));
+    const paramLower = activeTaskParam.toLowerCase();
+
+    const allTasks = [...tasks, ...privateTasks];
+    const currentTask =
+      allTasks.find(
+        (t) =>
+          t._id === activeTaskParam ||
+          getTaskSlug(t).toLowerCase() === paramLower ||
+          t.title.toLowerCase() === paramLower ||
+          t.title
+            .toLowerCase()
+            .trim()
+            .replace(/[^\w\s-]/g, '')
+            .replace(/[\s_-]+/g, '-')
+            .replace(/^-+|-+$/g, '') === paramLower
+      ) ||
+      selectedTaskForDetail ||
+      allTasks[0] || {
+        _id: 'default',
+        userId: user?.id || 'demo',
+        title: 'Draft Q3 Personal Growth Blueprint',
+        description:
+          'Outline key milestones for skill acquisition and daily habit consistency for Q3.',
+        tags: ['GROWTH', 'STRATEGY'],
+        status: 'in_progress',
+        priority: 'High',
+        isPrivate: false,
+        isHabit: false,
+        currentStreak: 4,
+        bestStreak: 12,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+
+    return (
+      <TaskDetailPage
