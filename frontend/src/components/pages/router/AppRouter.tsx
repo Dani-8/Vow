@@ -211,7 +211,15 @@ export const AppRouter: React.FC<AppRouterProps> = ({
   }
 
   if (activeView === 'stats') {
-    return <StatsView stats={stats} tasks={tasks} privateTasks={privateTasks} />;
+    return (
+      <StatsView
+        stats={stats}
+        tasks={tasks}
+        privateTasks={privateTasks}
+        challenges={challenges}
+        onNavigateToView={navigateToView}
+      />
+    );
   }
 
   if (activeView === 'task-map') {

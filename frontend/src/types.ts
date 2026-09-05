@@ -149,6 +149,8 @@ export interface Task {
   createdAt: string;
   updatedAt: string;
   subTasks?: SubTask[];
+  category?: string;
+  icon?: string;
 }
 
 export interface MasterStreakStats {
