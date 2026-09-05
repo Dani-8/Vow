@@ -1,27 +1,4 @@
 
-                        });
-                        setActivities(getTaskActivities(task._id));
-                    }}
-                />
-            )}
-
-            {activeTab === 'files' && (
-                <TaskFilesTab
-                    taskId={task._id}
-                    attachments={attachments}
-                    onAddAttachment={handleAddAttachment}
-                    onDeleteAttachment={handleDeleteAttachment}
-                />
-            )}
-
-            {activeTab === 'activity' && (
-                <TaskActivityTab
-                    taskId={task._id}
-                    activities={activities}
-                    onAddComment={handleAddComment}
-                    onDeleteActivity={handleDeleteActivity}
-                />
-            )}
 
             {/* Add / Edit Sub-Task Modal */}
             <AddSubTaskModal
