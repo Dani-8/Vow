@@ -1,24 +1,4 @@
 
-        window.addEventListener(TASK_DETAIL_UPDATED_EVENT, handleDetailUpdate);
-        return () => {
-            window.removeEventListener(TASK_DETAIL_UPDATED_EVENT, handleDetailUpdate);
-        };
-    }, [task._id, task.title]);
-
-    // Handle sticky note creation
-    const handleAddStickyNote = (noteData: Omit<TaskStickyNote, 'id' | 'createdAt' | 'updatedAt'>) => {
-        addTaskStickyNote(task._id, noteData);
-        setStickyNotes(getTaskStickyNotes(task._id, task.title));
-        setActivities(getTaskActivities(task._id, task.title));
-    };
-
-    // Handle sticky note update
-    const handleUpdateStickyNote = (noteId: string, updates: Partial<Omit<TaskStickyNote, 'id' | 'createdAt'>>) => {
-        updateTaskStickyNote(task._id, noteId, updates);
-        setStickyNotes(getTaskStickyNotes(task._id, task.title));
-    };
-
-    // Handle sticky note deletion
     const handleDeleteStickyNote = (noteId: string) => {
         deleteTaskStickyNote(task._id, noteId);
         setStickyNotes(getTaskStickyNotes(task._id, task.title));
