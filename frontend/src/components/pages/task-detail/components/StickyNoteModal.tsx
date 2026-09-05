@@ -1,40 +1,4 @@
 
-
-                {/* MODE 3: SUBTASK EXTRACTION SUB-VIEW */}
-                {extractMode && (
-                    <div className="p-6 space-y-4">
-                        <div className="flex items-center justify-between pb-2 border-b border-black/10">
-                            <div className="flex items-center space-x-2">
-                                <Sparkles className="w-4 h-4 text-indigo-600" />
-                                <h4 className="text-xs font-black uppercase text-indigo-900">
-                                    Detected Checklist Items ({detectedTasks.length})
-                                </h4>
-                            </div>
-                            <button
-                                type="button"
-                                onClick={() => setExtractMode(false)}
-                                className="text-xs font-bold text-slate-500 hover:text-slate-800"
-                            >
-                                Back to Note
-                            </button>
-                        </div>
-
-                        <p className="text-xs text-slate-700 font-medium">
-                            Select items from this note to automatically create active Subtasks on your task timeline:
-                        </p>
-
-                        {detectedTasks.length > 0 ? (
-                            <div className="max-h-56 overflow-y-auto space-y-2 pr-1">
-                                {detectedTasks.map((item, idx) => {
-                                    const isChecked = selectedToImport.includes(item);
-                                    return (
-                                        <label
-                                            key={idx}
-                                            className={`p-3 rounded-xl border flex items-center space-x-3 cursor-pointer transition-all ${isChecked
-                                                ? 'bg-white border-indigo-300 shadow-xs'
-                                                : 'bg-white/50 border-black/10 opacity-75'
-                                                }`}
-                                        >
                                             <input
                                                 type="checkbox"
                                                 checked={isChecked}
