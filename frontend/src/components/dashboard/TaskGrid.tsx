@@ -1,19 +1,4 @@
-import React from 'react';
-import { Plus } from 'lucide-react';
-import { Task } from '../../types';
-import { TaskCard } from '../tasks/TaskCard';
 
-interface TaskGridProps {
-  tasks: Task[];
-  searchQuery: string;
-  onToggleComplete: (task: Task) => void;
-  onTogglePrivate: (task: Task) => void;
-  onOpenAIAssist: (task: Task) => void;
-  onEditTask: (task: Task) => void;
-  onDeleteTask: (task: Task) => void;
-  onViewDetails: (task: Task) => void;
-  onCreateNewGoal: () => void;
-}
 
 export const TaskGrid: React.FC<TaskGridProps> = ({
   tasks,
