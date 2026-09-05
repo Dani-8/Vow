@@ -1,24 +1,4 @@
 
-    const handleDeleteStickyNote = (noteId: string) => {
-        deleteTaskStickyNote(task._id, noteId);
-        setStickyNotes(getTaskStickyNotes(task._id, task.title));
-        setActivities(getTaskActivities(task._id, task.title));
-    };
-
-    // Handle add attachment
-    const handleAddAttachment = (attachmentData: Omit<TaskAttachment, 'id' | 'uploadedAt'>) => {
-        addTaskAttachment(task._id, attachmentData);
-        setAttachments(getTaskAttachments(task._id));
-        setActivities(getTaskActivities(task._id));
-    };
-
-    // Handle delete attachment
-    const handleDeleteAttachment = (attachmentId: string) => {
-        deleteTaskAttachment(task._id, attachmentId);
-        setAttachments(getTaskAttachments(task._id));
-        setActivities(getTaskActivities(task._id));
-    };
-
     // Handle manual comment / check-in
     const handleAddComment = (message: string, commentCategory?: string) => {
         addTaskActivity(task._id, {
