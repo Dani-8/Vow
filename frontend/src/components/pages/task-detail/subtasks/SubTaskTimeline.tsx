@@ -1,27 +1,4 @@
 
-export const SubTaskTimeline: React.FC<SubTaskTimelineProps> = ({
-    subTasks,
-    selectedSubTaskId,
-    onSelectSubTask,
-    onOpenAddModal,
-    onReorderSubTasks,
-    onToggleStatus,
-}) => {
-    const [statusFilter, setStatusFilter] = useState<FilterStatus>('all');
-    const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
-    const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
-
-    // Status counts
-    const allCount = subTasks.length;
-    const inProgressCount = subTasks.filter((st) => st.status === 'in_progress').length;
-    const completedCount = subTasks.filter((st) => st.status === 'completed').length;
-    const pendingCount = subTasks.filter((st) => st.status === 'pending').length;
-
-    // Filtered list
-    const filteredSubTasks = subTasks.filter((st) => {
-        if (statusFilter === 'all') return true;
-        return st.status === statusFilter;
-    });
 
     // Reorder Handler (Move Up / Move Down)
     const handleMove = (indexInFullList: number, direction: 'up' | 'down', e: React.MouseEvent) => {
