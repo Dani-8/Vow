@@ -1,34 +1,4 @@
 
-        e.preventDefault();
-        if (!title.trim()) return;
-
-        if (editingSubTask && onUpdate) {
-            onUpdate({
-                ...editingSubTask,
-                title: title.trim(),
-                dateLabel,
-                dueDate,
-                timeLeft,
-                priority,
-                description: description.trim(),
-            });
-        } else {
-            onSave({
-                title: title.trim(),
-                dateLabel,
-                dueDate,
-                timeLeft,
-                status: 'pending',
-                priority,
-                description: description.trim(),
-                assignee: { name: 'Alex Rivera', email: 'demo@vow.app' },
-                masterStreak: '4 Days',
-            });
-        }
-
-        onClose();
-    };
-
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fadeIn">
             <div className="neu-card w-full max-w-lg p-6 sm:p-8 space-y-6 relative max-h-[90vh] overflow-y-auto">
