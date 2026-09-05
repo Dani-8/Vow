@@ -1,20 +1,3 @@
-import { useState, useEffect } from 'react';
-import { SubTask } from '../../../../types';
-import {
-    getSubTasksForTaskId,
-    saveSubTasksForTaskId,
-    SUBTASKS_UPDATED_EVENT,
-} from '../../../../utils/subtaskStorage';
-
-export function useSubTasks(taskId: string, initialSubTasks?: SubTask[]) {
-    const [subTasks, setSubTasks] = useState<SubTask[]>(() => {
-        return getSubTasksForTaskId(taskId, initialSubTasks);
-    });
-
-    // Keep state in sync if taskId or initialSubTasks changes
-    useEffect(() => {
-        setSubTasks(getSubTasksForTaskId(taskId, initialSubTasks));
-    }, [taskId]);
 
     // Listen for storage events from other components or tabs
     useEffect(() => {
