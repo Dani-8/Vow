@@ -1,28 +1,4 @@
 
-                                <div className="flex flex-col items-center justify-center -space-y-0.5 shrink-0 text-[#94a3b8] group-hover:text-[#54597d] transition-colors">
-                                    <button
-                                        disabled={indexInFullList === 0}
-                                        onClick={(e) => handleMove(indexInFullList, 'up', e)}
-                                        className="p-0.5 hover:text-[#2563eb] hover:bg-white/80 rounded transition-all disabled:opacity-20 disabled:hover:bg-transparent"
-                                        title="Move Up"
-                                    >
-                                        <ChevronUp className="w-4 h-4" />
-                                    </button>
-                                    <button
-                                        disabled={indexInFullList === subTasks.length - 1}
-                                        onClick={(e) => handleMove(indexInFullList, 'down', e)}
-                                        className="p-0.5 hover:text-[#2563eb] hover:bg-white/80 rounded transition-all disabled:opacity-20 disabled:hover:bg-transparent"
-                                        title="Move Down"
-                                    >
-                                        <ChevronDown className="w-4 h-4" />
-                                    </button>
-                                </div>
-
-                                {/* 2. Date Label */}
-                                <div className="w-14 sm:w-16 text-right text-xs font-extrabold text-[#717699] flex-shrink-0">
-                                    {st.dateLabel}
-                                </div>
-
                                 {/* 3. Timeline Indicator Node (with toggle on click) */}
                                 <button
                                     type="button"
