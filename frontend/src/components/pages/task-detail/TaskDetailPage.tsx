@@ -1,23 +1,4 @@
 
-    return (
-        <div className="space-y-6 w-full pb-10 animate-fadeIn">
-            {/* 1. Header Section */}
-            <TaskDetailHeader
-                task={task}
-                onBack={onBack}
-                onToggleComplete={onToggleComplete}
-                completedCount={completedCount}
-                totalCount={totalCount}
-                progressPercent={progressPercent}
-                onTogglePrivate={onTogglePrivate}
-                onEditTask={onEditTask}
-                onDeleteTask={onDeleteTask}
-            />
-
-            {/* 2. Navigation Tabs Bar */}
-            <TaskDetailTabs activeTab={activeTab} onTabChange={setActiveTab} />
-
-            {/* 3. Main Tab Content Workspace */}
             {activeTab === 'overview' && (
                 <TaskOverviewTab
                     task={task}
