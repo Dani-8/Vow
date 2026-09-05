@@ -1,24 +1,4 @@
 
-    } = useSubTasks(task._id, task.subTasks);
-
-    // Sync task detail data when task changes
-    useEffect(() => {
-        setStickyNotes(getTaskStickyNotes(task._id, task.title));
-        setAttachments(getTaskAttachments(task._id, task.title));
-        setActivities(getTaskActivities(task._id, task.title));
-    }, [task._id, task.title]);
-
-    // Listen for storage events for real-time synchronization
-    useEffect(() => {
-        const handleDetailUpdate = (e: Event) => {
-            const custom = e as CustomEvent<{ taskId: string; updateType: string }>;
-            if (custom.detail && (custom.detail.taskId === task._id || !custom.detail.taskId)) {
-                setStickyNotes(getTaskStickyNotes(task._id, task.title));
-                setAttachments(getTaskAttachments(task._id, task.title));
-                setActivities(getTaskActivities(task._id, task.title));
-            }
-        };
-
         window.addEventListener(TASK_DETAIL_UPDATED_EVENT, handleDetailUpdate);
         return () => {
             window.removeEventListener(TASK_DETAIL_UPDATED_EVENT, handleDetailUpdate);
