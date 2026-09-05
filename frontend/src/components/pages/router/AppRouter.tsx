@@ -272,3 +272,32 @@ export const AppRouter: React.FC<AppRouterProps> = ({
       />
     );
   }
+
+  return (
+    <TasksPage
+      tasks={filteredTasks}
+      searchQuery={searchQuery}
+      onSearchChange={setSearchQuery}
+      activeFilter={filter}
+      onFilterChange={setFilter}
+      onToggleComplete={onToggleComplete}
+      onTogglePrivate={(t) => onTogglePrivate(t)}
+      onOpenAIAssist={onOpenAIAssist}
+      onEditTask={onEditTask}
+      onDeleteTask={onDeleteTask}
+      onViewDetails={(t) => {
+        setSelectedTaskForDetail(t);
+        navigate(`/app/task/${getTaskSlug(t)}`);
+      }}
+      onCreateNewGoal={onOpenCreateModal}
+      isVaultView={activeView === 'private'}
+      isVaultUnlocked={isPrivateUnlocked}
+      onOpenPinModal={onOpenPinModal}
+      onLockVault={() => {
+        clearStoredPin();
+        setIsPrivateUnlocked(false);
+        navigateToView('visible');
+      }}
+    />
+  );
+};
