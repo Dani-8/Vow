@@ -1,30 +1,4 @@
 
-                {/* Time Left */}
-                <div className="space-y-1">
-                    <div className="flex items-center space-x-1.5 text-xs text-[#717699] font-medium">
-                        <Clock className="w-3.5 h-3.5 text-[#549acb]" />
-                        <span>Time Left</span>
-                    </div>
-                    <div className="text-xs font-bold text-amber-600">
-                        {subTask.timeLeft || 'Today'}
-                    </div>
-                </div>
-
-                {/* Assignee */}
-                <div className="space-y-1 pt-2 border-t border-slate-200/60">
-                    <div className="flex items-center space-x-1.5 text-xs text-[#717699] font-medium">
-                        <UserIcon className="w-3.5 h-3.5 text-[#549acb]" />
-                        <span>Assignee</span>
-                    </div>
-                    <div className="flex items-center space-x-2 pt-0.5">
-                        <div className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] font-bold">
-                            AR
-                        </div>
-                        <span className="text-xs font-bold text-[#1a1c35]">
-                            {subTask.assignee?.name || 'Alex Rivera'}
-                        </span>
-                    </div>
-                </div>
 
                 {/* Master Streak */}
                 <div className="space-y-1 pt-2 border-t border-slate-200/60">
