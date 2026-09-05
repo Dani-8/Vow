@@ -1,23 +1,4 @@
 
-
-            {/* Interactive Status Switcher & Priority Badge */}
-            <div className="space-y-2">
-                <label className="text-[11px] font-extrabold text-[#717699] uppercase tracking-wider">
-                    Status & Priority
-                </label>
-                <div className="flex flex-wrap items-center gap-2">
-                    {/* Status Buttons */}
-                    <div className="flex items-center p-1 rounded-xl bg-slate-200/70 neu-inset text-xs font-bold gap-1">
-                        <button
-                            type="button"
-                            onClick={() => onSetStatus ? onSetStatus(subTask.id, 'pending') : onToggleStatus(subTask.id)}
-                            className={`px-2.5 py-1 rounded-lg transition-all ${subTask.status === 'pending'
-                                ? 'bg-purple-600 text-white shadow-xs font-black'
-                                : 'text-[#717699] hover:text-[#1a1c35]'
-                                }`}
-                        >
-                            Pending
-                        </button>
                         <button
                             type="button"
                             onClick={() => onSetStatus ? onSetStatus(subTask.id, 'in_progress') : onToggleStatus(subTask.id)}
