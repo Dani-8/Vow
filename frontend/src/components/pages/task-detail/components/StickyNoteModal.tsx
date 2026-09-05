@@ -1,35 +1,4 @@
 
-                {/* MODE 2: EDIT / COMPOSE FORM (Triggered by Edit button or when creating a new note) */}
-                {isEditing && !extractMode && (
-                    <form onSubmit={handleSaveSubmit} className="p-6 space-y-4">
-                        {/* Note Title Input */}
-                        <div className="space-y-1">
-                            <label className="text-[11px] font-black uppercase tracking-wider opacity-75 text-slate-700">
-                                Note Heading / Topic (Optional)
-                            </label>
-                            <input
-                                type="text"
-                                value={title}
-                                onChange={(e) => setTitle(e.target.value)}
-                                placeholder="e.g. Grammar Exceptions, Action Checklist, Figma link..."
-                                className={`w-full px-3.5 py-2 rounded-xl text-xs font-bold focus:outline-none border ${currentTheme.lineBorder} bg-white/70 ${currentTheme.textColor} placeholder:text-slate-400`}
-                            />
-                        </div>
-
-                        {/* Color Palette Selector */}
-                        <div className="space-y-1.5">
-                            <label className="text-[11px] font-black uppercase tracking-wider opacity-75 text-slate-700 flex items-center space-x-1">
-                                <Palette className="w-3.5 h-3.5" />
-                                <span>Paper Color Theme</span>
-                            </label>
-                            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
-                                {(['yellow', 'green', 'blue', 'purple', 'rose', 'gray'] as NoteColor[]).map((c) => {
-                                    const theme = STICKY_COLOR_THEMES[c];
-                                    const isSelected = color === c;
-                                    return (
-                                        <button
-                                            key={c}
-                                            type="button"
                                             onClick={() => setColor(c)}
                                             className={`p-2 rounded-xl border text-center flex flex-col items-center space-y-1 transition-all ${theme.paperBg} ${theme.border} ${isSelected
                                                 ? 'ring-2 ring-indigo-600 ring-offset-1 scale-105 shadow-sm font-black'
