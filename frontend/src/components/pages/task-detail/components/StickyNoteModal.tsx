@@ -1,39 +1,4 @@
 
-
-                                if (line.startsWith('> ')) {
-                                    return (
-                                        <blockquote
-                                            key={idx}
-                                            className="p-2.5 rounded-lg bg-black/5 border-l-4 border-black/20 italic text-xs font-medium opacity-90 my-1"
-                                        >
-                                            {line.substring(2)}
-                                        </blockquote>
-                                    );
-                                }
-
-                                if (line.trim() === '') {
-                                    return <div key={idx} className="h-4" />;
-                                }
-
-                                return (
-                                    <p key={idx} className={`text-xs ${currentTheme.bodyTextColor} font-medium leading-relaxed`}>
-                                        {line}
-                                    </p>
-                                );
-                            })}
-                        </div>
-
-                        {/* Bottom Footer Details & Actions */}
-                        <div className={`pt-4 border-t ${currentTheme.lineBorder} flex flex-wrap items-center justify-between gap-3 text-xs`}>
-                            <div className="flex items-center space-x-3 text-[11px] opacity-75 font-medium">
-                                <span className="flex items-center space-x-1">
-                                    <Calendar className="w-3 h-3" />
-                                    <span>{note?.updatedAt ? new Date(note.updatedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : 'Today'}</span>
-                                </span>
-                                <span>•</span>
-                                <span className="capitalize">{currentTheme.name}</span>
-                            </div>
-
                             <div className="flex items-center space-x-2">
                                 {onAddSubTask && (
                                     <button
