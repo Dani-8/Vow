@@ -1,26 +1,4 @@
 
-    // Handle manual comment / check-in
-    const handleAddComment = (message: string, commentCategory?: string) => {
-        addTaskActivity(task._id, {
-            type: 'comment',
-            message,
-            user: 'Alex Rivera',
-            meta: { category: commentCategory },
-        });
-        setActivities(getTaskActivities(task._id));
-    };
-
-    // Handle delete activity
-    const handleDeleteActivity = (activityId: string) => {
-        deleteTaskActivity(task._id, activityId);
-        setActivities(getTaskActivities(task._id));
-    };
-
-    // Sync selected sub-task if updated in subTasks list
-    const activeSelectedSubTask = selectedSubTask
-        ? subTasks.find((st) => st.id === selectedSubTask.id) || null
-        : null;
-
     return (
         <div className="space-y-6 w-full pb-10 animate-fadeIn">
             {/* 1. Header Section */}
