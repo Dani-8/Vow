@@ -1,46 +1,4 @@
 
-export const StickyNoteModal: React.FC<StickyNoteModalProps> = ({
-    isOpen,
-    onClose,
-    note,
-    initialEditMode = false,
-    taskId,
-    onSave,
-    onDelete,
-    onAddSubTask,
-}) => {
-    const [isEditing, setIsEditing] = useState(false);
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
-    const [color, setColor] = useState<NoteColor>('yellow');
-    const [isPinned, setIsPinned] = useState(false);
-    const [copied, setCopied] = useState(false);
-
-    // Subtask extraction state inside modal
-    const [extractMode, setExtractMode] = useState(false);
-    const [detectedTasks, setDetectedTasks] = useState<string[]>([]);
-    const [selectedToImport, setSelectedToImport] = useState<string[]>([]);
-
-    useEffect(() => {
-        if (note) {
-            setTitle(note.title || '');
-            setContent(note.content || '');
-            setColor(note.color || 'yellow');
-            setIsPinned(!!note.isPinned);
-            setIsEditing(initialEditMode);
-        } else {
-            // Creating a new note -> always start in edit mode
-            setTitle('');
-            setContent('');
-            setColor('yellow');
-            setIsPinned(false);
-            setIsEditing(true);
-        }
-        setExtractMode(false);
-        setDetectedTasks([]);
-        setSelectedToImport([]);
-        setCopied(false);
-    }, [note, isOpen, initialEditMode]);
 
     if (!isOpen) return null;
 
