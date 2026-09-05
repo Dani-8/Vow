@@ -1,23 +1,4 @@
 
-                        className={`transition-all duration-300 ${activeSelectedSubTask ? 'lg:col-span-7' : 'lg:col-span-12 max-w-4xl'
-                            }`}
-                    >
-                        <SubTaskTimeline
-                            subTasks={subTasks}
-                            selectedSubTaskId={activeSelectedSubTask?.id || null}
-                            onSelectSubTask={(st) => setSelectedSubTask(st)}
-                            onToggleStatus={(id) => {
-                                toggleSubTaskStatus(id);
-                                const target = subTasks.find((s) => s.id === id);
-                                if (target) {
-                                    const willBeCompleted = target.status !== 'completed';
-                                    addTaskActivity(task._id, {
-                                        type: willBeCompleted ? 'subtask_complete' : 'status_change',
-                                        message: willBeCompleted
-                                            ? `Completed subtask: "${target.title}"`
-                                            : `Reopened subtask: "${target.title}"`,
-                                        user: 'Alex Rivera',
-                                    });
                                     setActivities(getTaskActivities(task._id));
                                 }
                             }}
