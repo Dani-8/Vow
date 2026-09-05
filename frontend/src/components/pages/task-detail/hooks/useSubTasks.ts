@@ -1,24 +1,4 @@
 
-    const toggleSubTaskStatus = (id: string) => {
-        const updated = subTasks.map((st) => {
-            if (st.id === id) {
-                const nextStatus: SubTask['status'] =
-                    st.status === 'completed'
-                        ? 'in_progress'
-                        : st.status === 'in_progress'
-                            ? 'completed'
-                            : 'completed';
-                return {
-                    ...st,
-                    status: nextStatus,
-                    timeLeft: nextStatus === 'completed' ? 'Completed' : st.timeLeft || 'In progress',
-                };
-            }
-            return st;
-        });
-        saveAndSetSubTasks(updated);
-    };
-
     const setSubTaskStatus = (id: string, status: SubTask['status']) => {
         const updated = subTasks.map((st) => {
             if (st.id === id) {
