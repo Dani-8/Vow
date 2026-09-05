@@ -1,28 +1,4 @@
-
-                                {/* 3. Timeline Indicator Node (with toggle on click) */}
-                                <button
-                                    type="button"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        if (onToggleStatus) {
-                                            onToggleStatus(st.id);
-                                        } else if (onSelectSubTask) {
-                                            onSelectSubTask(st);
-                                        }
-                                    }}
-                                    className="relative z-1 flex-shrink-0 flex items-center justify-center ml-1 sm:ml-2 mr-1 cursor-pointer group/node"
-                                    title="Click to toggle status (Pending -> Completed)"
-                                >
-                                    {isCompleted ? (
-                                        <div className="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-sm hover:scale-110 transition-transform">
-                                            <Check className="w-4 h-4 stroke-[3]" />
-                                        </div>
-                                    ) : isInProgress ? (
-                                        <div className="w-7 h-7 rounded-full bg-white border-2 border-[#2563eb] flex items-center justify-center shadow-md hover:scale-110 transition-transform">
-                                            <div className="w-3 h-3 rounded-full bg-[#2563eb]" />
-                                        </div>
-                                    ) : (
-                                        <div className="w-7 h-7 rounded-full bg-[#E0E5EC] border-2 border-[#a0aec0] flex items-center justify-center hover:scale-110 transition-transform">
+ transition-transform">
                                             <div className="w-2 h-2 rounded-full bg-[#a0aec0]" />
                                         </div>
                                     )}
