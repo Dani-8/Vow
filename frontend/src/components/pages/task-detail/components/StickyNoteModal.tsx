@@ -1,46 +1,4 @@
 
-            isPinned,
-        });
-    };
-
-    // Detect checklist items or bullet lines in content
-    const handleOpenExtract = () => {
-        const lines = content.split('\n');
-        const detected: string[] = [];
-
-        lines.forEach((line) => {
-            const trimmed = line.trim();
-            if (trimmed.startsWith('- [ ]') || trimmed.startsWith('- [x]') || trimmed.startsWith('* [ ]')) {
-                const text = trimmed.replace(/^[-*]\s*\[[ x]\]\s*/, '').trim();
-                if (text.length > 1) detected.push(text);
-            } else if (trimmed.startsWith('- ') || trimmed.startsWith('* ') || /^\d+\.\s+/.test(trimmed)) {
-                const text = trimmed.replace(/^[-*]|\d+\.\s*/, '').trim();
-                if (text.length > 1 && !text.startsWith('#')) detected.push(text);
-            }
-        });
-
-        const unique = Array.from(new Set(detected));
-        setDetectedTasks(unique);
-        setSelectedToImport(unique);
-        setExtractMode(true);
-    };
-
-    const handleImportSubtasks = () => {
-        if (!onAddSubTask || selectedToImport.length === 0) {
-            setExtractMode(false);
-            return;
-        }
-
-        selectedToImport.forEach((taskTitle) => {
-            onAddSubTask({
-                taskId,
-                title: taskTitle,
-                dateLabel: title || 'From Sticky Note',
-                status: 'pending',
-                priority: 'Medium',
-            });
-        });
-
         setExtractMode(false);
     };
 
