@@ -1,23 +1,4 @@
 
-            {activeTab === 'overview' && (
-                <TaskOverviewTab
-                    task={task}
-                    subTasks={subTasks}
-                    stickyNotes={stickyNotes}
-                    attachments={attachments}
-                    activities={activities}
-                    completedCount={completedCount}
-                    totalCount={totalCount}
-                    progressPercent={progressPercent}
-                    onTabChange={setActiveTab}
-                    onToggleComplete={onToggleComplete}
-                />
-            )}
-
-            {activeTab === 'sub-tasks' && (
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start transition-all">
-                    {/* Left / Main Column: Sub-Tasks Timeline */}
-                    <div
                         className={`transition-all duration-300 ${activeSelectedSubTask ? 'lg:col-span-7' : 'lg:col-span-12 max-w-4xl'
                             }`}
                     >
