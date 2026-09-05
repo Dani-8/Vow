@@ -1,46 +1,4 @@
 
-
-    if (!isOpen) return null;
-
-    const currentTheme = STICKY_COLOR_THEMES[color] || STICKY_COLOR_THEMES.yellow;
-
-    const handleCopyNote = () => {
-        const textToCopy = `${title ? title + '\n\n' : ''}${content}`;
-        navigator.clipboard.writeText(textToCopy);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-    };
-
-    const handleSaveSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!content.trim()) return;
-
-        onSave({
-            title: title.trim() || undefined,
-            content: content.trim(),
-            color,
-            isPinned,
-        });
-        setIsEditing(false);
-    };
-
-    // Toggle interactive checkboxes directly in view mode
-    const handleToggleCheckbox = (lineIdx: number) => {
-        const lines = content.split('\n');
-        const targetLine = lines[lineIdx];
-        if (targetLine.startsWith('- [ ]')) {
-            lines[lineIdx] = targetLine.replace('- [ ]', '- [x]');
-        } else if (targetLine.startsWith('- [x]')) {
-            lines[lineIdx] = targetLine.replace('- [x]', '- [ ]');
-        }
-        const updatedContent = lines.join('\n');
-        setContent(updatedContent);
-
-        // Auto-persist toggle update
-        onSave({
-            title: title.trim() || undefined,
-            content: updatedContent,
-            color,
             isPinned,
         });
     };
