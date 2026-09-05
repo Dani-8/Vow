@@ -74,3 +74,51 @@ interface AppRouterProps {
     challengeId: string,
     sprintData: {
       title: string;
+      targetDays: number;
+      startDate: string;
+      targetEndDate?: string;
+      rule?: string;
+    }
+  ) => Promise<void>;
+  onCompleteSprint?: (
+    challengeId: string,
+    sprintId: string,
+    retrospective: {
+      completedAt: string;
+      summary: string;
+      score?: number;
+      keyLearnings?: string;
+    },
+    markChallengeCompleted?: boolean
+  ) => Promise<void>;
+  onUpdateSprintRule?: (challengeId: string, sprintId: string, rule: string) => Promise<void>;
+}
+
+export const AppRouter: React.FC<AppRouterProps> = ({
+  activeView,
+  location,
+  user,
+  tasks,
+  privateTasks,
+  filteredTasks,
+  stats,
+  isPrivateUnlocked,
+  selectedTaskForDetail,
+  setSelectedTaskForDetail,
+  searchQuery,
+  setSearchQuery,
+  filter,
+  setFilter,
+  navigate,
+  navigateToView,
+  setIsPrivateUnlocked,
+  onCheckInToday,
+  onToggleComplete,
+  onTogglePrivate,
+  onEditTask,
+  onDeleteTask,
+  onOpenAIAssist,
+  onOpenCreateModal,
+  onOpenPinModal,
+  challenges,
+  selectedChallenge,
