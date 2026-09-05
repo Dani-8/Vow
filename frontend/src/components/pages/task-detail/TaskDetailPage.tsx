@@ -1,20 +1,4 @@
 
-interface TaskDetailPageProps {
-    task: Task;
-    onBack: () => void;
-    onToggleComplete: (task: Task) => void;
-    onTogglePrivate?: (task: Task) => void;
-    onEditTask?: (task: Task) => void;
-    onDeleteTask?: (task: Task) => void;
-}
-
-export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
-    task,
-    onBack,
-    onToggleComplete,
-    onTogglePrivate,
-    onEditTask,
-    onDeleteTask,
 }) => {
     const [activeTab, setActiveTab] = useState<TaskTabType>('overview');
     const [selectedSubTask, setSelectedSubTask] = useState<SubTask | null>(null);
