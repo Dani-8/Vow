@@ -1,36 +1,4 @@
 
-                            </div>
-                            <h3 className={`text-base font-black tracking-tight ${currentTheme.textColor} truncate max-w-xs`}>
-                                {title || (isEditing ? 'Untitled Note' : 'Sticky Note')}
-                            </h3>
-                        </div>
-                    </div>
-
-                    <div className="flex items-center space-x-1.5">
-                        {/* If in view mode, show Edit button & Copy button */}
-                        {!isEditing && !extractMode && (
-                            <>
-                                <button
-                                    type="button"
-                                    onClick={handleCopyNote}
-                                    className="p-2 rounded-xl bg-black/5 hover:bg-black/10 text-slate-700 transition-colors"
-                                    title="Copy note text"
-                                >
-                                    {copied ? <CheckCheck className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
-                                </button>
-
-                                <button
-                                    type="button"
-                                    onClick={() => setIsEditing(true)}
-                                    className="px-3 py-1.5 rounded-xl bg-black/10 hover:bg-black/15 text-slate-800 text-xs font-bold flex items-center space-x-1.5 transition-colors"
-                                    title="Edit note content & colors"
-                                >
-                                    <Edit3 className="w-3.5 h-3.5" />
-                                    <span>Edit</span>
-                                </button>
-                            </>
-                        )}
-
                         {/* If in edit mode and editing existing note, allow switching back to view mode */}
                         {isEditing && note && (
                             <button
