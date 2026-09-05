@@ -1,27 +1,4 @@
 
-                                onDelete={(id) => {
-                                    deleteSubTask(id);
-                                    setSelectedSubTask(null);
-                                }}
-                            />
-                        </div>
-                    )}
-                </div>
-            )}
-
-            {activeTab === 'notes' && (
-                <TaskNotesTab
-                    taskId={task._id}
-                    stickyNotes={stickyNotes}
-                    onAddStickyNote={handleAddStickyNote}
-                    onUpdateStickyNote={handleUpdateStickyNote}
-                    onDeleteStickyNote={handleDeleteStickyNote}
-                    onAddSubTask={(newSt) => {
-                        addSubTask(newSt);
-                        addTaskActivity(task._id, {
-                            type: 'subtask_add',
-                            message: `Imported subtask from sticky notes: "${newSt.title}"`,
-                            user: 'Alex Rivera',
                         });
                         setActivities(getTaskActivities(task._id));
                     }}
