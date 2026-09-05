@@ -1,25 +1,4 @@
 
-                        <button
-                            type="button"
-                            onClick={() => onSetStatus ? onSetStatus(subTask.id, 'in_progress') : onToggleStatus(subTask.id)}
-                            className={`px-2.5 py-1 rounded-lg transition-all ${subTask.status === 'in_progress'
-                                ? 'bg-[#2563eb] text-white shadow-xs font-black'
-                                : 'text-[#717699] hover:text-[#1a1c35]'
-                                }`}
-                        >
-                            In Progress
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => onSetStatus ? onSetStatus(subTask.id, 'completed') : onToggleStatus(subTask.id)}
-                            className={`px-2.5 py-1 rounded-lg transition-all ${subTask.status === 'completed'
-                                ? 'bg-emerald-600 text-white shadow-xs font-black'
-                                : 'text-[#717699] hover:text-[#1a1c35]'
-                                }`}
-                        >
-                            Completed
-                        </button>
-                    </div>
 
                     <span className="px-3 py-1.5 rounded-xl text-xs font-bold text-amber-700 bg-amber-100/80 border border-amber-200 flex items-center space-x-1.5 ml-auto">
                         <Flame className="w-3.5 h-3.5 text-amber-600" />
