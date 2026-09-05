@@ -1,18 +1,4 @@
 
-    };
-
-    const current = tabDetails[tabName.toLowerCase()] || {
-        icon: <PackageOpen className="w-10 h-10 text-[#549acb]" />,
-        title: `${tabName} Space`,
-        subtitle: "This module is currently being built for your growth workspace.",
-    };
-
-    return (
-        <div className="neu-card p-12 text-center flex flex-col items-center justify-center my-4 min-h-[340px]">
-            {/* Neumorphic Empty Box Icon Container */}
-            <div className="w-20 h-20 rounded-3xl neu-button flex items-center justify-center mb-5 bg-[#E0E5EC] shadow-md">
-                {current.icon}
-            </div>
 
             <h3 className="text-xl font-extrabold text-[#1a1c35] mb-2 tracking-tight">
                 {current.title}
