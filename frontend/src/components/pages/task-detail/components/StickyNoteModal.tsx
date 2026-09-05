@@ -1,37 +1,4 @@
 
-                        >
-                            {content.split('\n').map((line, idx) => {
-                                if (line.startsWith('- [ ]') || line.startsWith('- [x]')) {
-                                    const isChecked = line.startsWith('- [x]');
-                                    return (
-                                        <div
-                                            key={idx}
-                                            onClick={() => handleToggleCheckbox(idx)}
-                                            className="flex items-center space-x-2.5 text-xs font-medium cursor-pointer group/check select-none"
-                                        >
-                                            <input
-                                                type="checkbox"
-                                                checked={isChecked}
-                                                readOnly
-                                                className="rounded text-indigo-600 focus:ring-0 w-4 h-4 cursor-pointer"
-                                            />
-                                            <span
-                                                className={`${currentTheme.bodyTextColor} leading-snug transition-all ${isChecked ? 'line-through opacity-50' : 'group-hover/check:opacity-80'
-                                                    }`}
-                                            >
-                                                {line.replace(/^-\s*\[[ x]\]\s*/, '')}
-                                            </span>
-                                        </div>
-                                    );
-                                }
-
-                                if (line.startsWith('- ') || line.startsWith('• ') || line.startsWith('* ')) {
-                                    return (
-                                        <li key={idx} className={`ml-4 list-disc text-xs ${currentTheme.bodyTextColor} font-medium leading-relaxed`}>
-                                            {line.replace(/^[-*•]\s*/, '')}
-                                        </li>
-                                    );
-                                }
 
                                 if (line.startsWith('> ')) {
                                     return (
