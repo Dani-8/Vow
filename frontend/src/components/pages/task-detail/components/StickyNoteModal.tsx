@@ -1,37 +1,5 @@
 
 
-                        {/* Actions Bar */}
-                        <div className="flex items-center justify-between pt-2 border-t border-black/10">
-                            {note ? (
-                                <button
-                                    type="button"
-                                    onClick={() => setIsEditing(false)}
-                                    className="px-4 py-2 rounded-xl bg-black/5 hover:bg-black/10 text-xs font-bold text-slate-700"
-                                >
-                                    Cancel
-                                </button>
-                            ) : (
-                                <button
-                                    type="button"
-                                    onClick={onClose}
-                                    className="px-4 py-2 rounded-xl bg-black/5 hover:bg-black/10 text-xs font-bold text-slate-700"
-                                >
-                                    Cancel
-                                </button>
-                            )}
-
-                            <button
-                                type="submit"
-                                disabled={!content.trim()}
-                                className="px-5 py-2 rounded-xl neu-button-primary text-xs font-bold text-white flex items-center space-x-1.5 disabled:opacity-50 shadow-md ml-auto"
-                            >
-                                <Check className="w-3.5 h-3.5" />
-                                <span>{note ? 'Save Changes' : 'Pin Note'}</span>
-                            </button>
-                        </div>
-                    </form>
-                )}
-
                 {/* MODE 3: SUBTASK EXTRACTION SUB-VIEW */}
                 {extractMode && (
                     <div className="p-6 space-y-4">
