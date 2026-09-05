@@ -1,37 +1,5 @@
 
 
-                                            {/* Case 2: Bullet Points */}
-                                            <button
-                                                type="button"
-                                                onClick={() => setContent((prev) => prev ? `${prev}\n- Bullet point note` : '- Bullet point note')}
-                                                className="w-full p-2 rounded-xl bg-slate-50 hover:bg-indigo-50 border border-slate-200/60 hover:border-indigo-200 text-left transition-colors flex items-start space-x-2 group/item"
-                                            >
-                                                <span className="w-4 h-4 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[10px] font-black shrink-0 mt-0.5 group-hover/item:bg-indigo-200 group-hover/item:text-indigo-800">•</span>
-                                                <div className="flex-1">
-                                                    <div className="font-bold text-slate-800 flex items-center justify-between">
-                                                        <span>Bullet Lists</span>
-                                                        <code className="text-[10px] text-indigo-600 font-mono bg-white px-1 py-0.5 rounded border border-slate-200">- item</code>
-                                                    </div>
-                                                    <p className="text-[10px] text-slate-500 mt-0.5 leading-tight">Clean indented bullet points for ideas, grammar rules, and lists.</p>
-                                                </div>
-                                            </button>
-
-                                            {/* Case 3: Blockquotes / Quotes */}
-                                            <button
-                                                type="button"
-                                                onClick={() => setContent((prev) => prev ? `${prev}\n> "Key insight or motivational quote"` : '> "Key insight or motivational quote"')}
-                                                className="w-full p-2 rounded-xl bg-slate-50 hover:bg-indigo-50 border border-slate-200/60 hover:border-indigo-200 text-left transition-colors flex items-start space-x-2 group/item"
-                                            >
-                                                <span className="w-4 h-4 rounded border-l-2 border-slate-600 bg-slate-100 flex items-center justify-center text-[10px] italic font-serif shrink-0 mt-0.5 group-hover/item:border-indigo-600">“</span>
-                                                <div className="flex-1">
-                                                    <div className="font-bold text-slate-800 flex items-center justify-between">
-                                                        <span>Quotes &amp; Insights</span>
-                                                        <code className="text-[10px] text-indigo-600 font-mono bg-white px-1 py-0.5 rounded border border-slate-200">&gt; quote</code>
-                                                    </div>
-                                                    <p className="text-[10px] text-slate-500 mt-0.5 leading-tight">Highlights key insights, quotes, and warnings in styled blockquote callouts.</p>
-                                                </div>
-                                            </button>
-
                                             {/* Case 4: Freeform Lined Paper */}
                                             <div className="p-2 rounded-xl bg-slate-50 border border-slate-200/60 text-left flex items-start space-x-2">
                                                 <span className="w-4 h-4 rounded bg-amber-100 text-amber-800 flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">¶</span>
