@@ -1,25 +1,4 @@
 
-
-    // Reorder Handler (Move Up / Move Down)
-    const handleMove = (indexInFullList: number, direction: 'up' | 'down', e: React.MouseEvent) => {
-        e.stopPropagation();
-        if (!onReorderSubTasks) return;
-
-        const targetIndex = direction === 'up' ? indexInFullList - 1 : indexInFullList + 1;
-        if (targetIndex < 0 || targetIndex >= subTasks.length) return;
-
-        const updated = [...subTasks];
-        const [moved] = updated.splice(indexInFullList, 1);
-        updated.splice(targetIndex, 0, moved);
-        onReorderSubTasks(updated);
-    };
-
-    // Drag and Drop Handlers
-    const handleDragStart = (indexInFullList: number, e: React.DragEvent) => {
-        setDraggedIndex(indexInFullList);
-        e.dataTransfer.effectAllowed = 'move';
-    };
-
     const handleDragOver = (indexInFullList: number, e: React.DragEvent) => {
         e.preventDefault();
         if (draggedIndex !== null && draggedIndex !== indexInFullList) {
