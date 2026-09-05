@@ -170,3 +170,54 @@ export const AppRouter: React.FC<AppRouterProps> = ({
 
     return (
       <TaskDetailPage
+        task={currentTask}
+        onBack={() => {
+          if (selectedTaskForDetail?.isPrivate || currentTask.isPrivate) {
+            navigate('/app/vault');
+          } else {
+            navigate('/app/tasks');
+          }
+        }}
+        onToggleComplete={onToggleComplete}
+        onTogglePrivate={onTogglePrivate}
+        onEditTask={onEditTask}
+        onDeleteTask={(t) => {
+          onDeleteTask(t);
+          if (t.isPrivate) {
+            navigate('/app/vault');
+          } else {
+            navigate('/app/tasks');
+          }
+        }}
+      />
+    );
+  }
+
+  if (activeView === 'home') {
+    return (
+      <HomeView
+        tasks={tasks}
+        stats={stats}
+        onToggleComplete={onToggleComplete}
+        onCheckInToday={onCheckInToday}
+        onOpenCreateModal={onOpenCreateModal}
+        onOpenAIAssist={onOpenAIAssist}
+        onViewTaskDetail={(t) => {
+          setSelectedTaskForDetail(t);
+          navigate(`/app/task/${getTaskSlug(t)}`);
+        }}
+      />
+    );
+  }
+
+  if (activeView === 'stats') {
+    return (
+      <StatsView
+        stats={stats}
+        tasks={tasks}
+        privateTasks={privateTasks}
+        challenges={challenges}
+        onNavigateToView={navigateToView}
+      />
+    );
+  }
