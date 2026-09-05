@@ -1,28 +1,4 @@
 
-
-                {/* Master Streak */}
-                <div className="space-y-1 pt-2 border-t border-slate-200/60">
-                    <div className="flex items-center space-x-1.5 text-xs text-[#717699] font-medium">
-                        <Flame className="w-3.5 h-3.5 text-purple-600" />
-                        <span>Master Streak</span>
-                    </div>
-                    <div className="text-xs font-bold text-purple-700">
-                        {subTask.masterStreak || '4 Days'}
-                    </div>
-                </div>
-            </div>
-
-            {/* Description Block */}
-            <div className="space-y-2">
-                <label className="text-xs font-bold text-[#717699] uppercase tracking-wider">
-                    Description
-                </label>
-                <p className="text-xs sm:text-sm text-[#54597d] leading-relaxed font-medium">
-                    {subTask.description ||
-                        'Create a detailed milestone timeline for Q3 including key learning, habit building, and review checkpoints.'}
-                </p>
-            </div>
-
             {/* Attachments Section */}
             <div className="space-y-2">
                 <label className="text-xs font-bold text-[#717699] uppercase tracking-wider">
