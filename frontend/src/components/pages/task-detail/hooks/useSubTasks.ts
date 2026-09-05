@@ -1,22 +1,4 @@
 
-
-    const addSubTask = (newSubTask: Omit<SubTask, 'id' | 'taskId'>) => {
-        const id = `st-${Date.now()}`;
-        const subTaskWithIds: SubTask = {
-            ...newSubTask,
-            id,
-            taskId,
-        };
-        const updated = [...subTasks, subTaskWithIds];
-        saveAndSetSubTasks(updated);
-        return subTaskWithIds;
-    };
-
-    const updateSubTask = (updatedItem: SubTask) => {
-        const updated = subTasks.map((st) => (st.id === updatedItem.id ? updatedItem : st));
-        saveAndSetSubTasks(updated);
-    };
-
     const toggleSubTaskStatus = (id: string) => {
         const updated = subTasks.map((st) => {
             if (st.id === id) {
