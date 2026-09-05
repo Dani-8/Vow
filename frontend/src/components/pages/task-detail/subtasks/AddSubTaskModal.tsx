@@ -1,34 +1,4 @@
 
-                    {/* Time Left & Priority */}
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-xs font-bold text-[#717699] uppercase tracking-wider mb-2">
-                                Time Left
-                            </label>
-                            <input
-                                type="text"
-                                value={timeLeft}
-                                onChange={(e) => setTimeLeft(e.target.value)}
-                                placeholder="Today / 2 Days Left"
-                                className="w-full px-4 py-2.5 rounded-xl neu-input text-sm font-medium"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-xs font-bold text-[#717699] uppercase tracking-wider mb-2">
-                                Priority
-                            </label>
-                            <select
-                                value={priority}
-                                onChange={(e) => setPriority(e.target.value as 'High' | 'Medium' | 'Low')}
-                                className="w-full px-4 py-2.5 rounded-xl neu-input text-sm font-medium"
-                            >
-                                <option value="High">🔥 High</option>
-                                <option value="Medium">⚡ Medium</option>
-                                <option value="Low">🌱 Low</option>
-                            </select>
-                        </div>
-                    </div>
 
                     {/* Description */}
                     <div>
