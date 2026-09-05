@@ -1,28 +1,4 @@
 
-                        onClick={() => setStatusFilter('pending')}
-                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${statusFilter === 'pending'
-                            ? 'neu-inset text-purple-600 bg-purple-50'
-                            : 'text-[#717699] hover:text-[#1a1c35]'
-                            }`}
-                    >
-                        Pending <span className="ml-1 opacity-75">({pendingCount})</span>
-                    </button>
-                </div>
-            </div>
-
-            {/* Timeline List */}
-            <div className="relative pl-1 sm:pl-2 space-y-3">
-                {/* Vertical Timeline Line */}
-                <div className="absolute left-[118px] sm:left-[134px] top-6 bottom-8 w-[2px] bg-[#cbd5e1] pointer-events-none" />
-
-                {filteredSubTasks.length === 0 ? (
-                    <div className="neu-card p-8 text-center text-xs font-bold text-[#717699]">
-                        No sub-tasks found matching the selected filter.
-                    </div>
-                ) : (
-                    filteredSubTasks.map((st) => {
-                        const indexInFullList = subTasks.findIndex((item) => item.id === st.id);
-                        const isSelected = selectedSubTaskId === st.id;
                         const isCompleted = st.status === 'completed';
                         const isInProgress = st.status === 'in_progress';
                         const isDragOver = dragOverIndex === indexInFullList;
