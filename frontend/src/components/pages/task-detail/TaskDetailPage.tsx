@@ -1,28 +1,3 @@
-import React, { useState, useEffect } from 'react';
-import { Task, SubTask, TaskAttachment, TaskActivityItem, TaskStickyNote } from '../../../types';
-import { TaskDetailHeader } from './components/TaskDetailHeader';
-import { TaskDetailTabs, TaskTabType } from './components/TaskDetailTabs';
-import { TaskOverviewTab } from './components/TaskOverviewTab';
-import { TaskNotesTab } from './components/TaskNotesTab';
-import { TaskFilesTab } from './components/TaskFilesTab';
-import { TaskActivityTab } from './components/TaskActivityTab';
-import { SubTaskTimeline } from './subtasks/SubTaskTimeline';
-import { SubTaskDetailPanel } from './subtasks/SubTaskDetailPanel';
-import { AddSubTaskModal } from './subtasks/AddSubTaskModal';
-import { useSubTasks } from './hooks/useSubTasks';
-import {
-    getTaskStickyNotes,
-    addTaskStickyNote,
-    updateTaskStickyNote,
-    deleteTaskStickyNote,
-    getTaskAttachments,
-    addTaskAttachment,
-    deleteTaskAttachment,
-    getTaskActivities,
-    addTaskActivity,
-    deleteTaskActivity,
-    TASK_DETAIL_UPDATED_EVENT,
-} from '../../../utils/taskDetailStorage';
 
 interface TaskDetailPageProps {
     task: Task;
