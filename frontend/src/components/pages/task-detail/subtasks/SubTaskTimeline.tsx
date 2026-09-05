@@ -1,28 +1,4 @@
 
-                    {/* In Progress */}
-                    <button
-                        onClick={() => setStatusFilter('in_progress')}
-                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${statusFilter === 'in_progress'
-                            ? 'neu-inset text-blue-600 bg-blue-50'
-                            : 'text-[#717699] hover:text-[#1a1c35]'
-                            }`}
-                    >
-                        In Progress <span className="ml-1 opacity-75">({inProgressCount})</span>
-                    </button>
-
-                    {/* Completed */}
-                    <button
-                        onClick={() => setStatusFilter('completed')}
-                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${statusFilter === 'completed'
-                            ? 'neu-inset text-emerald-600 bg-emerald-50'
-                            : 'text-[#717699] hover:text-[#1a1c35]'
-                            }`}
-                    >
-                        Completed <span className="ml-1 opacity-75">({completedCount})</span>
-                    </button>
-
-                    {/* Pending */}
-                    <button
                         onClick={() => setStatusFilter('pending')}
                         className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${statusFilter === 'pending'
                             ? 'neu-inset text-purple-600 bg-purple-50'
