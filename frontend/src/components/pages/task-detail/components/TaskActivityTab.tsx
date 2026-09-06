@@ -1,35 +1,4 @@
 
-            {/* Activity Timeline List */}
-            <div className="neu-card p-6 bg-[#E0E5EC] space-y-6">
-                <div className="flex items-center justify-between border-b border-[#c8d0e0]/70 pb-3">
-                    <div className="flex items-center space-x-2">
-                        <Activity className="w-4 h-4 text-emerald-600" />
-                        <h3 className="text-sm font-black text-[#1a1c35]">Audit Log &amp; Activity Stream</h3>
-                    </div>
-                    <span className="text-xs font-bold text-[#717699]">{activities.length} entries</span>
-                </div>
-
-                {activities.length > 0 ? (
-                    <div className="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-[2px] before:bg-[#c8d0e0]">
-                        {activities.map((item) => (
-                            <div key={item.id} className="relative group">
-                                {/* Timeline Dot / Icon */}
-                                <div className="absolute -left-[27px] top-0 p-1.5 rounded-full neu-flat bg-[#E0E5EC] ring-4 ring-[#E0E5EC]">
-                                    {getActivityIcon(item.type, item.meta)}
-                                </div>
-
-                                <div className="neu-card p-4 bg-[#E0E5EC] space-y-2">
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center space-x-2.5">
-                                            <span className="text-xs font-black text-[#1a1c35]">
-                                                {item.user || 'Alex Rivera'}
-                                            </span>
-                                            {renderCategoryBadge(item)}
-                                            <span className="text-[10px] text-slate-400 font-medium">
-                                                • {formatTimestamp(item.timestamp)}
-                                            </span>
-                                        </div>
-
                                         {onDeleteActivity && (
                                             <button
                                                 onClick={() => onDeleteActivity(item.id)}
