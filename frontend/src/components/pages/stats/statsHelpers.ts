@@ -256,3 +256,38 @@ export function generateActivityHeatmap(
     }
 
     const result: DayActivity[] = [];
+
+    // Calculate start date aligned to the nearest Sunday totalWeeks ago
+    const currentDayOfWeek = today.getDay(); // 0 is Sunday, 6 is Saturday
+    const startDate = new Date(today);
+    startDate.setDate(today.getDate() - totalDays + (6 - currentDayOfWeek));
+    startDate.setHours(0, 0, 0, 0);
+
+    for (let i = 0; i < totalDays; i++) {
+        const cur = new Date(startDate);
+        cur.setDate(startDate.getDate() + i);
+        const dateKey = formatDateKey(cur);
+
+        const data = activityMap[dateKey] || { challengeCount: 0, taskCount: 0 };
+        const totalActions = data.challengeCount + data.taskCount;
+
+        let level: 0 | 1 | 2 | 3 | 4 = 0;
+        if (totalActions >= 5) level = 4;
+        else if (totalActions >= 3) level = 3;
+        else if (totalActions >= 2) level = 2;
+        else if (totalActions >= 1) level = 1;
+
+        result.push({
+            date: dateKey,
+            displayDate: cur.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+            dayOfWeek: cur.getDay(),
+            weekIndex: Math.floor(i / 7),
+            totalActions,
+            challengeActions: data.challengeCount,
+            taskActions: data.taskCount,
+            level,
+        });
+    }
+
+    return result;
+}
