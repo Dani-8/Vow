@@ -216,3 +216,43 @@ export function calculateEcosystemOverview(
         topTaskStreak,
     };
 }
+
+/**
+ * Generate 16 weeks (112 days) of activity for the Heatmap Grid
+ */
+export function generateActivityHeatmap(
+    tasks: Task[],
+    challenges: Challenge[],
+    totalWeeks: number = 52
+): DayActivity[] {
+    const totalDays = totalWeeks * 7;
+    const today = new Date();
+    today.setHours(23, 59, 59, 999);
+
+    // Map of date string -> { challengeCount, taskCount }
+    const activityMap: Record<string, { challengeCount: number; taskCount: number }> = {};
+
+    // 1. Process Challenge logs
+    challenges.forEach((ch) => {
+        (ch.logs || []).forEach((log) => {
+            if (log.status === 'completed' || log.status === 'rest') {
+                const dateKey = log.date ? log.date.split('T')[0] : '';
+                if (dateKey) {
+                    if (!activityMap[dateKey]) activityMap[dateKey] = { challengeCount: 0, taskCount: 0 };
+                    activityMap[dateKey].challengeCount++;
+                }
+            }
+        });
+    });
+
+    // 2. Process tasks and subtask activity (seed current active streak days)
+    const activeStreakLength = Math.min(30, Math.max(...tasks.map((t) => t.currentStreak || 0), 1));
+    for (let i = 0; i < activeStreakLength; i++) {
+        const d = new Date(today);
+        d.setDate(d.getDate() - i);
+        const k = formatDateKey(d);
+        if (!activityMap[k]) activityMap[k] = { challengeCount: 0, taskCount: 0 };
+        activityMap[k].taskCount += (i === 0 ? tasks.filter((t) => t.completedToday || t.status === 'completed').length || 2 : 2);
+    }
+
+    const result: DayActivity[] = [];
