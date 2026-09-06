@@ -1,26 +1,4 @@
 
-                            {/* Delete Task */}
-                            <button
-                                onClick={() => {
-                                    setIsMenuOpen(false);
-                                    if (
-                                        window.confirm(
-                                            `Are you sure you want to delete "${task.title}"?`
-                                        )
-                                    ) {
-                                        onDeleteTask?.(task);
-                                    }
-                                }}
-                                className="w-full text-left px-3 py-2.5 rounded-xl text-xs font-semibold text-rose-600 hover:bg-rose-50/70 flex items-center space-x-2.5 transition-colors"
-                            >
-                                <Trash2 className="w-4 h-4 text-rose-500" />
-                                <span>Delete Task</span>
-                            </button>
-                        </div>
-                    )}
-                </div>
-            </div>
-
             {/* Main Title & Progress Ring Layout */}
             <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
                 {/* Left Side: Completion Circle + Title + Badges */}
