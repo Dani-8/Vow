@@ -1,38 +1,4 @@
 
-
-    return (
-        <div className="space-y-6 animate-fadeIn max-w-4xl">
-            {/* Post Check-in / Comment Box */}
-            <div className="neu-card p-5 bg-[#E0E5EC] space-y-4">
-                <div className="flex items-center space-x-2">
-                    <MessageSquare className="w-4 h-4 text-indigo-600" />
-                    <h3 className="text-sm font-black text-[#1a1c35]">Log Check-in &amp; Progress Note</h3>
-                </div>
-
-                <form onSubmit={handleSubmit} className="space-y-3">
-                    <textarea
-                        value={commentText}
-                        onChange={(e) => setCommentText(e.target.value)}
-                        placeholder="Share a status update, highlight a blocker, or record a key milestone reached..."
-                        rows={3}
-                        className="w-full p-3 rounded-xl neu-inset bg-[#dbe2ee]/60 text-xs font-medium text-[#1a1c35] focus:outline-none placeholder:text-slate-400 resize-none"
-                    />
-
-                    <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
-                        {/* Category chips with clean Lucide SVG icons */}
-                        <div className="flex items-center space-x-2">
-                            <span className="text-[11px] font-bold text-[#717699]">Type:</span>
-                            <button
-                                type="button"
-                                onClick={() => setCommentCategory('update')}
-                                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 ${commentCategory === 'update'
-                                    ? 'neu-inset text-indigo-700 font-black'
-                                    : 'neu-button text-[#717699] hover:text-[#1a1c35]'
-                                    }`}
-                            >
-                                <TrendingUp className="w-3.5 h-3.5 text-indigo-600" />
-                                <span>Progress Update</span>
-                            </button>
                             <button
                                 type="button"
                                 onClick={() => setCommentCategory('blocker')}
