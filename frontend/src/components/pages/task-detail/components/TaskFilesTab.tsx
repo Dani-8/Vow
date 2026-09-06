@@ -1,34 +1,4 @@
 
-                </div>
-            ) : (
-                <div className="neu-card p-10 bg-[#E0E5EC] text-center space-y-2">
-                    <Paperclip className="w-8 h-8 text-slate-400 mx-auto" />
-                    <p className="text-xs font-bold text-[#1a1c35]">No attachments found</p>
-                    <p className="text-[11px] text-slate-400 max-w-sm mx-auto">
-                        {searchQuery
-                            ? 'No files matching your search term. Try adjusting your query or filter.'
-                            : 'Upload project briefs, design screenshots, reference documents, or save external links to keep everything in one place.'}
-                    </p>
-                </div>
-            )}
-
-            {/* Add Link Bookmark Modal */}
-            {isLinkModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fadeIn">
-                    <div className="neu-card p-6 bg-[#E0E5EC] max-w-md w-full space-y-4 shadow-2xl">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-2">
-                                <Globe className="w-5 h-5 text-sky-600" />
-                                <h3 className="text-base font-black text-[#1a1c35]">Add URL Bookmark</h3>
-                            </div>
-                            <button
-                                onClick={() => setIsLinkModalOpen(false)}
-                                className="text-xs font-bold text-slate-500 hover:text-slate-800"
-                            >
-                                ✕
-                            </button>
-                        </div>
-
                         <form onSubmit={handleAddLink} className="space-y-4">
                             <div className="space-y-1.5">
                                 <label className="text-xs font-bold text-[#717699]">Resource URL *</label>
