@@ -1,19 +1,4 @@
 
-
-    const getAttachmentIcon = (att: TaskAttachment) => {
-        switch (att.type) {
-            case 'link':
-                return <Globe className="w-5 h-5 text-sky-600" />;
-            case 'image':
-                return <ImageIcon className="w-5 h-5 text-violet-600" />;
-            case 'pdf':
-            case 'doc':
-                return <FileText className="w-5 h-5 text-rose-600" />;
-            default:
-                return <Paperclip className="w-5 h-5 text-slate-600" />;
-        }
-    };
-
     return (
         <div className="space-y-6 animate-fadeIn max-w-5xl">
             {/* Upload Zone & Action Buttons */}
