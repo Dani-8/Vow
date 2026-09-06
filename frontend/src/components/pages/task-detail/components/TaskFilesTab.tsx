@@ -1,27 +1,4 @@
 
-            {/* Filter and Search Bar */}
-            <div className="neu-card p-4 bg-[#E0E5EC] flex flex-wrap items-center justify-between gap-3">
-                {/* Search */}
-                <div className="flex items-center space-x-2 px-3 py-1.5 rounded-xl neu-inset bg-[#dbe2ee]/60 max-w-xs w-full">
-                    <Search className="w-3.5 h-3.5 text-slate-400" />
-                    <input
-                        type="text"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search attachments..."
-                        className="bg-transparent border-none text-xs focus:outline-none w-full text-[#1a1c35]"
-                    />
-                </div>
-
-                {/* Filter Pills */}
-                <div className="flex items-center space-x-1.5">
-                    {(
-                        [
-                            { id: 'all', label: 'All' },
-                            { id: 'doc', label: 'Documents' },
-                            { id: 'image', label: 'Images' },
-                            { id: 'link', label: 'Links' },
-                        ] as const
                     ).map((t) => (
                         <button
                             key={t.id}
