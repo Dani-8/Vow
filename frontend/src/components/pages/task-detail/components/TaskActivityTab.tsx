@@ -1,38 +1,4 @@
 
-    // Helper to render clean category chip badge without raw emojis
-    const renderCategoryBadge = (item: TaskActivityItem) => {
-        const category = item.meta?.category;
-        if (!category && item.type !== 'comment') return null;
-
-        if (category === 'blocker') {
-            return (
-                <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md bg-rose-100 text-rose-800 border border-rose-200 text-[10px] font-black uppercase tracking-wider">
-                    <AlertTriangle className="w-3 h-3 text-rose-600" />
-                    <span>Blocker</span>
-                </span>
-            );
-        }
-
-        if (category === 'milestone') {
-            return (
-                <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 border border-emerald-200 text-[10px] font-black uppercase tracking-wider">
-                    <Target className="w-3 h-3 text-emerald-600" />
-                    <span>Milestone</span>
-                </span>
-            );
-        }
-
-        if (category === 'update') {
-            return (
-                <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md bg-indigo-100 text-indigo-800 border border-indigo-200 text-[10px] font-black uppercase tracking-wider">
-                    <TrendingUp className="w-3 h-3 text-indigo-600" />
-                    <span>Progress Update</span>
-                </span>
-            );
-        }
-
-        return null;
-    };
 
     return (
         <div className="space-y-6 animate-fadeIn max-w-4xl">
