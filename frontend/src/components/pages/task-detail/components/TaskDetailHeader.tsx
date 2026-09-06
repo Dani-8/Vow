@@ -1,30 +1,4 @@
 
-                                    <>
-                                        <Unlock className="w-4 h-4 text-purple-600" />
-                                        <span>Make Public</span>
-                                    </>
-                                ) : (
-                                    <>
-                                        <Lock className="w-4 h-4 text-purple-600" />
-                                        <span>Move to Growth Vault</span>
-                                    </>
-                                )}
-                            </button>
-
-                            {/* Edit Task */}
-                            <button
-                                onClick={() => {
-                                    setIsMenuOpen(false);
-                                    onEditTask?.(task);
-                                }}
-                                className="w-full text-left px-3 py-2.5 rounded-xl text-xs font-semibold text-[#1a1c35] hover:bg-white/60 flex items-center space-x-2.5 transition-colors"
-                            >
-                                <Edit3 className="w-4 h-4 text-[#549acb]" />
-                                <span>Edit Task</span>
-                            </button>
-
-                            <div className="my-1.5 border-t border-gray-300/40" />
-
                             {/* Delete Task */}
                             <button
                                 onClick={() => {
