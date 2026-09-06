@@ -1,22 +1,4 @@
 
-
-                {/* Add Link / Bookmark Card */}
-                <div
-                    onClick={() => setIsLinkModalOpen(true)}
-                    className="p-6 rounded-2xl neu-card bg-[#E0E5EC] hover:scale-[1.01] transition-transform cursor-pointer flex flex-col items-center justify-center text-center space-y-2.5"
-                >
-                    <div className="p-3 rounded-2xl neu-button text-sky-600">
-                        <Link2 className="w-6 h-6" />
-                    </div>
-                    <div>
-                        <p className="text-xs sm:text-sm font-bold text-[#1a1c35]">
-                            Bookmark Reference URL
-                        </p>
-                        <p className="text-[11px] text-slate-400">Save Figma specs, GitHub PRs, Google Docs &amp; articles</p>
-                    </div>
-                </div>
-            </div>
-
             {/* Filter and Search Bar */}
             <div className="neu-card p-4 bg-[#E0E5EC] flex flex-wrap items-center justify-between gap-3">
                 {/* Search */}
