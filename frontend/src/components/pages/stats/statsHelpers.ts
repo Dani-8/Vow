@@ -291,3 +291,50 @@ export function generateActivityHeatmap(
 
     return result;
 }
+
+/**
+ * Category & Focus Distribution
+ */
+export function calculateCategoryDistribution(
+    tasks: Task[],
+    challenges: Challenge[],
+    taskMaps: TaskMap[]
+): CategoryBreakdownItem[] {
+    const categoryTotals: Record<
+        string,
+        { itemCount: number; completedCount: number; color: string; iconId: string }
+    > = {
+        'Tech & Engineering': { itemCount: 0, completedCount: 0, color: '#549acb', iconId: 'code' },
+        'Fitness & Health': { itemCount: 0, completedCount: 0, color: '#10b981', iconId: 'dumbbell' },
+        'Learning & Mind': { itemCount: 0, completedCount: 0, color: '#8b5cf6', iconId: 'book' },
+        'Business & Finance': { itemCount: 0, completedCount: 0, color: '#f59e0b', iconId: 'briefcase' },
+        'Habits & Routine': { itemCount: 0, completedCount: 0, color: '#6366f1', iconId: 'calendar' },
+        'Creative & Craft': { itemCount: 0, completedCount: 0, color: '#06b6d4', iconId: 'palette' },
+    };
+
+    const categorize = (rawCategory?: string, rawTitle?: string): string => {
+        const text = `${rawCategory || ''} ${rawTitle || ''}`.toLowerCase();
+        if (text.includes('code') || text.includes('dev') || text.includes('react') || text.includes('api') || text.includes('tech') || text.includes('app')) {
+            return 'Tech & Engineering';
+        }
+        if (text.includes('fit') || text.includes('run') || text.includes('gym') || text.includes('workout') || text.includes('health') || text.includes('diet')) {
+            return 'Fitness & Health';
+        }
+        if (text.includes('read') || text.includes('learn') || text.includes('book') || text.includes('study') || text.includes('russian') || text.includes('language')) {
+            return 'Learning & Mind';
+        }
+        if (text.includes('money') || text.includes('financ') || text.includes('business') || text.includes('invest') || text.includes('career') || text.includes('client')) {
+            return 'Business & Finance';
+        }
+        if (text.includes('creative') || text.includes('art') || text.includes('music') || text.includes('video') || text.includes('design') || text.includes('write')) {
+            return 'Creative & Craft';
+        }
+        return 'Habits & Routine';
+    };
+
+    // 1. Tasks
+    tasks.forEach((t) => {
+        const cat = categorize(t.category || (t.tags && t.tags[0]), t.title);
+        categoryTotals[cat].itemCount++;
+        if (t.status === 'completed' || t.completedToday) categoryTotals[cat].completedCount++;
+    });
