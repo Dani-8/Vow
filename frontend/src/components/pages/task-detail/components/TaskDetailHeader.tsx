@@ -1,29 +1,4 @@
 
-export const TaskDetailHeader: React.FC<TaskDetailHeaderProps> = ({
-    task,
-    onBack,
-    onToggleComplete,
-    completedCount,
-    totalCount,
-    progressPercent,
-    onTogglePrivate,
-    onEditTask,
-    onDeleteTask,
-}) => {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const menuRef = useRef<HTMLDivElement>(null);
-
-    // Close dropdown menu on click outside
-    useEffect(() => {
-        const handleClickOutside = (e: MouseEvent) => {
-            if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-                setIsMenuOpen(false);
-            }
-        };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
-
     // SVG circle calculations for progress ring
     const radius = 38;
     const circumference = 2 * Math.PI * radius;
