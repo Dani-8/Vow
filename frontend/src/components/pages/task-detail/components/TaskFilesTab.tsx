@@ -1,39 +1,4 @@
 
-                                    <button
-                                        onClick={() => onDeleteAttachment(att.id)}
-                                        className="p-1.5 rounded-lg neu-button text-slate-400 hover:text-rose-600 transition-colors"
-                                        title="Delete attachment"
-                                    >
-                                        <Trash2 className="w-3.5 h-3.5" />
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* Image Preview if applicable */}
-                            {att.type === 'image' && att.previewUrl && (
-                                <div className="h-28 w-full rounded-xl overflow-hidden neu-inset bg-slate-900/10">
-                                    <img
-                                        src={att.previewUrl}
-                                        alt={att.name}
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
-                            )}
-
-                            {/* Title & Metadata */}
-                            <div className="space-y-1">
-                                <p className="text-xs font-bold text-[#1a1c35] line-clamp-2" title={att.name}>
-                                    {att.name}
-                                </p>
-                                <div className="flex items-center justify-between text-[10px] text-slate-400">
-                                    <span>{att.size || 'Web link'}</span>
-                                    <span>
-                                        {att.uploadedAt ? new Date(att.uploadedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : 'Today'}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
                 </div>
             ) : (
                 <div className="neu-card p-10 bg-[#E0E5EC] text-center space-y-2">
