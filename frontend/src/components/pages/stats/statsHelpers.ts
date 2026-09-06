@@ -181,3 +181,38 @@ export function calculateEcosystemOverview(
     const totalCompletedItems = completedTasks + completedSubtasks;
     const overallTaskCompletionRate =
         totalTrackedItems > 0 ? Math.round((totalCompletedItems / totalTrackedItems) * 100) : 0;
+
+    // 4. Consistency Calculation
+    // Base active days out of 30 + weighted bonus for streak stability
+    const activeDaysCount = Math.min(30, activeDaysInLast30.size + (stats?.masterStreak ? Math.min(stats.masterStreak, 15) : 0));
+    const baseConsistency = Math.round((activeDaysCount / 30) * 100);
+    const consistencyScore = Math.min(100, Math.max(baseConsistency, stats?.masterStreak ? 70 : 50));
+
+    let consistencyGrade: 'Mastery' | 'Elite' | 'Strong' | 'Building' = 'Building';
+    if (consistencyScore >= 90) consistencyGrade = 'Mastery';
+    else if (consistencyScore >= 80) consistencyGrade = 'Elite';
+    else if (consistencyScore >= 65) consistencyGrade = 'Strong';
+
+    return {
+        consistencyScore,
+        consistencyGrade,
+        activeDaysLast30: activeDaysCount,
+        totalChallenges,
+        activeChallengesCount,
+        completedSprintsCount,
+        totalSprintLogsCount,
+        totalTrophiesEarned,
+        totalMaps,
+        totalMapNodes,
+        completedMapNodes,
+        roadmapCompletionRate,
+        totalTasks,
+        completedTasks,
+        totalSubtasks,
+        completedSubtasks,
+        overallTaskCompletionRate,
+        masterStreak: stats?.masterStreak || 0,
+        bestMasterStreak: Math.max(stats?.masterStreak || 0, stats?.bestMasterStreak || 0),
+        topTaskStreak,
+    };
+}
