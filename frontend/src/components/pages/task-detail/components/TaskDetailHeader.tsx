@@ -1,41 +1,4 @@
 
-            {/* Main Title & Progress Ring Layout */}
-            <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
-                {/* Left Side: Completion Circle + Title + Badges */}
-                <div className="space-y-4 flex-1">
-                    <div className="flex items-start space-x-4">
-                        {/* Completion Toggle Circle */}
-                        <button
-                            onClick={() => onToggleComplete(task)}
-                            className="mt-1 flex-shrink-0 focus:outline-none transition-transform active:scale-95"
-                            title={task.status === 'completed' ? 'Mark as incomplete' : 'Mark as completed'}
-                        >
-                            {task.status === 'completed' ? (
-                                <CheckCircle2 className="w-8 h-8 text-emerald-500 fill-emerald-100" />
-                            ) : (
-                                <div className="w-8 h-8 rounded-full border-2 border-[#549acb] hover:bg-blue-50/50 flex items-center justify-center transition-all">
-                                    <Circle className="w-6 h-6 text-transparent" />
-                                </div>
-                            )}
-                        </button>
-
-                        {/* Title & Tags */}
-                        <div className="space-y-3">
-                            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#1a1c35] tracking-tight leading-tight">
-                                {task.title || 'Draft Q3 Personal Growth Blueprint'}
-                            </h1>
-
-                            {/* Tags & Priority Row */}
-                            <div className="flex flex-wrap items-center gap-2">
-                                {task.tags && task.tags.length > 0 ? (
-                                    task.tags.map((tag, idx) => (
-                                        <span
-                                            key={idx}
-                                            className="px-3 py-1 rounded-xl text-[11px] font-bold uppercase tracking-wider text-[#549acb] bg-[#eef4f9] border border-blue-100/60 shadow-sm flex items-center space-x-1"
-                                        >
-                                            <Tag className="w-3 h-3" />
-                                            <span>{tag}</span>
-                                        </span>
                                     ))
                                 ) : (
                                     <>
