@@ -115,3 +115,34 @@ export function calculateEcosystemOverview(
             completedSprintsCount += ch.sprints.filter((s) => s.status === 'completed').length;
         }
     });
+
+    // 2. Roadmap Metrics
+    const totalMaps = taskMaps.length;
+    let totalMapNodes = 0;
+    let completedMapNodes = 0;
+
+    taskMaps.forEach((map) => {
+        const nodes = map.nodes || [];
+        totalMapNodes += nodes.length;
+        nodes.forEach((node) => {
+            if (node.customStatus === 'completed') {
+                completedMapNodes++;
+            } else {
+                // Check linked task / subtask
+                const linkedTask = tasks.find((t) => t._id === node.taskId);
+                if (linkedTask) {
+                    if (node.subTaskId) {
+                        const subs = getSubTasksForTaskId(linkedTask._id, linkedTask.subTasks);
+                        const targetSub = subs.find((s) => s.id === node.subTaskId);
+                        if (targetSub?.status === 'completed') {
+                            completedMapNodes++;
+                        }
+                    } else if (linkedTask.status === 'completed' || linkedTask.completedToday) {
+                        completedMapNodes++;
+                    }
+                }
+            }
+        });
+    });
+
+    const roadmapCompletionRate = totalMapNodes > 0 ? Math.round((completedMapNodes / totalMapNodes) * 100) : 0;
