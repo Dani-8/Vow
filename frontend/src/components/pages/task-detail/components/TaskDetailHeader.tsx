@@ -1,21 +1,4 @@
 
-    // SVG circle calculations for progress ring
-    const radius = 38;
-    const circumference = 2 * Math.PI * radius;
-    const strokeDashoffset = circumference - (progressPercent / 100) * circumference;
-
-    const getPriorityStyle = (priority?: string) => {
-        switch (priority?.toLowerCase()) {
-            case 'high':
-                return 'bg-amber-100/80 text-amber-700 border-amber-200';
-            case 'medium':
-                return 'bg-blue-100/80 text-blue-700 border-blue-200';
-            case 'low':
-                return 'bg-emerald-100/80 text-emerald-700 border-emerald-200';
-            default:
-                return 'bg-amber-100/80 text-amber-700 border-amber-200';
-        }
-    };
 
     return (
         <div className="neu-card p-6 sm:p-8 space-y-6">
