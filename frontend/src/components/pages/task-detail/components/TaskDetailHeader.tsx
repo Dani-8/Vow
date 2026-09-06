@@ -1,29 +1,4 @@
 
-                                    ))
-                                ) : (
-                                    <>
-                                        <span className="px-3 py-1 rounded-xl text-[11px] font-bold uppercase tracking-wider text-[#549acb] bg-[#eef4f9] border border-blue-100/60 flex items-center space-x-1">
-                                            <Tag className="w-3 h-3" />
-                                            <span>GROWTH</span>
-                                        </span>
-                                        <span className="px-3 py-1 rounded-xl text-[11px] font-bold uppercase tracking-wider text-[#549acb] bg-[#eef4f9] border border-blue-100/60 flex items-center space-x-1">
-                                            <Tag className="w-3 h-3" />
-                                            <span>STRATEGY</span>
-                                        </span>
-                                    </>
-                                )}
-
-                                <span
-                                    className={`px-3 py-1 rounded-xl text-[11px] font-bold uppercase tracking-wider border flex items-center space-x-1 ${getPriorityStyle(
-                                        task.priority || 'High'
-                                    )}`}
-                                >
-                                    <Flame className="w-3 h-3" />
-                                    <span>{task.priority || 'High'}</span>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
 
                     {/* Description */}
                     <p className="text-sm text-[#54597d] leading-relaxed max-w-2xl font-medium pt-1">
