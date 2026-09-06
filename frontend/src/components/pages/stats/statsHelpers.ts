@@ -146,3 +146,38 @@ export function calculateEcosystemOverview(
     });
 
     const roadmapCompletionRate = totalMapNodes > 0 ? Math.round((completedMapNodes / totalMapNodes) * 100) : 0;
+
+    // 3. Task & Subtask Metrics
+    const totalTasks = tasks.length;
+    const completedTasks = tasks.filter((t) => t.status === 'completed' || t.completedToday).length;
+    let totalSubtasks = 0;
+    let completedSubtasks = 0;
+
+    let topTaskStreak: { title: string; streak: number; best: number } | null = null;
+
+    tasks.forEach((t) => {
+        const subs = getSubTasksForTaskId(t._id, t.subTasks);
+        totalSubtasks += subs.length;
+        completedSubtasks += subs.filter((s) => s.status === 'completed').length;
+
+        const curStreak = t.currentStreak || 0;
+        const bestStreak = t.bestStreak || 0;
+
+        if (!topTaskStreak || curStreak > topTaskStreak.streak || bestStreak > topTaskStreak.best) {
+            topTaskStreak = {
+                title: t.title,
+                streak: curStreak,
+                best: Math.max(bestStreak, curStreak),
+            };
+        }
+
+        // If completed or has streak today
+        if (t.completedToday || (t.currentStreak && t.currentStreak > 0)) {
+            activeDaysInLast30.add(formatDateKey(today));
+        }
+    });
+
+    const totalTrackedItems = totalTasks + totalSubtasks;
+    const totalCompletedItems = completedTasks + completedSubtasks;
+    const overallTaskCompletionRate =
+        totalTrackedItems > 0 ? Math.round((totalCompletedItems / totalTrackedItems) * 100) : 0;
