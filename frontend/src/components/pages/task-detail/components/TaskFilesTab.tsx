@@ -1,45 +1,4 @@
 
-                    ).map((t) => (
-                        <button
-                            key={t.id}
-                            onClick={() => setFilterType(t.id)}
-                            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${filterType === t.id
-                                ? 'neu-inset text-[#549acb] font-black'
-                                : 'neu-button text-[#717699] hover:text-[#1a1c35]'
-                                }`}
-                        >
-                            {t.label}
-                        </button>
-                    ))}
-                </div>
-            </div>
-
-            {/* Files Grid */}
-            {filteredAttachments.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {filteredAttachments.map((att) => (
-                        <div
-                            key={att.id}
-                            className="neu-card p-4 bg-[#E0E5EC] space-y-3 hover:scale-[1.01] transition-transform relative group"
-                        >
-                            {/* Top Row */}
-                            <div className="flex items-start justify-between">
-                                <div className="p-2.5 rounded-xl neu-inset bg-[#dbe2ee]/70 shrink-0">
-                                    {getAttachmentIcon(att)}
-                                </div>
-
-                                <div className="flex items-center space-x-1">
-                                    {att.url && att.url !== '#' && (
-                                        <a
-                                            href={att.url}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="p-1.5 rounded-lg neu-button text-slate-500 hover:text-indigo-600"
-                                            title="Open resource"
-                                        >
-                                            <ExternalLink className="w-3.5 h-3.5" />
-                                        </a>
-                                    )}
                                     <button
                                         onClick={() => onDeleteAttachment(att.id)}
                                         className="p-1.5 rounded-lg neu-button text-slate-400 hover:text-rose-600 transition-colors"
