@@ -85,3 +85,33 @@ export function calculateEcosystemOverview(
     const activeDaysInLast30 = new Set<string>();
 
     // 1. Challenge Metrics
+    const totalChallenges = challenges.length;
+    const activeChallengesCount = challenges.filter((c) => (c.status || 'active') === 'active').length;
+    let completedSprintsCount = 0;
+    let totalSprintLogsCount = 0;
+    let totalTrophiesEarned = 0;
+
+    challenges.forEach((ch) => {
+        // Count trophies earned (milestones reached)
+        const totalCompletedLogs = (ch.logs || []).filter((l) => l.status === 'completed').length;
+        if (totalCompletedLogs >= 25) totalTrophiesEarned++;
+        if (totalCompletedLogs >= 50) totalTrophiesEarned++;
+        if (totalCompletedLogs >= 75) totalTrophiesEarned++;
+        if (totalCompletedLogs >= 100) totalTrophiesEarned++;
+
+        // Track active days
+        (ch.logs || []).forEach((l) => {
+            if (l.status === 'completed' || l.status === 'rest') {
+                totalSprintLogsCount++;
+                const logDate = l.date ? l.date.split('T')[0] : '';
+                if (last30DaysSet.has(logDate)) {
+                    activeDaysInLast30.add(logDate);
+                }
+            }
+        });
+
+        // Sprints
+        if (ch.sprints && ch.sprints.length > 0) {
+            completedSprintsCount += ch.sprints.filter((s) => s.status === 'completed').length;
+        }
+    });
