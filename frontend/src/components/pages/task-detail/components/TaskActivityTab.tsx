@@ -1,41 +1,4 @@
 
-                            <button
-                                type="button"
-                                onClick={() => setCommentCategory('blocker')}
-                                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 ${commentCategory === 'blocker'
-                                    ? 'neu-inset text-rose-700 font-black'
-                                    : 'neu-button text-[#717699] hover:text-rose-600'
-                                    }`}
-                            >
-                                <AlertTriangle className="w-3.5 h-3.5 text-rose-600" />
-                                <span>Blocker</span>
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => setCommentCategory('milestone')}
-                                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 ${commentCategory === 'milestone'
-                                    ? 'neu-inset text-emerald-700 font-black'
-                                    : 'neu-button text-[#717699] hover:text-emerald-600'
-                                    }`}
-                            >
-                                <Target className="w-3.5 h-3.5 text-emerald-600" />
-                                <span>Milestone</span>
-                            </button>
-                        </div>
-
-                        {/* Submit button */}
-                        <button
-                            type="submit"
-                            disabled={!commentText.trim()}
-                            className="px-4 py-2 rounded-xl neu-button-primary text-xs font-bold text-white flex items-center space-x-1.5 disabled:opacity-50 shadow-sm"
-                        >
-                            <span>Post Update</span>
-                            <Send className="w-3.5 h-3.5" />
-                        </button>
-                    </div>
-                </form>
-            </div>
-
             {/* Activity Timeline List */}
             <div className="neu-card p-6 bg-[#E0E5EC] space-y-6">
                 <div className="flex items-center justify-between border-b border-[#c8d0e0]/70 pb-3">
