@@ -1,34 +1,5 @@
 
 
-    const handleDrop = (e: React.DragEvent) => {
-        e.preventDefault();
-        setIsDragging(false);
-        handleFileUpload(e.dataTransfer.files);
-    };
-
-    const handleAddLink = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!linkUrl.trim()) return;
-
-        let cleanUrl = linkUrl.trim();
-        if (!cleanUrl.startsWith('http://') && !cleanUrl.startsWith('https://')) {
-            cleanUrl = `https://${cleanUrl}`;
-        }
-
-        const title = linkName.trim() || new URL(cleanUrl).hostname;
-
-        onAddAttachment({
-            name: title,
-            type: 'link',
-            url: cleanUrl,
-            size: 'Web Bookmark',
-        });
-
-        setLinkUrl('');
-        setLinkName('');
-        setIsLinkModalOpen(false);
-    };
-
     const getAttachmentIcon = (att: TaskAttachment) => {
         switch (att.type) {
             case 'link':
