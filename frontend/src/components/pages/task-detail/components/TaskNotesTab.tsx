@@ -1,27 +1,6 @@
 
 
 
-                                    {/* Actions Bar on card */}
-                                    <div
-                                        className="flex items-center space-x-1 opacity-90 group-hover:opacity-100 transition-opacity"
-                                        onClick={(e) => e.stopPropagation()}
-                                    >
-                                        <button
-                                            onClick={() => onUpdateStickyNote(note.id, { isPinned: !note.isPinned })}
-                                            className="p-1.5 rounded-lg bg-black/5 hover:bg-black/10 text-slate-700 transition-colors"
-                                            title={note.isPinned ? 'Unpin note' : 'Pin note to top'}
-                                        >
-                                            {note.isPinned ? <PinOff className="w-3.5 h-3.5" /> : <Pin className="w-3.5 h-3.5" />}
-                                        </button>
-
-                                        <button
-                                            onClick={() => handleOpenEdit(note)}
-                                            className="p-1.5 rounded-lg bg-black/5 hover:bg-black/10 text-slate-700 transition-colors"
-                                            title="Open full note modal"
-                                        >
-                                            <Edit3 className="w-3.5 h-3.5" />
-                                        </button>
-
                                         <button
                                             onClick={() => onDeleteStickyNote(note.id)}
                                             className="p-1.5 rounded-lg bg-black/5 hover:bg-rose-500/20 text-rose-700 transition-colors"
