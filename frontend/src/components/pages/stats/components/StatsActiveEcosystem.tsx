@@ -39,3 +39,28 @@ export const StatsActiveEcosystem: React.FC<StatsActiveEcosystemProps> = ({
                                 </p>
                             </div>
                         </div>
+
+                        {onNavigateToView && (
+                            <button
+                                onClick={() => onNavigateToView('challenges')}
+                                className="text-xs font-bold text-[#549acb] hover:text-[#44476A] flex items-center space-x-1"
+                            >
+                                <span>All Challenges</span>
+                                <ChevronRight className="w-3.5 h-3.5" />
+                            </button>
+                        )}
+                    </div>
+
+                    {activeChallenges.length === 0 ? (
+                        <div className="neu-inset p-5 rounded-2xl text-center space-y-2">
+                            <p className="text-xs font-bold text-[#717699]">No active challenges right now.</p>
+                            {onNavigateToView && (
+                                <button
+                                    onClick={() => onNavigateToView('challenges')}
+                                    className="px-4 py-2 rounded-2xl neu-button text-xs font-black text-[#549acb] bg-[#E0E5EC]"
+                                >
+                                    + Start a 100-Day Challenge
+                                </button>
+                            )}
+                        </div>
+                    ) : (
