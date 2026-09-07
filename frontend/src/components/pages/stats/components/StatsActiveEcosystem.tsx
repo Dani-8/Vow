@@ -155,3 +155,38 @@ export const StatsActiveEcosystem: React.FC<StatsActiveEcosystemProps> = ({
                             </button>
                         )}
                     </div>
+
+                    {primaryMaps.length === 0 ? (
+                        <div className="neu-inset p-5 rounded-2xl text-center space-y-2">
+                            <p className="text-xs font-bold text-[#717699]">No task maps created yet.</p>
+                            {onNavigateToView && (
+                                <button
+                                    onClick={() => onNavigateToView('task-map')}
+                                    className="px-4 py-2 rounded-2xl neu-button text-xs font-black text-indigo-600 bg-[#E0E5EC]"
+                                >
+                                    + Explore Roadmap Blueprints
+                                </button>
+                            )}
+                        </div>
+                    ) : (
+                        <div className="space-y-3">
+                            {primaryMaps.map((map) => {
+                                const Icon = getCategoryIconComponent(map.icon || map.category);
+                                const totalNodes = (map.nodes || []).length;
+                                const completedNodes = (map.nodes || []).filter((n) => n.customStatus === 'completed').length;
+                                const progress = totalNodes > 0 ? Math.round((completedNodes / totalNodes) * 100) : 0;
+                                const connectionsCount = (map.connections || []).length;
+
+                                return (
+                                    <div
+                                        key={map.id}
+                                        onClick={() => {
+                                            if (onNavigateToView) {
+                                                const slug = getMapSlug(map);
+                                                window.location.hash = '';
+                                                window.history.pushState({}, '', `/app/map/${encodeURIComponent(slug)}`);
+                                                onNavigateToView('task-map');
+                                            }
+                                        }}
+                                        className="neu-inset p-4 rounded-2xl flex flex-col space-y-2.5 cursor-pointer hover:border-indigo-400/40 border border-transparent transition-all group"
+                                    ></div>
