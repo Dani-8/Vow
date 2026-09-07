@@ -1,48 +1,5 @@
 
 
-                    {/* Description */}
-                    {task.description ? (
-                        <p className="text-sm font-medium text-[#4a4e69] leading-relaxed">
-                            {task.description}
-                        </p>
-                    ) : (
-                        <p className="text-sm italic text-slate-400">
-                            No description added yet. You can edit this task to add clear goals and requirements.
-                        </p>
-                    )}
-
-                    {/* Subtask Progress Bar */}
-                    <div className="pt-2 space-y-2 border-t border-[#c8d0e0]/70">
-                        <div className="flex items-center justify-between text-xs font-bold text-[#717699]">
-                            <div className="flex items-center space-x-1.5 text-[#1a1c35]">
-                                <ListTodo className="w-4 h-4 text-[#2563eb]" />
-                                <span className="font-black">Sub-task Breakdown</span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <span>{completedCount} of {totalCount} completed</span>
-                                <span className="text-[#2563eb] font-black">({progressPercent}%)</span>
-                            </div>
-                        </div>
-
-                        <div className="h-3 w-full neu-inset rounded-full overflow-hidden p-0.5 bg-[#d1d9e6]">
-                            <div
-                                className="h-full rounded-full transition-all duration-500 bg-gradient-to-r from-[#2563eb] to-[#3b82f6]"
-                                style={{ width: `${progressPercent}%` }}
-                            />
-                        </div>
-
-                        <div className="flex justify-end pt-1">
-                            <button
-                                onClick={() => onTabChange('sub-tasks')}
-                                className="text-xs font-bold text-[#2563eb] hover:underline flex items-center space-x-1"
-                            >
-                                <span>Manage &amp; Timeline Breakdown</span>
-                                <ChevronRight className="w-3.5 h-3.5" />
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
                 {/* 2. Pinned Sticky Notes Board Preview */}
                 <div className="neu-card p-6 bg-[#E0E5EC] space-y-4">
                     <div className="flex items-center justify-between">
