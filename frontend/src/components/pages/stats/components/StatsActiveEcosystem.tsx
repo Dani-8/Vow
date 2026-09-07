@@ -189,4 +189,48 @@ export const StatsActiveEcosystem: React.FC<StatsActiveEcosystemProps> = ({
                                             }
                                         }}
                                         className="neu-inset p-4 rounded-2xl flex flex-col space-y-2.5 cursor-pointer hover:border-indigo-400/40 border border-transparent transition-all group"
-                                    ></div>
+                                    >
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center space-x-3">
+                                                <div className="w-8 h-8 rounded-xl neu-button flex items-center justify-center text-indigo-600 bg-[#E0E5EC] shrink-0">
+                                                    <Icon className="w-4 h-4" />
+                                                </div>
+                                                <div>
+                                                    <h4 className="text-xs font-black text-[#1a1c35] group-hover:text-indigo-600 transition-colors">
+                                                        {map.name}
+                                                    </h4>
+                                                    <span className="text-[10px] font-bold text-[#717699]">
+                                                        {totalNodes} Nodes • {connectionsCount} Dependency Links
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <span className="px-2 py-0.5 rounded-full neu-button text-[10px] font-extrabold text-indigo-600 bg-[#E0E5EC]">
+                                                {progress}% Done
+                                            </span>
+                                        </div>
+
+                                        {/* Progress bar */}
+                                        <div className="space-y-1">
+                                            <div className="flex justify-between text-[10px] font-bold text-[#717699]">
+                                                <span>{completedNodes} of {totalNodes} nodes conquered</span>
+                                                <span>{progress}%</span>
+                                            </div>
+                                            <div className="w-full h-1.5 rounded-full bg-slate-300 overflow-hidden">
+                                                <div
+                                                    className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-blue-500 transition-all duration-300"
+                                                    style={{ width: `${progress}%` }}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+};
+</div>
