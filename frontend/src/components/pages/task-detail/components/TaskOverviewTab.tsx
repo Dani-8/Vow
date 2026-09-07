@@ -1,21 +1,4 @@
 
-
-                {/* Activity Quick Stream */}
-                <div className="neu-card p-5 bg-[#E0E5EC] space-y-4">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                            <Activity className="w-4 h-4 text-emerald-600" />
-                            <h3 className="text-xs font-black uppercase tracking-wider text-[#1a1c35]">
-                                Recent Audit Trail
-                            </h3>
-                        </div>
-
-                        <button
-                            onClick={() => onTabChange('activity')}
-                            className="text-[11px] font-bold text-emerald-700 hover:underline"
-                        >
-                            View Full History
-                        </button>
                     </div>
 
                     <div className="space-y-3">
