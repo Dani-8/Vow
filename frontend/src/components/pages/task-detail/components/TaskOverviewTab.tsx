@@ -1,36 +1,4 @@
 
-                        <div
-                            onClick={() => onTabChange('notes')}
-                            className="p-5 rounded-xl border border-dashed border-[#c8d0e0] text-center cursor-pointer hover:bg-slate-200/30 transition-all space-y-1"
-                        >
-                            <p className="text-xs font-bold text-[#4a4e69]">No sticky notes pinned yet.</p>
-                            <p className="text-[11px] text-slate-400">Click to pin multi-colored cards for research, checklists, and rules.</p>
-                        </div>
-                    )}
-                </div>
-
-                {/* 3. Files & Attached Resources Preview */}
-                <div className="neu-card p-6 bg-[#E0E5EC] space-y-4">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                            <div className="p-2 rounded-xl neu-button text-indigo-600">
-                                <Paperclip className="w-4 h-4" />
-                            </div>
-                            <div>
-                                <h3 className="text-sm font-black text-[#1a1c35]">Resources &amp; Attachments</h3>
-                                <span className="text-[11px] font-medium text-[#717699]">{attachments.length} attached items</span>
-                            </div>
-                        </div>
-
-                        <button
-                            onClick={() => onTabChange('files')}
-                            className="px-3 py-1.5 rounded-xl neu-button text-xs font-bold text-indigo-600 hover:text-indigo-800 flex items-center space-x-1"
-                        >
-                            <span>Vault &amp; Links</span>
-                            <ArrowUpRight className="w-3.5 h-3.5" />
-                        </button>
-                    </div>
-
                     {attachments.length > 0 ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             {attachments.slice(0, 4).map((att) => (
