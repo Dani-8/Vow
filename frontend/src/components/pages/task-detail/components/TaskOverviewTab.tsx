@@ -1,15 +1,4 @@
 
-                    ) : (
-                        <div
-                            onClick={() => onTabChange('files')}
-                            className="p-5 rounded-xl border border-dashed border-[#c8d0e0] text-center cursor-pointer hover:bg-slate-200/30 transition-all space-y-1"
-                        >
-                            <p className="text-xs font-bold text-[#4a4e69]">No files or links attached yet.</p>
-                            <p className="text-[11px] text-slate-400">Click to upload documents, screenshots, or Figma/GitHub bookmarks.</p>
-                        </div>
-                    )}
-                </div>
-            </div>
 
             {/* Right Column: Metadata & Recent Activity Timeline */}
             <div className="lg:col-span-4 space-y-6">
