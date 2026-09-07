@@ -1,32 +1,6 @@
 
 
 
-                    {/* Color Filter Dots */}
-                    <div className="flex items-center space-x-1.5 pl-1">
-                        <button
-                            onClick={() => setColorFilter('all')}
-                            className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${colorFilter === 'all'
-                                ? 'neu-inset text-[#549acb] font-black'
-                                : 'neu-button text-slate-500 hover:text-slate-800'
-                                }`}
-                        >
-                            All
-                        </button>
-                        {(['yellow', 'green', 'blue', 'purple', 'rose', 'gray'] as NoteColor[]).map((c) => {
-                            const theme = STICKY_COLOR_THEMES[c];
-                            return (
-                                <button
-                                    key={c}
-                                    onClick={() => setColorFilter(c)}
-                                    className={`w-6 h-6 rounded-full transition-transform flex items-center justify-center ${theme.accentDot} ${colorFilter === c ? 'scale-125 ring-2 ring-indigo-500 ring-offset-2 ring-offset-[#E0E5EC]' : 'hover:scale-110 opacity-80 hover:opacity-100'
-                                        }`}
-                                    title={`Filter ${theme.name}`}
-                                />
-                            );
-                        })}
-                    </div>
-                </div>
-
                 {/* Right: Add Note Button */}
                 <button
                     onClick={handleOpenAdd}
