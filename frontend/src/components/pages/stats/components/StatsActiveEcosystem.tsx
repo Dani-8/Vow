@@ -233,4 +233,3 @@ export const StatsActiveEcosystem: React.FC<StatsActiveEcosystemProps> = ({
         </div>
     );
 };
-</div>
