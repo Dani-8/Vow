@@ -1,27 +1,5 @@
 
 
-                {/* 2. Pinned Sticky Notes Board Preview */}
-                <div className="neu-card p-6 bg-[#E0E5EC] space-y-4">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                            <div className="p-2 rounded-xl neu-button text-amber-600">
-                                <StickyNote className="w-4 h-4" />
-                            </div>
-                            <div>
-                                <h3 className="text-sm font-black text-[#1a1c35]">Sticky Notes &amp; Guidelines</h3>
-                                <span className="text-[11px] font-medium text-[#717699]">{stickyNotes.length} pinned paper notes</span>
-                            </div>
-                        </div>
-
-                        <button
-                            onClick={() => onTabChange('notes')}
-                            className="px-3 py-1.5 rounded-xl neu-button text-xs font-bold text-amber-800 hover:text-amber-900 flex items-center space-x-1"
-                        >
-                            <span>Open Sticky Board</span>
-                            <ArrowUpRight className="w-3.5 h-3.5" />
-                        </button>
-                    </div>
-
                     {stickyNotes.length > 0 ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                             {stickyNotes.slice(0, 4).map((note) => {
