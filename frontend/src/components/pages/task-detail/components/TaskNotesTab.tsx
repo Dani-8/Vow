@@ -1,23 +1,5 @@
 
 
-
-                {/* Right: Add Note Button */}
-                <button
-                    onClick={handleOpenAdd}
-                    className="px-4 py-2 rounded-xl neu-button-primary text-xs font-bold text-white flex items-center space-x-1.5 shadow-sm"
-                >
-                    <Plus className="w-4 h-4" />
-                    <span>Pin Sticky Note</span>
-                </button>
-            </div>
-
-            {/* Sticky Notes Corkboard Grid */}
-            {filteredNotes.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                    {filteredNotes.map((note) => {
-                        const colorCfg = STICKY_COLOR_THEMES[note.color || 'yellow'] || STICKY_COLOR_THEMES.yellow;
-
-                        return (
                             <div
                                 key={note.id}
                                 onClick={() => handleOpenEdit(note)}
