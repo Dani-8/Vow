@@ -1,23 +1,6 @@
 
 
 
-    return (
-        <div className="space-y-6 animate-fadeIn max-w-6xl">
-            {/* Top Controls Toolbar */}
-            <div className="neu-card p-4 bg-[#E0E5EC] flex flex-wrap items-center justify-between gap-3">
-                {/* Left: Search & Filter */}
-                <div className="flex flex-wrap items-center gap-3">
-                    <div className="flex items-center space-x-2 px-3 py-1.5 rounded-xl neu-inset bg-[#dbe2ee]/60 w-48 sm:w-64">
-                        <Search className="w-3.5 h-3.5 text-slate-400" />
-                        <input
-                            type="text"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            placeholder="Search sticky notes..."
-                            className="bg-transparent border-none text-xs focus:outline-none w-full text-[#1a1c35]"
-                        />
-                    </div>
-
                     {/* Color Filter Dots */}
                     <div className="flex items-center space-x-1.5 pl-1">
                         <button
