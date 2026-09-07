@@ -64,3 +64,46 @@ export const StatsActiveEcosystem: React.FC<StatsActiveEcosystemProps> = ({
                             )}
                         </div>
                     ) : (
+                        <div className="space-y-3">
+                            {activeChallenges.map((ch) => {
+                                const Icon = getCategoryIconComponent(ch.icon || ch.category);
+                                const completedLogs = (ch.logs || []).filter((l) => l.status === 'completed').length;
+                                const percent = Math.min(100, Math.round((completedLogs / (ch.targetDays || 100)) * 100));
+
+                                // Calculate streak
+                                let streak = 0;
+                                const sortedLogs = [...(ch.logs || [])].sort((a, b) => b.dayNumber - a.dayNumber);
+                                for (const log of sortedLogs) {
+                                    if (log.status === 'completed') streak++;
+                                    else if (log.status === 'rest') continue;
+                                    else break;
+                                }
+
+                                return (
+                                    <div
+                                        key={ch._id || ch.id}
+                                        onClick={() => onNavigateToView?.('challenge-detail', ch.id || ch._id)}
+                                        className="neu-inset p-4 rounded-2xl flex flex-col space-y-2.5 cursor-pointer hover:border-[#549acb]/40 border border-transparent transition-all group"
+                                    >
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center space-x-3">
+                                                <div className="w-8 h-8 rounded-xl neu-button flex items-center justify-center text-[#549acb] bg-[#E0E5EC] shrink-0">
+                                                    <Icon className="w-4 h-4" />
+                                                </div>
+                                                <div>
+                                                    <h4 className="text-xs font-black text-[#1a1c35] group-hover:text-[#549acb] transition-colors">
+                                                        {ch.title}
+                                                    </h4>
+                                                    <span className="text-[10px] font-bold text-[#717699]">
+                                                        {ch.category} • {ch.targetDays || 100} Days Target
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-center space-x-2">
+                                                <span className="px-2 py-0.5 rounded-full neu-button text-[10px] font-black text-amber-500 flex items-center space-x-1 bg-[#E0E5EC]">
+                                                    <Flame className="w-3 h-3 fill-amber-500" />
+                                                    <span>{streak}d Streak</span>
+                                                </span>
+                                            </div>
+                                        </div>
