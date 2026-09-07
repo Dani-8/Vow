@@ -107,3 +107,24 @@ export const StatsActiveEcosystem: React.FC<StatsActiveEcosystemProps> = ({
                                                 </span>
                                             </div>
                                         </div>
+
+                                        {/* Progress */}
+                                        <div className="space-y-1">
+                                            <div className="flex justify-between text-[10px] font-bold text-[#717699]">
+                                                <span>{completedLogs} days logged</span>
+                                                <span>{percent}%</span>
+                                            </div>
+                                            <div className="w-full h-1.5 rounded-full bg-slate-300 overflow-hidden">
+                                                <div
+                                                    className="h-full rounded-full bg-gradient-to-r from-[#549acb] to-purple-600 transition-all duration-300"
+                                                    style={{ width: `${percent}%` }}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+                </div>
+            </div>
