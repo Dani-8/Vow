@@ -1,26 +1,5 @@
 
-
-
-                                        <button
-                                            onClick={() => onDeleteStickyNote(note.id)}
-                                            className="p-1.5 rounded-lg bg-black/5 hover:bg-rose-500/20 text-rose-700 transition-colors"
-                                            title="Delete note"
-                                        >
-                                            <Trash2 className="w-3.5 h-3.5" />
-                                        </button>
-                                    </div>
-                                </div>
-
-                                {/* Content Body (Render line items) */}
-                                <div className={`text-xs ${colorCfg.textColor} leading-relaxed font-sans flex-1 overflow-hidden space-y-1.5`}>
-                                    {note.content.split('\n').slice(0, 8).map((line, idx) => {
-                                        if (line.startsWith('- [ ]') || line.startsWith('- [x]')) {
-                                            const isChecked = line.startsWith('- [x]');
-                                            return (
-                                                <div key={idx} className="flex items-center space-x-1.5 font-medium">
-                                                    <input type="checkbox" checked={isChecked} readOnly className="rounded text-indigo-600 w-3.5 h-3.5" />
-                                                    <span className={isChecked ? 'line-through opacity-60' : ''}>
-                                                        {line.replace(/^-\s*\[[ x]\]\s*/, '')}
+    {line.replace(/^-\s*\[[ x]\]\s*/, '')}
                                                     </span>
                                                 </div>
                                             );
