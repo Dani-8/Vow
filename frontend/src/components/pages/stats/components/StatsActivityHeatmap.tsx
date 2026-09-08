@@ -13,3 +13,11 @@ interface StatsActiveEcosystemProps {
         param?: string
     ) => void;
 }
+
+export const StatsActiveEcosystem: React.FC<StatsActiveEcosystemProps> = ({
+    challenges,
+    taskMaps,
+    onNavigateToView,
+}) => {
+    const activeChallenges = challenges.filter((c) => (c.status || 'active') === 'active').slice(0, 3);
+    const primaryMaps = taskMaps.slice(0, 3);
