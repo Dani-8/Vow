@@ -176,3 +176,31 @@ export const StatsActiveEcosystem: React.FC<StatsActiveEcosystemProps> = ({
                                 const completedNodes = (map.nodes || []).filter((n) => n.customStatus === 'completed').length;
                                 const progress = totalNodes > 0 ? Math.round((completedNodes / totalNodes) * 100) : 0;
                                 const connectionsCount = (map.connections || []).length;
+
+                                return (
+                                    <div
+                                        key={map.id}
+                                        onClick={() => {
+                                            if (onNavigateToView) {
+                                                const slug = getMapSlug(map);
+                                                window.location.hash = '';
+                                                window.history.pushState({}, '', `/app/map/${encodeURIComponent(slug)}`);
+                                                onNavigateToView('task-map');
+                                            }
+                                        }}
+                                        className="neu-inset p-4 rounded-2xl flex flex-col space-y-2.5 cursor-pointer hover:border-indigo-400/40 border border-transparent transition-all group"
+                                    >
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center space-x-3">
+                                                <div className="w-8 h-8 rounded-xl neu-button flex items-center justify-center text-indigo-600 bg-[#E0E5EC] shrink-0">
+                                                    <Icon className="w-4 h-4" />
+                                                </div>
+                                                <div>
+                                                    <h4 className="text-xs font-black text-[#1a1c35] group-hover:text-indigo-600 transition-colors">
+                                                        {map.name}
+                                                    </h4>
+                                                    <span className="text-[10px] font-bold text-[#717699]">
+                                                        {totalNodes} Nodes • {connectionsCount} Dependency Links
+                                                    </span>
+                                                </div>
+                                            </div>
