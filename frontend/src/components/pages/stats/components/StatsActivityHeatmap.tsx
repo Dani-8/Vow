@@ -39,3 +39,14 @@ export const StatsActiveEcosystem: React.FC<StatsActiveEcosystemProps> = ({
                                 </p>
                             </div>
                         </div>
+
+                        {onNavigateToView && (
+                            <button
+                                onClick={() => onNavigateToView('challenges')}
+                                className="text-xs font-bold text-[#549acb] hover:text-[#44476A] flex items-center space-x-1"
+                            >
+                                <span>All Challenges</span>
+                                <ChevronRight className="w-3.5 h-3.5" />
+                            </button>
+                        )}
+                    </div>
