@@ -128,3 +128,30 @@ export const StatsActiveEcosystem: React.FC<StatsActiveEcosystemProps> = ({
                     )}
                 </div>
             </div>
+
+            {/* Column 2: Active Roadmaps (Task Maps) */}
+            <div className="neu-card p-6 rounded-3xl space-y-4 border border-white/60 flex flex-col justify-between">
+                <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                            <div className="w-10 h-10 rounded-2xl neu-button flex items-center justify-center text-indigo-600 bg-[#E0E5EC]">
+                                <Compass className="w-5 h-5" />
+                            </div>
+                            <div>
+                                <h3 className="text-base font-black text-[#1a1c35]">Strategic Task Maps</h3>
+                                <p className="text-xs text-[#717699] font-medium">
+                                    Visual dependency & milestone roadmaps
+                                </p>
+                            </div>
+                        </div>
+
+                        {onNavigateToView && (
+                            <button
+                                onClick={() => onNavigateToView('task-map')}
+                                className="text-xs font-bold text-indigo-600 hover:text-[#44476A] flex items-center space-x-1"
+                            >
+                                <span>All Maps</span>
+                                <ChevronRight className="w-3.5 h-3.5" />
+                            </button>
+                        )}
+                    </div>
