@@ -64,3 +64,17 @@ export const StatsActiveEcosystem: React.FC<StatsActiveEcosystemProps> = ({
                             )}
                         </div>
                     ) : (
+                        <div className="space-y-3">
+                            {activeChallenges.map((ch) => {
+                                const Icon = getCategoryIconComponent(ch.icon || ch.category);
+                                const completedLogs = (ch.logs || []).filter((l) => l.status === 'completed').length;
+                                const percent = Math.min(100, Math.round((completedLogs / (ch.targetDays || 100)) * 100));
+
+                                // Calculate streak
+                                let streak = 0;
+                                const sortedLogs = [...(ch.logs || [])].sort((a, b) => b.dayNumber - a.dayNumber);
+                                for (const log of sortedLogs) {
+                                    if (log.status === 'completed') streak++;
+                                    else if (log.status === 'rest') continue;
+                                    else break;
+                                }
