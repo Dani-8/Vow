@@ -295,3 +295,14 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                                     />
                                 </PieChart>
                             </ResponsiveContainer>
+
+                            {/* Center Donut Label */}
+                            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                                <span className="text-xl font-black text-[#1a1c35]">
+                                    {normalizedCategories.reduce((s, c) => s + c.itemCount, 0)}
+                                </span>
+                                <span className="text-[9px] font-bold uppercase text-[#717699]">
+                                    Total Items
+                                </span>
+                            </div>
+                        </div>
