@@ -368,3 +368,36 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                             </span>
                         </div>
                     </div>
+
+                    <div className="w-full h-64 pt-2">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={barData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#CBD5E1" vertical={false} />
+                                <XAxis
+                                    dataKey="name"
+                                    tick={{ fill: '#44476A', fontSize: 11, fontWeight: 700 }}
+                                    axisLine={{ stroke: '#CBD5E1' }}
+                                    tickLine={false}
+                                />
+                                <YAxis
+                                    tick={{ fill: '#717699', fontSize: 10 }}
+                                    axisLine={false}
+                                    tickLine={false}
+                                />
+                                <Tooltip
+                                    formatter={(val: any, name: any) => [val, name === 'completed' ? 'Conquered' : 'Pending']}
+                                    contentStyle={{
+                                        backgroundColor: '#E0E5EC',
+                                        borderRadius: '14px',
+                                        border: '1px solid #CBD5E1',
+                                        boxShadow: '4px 4px 8px #bec3c9, -4px -4px 8px #ffffff',
+                                        fontSize: '11px',
+                                        fontWeight: 700,
+                                    }}
+                                />
+                                <Bar dataKey="completed" stackId="a" fill="#10b981" radius={[0, 0, 4, 4]} />
+                                <Bar dataKey="pending" stackId="a" fill="#CBD5E1" radius={[6, 6, 0, 0]} />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
