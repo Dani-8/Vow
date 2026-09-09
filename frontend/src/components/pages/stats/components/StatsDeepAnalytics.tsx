@@ -306,3 +306,34 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                                 </span>
                             </div>
                         </div>
+
+                        {/* Donut Legend */}
+                        <div className="grid grid-cols-2 gap-2 pt-1">
+                            {normalizedCategories.slice(0, 6).map((cat) => (
+                                <button
+                                    key={cat.key}
+                                    onClick={() => setSelectedCategoryKey(cat.key)}
+                                    className={`flex items-center space-x-2 px-2.5 py-1.5 rounded-xl text-left transition-all ${
+                                        selectedCategory?.key === cat.key
+                                            ? 'neu-button bg-[#E0E5EC]'
+                                            : 'neu-inset bg-[#E0E5EC]/80 hover:bg-[#E0E5EC]'
+                                    }`}
+                                >
+                                    <span
+                                        className="w-2.5 h-2.5 rounded-full shrink-0"
+                                        style={{ backgroundColor: cat.color }}
+                                    />
+                                    <div className="min-w-0 flex-1">
+                                        <div className="text-[11px] font-bold text-[#1a1c35] truncate">
+                                            {cat.name}
+                                        </div>
+                                        <div className="text-[9px] font-semibold text-[#717699]">
+                                            {cat.percentage}% share
+                                        </div>
+                                    </div>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
