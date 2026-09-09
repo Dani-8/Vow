@@ -89,3 +89,16 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
         total: cat.itemCount,
         color: cat.color,
     }));
+
+    // 3. Weekly Trend Data (Past 8 weeks)
+    const last8WeeksMap: Record<number, { weekLabel: string; actions: number; challengeLogs: number }> = {};
+    const maxWeekIndex = Math.max(...heatmapActivities.map((a) => a.weekIndex), 0);
+    const minWeekIndex = Math.max(0, maxWeekIndex - 7);
+
+    for (let w = minWeekIndex; w <= maxWeekIndex; w++) {
+        const weekDays = heatmapActivities.filter((a) => a.weekIndex === w);
+        const total = weekDays.reduce((sum, d) => sum + d.totalActions, 0);
+        const challengeLogs = weekDays.reduce((sum, d) => sum + d.challengeActions, 0);
+        const firstDay = weekDays[0]?.displayDate.split(',')[0] || `Wk ${w + 1}`;
+        last8WeeksMap[w] = { weekLabel: firstDay, actions: total, challengeLogs };
+    }
