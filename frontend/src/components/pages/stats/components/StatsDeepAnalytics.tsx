@@ -423,3 +423,46 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                             8-Wk Window
                         </span>
                     </div>
+
+                    <div className="w-full h-64 pt-2">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <AreaChart data={weeklyTrend} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                                <defs>
+                                    <linearGradient id="colorVelocity" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%" stopColor="#549acb" stopOpacity={0.4} />
+                                        <stop offset="95%" stopColor="#549acb" stopOpacity={0.0} />
+                                    </linearGradient>
+                                </defs>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#CBD5E1" vertical={false} />
+                                <XAxis
+                                    dataKey="weekLabel"
+                                    tick={{ fill: '#44476A', fontSize: 10, fontWeight: 700 }}
+                                    axisLine={{ stroke: '#CBD5E1' }}
+                                    tickLine={false}
+                                />
+                                <YAxis
+                                    tick={{ fill: '#717699', fontSize: 10 }}
+                                    axisLine={false}
+                                    tickLine={false}
+                                />
+                                <Tooltip
+                                    formatter={(val: any) => [`${val} actions completed`, 'Weekly Velocity']}
+                                    contentStyle={{
+                                        backgroundColor: '#E0E5EC',
+                                        borderRadius: '14px',
+                                        border: '1px solid #CBD5E1',
+                                        boxShadow: '4px 4px 8px #bec3c9, -4px -4px 8px #ffffff',
+                                        fontSize: '11px',
+                                        fontWeight: 700,
+                                    }}
+                                />
+                                <Area
+                                    type="monotone"
+                                    dataKey="actions"
+                                    stroke="#549acb"
+                                    strokeWidth={3}
+                                    fillOpacity={1}
+                                    fill="url(#colorVelocity)"
+                                />
+                            </AreaChart>
+                        </ResponsiveContainer>
