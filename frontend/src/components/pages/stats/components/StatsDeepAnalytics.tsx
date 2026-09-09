@@ -241,3 +241,8 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                             </RadarChart>
                         </ResponsiveContainer>
                     </div>
+
+                    <p className="text-[11px] text-[#717699] text-center font-medium">
+                        Blue shape charts your effort volume across life domains; green shape plots your actual finish rate percentage.
+                    </p>
+                </div>
