@@ -199,7 +199,7 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                                 </div>
                             </div>
                         </div>
-                </div>
+                    </div>
 
                     {/* Recharts Radar */}
                     <div className="w-full h-72 py-1">
@@ -466,3 +466,9 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                                 />
                             </AreaChart>
                         </ResponsiveContainer>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
