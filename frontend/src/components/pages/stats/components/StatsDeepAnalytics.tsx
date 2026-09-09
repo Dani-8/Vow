@@ -356,3 +356,15 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                                 </p>
                             </div>
                         </div>
+
+                        <div className="flex items-center space-x-2 text-[10px] font-bold">
+                            <span className="flex items-center space-x-1">
+                                <span className="w-2 h-2 rounded-full bg-[#10b981]" />
+                                <span className="text-[#44476A]">Conquered</span>
+                            </span>
+                            <span className="flex items-center space-x-1">
+                                <span className="w-2 h-2 rounded-full bg-[#CBD5E1]" />
+                                <span className="text-[#44476A]">Pending</span>
+                            </span>
+                        </div>
+                    </div>
