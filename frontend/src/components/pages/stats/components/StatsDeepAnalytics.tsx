@@ -186,3 +186,17 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                                     </p>
                                 </div>
                             </div>
+
+                            {/* Legend */}
+                            <div className="flex items-center space-x-3 text-[11px] font-bold">
+                                <div className="flex items-center space-x-1.5">
+                                    <span className="w-2.5 h-2.5 rounded-full bg-[#549acb]" />
+                                    <span className="text-[#44476A]">Target Volume</span>
+                                </div>
+                                <div className="flex items-center space-x-1.5">
+                                    <span className="w-2.5 h-2.5 rounded-full bg-[#10b981]" />
+                                    <span className="text-[#44476A]">Completion %</span>
+                                </div>
+                            </div>
+                        </div>
+                </div>
