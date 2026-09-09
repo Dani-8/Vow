@@ -45,3 +45,25 @@ const HARMONIOUS_COLORS = [
     '#8b5cf6', // Violet
     '#06b6d4', // Cyan
 ];
+
+export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
+    categories,
+    heatmapActivities,
+}) => {
+    const [selectedCategoryKey, setSelectedCategoryKey] = useState<string | null>(null);
+
+    // Normalize category colors to cohesive palette
+    const normalizedCategories = categories.map((cat, idx) => ({
+        ...cat,
+        color: HARMONIOUS_COLORS[idx % HARMONIOUS_COLORS.length],
+    }));
+
+    // Efficiency calculations
+    const sortedByEfficiency = [...normalizedCategories].sort((a, b) => {
+        const effA = a.itemCount > 0 ? a.completedCount / a.itemCount : 0;
+        const effB = b.itemCount > 0 ? b.completedCount / b.itemCount : 0;
+        return effB - effA;
+    });
+
+    const highestEfficiency = sortedByEfficiency[0];
+    const highestVolume = [...normalizedCategories].sort((a, b) => b.itemCount - a.itemCount)[0];
