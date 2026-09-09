@@ -129,3 +129,21 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                         Highest concentration of active challenges, visual task maps, and routines.
                     </p>
                 </div>
+
+                <div className="neu-card p-5 rounded-3xl space-y-2 border border-white/60">
+                    <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-black uppercase tracking-wider text-emerald-600 flex items-center space-x-1.5">
+                            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                            <span>Highest Follow-Through</span>
+                        </span>
+                        <span className="px-2 py-0.5 rounded-full neu-inset text-[10px] font-extrabold text-emerald-600">
+                            {highestEfficiency ? Math.round((highestEfficiency.completedCount / highestEfficiency.itemCount) * 100) : 0}% Rate
+                        </span>
+                    </div>
+                    <div className="text-xl font-black text-[#1a1c35]">
+                        {highestEfficiency?.name || 'Tech & Engineering'}
+                    </div>
+                    <p className="text-xs text-[#717699] font-medium">
+                        Strongest completion discipline across roadmap goals and check-ins.
+                    </p>
+                </div>
