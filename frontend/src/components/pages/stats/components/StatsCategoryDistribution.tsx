@@ -34,3 +34,27 @@ export const StatsCategoryDistribution: React.FC<StatsCategoryDistributionProps>
                     </div>
                 )}
             </div>
+
+            {/* Distribution Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {categories.map((cat) => {
+                    const Icon = getCategoryIconComponent(cat.iconId);
+                    return (
+                        <div key={cat.key} className="neu-inset p-4 rounded-2xl space-y-2.5 bg-[#E0E5EC]/80 border border-white/60">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center space-x-2.5">
+                                    <div
+                                        className="w-8 h-8 rounded-xl neu-button flex items-center justify-center bg-[#E0E5EC] shrink-0"
+                                        style={{ color: cat.color }}
+                                    >
+                                        <Icon className="w-4 h-4" />
+                                    </div>
+                                    <div>
+                                        <h4 className="text-xs font-black text-[#1a1c35]">{cat.name}</h4>
+                                        <span className="text-[10px] font-semibold text-[#717699]">
+                                            {cat.itemCount} active item{cat.itemCount === 1 ? '' : 's'}
+                                        </span>
+                                    </div>
+                                </div>
+                                <span className="text-sm font-black text-[#1a1c35]">{cat.percentage}%</span>
+                            </div>
