@@ -102,3 +102,8 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
         const firstDay = weekDays[0]?.displayDate.split(',')[0] || `Wk ${w + 1}`;
         last8WeeksMap[w] = { weekLabel: firstDay, actions: total, challengeLogs };
     }
+
+    const weeklyTrend = Object.values(last8WeeksMap);
+
+    const selectedCategory =
+        normalizedCategories.find((c) => c.key === selectedCategoryKey) || normalizedCategories[0];
