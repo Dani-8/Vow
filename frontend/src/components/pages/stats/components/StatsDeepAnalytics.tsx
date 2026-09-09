@@ -166,3 +166,308 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                     </p>
                 </div>
             </div>
+
+            {/* Row 1: Interactive Recharts Radar Chart + Category Share Donut */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                {/* 1. Life Balance Radar Chart (7 cols) */}
+                <div className="lg:col-span-7 neu-card p-6 rounded-3xl space-y-4 border border-white/60 flex flex-col justify-between">
+                    <div>
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div className="flex items-center space-x-3">
+                                <div className="w-10 h-10 rounded-2xl neu-button flex items-center justify-center text-[#549acb] bg-[#E0E5EC]">
+                                    <Compass className="w-5 h-5" />
+                                </div>
+                                <div>
+                                    <h3 className="text-base font-black text-[#1a1c35]">
+                                        Domain Performance Radar
+                                    </h3>
+                                    <p className="text-xs text-[#717699] font-medium">
+                                        Multi-axis spider graph: Target Volume vs. Completion Strength
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Legend */}
+                            <div className="flex items-center space-x-3 text-[11px] font-bold">
+                                <div className="flex items-center space-x-1.5">
+                                    <span className="w-2.5 h-2.5 rounded-full bg-[#549acb]" />
+                                    <span className="text-[#44476A]">Target Volume</span>
+                                </div>
+                                <div className="flex items-center space-x-1.5">
+                                    <span className="w-2.5 h-2.5 rounded-full bg-[#10b981]" />
+                                    <span className="text-[#44476A]">Completion %</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Recharts Radar */}
+                    <div className="w-full h-72 py-1">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <RadarChart cx="50%" cy="50%" outerRadius="75%" data={radarData}>
+                                <PolarGrid stroke="#CBD5E1" strokeDasharray="3 3" />
+                                <PolarAngleAxis
+                                    dataKey="category"
+                                    tick={{ fill: '#44476A', fontSize: 11, fontWeight: 700 }}
+                                />
+                                <PolarRadiusAxis angle={30} domain={[0, 'auto']} tick={false} axisLine={false} />
+                                <Radar
+                                    name="Target Volume"
+                                    dataKey="focusVolume"
+                                    stroke="#549acb"
+                                    fill="#549acb"
+                                    fillOpacity={0.25}
+                                    strokeWidth={2}
+                                />
+                                <Radar
+                                    name="Completion %"
+                                    dataKey="completionStrength"
+                                    stroke="#10b981"
+                                    fill="#10b981"
+                                    fillOpacity={0.3}
+                                    strokeWidth={2}
+                                />
+                                <Tooltip
+                                    contentStyle={{
+                                        backgroundColor: '#E0E5EC',
+                                        borderRadius: '16px',
+                                        border: '1px solid #CBD5E1',
+                                        boxShadow: '4px 4px 8px #bec3c9, -4px -4px 8px #ffffff',
+                                        fontSize: '11px',
+                                        fontWeight: 700,
+                                        color: '#1a1c35',
+                                    }}
+                                />
+                            </RadarChart>
+                        </ResponsiveContainer>
+                    </div>
+
+                    <p className="text-[11px] text-[#717699] text-center font-medium">
+                        Blue shape charts your effort volume across life domains; green shape plots your actual finish rate percentage.
+                    </p>
+                </div>
+
+                {/* 2. Donut Pie Chart: Category Focus Allocation (5 cols) */}
+                <div className="lg:col-span-5 neu-card p-6 rounded-3xl space-y-4 border border-white/60 flex flex-col justify-between">
+                    <div>
+                        <div className="flex items-center space-x-3 mb-2">
+                            <div className="w-10 h-10 rounded-2xl neu-button flex items-center justify-center text-[#6366f1] bg-[#E0E5EC]">
+                                <PieIcon className="w-5 h-5" />
+                            </div>
+                            <div>
+                                <h3 className="text-base font-black text-[#1a1c35]">Focus Share (Donut)</h3>
+                                <p className="text-xs text-[#717699] font-medium">
+                                    Proportional energy allocation
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Recharts Pie / Donut */}
+                        <div className="w-full h-52 relative flex items-center justify-center">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <PieChart>
+                                    <Pie
+                                        data={normalizedCategories}
+                                        dataKey="itemCount"
+                                        nameKey="name"
+                                        cx="50%"
+                                        cy="50%"
+                                        innerRadius={55}
+                                        outerRadius={80}
+                                        paddingAngle={3}
+                                        stroke="#E0E5EC"
+                                        strokeWidth={2}
+                                    >
+                                        {normalizedCategories.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={entry.color} />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip
+                                        formatter={(val: any, name: any) => [`${val} items`, name]}
+                                        contentStyle={{
+                                            backgroundColor: '#E0E5EC',
+                                            borderRadius: '14px',
+                                            border: '1px solid #CBD5E1',
+                                            boxShadow: '4px 4px 8px #bec3c9, -4px -4px 8px #ffffff',
+                                            fontSize: '11px',
+                                            fontWeight: 700,
+                                        }}
+                                    />
+                                </PieChart>
+                            </ResponsiveContainer>
+
+                            {/* Center Donut Label */}
+                            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                                <span className="text-xl font-black text-[#1a1c35]">
+                                    {normalizedCategories.reduce((s, c) => s + c.itemCount, 0)}
+                                </span>
+                                <span className="text-[9px] font-bold uppercase text-[#717699]">
+                                    Total Items
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Donut Legend */}
+                        <div className="grid grid-cols-2 gap-2 pt-1">
+                            {normalizedCategories.slice(0, 6).map((cat) => (
+                                <button
+                                    key={cat.key}
+                                    onClick={() => setSelectedCategoryKey(cat.key)}
+                                    className={`flex items-center space-x-2 px-2.5 py-1.5 rounded-xl text-left transition-all ${selectedCategory?.key === cat.key
+                                        ? 'neu-button bg-[#E0E5EC]'
+                                        : 'neu-inset bg-[#E0E5EC]/80 hover:bg-[#E0E5EC]'
+                                        }`}
+                                >
+                                    <span
+                                        className="w-2.5 h-2.5 rounded-full shrink-0"
+                                        style={{ backgroundColor: cat.color }}
+                                    />
+                                    <div className="min-w-0 flex-1">
+                                        <div className="text-[11px] font-bold text-[#1a1c35] truncate">
+                                            {cat.name}
+                                        </div>
+                                        <div className="text-[9px] font-semibold text-[#717699]">
+                                            {cat.percentage}% share
+                                        </div>
+                                    </div>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Row 2: Category Conquered vs Pending Bar Chart + 8-Week Cadence Area Chart */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* 1. Stacked Bar Chart */}
+                <div className="neu-card p-6 rounded-3xl space-y-4 border border-white/60">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                            <div className="w-10 h-10 rounded-2xl neu-button flex items-center justify-center text-[#10b981] bg-[#E0E5EC]">
+                                <BarChart3 className="w-5 h-5" />
+                            </div>
+                            <div>
+                                <h3 className="text-base font-black text-[#1a1c35]">
+                                    Conquered vs. Pending Backlog
+                                </h3>
+                                <p className="text-xs text-[#717699] font-medium">
+                                    Item completion volume per category
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center space-x-2 text-[10px] font-bold">
+                            <span className="flex items-center space-x-1">
+                                <span className="w-2 h-2 rounded-full bg-[#10b981]" />
+                                <span className="text-[#44476A]">Conquered</span>
+                            </span>
+                            <span className="flex items-center space-x-1">
+                                <span className="w-2 h-2 rounded-full bg-[#CBD5E1]" />
+                                <span className="text-[#44476A]">Pending</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div className="w-full h-64 pt-2">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={barData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#CBD5E1" vertical={false} />
+                                <XAxis
+                                    dataKey="name"
+                                    tick={{ fill: '#44476A', fontSize: 11, fontWeight: 700 }}
+                                    axisLine={{ stroke: '#CBD5E1' }}
+                                    tickLine={false}
+                                />
+                                <YAxis
+                                    tick={{ fill: '#717699', fontSize: 10 }}
+                                    axisLine={false}
+                                    tickLine={false}
+                                />
+                                <Tooltip
+                                    formatter={(val: any, name: any) => [val, name === 'completed' ? 'Conquered' : 'Pending']}
+                                    contentStyle={{
+                                        backgroundColor: '#E0E5EC',
+                                        borderRadius: '14px',
+                                        border: '1px solid #CBD5E1',
+                                        boxShadow: '4px 4px 8px #bec3c9, -4px -4px 8px #ffffff',
+                                        fontSize: '11px',
+                                        fontWeight: 700,
+                                    }}
+                                />
+                                <Bar dataKey="completed" stackId="a" fill="#10b981" radius={[0, 0, 4, 4]} />
+                                <Bar dataKey="pending" stackId="a" fill="#CBD5E1" radius={[6, 6, 0, 0]} />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+
+                {/* 2. 8-Week Velocity Area Trend */}
+                <div className="neu-card p-6 rounded-3xl space-y-4 border border-white/60">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                            <div className="w-10 h-10 rounded-2xl neu-button flex items-center justify-center text-[#549acb] bg-[#E0E5EC]">
+                                <Activity className="w-5 h-5" />
+                            </div>
+                            <div>
+                                <h3 className="text-base font-black text-[#1a1c35]">
+                                    Weekly Execution Cadence
+                                </h3>
+                                <p className="text-xs text-[#717699] font-medium">
+                                    Action output volume over the last 8 weeks
+                                </p>
+                            </div>
+                        </div>
+
+                        <span className="px-2.5 py-1 rounded-full neu-inset text-[10px] font-black text-[#549acb]">
+                            8-Wk Window
+                        </span>
+                    </div>
+
+                    <div className="w-full h-64 pt-2">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <AreaChart data={weeklyTrend} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                                <defs>
+                                    <linearGradient id="colorVelocity" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%" stopColor="#549acb" stopOpacity={0.4} />
+                                        <stop offset="95%" stopColor="#549acb" stopOpacity={0.0} />
+                                    </linearGradient>
+                                </defs>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#CBD5E1" vertical={false} />
+                                <XAxis
+                                    dataKey="weekLabel"
+                                    tick={{ fill: '#44476A', fontSize: 10, fontWeight: 700 }}
+                                    axisLine={{ stroke: '#CBD5E1' }}
+                                    tickLine={false}
+                                />
+                                <YAxis
+                                    tick={{ fill: '#717699', fontSize: 10 }}
+                                    axisLine={false}
+                                    tickLine={false}
+                                />
+                                <Tooltip
+                                    formatter={(val: any) => [`${val} actions completed`, 'Weekly Velocity']}
+                                    contentStyle={{
+                                        backgroundColor: '#E0E5EC',
+                                        borderRadius: '14px',
+                                        border: '1px solid #CBD5E1',
+                                        boxShadow: '4px 4px 8px #bec3c9, -4px -4px 8px #ffffff',
+                                        fontSize: '11px',
+                                        fontWeight: 700,
+                                    }}
+                                />
+                                <Area
+                                    type="monotone"
+                                    dataKey="actions"
+                                    stroke="#549acb"
+                                    strokeWidth={3}
+                                    fillOpacity={1}
+                                    fill="url(#colorVelocity)"
+                                />
+                            </AreaChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
