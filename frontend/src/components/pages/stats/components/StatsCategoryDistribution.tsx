@@ -24,3 +24,13 @@ export const StatsCategoryDistribution: React.FC<StatsCategoryDistributionProps>
                         </p>
                     </div>
                 </div>
+
+                {topCategory && (
+                    <div className="px-3 py-1.5 rounded-2xl neu-inset text-xs font-bold text-[#1a1c35] flex items-center space-x-1.5 shrink-0 bg-[#E0E5EC]/80">
+                        <Sparkles className="w-3.5 h-3.5 text-[#549acb]" />
+                        <span>
+                            Primary Domain: <strong className="text-[#549acb]">{topCategory.name}</strong> ({topCategory.percentage}%)
+                        </span>
+                    </div>
+                )}
+            </div>
