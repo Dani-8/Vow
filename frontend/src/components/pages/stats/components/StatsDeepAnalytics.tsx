@@ -166,3 +166,23 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                     </p>
                 </div>
             </div>
+
+            {/* Row 1: Interactive Recharts Radar Chart + Category Share Donut */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                {/* 1. Life Balance Radar Chart (7 cols) */}
+                <div className="lg:col-span-7 neu-card p-6 rounded-3xl space-y-4 border border-white/60 flex flex-col justify-between">
+                    <div>
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div className="flex items-center space-x-3">
+                                <div className="w-10 h-10 rounded-2xl neu-button flex items-center justify-center text-[#549acb] bg-[#E0E5EC]">
+                                    <Compass className="w-5 h-5" />
+                                </div>
+                                <div>
+                                    <h3 className="text-base font-black text-[#1a1c35]">
+                                        Domain Performance Radar
+                                    </h3>
+                                    <p className="text-xs text-[#717699] font-medium">
+                                        Multi-axis spider graph: Target Volume vs. Completion Strength
+                                    </p>
+                                </div>
+                            </div>
