@@ -1,233 +1,230 @@
-import React from 'react';
-import { Trophy, Compass, ArrowRight, Flame, Layers, CheckCircle2, ChevronRight } from 'lucide-react';
-import { Challenge } from '../../../../types';
-import { TaskMap } from '../../task-map/types';
-import { getCategoryIconComponent } from '../../../common/categoryIcons';
-import { getMapSlug } from '../../task-map/TaskMapPage';
+import React, { useState, useMemo } from 'react';
+import { Calendar, Info } from 'lucide-react';
+import { DayActivity } from '../statsHelpers';
 
-interface StatsActiveEcosystemProps {
-    challenges: Challenge[];
-    taskMaps: TaskMap[];
-    onNavigateToView?: (
-        view: 'home' | 'landing' | 'visible' | 'private' | 'stats' | 'auth' | 'task-map' | 'challenges' | 'challenge-detail',
-        param?: string
-    ) => void;
+interface StatsActivityHeatmapProps {
+    activities: DayActivity[];
 }
 
-export const StatsActiveEcosystem: React.FC<StatsActiveEcosystemProps> = ({
-    challenges,
-    taskMaps,
-    onNavigateToView,
-}) => {
-    const activeChallenges = challenges.filter((c) => (c.status || 'active') === 'active').slice(0, 3);
-    const primaryMaps = taskMaps.slice(0, 3);
+export const StatsActivityHeatmap: React.FC<StatsActivityHeatmapProps> = ({ activities }) => {
+    const [hoveredDay, setHoveredDay] = useState<DayActivity | null>(null);
+    const [activeFilter, setActiveFilter] = useState<'all' | 'challenges' | 'tasks'>('all');
+
+    // Group activities by week index
+    const weeks: DayActivity[][] = useMemo(() => {
+        const grouped: DayActivity[][] = [];
+        activities.forEach((day) => {
+            if (!grouped[day.weekIndex]) {
+                grouped[day.weekIndex] = [];
+            }
+            grouped[day.weekIndex].push(day);
+        });
+        return grouped;
+    }, [activities]);
+
+    // Compute month headers positioned at the week index where each month begins
+    const monthLabels = useMemo(() => {
+        const labels: { name: string; weekIndex: number }[] = [];
+        let lastMonth = '';
+
+        weeks.forEach((week, wIndex) => {
+            // Check the first day in this week
+            const firstDay = week[0];
+            if (firstDay) {
+                // Parse date string (YYYY-MM-DD)
+                const parts = firstDay.date.split('-');
+                if (parts.length >= 2) {
+                    const monthKey = `${parts[0]}-${parts[1]}`;
+                    if (monthKey !== lastMonth) {
+                        const dateObj = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, 1);
+                        const monthName = dateObj.toLocaleDateString('en-US', { month: 'short' });
+                        labels.push({ name: monthName, weekIndex: wIndex });
+                        lastMonth = monthKey;
+                    }
+                }
+            }
+        });
+        return labels;
+    }, [weeks]);
+
+    // Compute stats
+    const totalActions = activities.reduce((sum, d) => sum + d.totalActions, 0);
+    const activeDays = activities.filter((d) => d.totalActions > 0).length;
+    const maxDayActions = activities.reduce((max, d) => Math.max(max, d.totalActions), 0);
+
+    const getCellColorClass = (day: DayActivity): string => {
+        const count =
+            activeFilter === 'all'
+                ? day.totalActions
+                : activeFilter === 'challenges'
+                    ? day.challengeActions
+                    : day.taskActions;
+
+        if (count === 0) return 'bg-[#d8dee8]/60 shadow-[inset_1px_1px_2px_rgba(163,177,198,0.5),inset_-1px_-1px_2px_rgba(255,255,255,0.7)]';
+        if (count === 1) return 'bg-sky-200 border border-sky-300 shadow-sm';
+        if (count <= 3) return 'bg-sky-400 text-white shadow-sm';
+        if (count <= 5) return 'bg-[#549acb] text-white shadow-sm';
+        return 'bg-[#3b82f6] text-white shadow-sm';
+    };
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Column 1: Active Challenges */}
-            <div className="neu-card p-6 rounded-3xl space-y-4 border border-white/60 flex flex-col justify-between">
-                <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 rounded-2xl neu-button flex items-center justify-center text-[#549acb] bg-[#E0E5EC]">
-                                <Trophy className="w-5 h-5" />
-                            </div>
-                            <div>
-                                <h3 className="text-base font-black text-[#1a1c35]">Active Challenges</h3>
-                                <p className="text-xs text-[#717699] font-medium">
-                                    Current challenges in progress
-                                </p>
-                            </div>
-                        </div>
-
-                        {onNavigateToView && (
-                            <button
-                                onClick={() => onNavigateToView('challenges')}
-                                className="text-xs font-bold text-[#549acb] hover:text-[#44476A] flex items-center space-x-1"
-                            >
-                                <span>All Challenges</span>
-                                <ChevronRight className="w-3.5 h-3.5" />
-                            </button>
-                        )}
+        <div className="neu-card p-6 rounded-3xl space-y-5 border border-white/60">
+            {/* Header */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 rounded-2xl neu-button flex items-center justify-center text-[#549acb] bg-[#E0E5EC]">
+                        <Calendar className="w-5 h-5" />
                     </div>
+                    <div>
+                        <h3 className="text-base font-black text-[#1a1c35] flex items-center space-x-2">
+                            <span>Unified Activity & Execution Matrix</span>
+                            <span className="text-[10px] px-2 py-0.5 rounded-full neu-inset text-[#549acb] font-bold">
+                                365 Days
+                            </span>
+                        </h3>
+                        <p className="text-xs text-[#717699] font-medium">
+                            Full annual contribution history across challenges, roadmap milestones, and daily habits
+                        </p>
+                    </div>
+                </div>
 
-                    {activeChallenges.length === 0 ? (
-                        <div className="neu-inset p-5 rounded-2xl text-center space-y-2">
-                            <p className="text-xs font-bold text-[#717699]">No active challenges right now.</p>
-                            {onNavigateToView && (
-                                <button
-                                    onClick={() => onNavigateToView('challenges')}
-                                    className="px-4 py-2 rounded-2xl neu-button text-xs font-black text-[#549acb] bg-[#E0E5EC]"
-                                >
-                                    + Start a 100-Day Challenge
-                                </button>
-                            )}
-                        </div>
-                    ) : (
-                        <div className="space-y-3">
-                            {activeChallenges.map((ch) => {
-                                const Icon = getCategoryIconComponent(ch.icon || ch.category);
-                                const completedLogs = (ch.logs || []).filter((l) => l.status === 'completed').length;
-                                const percent = Math.min(100, Math.round((completedLogs / (ch.targetDays || 100)) * 100));
-
-                                // Calculate streak
-                                let streak = 0;
-                                const sortedLogs = [...(ch.logs || [])].sort((a, b) => b.dayNumber - a.dayNumber);
-                                for (const log of sortedLogs) {
-                                    if (log.status === 'completed') streak++;
-                                    else if (log.status === 'rest') continue;
-                                    else break;
-                                }
-
-                                return (
-                                    <div
-                                        key={ch._id || ch.id}
-                                        onClick={() => onNavigateToView?.('challenge-detail', ch.id || ch._id)}
-                                        className="neu-inset p-4 rounded-2xl flex flex-col space-y-2.5 cursor-pointer hover:border-[#549acb]/40 border border-transparent transition-all group"
-                                    >
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center space-x-3">
-                                                <div className="w-8 h-8 rounded-xl neu-button flex items-center justify-center text-[#549acb] bg-[#E0E5EC] shrink-0">
-                                                    <Icon className="w-4 h-4" />
-                                                </div>
-                                                <div>
-                                                    <h4 className="text-xs font-black text-[#1a1c35] group-hover:text-[#549acb] transition-colors">
-                                                        {ch.title}
-                                                    </h4>
-                                                    <span className="text-[10px] font-bold text-[#717699]">
-                                                        {ch.category} • {ch.targetDays || 100} Days Target
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            <div className="flex items-center space-x-2">
-                                                <span className="px-2 py-0.5 rounded-full neu-button text-[10px] font-black text-amber-500 flex items-center space-x-1 bg-[#E0E5EC]">
-                                                    <Flame className="w-3 h-3 fill-amber-500" />
-                                                    <span>{streak}d Streak</span>
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        {/* Progress */}
-                                        <div className="space-y-1">
-                                            <div className="flex justify-between text-[10px] font-bold text-[#717699]">
-                                                <span>{completedLogs} days logged</span>
-                                                <span>{percent}%</span>
-                                            </div>
-                                            <div className="w-full h-1.5 rounded-full bg-slate-300 overflow-hidden">
-                                                <div
-                                                    className="h-full rounded-full bg-gradient-to-r from-[#549acb] to-purple-600 transition-all duration-300"
-                                                    style={{ width: `${percent}%` }}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    )}
+                {/* Filter Pills */}
+                <div className="flex items-center space-x-1.5 neu-inset p-1 rounded-2xl bg-[#E0E5EC]/80">
+                    <button
+                        onClick={() => setActiveFilter('all')}
+                        className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${activeFilter === 'all'
+                            ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                            : 'text-[#717699] hover:text-[#1a1c35]'
+                            }`}
+                    >
+                        All Actions
+                    </button>
+                    <button
+                        onClick={() => setActiveFilter('challenges')}
+                        className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${activeFilter === 'challenges'
+                            ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                            : 'text-[#717699] hover:text-[#1a1c35]'
+                            }`}
+                    >
+                        Challenges
+                    </button>
+                    <button
+                        onClick={() => setActiveFilter('tasks')}
+                        className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${activeFilter === 'tasks'
+                            ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                            : 'text-[#717699] hover:text-[#1a1c35]'
+                            }`}
+                    >
+                        Tasks
+                    </button>
                 </div>
             </div>
 
-            {/* Column 2: Active Roadmaps (Task Maps) */}
-            <div className="neu-card p-6 rounded-3xl space-y-4 border border-white/60 flex flex-col justify-between">
-                <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 rounded-2xl neu-button flex items-center justify-center text-indigo-600 bg-[#E0E5EC]">
-                                <Compass className="w-5 h-5" />
-                            </div>
-                            <div>
-                                <h3 className="text-base font-black text-[#1a1c35]">Strategic Task Maps</h3>
-                                <p className="text-xs text-[#717699] font-medium">
-                                    Visual dependency & milestone roadmaps
-                                </p>
-                            </div>
-                        </div>
-
-                        {onNavigateToView && (
-                            <button
-                                onClick={() => onNavigateToView('task-map')}
-                                className="text-xs font-bold text-indigo-600 hover:text-[#44476A] flex items-center space-x-1"
-                            >
-                                <span>All Maps</span>
-                                <ChevronRight className="w-3.5 h-3.5" />
-                            </button>
-                        )}
+            {/* Matrix Container - 365 Days GitHub-style */}
+            <div className="overflow-x-auto pb-3 pt-1 scrollbar-thin">
+                <div className="min-w-[840px] space-y-1.5">
+                    {/* Horizontal Months Row aligned with weeks */}
+                    <div className="flex pl-8 text-[11px] font-bold text-[#717699] select-none h-4 relative">
+                        {monthLabels.map((m, idx) => {
+                            // Calculate column offset: each week is ~15px (11px cell + 4px gap)
+                            const leftOffset = m.weekIndex * 15;
+                            return (
+                                <span
+                                    key={`month-${idx}`}
+                                    className="absolute"
+                                    style={{ left: `${leftOffset}px` }}
+                                >
+                                    {m.name}
+                                </span>
+                            );
+                        })}
                     </div>
 
-                    {primaryMaps.length === 0 ? (
-                        <div className="neu-inset p-5 rounded-2xl text-center space-y-2">
-                            <p className="text-xs font-bold text-[#717699]">No task maps created yet.</p>
-                            {onNavigateToView && (
-                                <button
-                                    onClick={() => onNavigateToView('task-map')}
-                                    className="px-4 py-2 rounded-2xl neu-button text-xs font-black text-indigo-600 bg-[#E0E5EC]"
-                                >
-                                    + Explore Roadmap Blueprints
-                                </button>
-                            )}
+                    {/* Days grid with Mon / Wed / Fri row labels */}
+                    <div className="flex items-start">
+                        {/* Day labels (Mon, Wed, Fri) aligned to 7 rows */}
+                        <div className="flex flex-col justify-between pr-2 text-[9px] font-bold text-[#717699] select-none h-[105px] pt-1">
+                            <span className="leading-none">Mon</span>
+                            <span className="leading-none">Wed</span>
+                            <span className="leading-none">Fri</span>
                         </div>
-                    ) : (
-                        <div className="space-y-3">
-                            {primaryMaps.map((map) => {
-                                const Icon = getCategoryIconComponent(map.icon || map.category);
-                                const totalNodes = (map.nodes || []).length;
-                                const completedNodes = (map.nodes || []).filter((n) => n.customStatus === 'completed').length;
-                                const progress = totalNodes > 0 ? Math.round((completedNodes / totalNodes) * 100) : 0;
-                                const connectionsCount = (map.connections || []).length;
 
-                                return (
-                                    <div
-                                        key={map.id}
-                                        onClick={() => {
-                                            if (onNavigateToView) {
-                                                const slug = getMapSlug(map);
-                                                window.location.hash = '';
-                                                window.history.pushState({}, '', `/app/map/${encodeURIComponent(slug)}`);
-                                                onNavigateToView('task-map');
-                                            }
-                                        }}
-                                        className="neu-inset p-4 rounded-2xl flex flex-col space-y-2.5 cursor-pointer hover:border-indigo-400/40 border border-transparent transition-all group"
-                                    >
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center space-x-3">
-                                                <div className="w-8 h-8 rounded-xl neu-button flex items-center justify-center text-indigo-600 bg-[#E0E5EC] shrink-0">
-                                                    <Icon className="w-4 h-4" />
-                                                </div>
-                                                <div>
-                                                    <h4 className="text-xs font-black text-[#1a1c35] group-hover:text-indigo-600 transition-colors">
-                                                        {map.name}
-                                                    </h4>
-                                                    <span className="text-[10px] font-bold text-[#717699]">
-                                                        {totalNodes} Nodes • {connectionsCount} Dependency Links
-                                                    </span>
-                                                </div>
-                                            </div>
+                        {/* 53-54 Weeks columns */}
+                        <div className="flex space-x-1">
+                            {weeks.map((week, wIndex) => (
+                                <div key={`week-${wIndex}`} className="flex flex-col space-y-1">
+                                    {week.map((day) => {
+                                        const count =
+                                            activeFilter === 'all'
+                                                ? day.totalActions
+                                                : activeFilter === 'challenges'
+                                                    ? day.challengeActions
+                                                    : day.taskActions;
 
-                                            <span className="px-2 py-0.5 rounded-full neu-button text-[10px] font-extrabold text-indigo-600 bg-[#E0E5EC]">
-                                                {progress}% Done
-                                            </span>
-                                        </div>
-
-                                        {/* Progress bar */}
-                                        <div className="space-y-1">
-                                            <div className="flex justify-between text-[10px] font-bold text-[#717699]">
-                                                <span>{completedNodes} of {totalNodes} nodes conquered</span>
-                                                <span>{progress}%</span>
-                                            </div>
-                                            <div className="w-full h-1.5 rounded-full bg-slate-300 overflow-hidden">
-                                                <div
-                                                    className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-blue-500 transition-all duration-300"
-                                                    style={{ width: `${progress}%` }}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                );
-                            })}
+                                        return (
+                                            <div
+                                                key={day.date}
+                                                onMouseEnter={() => setHoveredDay(day)}
+                                                onMouseLeave={() => setHoveredDay(null)}
+                                                className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-sm cursor-pointer transition-transform duration-150 hover:scale-125 ${getCellColorClass(
+                                                    day
+                                                )}`}
+                                                title={`${day.displayDate}: ${count} actions`}
+                                            />
+                                        );
+                                    })}
+                                </div>
+                            ))}
                         </div>
-                    )}
+                    </div>
+                </div>
+            </div>
+
+            {/* Active Tooltip / Detail Banner */}
+            <div className="neu-inset p-3.5 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs bg-[#E0E5EC]/80 border border-white/60">
+                {hoveredDay ? (
+                    <div className="flex items-center space-x-2.5">
+                        <div className="w-2.5 h-2.5 rounded-full bg-[#549acb] animate-pulse" />
+                        <span className="font-black text-[#1a1c35]">{hoveredDay.displayDate}:</span>
+                        <span className="text-[#549acb] font-extrabold">
+                            {hoveredDay.totalActions} total action{hoveredDay.totalActions === 1 ? '' : 's'}
+                        </span>
+                        <span className="text-[#717699]">
+                            ({hoveredDay.challengeActions} challenge logs • {hoveredDay.taskActions} task actions)
+                        </span>
+                    </div>
+                ) : (
+                    <div className="flex items-center space-x-2 text-[#717699] font-medium">
+                        <Info className="w-4 h-4 text-[#549acb]" />
+                        <span>Hover over any day square to see execution details.</span>
+                    </div>
+                )}
+
+                {/* Legend */}
+                <div className="flex items-center space-x-1.5 text-[11px] font-bold text-[#717699] shrink-0">
+                    <span>Less</span>
+                    <div className="w-2.5 h-2.5 rounded-sm bg-[#d8dee8]/60 shadow-inner" />
+                    <div className="w-2.5 h-2.5 rounded-sm bg-sky-200" />
+                    <div className="w-2.5 h-2.5 rounded-sm bg-sky-400" />
+                    <div className="w-2.5 h-2.5 rounded-sm bg-[#549acb]" />
+                    <div className="w-2.5 h-2.5 rounded-sm bg-[#3b82f6]" />
+                    <span>More</span>
+                </div>
+            </div>
+
+            {/* Bottom Summary Stats */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                <div className="neu-inset p-3.5 rounded-2xl text-center">
+                    <span className="text-[10px] font-bold uppercase text-[#717699] block">Total Executed Actions (1y)</span>
+                    <span className="text-xl font-black text-[#1a1c35]">{totalActions}</span>
+                </div>
+                <div className="neu-inset p-3.5 rounded-2xl text-center">
+                    <span className="text-[10px] font-bold uppercase text-[#717699] block">Active Execution Days</span>
+                    <span className="text-xl font-black text-emerald-600">{activeDays} Days</span>
+                </div>
+                <div className="neu-inset p-3.5 rounded-2xl text-center">
+                    <span className="text-[10px] font-bold uppercase text-[#717699] block">Peak Day Volume</span>
+                    <span className="text-xl font-black text-[#549acb]">{maxDayActions} Actions</span>
                 </div>
             </div>
         </div>
