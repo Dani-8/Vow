@@ -66,3 +66,24 @@ export const StatsActivityHeatmap: React.FC<StatsActivityHeatmapProps> = ({ acti
         if (count <= 5) return 'bg-[#549acb] text-white shadow-sm';
         return 'bg-[#3b82f6] text-white shadow-sm';
     };
+
+    return (
+        <div className="neu-card p-6 rounded-3xl space-y-5 border border-white/60">
+            {/* Header */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 rounded-2xl neu-button flex items-center justify-center text-[#549acb] bg-[#E0E5EC]">
+                        <Calendar className="w-5 h-5" />
+                    </div>
+                    <div>
+                        <h3 className="text-base font-black text-[#1a1c35] flex items-center space-x-2">
+                            <span>Unified Activity & Execution Matrix</span>
+                            <span className="text-[10px] px-2 py-0.5 rounded-full neu-inset text-[#549acb] font-bold">
+                                365 Days
+                            </span>
+                        </h3>
+                        <p className="text-xs text-[#717699] font-medium">
+                            Full annual contribution history across challenges, roadmap milestones, and daily habits
+                        </p>
+                    </div>
+                </div>
