@@ -22,3 +22,9 @@ export const StatsExecutiveHeader: React.FC<StatsExecutiveHeaderProps> = ({ over
                         <span className="text-[10px] font-bold text-[#717699]">Unified Ecosystem Telemetry</span>
                     </div>
                 </div>
+
+                <span className="hidden sm:inline-flex items-center space-x-1 px-2.5 py-1 rounded-full neu-inset text-[10px] font-extrabold text-emerald-600 bg-[#E0E5EC]/90">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>Non-Punitive Engine</span>
+                </span>
+            </div>
