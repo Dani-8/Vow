@@ -122,3 +122,32 @@ export const StatsActivityHeatmap: React.FC<StatsActivityHeatmapProps> = ({ acti
                     </button>
                 </div>
             </div>
+
+            {/* Matrix Container - 365 Days GitHub-style */}
+            <div className="overflow-x-auto pb-3 pt-1 scrollbar-thin">
+                <div className="min-w-[840px] space-y-1.5">
+                    {/* Horizontal Months Row aligned with weeks */}
+                    <div className="flex pl-8 text-[11px] font-bold text-[#717699] select-none h-4 relative">
+                        {monthLabels.map((m, idx) => {
+                            // Calculate column offset: each week is ~15px (11px cell + 4px gap)
+                            const leftOffset = m.weekIndex * 15;
+                            return (
+                                <span
+                                    key={`month-${idx}`}
+                                    className="absolute"
+                                    style={{ left: `${leftOffset}px` }}
+                                >
+                                    {m.name}
+                                </span>
+                            );
+                        })}
+                    </div>
+
+                    {/* Days grid with Mon / Wed / Fri row labels */}
+                    <div className="flex items-start">
+                        {/* Day labels (Mon, Wed, Fri) aligned to 7 rows */}
+                        <div className="flex flex-col justify-between pr-2 text-[9px] font-bold text-[#717699] select-none h-[105px] pt-1">
+                            <span className="leading-none">Mon</span>
+                            <span className="leading-none">Wed</span>
+                            <span className="leading-none">Fri</span>
+                        </div>
