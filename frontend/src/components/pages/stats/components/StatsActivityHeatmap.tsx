@@ -46,3 +46,23 @@ export const StatsActivityHeatmap: React.FC<StatsActivityHeatmapProps> = ({ acti
         });
         return labels;
     }, [weeks]);
+
+    // Compute stats
+    const totalActions = activities.reduce((sum, d) => sum + d.totalActions, 0);
+    const activeDays = activities.filter((d) => d.totalActions > 0).length;
+    const maxDayActions = activities.reduce((max, d) => Math.max(max, d.totalActions), 0);
+
+    const getCellColorClass = (day: DayActivity): string => {
+        const count =
+            activeFilter === 'all'
+                ? day.totalActions
+                : activeFilter === 'challenges'
+                ? day.challengeActions
+                : day.taskActions;
+
+        if (count === 0) return 'bg-[#d8dee8]/60 shadow-[inset_1px_1px_2px_rgba(163,177,198,0.5),inset_-1px_-1px_2px_rgba(255,255,255,0.7)]';
+        if (count === 1) return 'bg-sky-200 border border-sky-300 shadow-sm';
+        if (count <= 3) return 'bg-sky-400 text-white shadow-sm';
+        if (count <= 5) return 'bg-[#549acb] text-white shadow-sm';
+        return 'bg-[#3b82f6] text-white shadow-sm';
+    };
