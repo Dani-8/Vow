@@ -28,3 +28,15 @@ export const StatsExecutiveHeader: React.FC<StatsExecutiveHeaderProps> = ({ over
                     <span>Non-Punitive Engine</span>
                 </span>
             </div>
+
+            {/* Right: Key Micro Stats Strip */}
+            <div className="flex items-center flex-wrap gap-2 w-full md:w-auto justify-end text-xs font-bold">
+                <div className="px-3 py-1.5 rounded-xl neu-inset flex items-center space-x-2 bg-[#E0E5EC]/80">
+                    <span className="text-[10px] uppercase font-extrabold text-[#717699]">Consistency</span>
+                    <span className="px-2 py-0.5 rounded-lg text-[10px] font-black text-white bg-[#549acb]">
+                        {consistencyScore}% ({consistencyGrade})
+                    </span>
+                    <span className="text-[10px] font-medium text-[#717699]">
+                        {activeDaysLast30}/30d
+                    </span>
+                </div>
