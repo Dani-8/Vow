@@ -214,3 +214,22 @@ export const StatsActivityHeatmap: React.FC<StatsActivityHeatmapProps> = ({ acti
                     <span>More</span>
                 </div>
             </div>
+
+            {/* Bottom Summary Stats */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                <div className="neu-inset p-3.5 rounded-2xl text-center">
+                    <span className="text-[10px] font-bold uppercase text-[#717699] block">Total Executed Actions (1y)</span>
+                    <span className="text-xl font-black text-[#1a1c35]">{totalActions}</span>
+                </div>
+                <div className="neu-inset p-3.5 rounded-2xl text-center">
+                    <span className="text-[10px] font-bold uppercase text-[#717699] block">Active Execution Days</span>
+                    <span className="text-xl font-black text-emerald-600">{activeDays} Days</span>
+                </div>
+                <div className="neu-inset p-3.5 rounded-2xl text-center">
+                    <span className="text-[10px] font-bold uppercase text-[#717699] block">Peak Day Volume</span>
+                    <span className="text-xl font-black text-[#549acb]">{maxDayActions} Actions</span>
+                </div>
+            </div>
+        </div>
+    );
+};
