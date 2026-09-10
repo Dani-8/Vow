@@ -40,3 +40,15 @@ export const StatsExecutiveHeader: React.FC<StatsExecutiveHeaderProps> = ({ over
                         {activeDaysLast30}/30d
                     </span>
                 </div>
+
+                <div className="px-3 py-1.5 rounded-xl neu-inset flex items-center space-x-2 bg-[#E0E5EC]/80">
+                    <Flame className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+                    <span className="text-[#1a1c35] font-black">{masterStreak}d Master</span>
+                    <span className="text-[10px] text-[#717699] font-semibold border-l border-slate-300 pl-2">
+                        Best: <strong className="text-[#549acb]">{bestMasterStreak}d</strong>
+                    </span>
+                </div>
+            </div>
+        </div>
+    );
+};
