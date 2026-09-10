@@ -151,3 +151,34 @@ export const StatsActivityHeatmap: React.FC<StatsActivityHeatmapProps> = ({ acti
                             <span className="leading-none">Wed</span>
                             <span className="leading-none">Fri</span>
                         </div>
+
+                        {/* 53-54 Weeks columns */}
+                        <div className="flex space-x-1">
+                            {weeks.map((week, wIndex) => (
+                                <div key={`week-${wIndex}`} className="flex flex-col space-y-1">
+                                    {week.map((day) => {
+                                        const count =
+                                            activeFilter === 'all'
+                                                ? day.totalActions
+                                                : activeFilter === 'challenges'
+                                                ? day.challengeActions
+                                                : day.taskActions;
+
+                                        return (
+                                            <div
+                                                key={day.date}
+                                                onMouseEnter={() => setHoveredDay(day)}
+                                                onMouseLeave={() => setHoveredDay(null)}
+                                                className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-sm cursor-pointer transition-transform duration-150 hover:scale-125 ${getCellColorClass(
+                                                    day
+                                                )}`}
+                                                title={`${day.displayDate}: ${count} actions`}
+                                            />
+                                        );
+                                    })}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
