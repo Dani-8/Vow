@@ -87,3 +87,38 @@ export const StatsActivityHeatmap: React.FC<StatsActivityHeatmapProps> = ({ acti
                         </p>
                     </div>
                 </div>
+
+                {/* Filter Pills */}
+                <div className="flex items-center space-x-1.5 neu-inset p-1 rounded-2xl bg-[#E0E5EC]/80">
+                    <button
+                        onClick={() => setActiveFilter('all')}
+                        className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
+                            activeFilter === 'all'
+                                ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                                : 'text-[#717699] hover:text-[#1a1c35]'
+                        }`}
+                    >
+                        All Actions
+                    </button>
+                    <button
+                        onClick={() => setActiveFilter('challenges')}
+                        className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
+                            activeFilter === 'challenges'
+                                ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                                : 'text-[#717699] hover:text-[#1a1c35]'
+                        }`}
+                    >
+                        Challenges
+                    </button>
+                    <button
+                        onClick={() => setActiveFilter('tasks')}
+                        className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
+                            activeFilter === 'tasks'
+                                ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                                : 'text-[#717699] hover:text-[#1a1c35]'
+                        }`}
+                    >
+                        Tasks
+                    </button>
+                </div>
+            </div>
