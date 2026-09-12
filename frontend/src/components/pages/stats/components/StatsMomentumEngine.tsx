@@ -218,3 +218,21 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
                                 )}
                             </p>
                         )}
+                        {trendState === 'steady' && (
+                            <p className="text-[#44476A] font-medium leading-relaxed">
+                                {activeCategoryFilter ? (
+                                    <>Consistent execution in <strong className="text-[#1a1c35]">{activeCategoryFilter}</strong> with <strong className="text-[#549acb] font-bold">{currentTotal} actions</strong> logged.</>
+                                ) : (
+                                    <>Stable cadence. You have sustained <strong className="text-[#549acb] font-bold">{currentTotal} actions</strong> across challenges and habits. One extra check-in today initiates a growth surge.</>
+                                )}
+                            </p>
+                        )}
+                        {trendState === 'cooling' && (
+                            <p className="text-[#44476A] font-medium leading-relaxed">
+                                {activeCategoryFilter ? (
+                                    <>A pause in <strong className="text-[#1a1c35]">{activeCategoryFilter}</strong>. A single log or task completion today will reignite momentum in this domain.</>
+                                ) : (
+                                    <>A slight pace breather detected. Non-punitive rule: <strong className="text-[#549acb] font-bold">just 1 micro-task or challenge log today</strong> bends your trajectory back upward.</>
+                                )}
+                            </p>
+                        )}
