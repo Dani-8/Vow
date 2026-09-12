@@ -255,3 +255,16 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
                                 Day-by-day output volume compared against your past self
                             </span>
                         </div>
+
+                        {/* Chart Legend */}
+                        <div className="flex items-center space-x-3 text-[11px] font-bold">
+                            <div className="flex items-center space-x-1.5">
+                                <span className="w-3 h-0.5 bg-[#549acb] rounded-full" />
+                                <span className="text-[#1a1c35]">Current 30 Days</span>
+                            </div>
+                            <div className="flex items-center space-x-1.5">
+                                <span className="w-3 h-0.5 border-t-2 border-dashed border-[#94a3b8]" />
+                                <span className="text-[#717699]">Previous 30 Days</span>
+                            </div>
+                        </div>
+                    </div>
