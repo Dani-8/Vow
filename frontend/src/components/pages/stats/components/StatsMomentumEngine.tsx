@@ -291,3 +291,24 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
                                     tickLine={false}
                                     tickFormatter={(v) => `D${v}`}
                                 />
+                                <YAxis
+                                    tick={{ fill: '#717699', fontSize: 10 }}
+                                    axisLine={false}
+                                    tickLine={false}
+                                />
+                                <Tooltip
+                                    formatter={(value: any, name: any) => [
+                                        `${value} actions`,
+                                        name === 'currentActions' ? 'Current Period' : 'Previous Period',
+                                    ]}
+                                    labelFormatter={(label: any) => `Day ${label} of 30`}
+                                    contentStyle={{
+                                        backgroundColor: '#E0E5EC',
+                                        borderRadius: '14px',
+                                        border: '1px solid #CBD5E1',
+                                        boxShadow: '4px 4px 8px #bec3c9, -4px -4px 8px #ffffff',
+                                        fontSize: '11px',
+                                        fontWeight: 700,
+                                        color: '#1a1c35',
+                                    }}
+                                />
