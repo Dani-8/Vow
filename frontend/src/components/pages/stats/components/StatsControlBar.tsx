@@ -54,3 +54,28 @@ const DAY_OPTIONS: { id: DayOfWeekOption; label: string; sub: string }[] = [
     { id: 6, label: 'Saturdays', sub: 'Sat cadence' },
     { id: 0, label: 'Sundays', sub: 'Sun cadence' },
 ];
+
+export const StatsControlBar: React.FC<StatsControlBarProps> = ({
+    filters,
+    onChangeFilters,
+    activeCategoryFilter,
+    onResetCategoryFilter,
+}) => {
+    // Dropdown open states: only 3 clean dropdowns
+    const [openDropdown, setOpenDropdown] = useState<'range' | 'type' | 'day' | null>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    // Close dropdowns on outside click
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+                setOpenDropdown(null);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const toggleDropdown = (menu: 'range' | 'type' | 'day') => {
+        setOpenDropdown((prev) => (prev === menu ? null : menu));
+    };
