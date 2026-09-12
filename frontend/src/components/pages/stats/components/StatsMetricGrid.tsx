@@ -116,3 +116,20 @@ export const StatsMetricGrid: React.FC<StatsMetricGridProps> = ({ overview }) =>
                                 {card.badge}
                             </span>
                         </div>
+
+                        {/* Numbers */}
+                        <div className="flex items-baseline justify-between pt-1">
+                            <div>
+                                <span className="text-3xl font-black text-[#1a1c35] tracking-tight">
+                                    {card.primaryValue}
+                                </span>
+                            </div>
+                            <div className="text-right">
+                                <span className="text-xs font-black text-[#549acb] block">
+                                    {card.secondaryValue}
+                                </span>
+                                <span className="text-[10px] font-semibold text-[#717699]">
+                                    {card.secondaryLabel}
+                                </span>
+                            </div>
+                        </div>
