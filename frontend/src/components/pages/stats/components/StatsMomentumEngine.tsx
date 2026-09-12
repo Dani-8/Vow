@@ -98,3 +98,11 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
             currentActiveDays: curActive,
         };
     }, [heatmapActivities]);
+
+    // Discipline momentum score (0 - 100) based on active days out of 30, master streak, and output
+    const momentumScore = useMemo(() => {
+        const baseScore = Math.min(60, Math.round((currentActiveDays / 30) * 60));
+        const streakBonus = Math.min(25, (overview.masterStreak || 1) * 3);
+        const volumeBonus = Math.min(15, Math.round((currentTotal / 25) * 15));
+        return Math.min(100, Math.max(15, baseScore + streakBonus + volumeBonus));
+    }, [currentActiveDays, overview.masterStreak, currentTotal]);
