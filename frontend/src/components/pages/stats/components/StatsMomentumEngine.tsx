@@ -244,3 +244,35 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
                                 )}
                             </p>
                         )}
+
+                        <div className="flex items-center justify-between text-[10px] font-extrabold text-[#717699] pt-1.5 border-t border-slate-200">
+                            <span>Current: <strong className="text-[#1a1c35]">{currentTotal} actions</strong></span>
+                            <span>Prior: <strong className="text-[#717699]">{prevTotal} actions</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* 2. Right Dual Wave Trajectory Chart (8 cols) */}
+                <div className="lg:col-span-8 neu-inset p-5 rounded-3xl bg-[#E0E5EC]/80 border border-white/60 space-y-3">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1">
+                        <div>
+                            <h4 className="text-xs font-black text-[#1a1c35] uppercase tracking-wider">
+                                Trajectory Comparison Curve
+                            </h4>
+                            <span className="text-[10px] text-[#717699] font-medium">
+                                Day-by-day output volume compared against your past self
+                            </span>
+                        </div>
+
+                        {/* Chart Legend */}
+                        <div className="flex items-center space-x-3 text-[11px] font-bold">
+                            <div className="flex items-center space-x-1.5">
+                                <span className="w-3 h-0.5 bg-[#549acb] rounded-full" />
+                                <span className="text-[#1a1c35]">Current ({effectiveDays}d)</span>
+                            </div>
+                            <div className="flex items-center space-x-1.5">
+                                <span className="w-3 h-0.5 border-t-2 border-dashed border-[#94a3b8]" />
+                                <span className="text-[#717699]">Previous ({effectiveDays}d)</span>
+                            </div>
+                        </div>
+                    </div>
