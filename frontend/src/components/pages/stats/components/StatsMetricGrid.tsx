@@ -1,76 +1,150 @@
 import React from 'react';
-import { Flame, Trophy, CheckCircle, Repeat, LucideIcon } from 'lucide-react';
-import { MasterStreakStats } from '../../../../types';
+import { Flame, Trophy, Compass, CheckCircle2, Award, Layers, Zap } from 'lucide-react';
+import { EcosystemOverview } from '../statsHelpers';
 
 interface StatsMetricGridProps {
-    stats: MasterStreakStats;
-    overallBestStreak: number;
-    totalTracked: number;
+    overview: EcosystemOverview;
 }
 
-interface MetricItem {
-    id: string;
-    icon: LucideIcon;
-    iconColor: string;
-    iconClass?: string;
-    label: string;
-    value: string;
-    valueColor: string;
-}
+export const StatsMetricGrid: React.FC<StatsMetricGridProps> = ({ overview }) => {
+    const {
+        masterStreak,
+        bestMasterStreak,
+        totalSprintLogsCount,
+        activeChallengesCount,
+        totalTrophiesEarned,
+        completedMapNodes,
+        totalMapNodes,
+        roadmapCompletionRate,
+        completedSubtasks,
+        totalSubtasks,
+        completedTasks,
+        totalTasks,
+        overallTaskCompletionRate,
+    } = overview;
 
-export const StatsMetricGrid: React.FC<StatsMetricGridProps> = ({
-    stats,
-    overallBestStreak,
-    totalTracked,
-}) => {
-    const metrics: MetricItem[] = [
+    const cards = [
         {
-            id: 'master',
+            id: 'pillar-streak',
+            title: 'Master Streak',
+            badge: 'Global Resilience',
             icon: Flame,
-            iconColor: 'text-[#549acb]',
-            iconClass: 'fill-[#549acb]',
-            label: 'Master Streak',
-            value: `${stats.masterStreak} Days`,
-            valueColor: 'text-[#1a1c35]',
+            iconColor: 'text-amber-500',
+            iconBg: 'bg-amber-500/10',
+            primaryValue: `${masterStreak}d`,
+            primaryLabel: 'Current Master Streak',
+            secondaryValue: `${bestMasterStreak}d Record`,
+            secondaryLabel: 'All-Time High',
+            progressPercent: Math.min(100, Math.round((masterStreak / Math.max(bestMasterStreak, 1)) * 100)),
+            progressColor: 'from-amber-400 to-amber-600',
+            subText: masterStreak >= bestMasterStreak && masterStreak > 0
+                ? '⚡ Currently matching or setting an all-time record!'
+                : `Aiming to beat your personal best of ${bestMasterStreak} days.`,
         },
         {
-            id: 'best',
+            id: 'pillar-challenges',
+            title: 'Active Challenges',
+            badge: `${activeChallengesCount} Active`,
             icon: Trophy,
             iconColor: 'text-[#549acb]',
-            label: 'Personal Best Streak',
-            value: `${overallBestStreak} Days`,
-            valueColor: 'text-[#549acb]',
+            iconBg: 'bg-[#549acb]/10',
+            primaryValue: `${totalSprintLogsCount}d`,
+            primaryLabel: 'Total Days Logged',
+            secondaryValue: `${totalTrophiesEarned} Badges`,
+            secondaryLabel: 'Milestone Trophies',
+            progressPercent: Math.min(100, (totalSprintLogsCount % 100)),
+            progressColor: 'from-[#549acb] to-[#38bdf8]',
+            subText: `${activeChallengesCount} challenge${activeChallengesCount === 1 ? '' : 's'} actively in progress.`,
         },
         {
-            id: 'checkins',
-            icon: CheckCircle,
+            id: 'pillar-roadmap',
+            title: 'Task Map Velocity',
+            badge: `${roadmapCompletionRate}% Cleared`,
+            icon: Compass,
+            iconColor: 'text-indigo-600',
+            iconBg: 'bg-indigo-500/10',
+            primaryValue: `${completedMapNodes}`,
+            primaryLabel: `Nodes Conquered (${totalMapNodes} total)`,
+            secondaryValue: `${overview.totalMaps} Maps`,
+            secondaryLabel: 'Strategic Blueprints',
+            progressPercent: roadmapCompletionRate,
+            progressColor: 'from-indigo-500 to-blue-500',
+            subText: `${totalMapNodes - completedMapNodes} remaining milestone node${(totalMapNodes - completedMapNodes) === 1 ? '' : 's'} to unlock.`,
+        },
+        {
+            id: 'pillar-tasks',
+            title: 'Subtask & Task Engine',
+            badge: `${overallTaskCompletionRate}% Clearance`,
+            icon: CheckCircle2,
             iconColor: 'text-emerald-600',
-            label: 'Total Check-In Days',
-            value: `${stats.totalCheckIns} Days`,
-            valueColor: 'text-emerald-700',
-        },
-        {
-            id: 'tracked',
-            icon: Repeat,
-            iconColor: 'text-purple-600',
-            label: 'Habits & Goals',
-            value: `${totalTracked} Tracked`,
-            valueColor: 'text-purple-700',
+            iconBg: 'bg-emerald-500/10',
+            primaryValue: `${completedTasks + completedSubtasks}`,
+            primaryLabel: 'Items Executed',
+            secondaryValue: `${completedSubtasks} / ${totalSubtasks}`,
+            secondaryLabel: 'Subtasks Finished',
+            progressPercent: overallTaskCompletionRate,
+            progressColor: 'from-emerald-500 to-teal-500',
+            subText: `${completedTasks} of ${totalTasks} top-level tasks marked complete.`,
         },
     ];
 
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {metrics.map((item) => {
-                const Icon = item.icon;
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+            {cards.map((card) => {
+                const Icon = card.icon;
                 return (
-                    <div key={item.id} className="neu-card p-5 flex items-center space-x-4">
-                        <div className={`w-12 h-12 rounded-2xl neu-button flex items-center justify-center ${item.iconColor} bg-[#E0E5EC] shrink-0`}>
-                            <Icon className={`w-6 h-6 ${item.iconClass || ''}`} />
+                    <div
+                        key={card.id}
+                        className="neu-card p-5 rounded-3xl flex flex-col justify-between space-y-4 hover:shadow-lg transition-all duration-200 border border-white/60"
+                    >
+                        {/* Top row */}
+                        <div className="flex items-start justify-between">
+                            <div className="flex items-center space-x-3">
+                                <div className={`w-11 h-11 rounded-2xl neu-button flex items-center justify-center ${card.iconColor} ${card.iconBg} shrink-0`}>
+                                    <Icon className="w-5 h-5" />
+                                </div>
+                                <div>
+                                    <h3 className="text-sm font-black text-[#1a1c35] leading-tight">
+                                        {card.title}
+                                    </h3>
+                                    <span className="text-[10px] font-bold text-[#717699] uppercase tracking-wider">
+                                        {card.primaryLabel}
+                                    </span>
+                                </div>
+                            </div>
+                            <span className="px-2 py-0.5 rounded-full neu-inset text-[10px] font-extrabold text-[#44476A]">
+                                {card.badge}
+                            </span>
                         </div>
-                        <div>
-                            <span className="text-xs font-semibold text-[#717699] block">{item.label}</span>
-                            <span className={`text-2xl font-black ${item.valueColor}`}>{item.value}</span>
+
+                        {/* Numbers */}
+                        <div className="flex items-baseline justify-between pt-1">
+                            <div>
+                                <span className="text-3xl font-black text-[#1a1c35] tracking-tight">
+                                    {card.primaryValue}
+                                </span>
+                            </div>
+                            <div className="text-right">
+                                <span className="text-xs font-black text-[#549acb] block">
+                                    {card.secondaryValue}
+                                </span>
+                                <span className="text-[10px] font-semibold text-[#717699]">
+                                    {card.secondaryLabel}
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Progress bar */}
+                        <div className="space-y-1.5 pt-1">
+                            <div className="w-full h-2 rounded-full neu-inset overflow-hidden p-0.5">
+                                <div
+                                    className={`h-full rounded-full bg-gradient-to-r ${card.progressColor} transition-all duration-500`}
+                                    style={{ width: `${Math.max(5, Math.min(100, card.progressPercent))}%` }}
+                                />
+                            </div>
+                            <p className="text-[11px] text-[#717699] font-medium leading-tight">
+                                {card.subText}
+                            </p>
                         </div>
                     </div>
                 );
