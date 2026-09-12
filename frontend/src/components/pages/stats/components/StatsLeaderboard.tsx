@@ -93,41 +93,37 @@ export const StatsLeaderboard: React.FC<StatsLeaderboardProps> = ({ tasks }) => 
             <div className="flex flex-wrap items-center gap-2">
                 <button
                     onClick={() => setTypeFilter('all')}
-                    className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
-                        typeFilter === 'all'
+                    className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${typeFilter === 'all'
                             ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
                             : 'neu-inset text-[#717699] hover:text-[#1a1c35]'
-                    }`}
+                        }`}
                 >
                     All ({tasks.length})
                 </button>
                 <button
                     onClick={() => setTypeFilter('habits')}
-                    className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
-                        typeFilter === 'habits'
+                    className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${typeFilter === 'habits'
                             ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
                             : 'neu-inset text-[#717699] hover:text-[#1a1c35]'
-                    }`}
+                        }`}
                 >
                     Daily Habits ({tasks.filter((t) => t.isHabit).length})
                 </button>
                 <button
                     onClick={() => setTypeFilter('goals')}
-                    className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
-                        typeFilter === 'goals'
+                    className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${typeFilter === 'goals'
                             ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
                             : 'neu-inset text-[#717699] hover:text-[#1a1c35]'
-                    }`}
+                        }`}
                 >
                     Single Goals ({tasks.filter((t) => !t.isHabit).length})
                 </button>
                 <button
                     onClick={() => setTypeFilter('private')}
-                    className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
-                        typeFilter === 'private'
+                    className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${typeFilter === 'private'
                             ? 'neu-button text-purple-600 bg-[#E0E5EC]'
                             : 'neu-inset text-[#717699] hover:text-[#1a1c35]'
-                    }`}
+                        }`}
                 >
                     Growth Vault ({tasks.filter((t) => t.isPrivate).length})
                 </button>
@@ -198,9 +194,8 @@ export const StatsLeaderboard: React.FC<StatsLeaderboardProps> = ({ tasks }) => 
                                 <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto space-x-4 shrink-0 pl-9 sm:pl-0">
                                     <div className="text-left sm:text-right space-y-0.5">
                                         <div className="flex items-center sm:justify-end space-x-1.5">
-                                            <span className={`text-sm font-black flex items-center space-x-1 ${
-                                                curStreak > 0 ? 'text-amber-500' : 'text-[#717699]'
-                                            }`}>
+                                            <span className={`text-sm font-black flex items-center space-x-1 ${curStreak > 0 ? 'text-amber-500' : 'text-[#717699]'
+                                                }`}>
                                                 <Flame className={`w-4 h-4 ${curStreak > 0 ? 'fill-amber-500' : ''}`} />
                                                 <span>{curStreak}d Streak</span>
                                             </span>
