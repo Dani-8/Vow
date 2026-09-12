@@ -142,3 +142,22 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
     const highestVolume = useMemo(() => {
         return [...normalizedCategories].sort((a, b) => b.itemCount - a.itemCount)[0];
     }, [normalizedCategories]);
+
+    // 1. Radar Chart Data: Volume Focus vs Completion Strength (%)
+    const radarData = useMemo(() => {
+        return normalizedCategories.slice(0, 6).map((cat) => {
+            const strengthPercent =
+                cat.itemCount > 0 ? Math.round((cat.completedCount / cat.itemCount) * 100) : 0;
+            return {
+                category: cat.name.split(' ')[0],
+                fullName: cat.name,
+                focusVolume: cat.itemCount,
+                completionStrength: strengthPercent,
+                key: cat.key,
+                isSelected: selectedCategoryKey === cat.key,
+            };
+        });
+    }, [normalizedCategories, selectedCategoryKey]);
+
+    // 2. Category Stacked/Grouped Bar Chart Data
+    const barData = useMemo(() => {
