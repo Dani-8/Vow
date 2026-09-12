@@ -25,3 +25,25 @@ interface StatsMomentumEngineProps {
     activeCategoryFilter?: string | null;
     onResetCategoryFilter?: () => void;
 }
+
+export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
+    heatmapActivities,
+    overview,
+    activeCategoryFilter,
+    onResetCategoryFilter,
+}) => {
+    // 1. Calculate the Rolling 30 Days (Current 30 vs Previous 30)
+    // heatmapActivities is sorted from oldest (52 weeks ago) to newest (today)
+    const { chartData, currentTotal, prevTotal, growthPercent, trendState, currentActiveDays } = useMemo(() => {
+        const totalLen = heatmapActivities.length;
+        // Last 30 days = current window
+        const currentWindow = heatmapActivities.slice(Math.max(0, totalLen - 30));
+        // Previous 30 days before that = benchmark window
+        const prevWindow = heatmapActivities.slice(
+            Math.max(0, totalLen - 60),
+            Math.max(0, totalLen - 30)
+        );
+
+        let curSum = 0;
+        let pSum = 0;
+        let curActive = 0;
