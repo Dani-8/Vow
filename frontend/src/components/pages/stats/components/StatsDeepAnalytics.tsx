@@ -251,3 +251,28 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                     </button>
                 </div>
             )}
+
+            {/* 3. Hero Discipline & Momentum Arc: Score + Trend + Dual Wave Trajectory */}
+            <StatsMomentumEngine
+                heatmapActivities={dynamicActivities}
+                overview={overview}
+                activeCategoryFilter={activeCategory ? activeCategory.name : null}
+                onResetCategoryFilter={handleResetCategoryFilter}
+                windowDays={currentWindowDays}
+                rangeLabel={
+                    filters.timeRange === 'custom'
+                        ? 'Custom Range'
+                        : `Rolling ${currentWindowDays} Days`
+                }
+            />
+
+            {/* 4. Top 3 Executive Takeaway Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div
+                    onClick={() => highestVolume && handleToggleCategory(highestVolume.key)}
+                    className={`neu-card p-5 rounded-3xl space-y-2 border cursor-pointer transition-all ${
+                        selectedCategoryKey === highestVolume?.key
+                            ? 'ring-2 ring-[#549acb] shadow-md border-transparent'
+                            : 'border-white/60 hover:scale-[1.01]'
+                    }`}
+                ></div>
