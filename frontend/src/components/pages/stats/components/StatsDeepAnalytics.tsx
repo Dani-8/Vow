@@ -319,3 +319,63 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                         Strongest completion discipline across roadmap goals and check-ins. Click to filter.
                     </p>
                 </div>
+
+                <div className="neu-card p-5 rounded-3xl space-y-2 border border-white/60">
+                    <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-black uppercase tracking-wider text-[#6366f1] flex items-center space-x-1.5">
+                            <TrendingUp className="w-3.5 h-3.5 text-[#6366f1]" />
+                            <span>Active Horizon</span>
+                        </span>
+                        <span className="px-2 py-0.5 rounded-full neu-inset text-[10px] font-extrabold text-[#6366f1]">
+                            {activeCategory ? activeCategory.name.split(' ')[0] : 'All Domains'}
+                        </span>
+                    </div>
+                    <div className="text-xl font-black text-[#1a1c35] truncate">
+                        {activeCategory ? `${activeCategory.completedCount} Completed` : `${filters.timeRange.toUpperCase()} Horizon`}
+                    </div>
+                    <p className="text-xs text-[#717699] font-medium truncate">
+                        {filters.dayOfWeek !== 'all'
+                            ? `Day filter: ${filters.dayOfWeek === 'weekdays' ? 'Weekdays only' : filters.dayOfWeek === 'weekends' ? 'Weekends only' : 'Single day'} active.`
+                            : `Cadence dynamically calculated for ${currentWindowDays} day window.`}
+                    </p>
+                </div>
+            </div>
+
+            {/* Row 1: Interactive Radar Chart + Donut */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                {/* Domain Performance Radar (7 cols) */}
+                <div className="lg:col-span-7 neu-card p-6 rounded-3xl space-y-4 border border-white/60 flex flex-col justify-between">
+                    <div>
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div className="flex items-center space-x-3">
+                                <div className="w-10 h-10 rounded-2xl neu-button flex items-center justify-center text-[#549acb] bg-[#E0E5EC]">
+                                    <Compass className="w-5 h-5" />
+                                </div>
+                                <div>
+                                    <h3 className="text-base font-black text-[#1a1c35] flex items-center space-x-2">
+                                        <span>Domain Performance Radar</span>
+                                        {activeCategory && (
+                                            <span className="text-[10px] px-2 py-0.5 rounded-full neu-inset text-[#549acb] font-bold">
+                                                Active: {activeCategory.name}
+                                            </span>
+                                        )}
+                                    </h3>
+                                    <p className="text-xs text-[#717699] font-medium">
+                                        Click any category node or legend pill to cross-filter the dashboard
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Legend */}
+                            <div className="flex items-center space-x-3 text-[11px] font-bold">
+                                <div className="flex items-center space-x-1.5">
+                                    <span className="w-2.5 h-2.5 rounded-full bg-[#549acb]" />
+                                    <span className="text-[#44476A]">Target Volume</span>
+                                </div>
+                                <div className="flex items-center space-x-1.5">
+                                    <span className="w-2.5 h-2.5 rounded-full bg-[#10b981]" />
+                                    <span className="text-[#44476A]">Completion %</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
