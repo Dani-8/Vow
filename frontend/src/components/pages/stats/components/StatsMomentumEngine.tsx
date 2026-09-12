@@ -236,3 +236,10 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
                                 )}
                             </p>
                         )}
+
+                        <div className="flex items-center justify-between text-[10px] font-extrabold text-[#717699] pt-1.5 border-t border-slate-200">
+                            <span>This Mo: <strong className="text-[#1a1c35]">{currentTotal} actions</strong></span>
+                            <span>Past Mo: <strong className="text-[#717699]">{prevTotal} actions</strong></span>
+                        </div>
+                    </div>
+                </div>
