@@ -57,3 +57,31 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
         const data = [];
 
         for (let i = 0; i < count; i++) {
+            const curDay = currentWindow[i];
+            const prevDay = prevWindow[i];
+
+            const curActions = curDay ? curDay.totalActions : 0;
+            const prevActions = prevDay ? prevDay.totalActions : 0;
+
+            curSum += curActions;
+            pSum += prevActions;
+
+            if (curActions > 0) curActive++;
+
+            data.push({
+                dayIndex: i + 1,
+                label: `Day ${i + 1}`,
+                date: curDay ? curDay.displayDate.split(',')[0] : `Day ${i + 1}`,
+                currentActions: curActions,
+                prevActions: prevActions,
+                currentCumulative: curSum,
+                prevCumulative: pSum,
+            });
+        }
+
+        let growth = 0;
+        if (pSum > 0) {
+            growth = Math.round(((curSum - pSum) / pSum) * 100);
+        } else if (curSum > 0) {
+            growth = 100;
+        }
