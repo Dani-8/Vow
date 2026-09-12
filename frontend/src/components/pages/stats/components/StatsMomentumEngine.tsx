@@ -114,3 +114,38 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
     }, [currentActiveDays, overview.masterStreak, currentTotal, effectiveDays]);
 
     const titleWindowLabel = rangeLabel || `Rolling ${effectiveDays} Days`;
+
+    return (
+        <div className="neu-card p-6 rounded-3xl space-y-5 border border-white/60 bg-[#E0E5EC]">
+            {/* Header Strip */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-300/60 pb-3.5">
+                <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 rounded-2xl neu-button flex items-center justify-center text-[#549acb] bg-[#E0E5EC]">
+                        <Zap className="w-5 h-5 fill-[#549acb]/20" />
+                    </div>
+                    <div>
+                        <div className="flex items-center space-x-2">
+                            <h3 className="text-base font-black text-[#1a1c35]">
+                                Momentum & Discipline Arc
+                            </h3>
+                            <span className="text-[10px] px-2 py-0.5 rounded-full neu-inset text-[#549acb] font-extrabold uppercase tracking-wider">
+                                {titleWindowLabel}
+                            </span>
+                            {activeCategoryFilter && (
+                                <button
+                                    onClick={onResetCategoryFilter}
+                                    className="text-[10px] px-2.5 py-0.5 rounded-full bg-[#549acb] text-white font-extrabold flex items-center space-x-1 shadow-sm hover:opacity-90 transition-opacity"
+                                    title="Click to reset filter back to all categories"
+                                >
+                                    <span>Filtered: {activeCategoryFilter}</span>
+                                    <X className="w-3 h-3 ml-0.5" />
+                                </button>
+                            )}
+                        </div>
+                        <p className="text-xs text-[#717699] font-medium">
+                            {activeCategoryFilter
+                                ? `Showing dedicated discipline & velocity solely for ${activeCategoryFilter}`
+                                : `Real-time trajectory: Your current ${effectiveDays}-day discipline vs. your previous period baseline`}
+                        </p>
+                    </div>
+                </div>
