@@ -27,3 +27,31 @@ export function filterActivities(
             customEnd.setHours(23, 59, 59, 999);
         }
     }
+
+    const cutoffDate = new Date(today);
+    cutoffDate.setDate(today.getDate() - daysToInclude);
+    cutoffDate.setHours(0, 0, 0, 0);
+
+    return rawHeatmap
+        .filter((act) => {
+            const actDate = new Date(act.date);
+
+            // Time horizon check
+            if (customStart || customEnd) {
+                if (customStart && actDate < customStart) return false;
+                if (customEnd && actDate > customEnd) return false;
+            } else {
+                if (actDate < cutoffDate) return false;
+            }
+
+            // Day of week check
+            if (filters.dayOfWeek === 'weekdays') {
+                if (act.dayOfWeek === 0 || act.dayOfWeek === 6) return false;
+            } else if (filters.dayOfWeek === 'weekends') {
+                if (act.dayOfWeek !== 0 && act.dayOfWeek !== 6) return false;
+            } else if (typeof filters.dayOfWeek === 'number') {
+                if (act.dayOfWeek !== filters.dayOfWeek) return false;
+            }
+
+            return true;
+        })
