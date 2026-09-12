@@ -116,3 +116,15 @@ export const StatsStreakRecords: React.FC<StatsStreakRecordsProps> = ({ tasks, s
                             <span>Permanent Records</span>
                         </span>
                     </div>
+
+                    {hallOfFame.length === 0 ? (
+                        <div className="neu-inset p-6 rounded-2xl text-center">
+                            <p className="text-xs font-bold text-[#717699]">No streak records recorded yet.</p>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                            {hallOfFame.map((item, idx) => {
+                                const Icon = getCategoryIconComponent(item.icon || item.category);
+                                const best = Math.max(item.bestStreak || 0, item.currentStreak || 0);
+                                const medals = ['🥇 1st Place', '🥈 2nd Place', '🥉 3rd Place'];
+                                const ringColors = ['border-amber-400', 'border-slate-400', 'border-amber-600'];
