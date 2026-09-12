@@ -106,3 +106,13 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
         const volumeBonus = Math.min(15, Math.round((currentTotal / 25) * 15));
         return Math.min(100, Math.max(15, baseScore + streakBonus + volumeBonus));
     }, [currentActiveDays, overview.masterStreak, currentTotal]);
+
+    return (
+        <div className="neu-card p-6 rounded-3xl space-y-5 border border-white/60 bg-[#E0E5EC]">
+            {/* Header Strip */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-300/60 pb-3.5">
+                <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 rounded-2xl neu-button flex items-center justify-center text-[#549acb] bg-[#E0E5EC]">
+                        <Zap className="w-5 h-5 fill-[#549acb]/20" />
+                    </div>
+                    <div>
