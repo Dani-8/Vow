@@ -268,3 +268,26 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
                             </div>
                         </div>
                     </div>
+
+                    {/* Dual Wave Area Chart */}
+                    <div className="w-full h-60 pt-2">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
+                                <defs>
+                                    <linearGradient id="curWaveGradient" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%" stopColor="#549acb" stopOpacity={0.45} />
+                                        <stop offset="95%" stopColor="#549acb" stopOpacity={0.02} />
+                                    </linearGradient>
+                                    <linearGradient id="prevWaveGradient" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%" stopColor="#94a3b8" stopOpacity={0.2} />
+                                        <stop offset="95%" stopColor="#94a3b8" stopOpacity={0.0} />
+                                    </linearGradient>
+                                </defs>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#CBD5E1" vertical={false} />
+                                <XAxis
+                                    dataKey="dayIndex"
+                                    tick={{ fill: '#44476A', fontSize: 10, fontWeight: 700 }}
+                                    axisLine={{ stroke: '#CBD5E1' }}
+                                    tickLine={false}
+                                    tickFormatter={(v) => `D${v}`}
+                                />
