@@ -320,3 +320,27 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
                                         color: '#1a1c35',
                                     }}
                                 />
+                                {/* Previous days (Dotted baseline) */}
+                                <Area
+                                    type="monotone"
+                                    dataKey="prevActions"
+                                    name="prevActions"
+                                    stroke="#94a3b8"
+                                    strokeWidth={2}
+                                    strokeDasharray="4 4"
+                                    fillOpacity={1}
+                                    fill="url(#prevWaveGradient)"
+                                />
+                                {/* Current days (Solid Brand Blue glow) */}
+                                <Area
+                                    type="monotone"
+                                    dataKey="currentActions"
+                                    name="currentActions"
+                                    stroke="#549acb"
+                                    strokeWidth={3}
+                                    fillOpacity={1}
+                                    fill="url(#curWaveGradient)"
+                                />
+                            </AreaChart>
+                        </ResponsiveContainer>
+                    </div>
