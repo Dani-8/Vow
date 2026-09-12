@@ -227,3 +227,46 @@ export const StatsControlBar: React.FC<StatsControlBarProps> = ({
                                         </div>
                                     </div>
                                 )}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* 2. Custom Dropdown: EXECUTION TYPE */}
+                    <div className="relative">
+                        <button
+                            type="button"
+                            onClick={() => toggleDropdown('type')}
+                            className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center space-x-1.5 ${
+                                openDropdown === 'type' || filters.executionType !== 'all'
+                                    ? 'neu-button bg-[#E0E5EC] text-[#6366f1] shadow-inner ring-1 ring-[#6366f1]/30'
+                                    : 'neu-inset text-[#1a1c35] hover:text-[#6366f1]'
+                            }`}
+                        >
+                            <Layers className="w-3.5 h-3.5 text-[#6366f1]" />
+                            <span>{currentExecution.label}</span>
+                            <ChevronDown
+                                className={`w-3.5 h-3.5 text-[#717699] transition-transform duration-200 ${
+                                    openDropdown === 'type' ? 'rotate-180 text-[#6366f1]' : ''
+                                }`}
+                            />
+                        </button>
+
+                        {/* Dropdown Menu */}
+                        {openDropdown === 'type' && (
+                            <div className="absolute left-0 mt-2 w-60 z-50 neu-card rounded-2xl p-2 bg-[#E0E5EC] border border-white/80 shadow-2xl space-y-1 animate-fadeIn">
+                                <div className="px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#717699] border-b border-slate-300/60">
+                                    Execution Type
+                                </div>
+                                {EXECUTION_OPTIONS.map((opt) => {
+                                    const isSelected = filters.executionType === opt.id;
+                                    return (
+                                        <button
+                                            key={opt.id}
+                                            type="button"
+                                            onClick={() => handleSelectExecutionType(opt.id)}
+                                            className={`w-full px-3 py-2 rounded-xl text-left transition-all flex items-center justify-between ${
+                                                isSelected
+                                                    ? 'neu-button bg-[#E0E5EC] font-black'
+                                                    : 'hover:bg-white/40 text-[#1a1c35]'
+                                            }`}
+                                        ></button>
