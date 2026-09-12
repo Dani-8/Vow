@@ -18,3 +18,10 @@ import {
     Tooltip,
     CartesianGrid,
 } from 'recharts';
+
+interface StatsMomentumEngineProps {
+    heatmapActivities: DayActivity[];
+    overview: EcosystemOverview;
+    activeCategoryFilter?: string | null;
+    onResetCategoryFilter?: () => void;
+}
