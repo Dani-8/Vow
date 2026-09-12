@@ -72,3 +72,29 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
                 prevCumulative: pSum,
             });
         }
+
+        let growth = 0;
+        if (pSum > 0) {
+            growth = Math.round(((curSum - pSum) / pSum) * 100);
+        } else if (curSum > 0) {
+            growth = 100;
+        }
+
+        let trend: 'rising' | 'steady' | 'cooling' = 'steady';
+        if (growth >= 5 || (curSum >= pSum && curSum > 0)) {
+            trend = 'rising';
+        } else if (growth <= -10) {
+            trend = 'cooling';
+        } else {
+            trend = 'steady';
+        }
+
+        return {
+            chartData: data,
+            currentTotal: curSum,
+            prevTotal: pSum,
+            growthPercent: growth,
+            trendState: trend,
+            currentActiveDays: curActive,
+        };
+    }, [heatmapActivities]);
