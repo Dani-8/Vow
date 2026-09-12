@@ -206,3 +206,24 @@ export const StatsStreakRecords: React.FC<StatsStreakRecordsProps> = ({ tasks, s
                         </div>
                     </div>
                 </div>
+
+                {/* Filter Pills */}
+                <div className="flex flex-wrap items-center gap-2">
+                    <button
+                        onClick={() => setTypeFilter('all')}
+                        className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
+                            typeFilter === 'all'
+                                ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                                : 'neu-inset text-[#717699] hover:text-[#1a1c35]'
+                        }`}
+                    >
+                        All ({tasks.length})
+                    </button>
+                    <button
+                        onClick={() => setTypeFilter('habits')}
+                        className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
+                            typeFilter === 'habits'
+                                ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                                : 'neu-inset text-[#717699] hover:text-[#1a1c35]'
+                        }`}
+                    >
