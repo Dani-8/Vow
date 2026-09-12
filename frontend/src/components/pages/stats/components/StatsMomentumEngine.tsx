@@ -164,3 +164,40 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
                     )}
                 </div>
             </div>
+
+            {/* Split Content: Left Metric Command Block (35%) + Right 30-Day Dual Wave Chart (65%) */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                {/* 1. Left Command Block (4 cols) */}
+                <div className="lg:col-span-4 space-y-4">
+                    {/* Score Inset Display */}
+                    <div className="neu-inset p-5 rounded-3xl bg-[#E0E5EC]/80 border border-white/60 space-y-3">
+                        <div className="flex items-center justify-between">
+                            <span className="text-[11px] font-black uppercase tracking-wider text-[#717699]">
+                                Discipline Momentum Index
+                            </span>
+                            <span className="text-xs font-extrabold text-[#549acb] flex items-center space-x-1">
+                                <Sparkles className="w-3 h-3" />
+                                <span>{overview.consistencyGrade}</span>
+                            </span>
+                        </div>
+
+                        <div className="flex items-baseline space-x-2">
+                            <span className="text-4xl font-black text-[#1a1c35] tracking-tight">
+                                {momentumScore}
+                            </span>
+                            <span className="text-sm font-bold text-[#717699]">/ 100</span>
+                        </div>
+
+                        {/* Progress Bar Gauge */}
+                        <div className="w-full h-2 rounded-full neu-inset overflow-hidden p-0.5">
+                            <div
+                                className="h-full rounded-full transition-all duration-700 bg-gradient-to-r from-[#549acb] to-emerald-500"
+                                style={{ width: `${momentumScore}%` }}
+                            />
+                        </div>
+
+                        <div className="flex justify-between text-[11px] font-bold text-[#717699] pt-1 border-t border-slate-300/70">
+                            <span>30-Day Active Pace:</span>
+                            <span className="text-[#1a1c35] font-black">{currentActiveDays} of 30 Days</span>
+                        </div>
+                    </div>
