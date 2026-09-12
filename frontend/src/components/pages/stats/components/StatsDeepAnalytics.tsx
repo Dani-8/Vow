@@ -184,3 +184,37 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                 challengeLogs: d.challengeActions,
             }));
         }
+
+        // For 30d to 90d, break into weeks
+        const weeksToShow = Math.ceil(currentWindowDays / 7);
+        const weeksMap: Record<number, { label: string; actions: number; challengeLogs: number }> = {};
+        
+        // Group activities by relative week from start of the window
+        const totalActs = dynamicActivities.length;
+        const actsToGroup = dynamicActivities.slice(Math.max(0, totalActs - currentWindowDays));
+
+        actsToGroup.forEach((d, idx) => {
+            const weekIdx = Math.floor(idx / 7) + 1;
+            if (!weeksMap[weekIdx]) {
+                weeksMap[weekIdx] = {
+                    label: `Wk ${weekIdx}`,
+                    actions: 0,
+                    challengeLogs: 0,
+                };
+            }
+            weeksMap[weekIdx].actions += d.totalActions;
+            weeksMap[weekIdx].challengeLogs += d.challengeActions;
+        });
+
+        return Object.values(weeksMap);
+    }, [dynamicActivities, currentWindowDays]);
+
+    return (
+        <div className="space-y-6">
+            {/* 1. Global Analytics Control Bar (Time Horizon, Execution Type, Day-of-Week) */}
+            <StatsControlBar
+                filters={filters}
+                onChangeFilters={setFilters}
+                activeCategoryFilter={activeCategory ? activeCategory.name : null}
+                onResetCategoryFilter={handleResetCategoryFilter}
+            />
