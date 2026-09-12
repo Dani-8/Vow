@@ -85,3 +85,32 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
         } else if (curSum > 0) {
             growth = 100;
         }
+
+        let trend: 'rising' | 'steady' | 'cooling' = 'steady';
+        if (growth >= 5 || (curSum >= pSum && curSum > 0)) {
+            trend = 'rising';
+        } else if (growth <= -10) {
+            trend = 'cooling';
+        } else {
+            trend = 'steady';
+        }
+
+        return {
+            chartData: data,
+            currentTotal: curSum,
+            prevTotal: pSum,
+            growthPercent: growth,
+            trendState: trend,
+            currentActiveDays: curActive,
+        };
+    }, [heatmapActivities, effectiveDays]);
+
+    // Discipline momentum score (0 - 100)
+    const momentumScore = useMemo(() => {
+        const baseScore = Math.min(60, Math.round((currentActiveDays / effectiveDays) * 60));
+        const streakBonus = Math.min(25, (overview.masterStreak || 1) * 3);
+        const volumeBonus = Math.min(15, Math.round((currentTotal / (effectiveDays * 0.8)) * 15));
+        return Math.min(100, Math.max(15, baseScore + streakBonus + volumeBonus));
+    }, [currentActiveDays, overview.masterStreak, currentTotal, effectiveDays]);
+
+    const titleWindowLabel = rangeLabel || `Rolling ${effectiveDays} Days`;
