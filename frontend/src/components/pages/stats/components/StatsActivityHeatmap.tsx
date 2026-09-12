@@ -93,8 +93,8 @@ export const StatsActivityHeatmap: React.FC<StatsActivityHeatmapProps> = ({ acti
                     <button
                         onClick={() => setActiveFilter('all')}
                         className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${activeFilter === 'all'
-                                ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
-                                : 'text-[#717699] hover:text-[#1a1c35]'
+                            ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                            : 'text-[#717699] hover:text-[#1a1c35]'
                             }`}
                     >
                         All Actions
@@ -102,8 +102,8 @@ export const StatsActivityHeatmap: React.FC<StatsActivityHeatmapProps> = ({ acti
                     <button
                         onClick={() => setActiveFilter('challenges')}
                         className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${activeFilter === 'challenges'
-                                ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
-                                : 'text-[#717699] hover:text-[#1a1c35]'
+                            ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                            : 'text-[#717699] hover:text-[#1a1c35]'
                             }`}
                     >
                         Challenges
@@ -111,8 +111,8 @@ export const StatsActivityHeatmap: React.FC<StatsActivityHeatmapProps> = ({ acti
                     <button
                         onClick={() => setActiveFilter('tasks')}
                         className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${activeFilter === 'tasks'
-                                ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
-                                : 'text-[#717699] hover:text-[#1a1c35]'
+                            ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                            : 'text-[#717699] hover:text-[#1a1c35]'
                             }`}
                     >
                         Tasks
