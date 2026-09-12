@@ -189,3 +189,41 @@ export const StatsControlBar: React.FC<StatsControlBarProps> = ({
                                         </button>
                                     );
                                 })}
+
+                                {/* Inline Custom Date Pickers if Custom is active */}
+                                {filters.timeRange === 'custom' && (
+                                    <div className="p-2.5 neu-inset rounded-xl bg-[#E0E5EC]/90 space-y-2 mt-1 border border-slate-300/70">
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-[10px] font-extrabold uppercase text-[#717699]">
+                                                Start:
+                                            </span>
+                                            <input
+                                                type="date"
+                                                value={filters.customStartDate || ''}
+                                                onChange={(e) =>
+                                                    onChangeFilters({
+                                                        ...filters,
+                                                        customStartDate: e.target.value,
+                                                    })
+                                                }
+                                                className="bg-transparent text-xs font-bold text-[#1a1c35] focus:outline-none"
+                                            />
+                                        </div>
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-[10px] font-extrabold uppercase text-[#717699]">
+                                                End:
+                                            </span>
+                                            <input
+                                                type="date"
+                                                value={filters.customEndDate || ''}
+                                                onChange={(e) =>
+                                                    onChangeFilters({
+                                                        ...filters,
+                                                        customEndDate: e.target.value,
+                                                    })
+                                                }
+                                                className="bg-transparent text-xs font-bold text-[#1a1c35] focus:outline-none"
+                                            />
+                                        </div>
+                                    </div>
+                                )}
