@@ -70,3 +70,35 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
     tasks = [],
     challenges = [],
 }) => {
+    // 1. Cross-filtering category state (null = all domains)
+    const [selectedCategoryKey, setSelectedCategoryKey] = useState<string | null>(null);
+
+    // 2. Global Analytics Filter state
+    const [filters, setFilters] = useState<AnalyticsFilterState>({
+        timeRange: '30d',
+        dayOfWeek: 'all',
+        executionType: 'all',
+    });
+
+    // Normalize category colors to cohesive palette
+    const normalizedCategories = useMemo(() => {
+        return categories.map((cat, idx) => ({
+            ...cat,
+            color: HARMONIOUS_COLORS[idx % HARMONIOUS_COLORS.length],
+        }));
+    }, [categories]);
+
+    // Currently filtered category object (if any)
+    const activeCategory = useMemo(() => {
+        if (!selectedCategoryKey) return null;
+        return normalizedCategories.find((c) => c.key === selectedCategoryKey) || null;
+    }, [selectedCategoryKey, normalizedCategories]);
+
+    // Toggle category selection
+    const handleToggleCategory = (catKey: string) => {
+        setSelectedCategoryKey((prev) => (prev === catKey ? null : catKey));
+    };
+
+    const handleResetCategoryFilter = () => {
+        setSelectedCategoryKey(null);
+    };
