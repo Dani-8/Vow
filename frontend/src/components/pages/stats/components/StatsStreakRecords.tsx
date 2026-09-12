@@ -212,8 +212,8 @@ export const StatsStreakRecords: React.FC<StatsStreakRecordsProps> = ({ tasks, s
                     <button
                         onClick={() => setTypeFilter('all')}
                         className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${typeFilter === 'all'
-                                ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
-                                : 'neu-inset text-[#717699] hover:text-[#1a1c35]'
+                            ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                            : 'neu-inset text-[#717699] hover:text-[#1a1c35]'
                             }`}
                     >
                         All ({tasks.length})
@@ -221,8 +221,8 @@ export const StatsStreakRecords: React.FC<StatsStreakRecordsProps> = ({ tasks, s
                     <button
                         onClick={() => setTypeFilter('habits')}
                         className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${typeFilter === 'habits'
-                                ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
-                                : 'neu-inset text-[#717699] hover:text-[#1a1c35]'
+                            ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                            : 'neu-inset text-[#717699] hover:text-[#1a1c35]'
                             }`}
                     >
                         Daily Habits ({tasks.filter((t) => t.isHabit).length})
@@ -230,8 +230,8 @@ export const StatsStreakRecords: React.FC<StatsStreakRecordsProps> = ({ tasks, s
                     <button
                         onClick={() => setTypeFilter('goals')}
                         className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${typeFilter === 'goals'
-                                ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
-                                : 'neu-inset text-[#717699] hover:text-[#1a1c35]'
+                            ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                            : 'neu-inset text-[#717699] hover:text-[#1a1c35]'
                             }`}
                     >
                         Single Goals ({tasks.filter((t) => !t.isHabit).length})
@@ -239,8 +239,8 @@ export const StatsStreakRecords: React.FC<StatsStreakRecordsProps> = ({ tasks, s
                     <button
                         onClick={() => setTypeFilter('private')}
                         className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${typeFilter === 'private'
-                                ? 'neu-button text-purple-600 bg-[#E0E5EC]'
-                                : 'neu-inset text-[#717699] hover:text-[#1a1c35]'
+                            ? 'neu-button text-purple-600 bg-[#E0E5EC]'
+                            : 'neu-inset text-[#717699] hover:text-[#1a1c35]'
                             }`}
                     >
                         Growth Vault ({tasks.filter((t) => t.isPrivate).length})
