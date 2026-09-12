@@ -292,6 +292,46 @@ export function generateActivityHeatmap(
     return result;
 }
 
+export const categorize = (rawCategory?: string, rawTitle?: string): string => {
+    const text = `${rawCategory || ''} ${rawTitle || ''}`.toLowerCase();
+    if (text.includes('code') || text.includes('dev') || text.includes('react') || text.includes('api') || text.includes('tech') || text.includes('app')) {
+        return 'Tech & Engineering';
+    }
+    if (text.includes('fit') || text.includes('run') || text.includes('gym') || text.includes('workout') || text.includes('health') || text.includes('diet')) {
+        return 'Fitness & Health';
+    }
+    if (text.includes('read') || text.includes('learn') || text.includes('book') || text.includes('study') || text.includes('russian') || text.includes('language')) {
+        return 'Learning & Mind';
+    }
+    if (text.includes('money') || text.includes('financ') || text.includes('business') || text.includes('invest') || text.includes('career') || text.includes('client')) {
+        return 'Business & Finance';
+    }
+    if (text.includes('creative') || text.includes('art') || text.includes('music') || text.includes('video') || text.includes('design') || text.includes('write')) {
+        return 'Creative & Craft';
+    }
+    return 'Habits & Routine';
+};
+
+/**
+ * Generate activity heatmap filtered by a specific category name or null for all
+ */
+export function generateCategoryActivityHeatmap(
+    tasks: Task[],
+    challenges: Challenge[],
+    filterCategoryName: string | null,
+    totalWeeks: number = 52
+): DayActivity[] {
+    const filteredTasks = filterCategoryName
+        ? tasks.filter((t) => categorize(t.category || (t.tags && t.tags[0]), t.title) === filterCategoryName)
+        : tasks;
+
+    const filteredChallenges = filterCategoryName
+        ? challenges.filter((c) => categorize(c.category, c.title) === filterCategoryName)
+        : challenges;
+
+    return generateActivityHeatmap(filteredTasks, filteredChallenges, totalWeeks);
+}
+
 /**
  * Category & Focus Distribution
  */
@@ -310,26 +350,6 @@ export function calculateCategoryDistribution(
         'Business & Finance': { itemCount: 0, completedCount: 0, color: '#f59e0b', iconId: 'briefcase' },
         'Habits & Routine': { itemCount: 0, completedCount: 0, color: '#6366f1', iconId: 'calendar' },
         'Creative & Craft': { itemCount: 0, completedCount: 0, color: '#06b6d4', iconId: 'palette' },
-    };
-
-    const categorize = (rawCategory?: string, rawTitle?: string): string => {
-        const text = `${rawCategory || ''} ${rawTitle || ''}`.toLowerCase();
-        if (text.includes('code') || text.includes('dev') || text.includes('react') || text.includes('api') || text.includes('tech') || text.includes('app')) {
-            return 'Tech & Engineering';
-        }
-        if (text.includes('fit') || text.includes('run') || text.includes('gym') || text.includes('workout') || text.includes('health') || text.includes('diet')) {
-            return 'Fitness & Health';
-        }
-        if (text.includes('read') || text.includes('learn') || text.includes('book') || text.includes('study') || text.includes('russian') || text.includes('language')) {
-            return 'Learning & Mind';
-        }
-        if (text.includes('money') || text.includes('financ') || text.includes('business') || text.includes('invest') || text.includes('career') || text.includes('client')) {
-            return 'Business & Finance';
-        }
-        if (text.includes('creative') || text.includes('art') || text.includes('music') || text.includes('video') || text.includes('design') || text.includes('write')) {
-            return 'Creative & Craft';
-        }
-        return 'Habits & Routine';
     };
 
     // 1. Tasks

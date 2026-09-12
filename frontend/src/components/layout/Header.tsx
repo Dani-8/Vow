@@ -32,7 +32,7 @@ export const Header: React.FC<HeaderProps> = ({
             case 'private':
                 return 'Growth Vault (PIN Safeguarded)';
             case 'stats':
-                return 'Analytics & Streak Records';
+                return 'Progress & Insights';
             case 'task-detail':
                 return 'Task Workspace & Sub-Task Timeline';
             case 'task-map':
