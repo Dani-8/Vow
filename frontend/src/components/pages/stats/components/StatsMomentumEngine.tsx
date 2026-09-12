@@ -201,3 +201,20 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
                             <span className="text-[#1a1c35] font-black">{currentActiveDays} of 30 Days</span>
                         </div>
                     </div>
+
+                    {/* Psychology Coaching Cue */}
+                    <div className="neu-card p-4 rounded-2xl border border-white/60 text-xs space-y-2">
+                        <div className="flex items-center space-x-2 font-black text-[#1a1c35]">
+                            <Flame className="w-4 h-4 text-amber-500 fill-amber-500" />
+                            <span>Cadence Psychology</span>
+                        </div>
+
+                        {trendState === 'rising' && (
+                            <p className="text-[#44476A] font-medium leading-relaxed">
+                                {activeCategoryFilter ? (
+                                    <>In <strong className="text-[#1a1c35]">{activeCategoryFilter}</strong>, you are outpacing your baseline by <strong className="text-emerald-600 font-bold">+{growthPercent}%</strong>. This domain is compounding fast.</>
+                                ) : (
+                                    <>You are outperforming your previous 30-day pace by <strong className="text-emerald-600 font-bold">+{growthPercent}%</strong>. Your unbroken discipline is compounding into permanent routine.</>
+                                )}
+                            </p>
+                        )}
