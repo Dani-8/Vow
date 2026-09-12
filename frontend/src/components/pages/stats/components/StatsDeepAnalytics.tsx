@@ -275,4 +275,4 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                             ? 'ring-2 ring-[#549acb] shadow-md border-transparent'
                             : 'border-white/60 hover:scale-[1.01]'
                     }`}
-                ></div>
+                >
