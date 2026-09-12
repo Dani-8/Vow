@@ -332,3 +332,10 @@ export const StatsStreakRecords: React.FC<StatsStreakRecordsProps> = ({ tasks, s
                                     </div>
                                 </div>
                             );
+                        })}
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
