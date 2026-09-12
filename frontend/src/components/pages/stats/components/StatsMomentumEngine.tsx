@@ -344,3 +344,18 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
                             </AreaChart>
                         </ResponsiveContainer>
                     </div>
+
+                    <div className="flex items-center justify-between text-[10px] text-[#717699] font-semibold px-2 pt-1 border-t border-slate-300/60">
+                        <span>Day 1 ({effectiveDays}d ago)</span>
+                        <span className="text-[#549acb] font-bold">
+                            {currentTotal >= prevTotal
+                                ? `🔥 Leading previous output by +${currentTotal - prevTotal} actions`
+                                : `Target: ${prevTotal - currentTotal} more actions to top previous period`}
+                        </span>
+                        <span>Day {effectiveDays} (Today)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
