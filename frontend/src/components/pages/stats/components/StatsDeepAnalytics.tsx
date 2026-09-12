@@ -161,3 +161,26 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
 
     // 2. Category Stacked/Grouped Bar Chart Data
     const barData = useMemo(() => {
+        return normalizedCategories.map((cat) => ({
+            name: cat.name.split(' ')[0],
+            fullName: cat.name,
+            key: cat.key,
+            completed: cat.completedCount,
+            pending: Math.max(0, cat.itemCount - cat.completedCount),
+            total: cat.itemCount,
+            color: cat.color,
+            isSelected: selectedCategoryKey === cat.key,
+        }));
+    }, [normalizedCategories, selectedCategoryKey]);
+
+    // 3. Weekly Execution Cadence Trend: DYNAMICALLY DICTATED BY GLOBAL RANGE
+    // If 7d or 14d, break down by Days. If 30d+, group into appropriate weekly intervals.
+    const cadenceTrend = useMemo(() => {
+        // If range is short (7d or 14d), show day-by-day cadence
+        if (currentWindowDays <= 14) {
+            return dynamicActivities.slice(-currentWindowDays).map((d) => ({
+                label: d.displayDate.split(',')[0],
+                actions: d.totalActions,
+                challengeLogs: d.challengeActions,
+            }));
+        }
