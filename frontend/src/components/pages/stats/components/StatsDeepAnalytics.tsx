@@ -218,3 +218,36 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                 activeCategoryFilter={activeCategory ? activeCategory.name : null}
                 onResetCategoryFilter={handleResetCategoryFilter}
             />
+
+            {/* 2. Cross-Filter Domain Banner (PowerBI style) */}
+            {activeCategory && (
+                <div className="neu-card p-3.5 rounded-2xl flex items-center justify-between border-2 border-[#549acb]/40 bg-[#E0E5EC] animate-fadeIn">
+                    <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 rounded-xl neu-button flex items-center justify-center text-white bg-[#549acb]">
+                            <Filter className="w-4 h-4" />
+                        </div>
+                        <div>
+                            <span className="text-xs font-black text-[#1a1c35] flex items-center space-x-1.5">
+                                <span>Domain Filter Active:</span>
+                                <span
+                                    className="px-2 py-0.5 rounded-md text-white font-bold"
+                                    style={{ backgroundColor: activeCategory.color }}
+                                >
+                                    {activeCategory.name}
+                                </span>
+                            </span>
+                            <p className="text-[11px] text-[#717699] font-medium">
+                                All momentum curves, cadence waves, and metrics below are isolated to this domain.
+                            </p>
+                        </div>
+                    </div>
+
+                    <button
+                        onClick={handleResetCategoryFilter}
+                        className="neu-button px-3 py-1.5 rounded-xl text-xs font-bold text-[#717699] hover:text-[#1a1c35] flex items-center space-x-1 transition-all"
+                    >
+                        <span>Reset Domain</span>
+                        <X className="w-3.5 h-3.5" />
+                    </button>
+                </div>
+            )}
