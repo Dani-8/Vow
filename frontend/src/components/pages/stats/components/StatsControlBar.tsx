@@ -290,3 +290,35 @@ export const StatsControlBar: React.FC<StatsControlBarProps> = ({
                             </div>
                         )}
                     </div>
+
+                    {/* 3. Custom Dropdown: DAY OF WEEK */}
+                    <div className="relative">
+                        <button
+                            type="button"
+                            onClick={() => toggleDropdown('day')}
+                            className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center space-x-1.5 ${
+                                openDropdown === 'day' || filters.dayOfWeek !== 'all'
+                                    ? 'neu-button bg-[#E0E5EC] text-[#549acb] shadow-inner ring-1 ring-[#549acb]/30'
+                                    : 'neu-inset text-[#1a1c35] hover:text-[#549acb]'
+                            }`}
+                        >
+                            <span className="w-2 h-2 rounded-full bg-[#549acb]" />
+                            <span>{currentDayLabel}</span>
+                            <ChevronDown
+                                className={`w-3.5 h-3.5 text-[#717699] transition-transform duration-200 ${
+                                    openDropdown === 'day' ? 'rotate-180 text-[#549acb]' : ''
+                                }`}
+                            />
+                        </button>
+
+                        {/* Dropdown Menu */}
+                        {openDropdown === 'day' && (
+                            <div className="absolute left-0 mt-2 w-56 z-50 neu-card rounded-2xl p-2 bg-[#E0E5EC] border border-white/80 shadow-2xl space-y-1 animate-fadeIn max-h-72 overflow-y-auto">
+                                <div className="px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#717699] border-b border-slate-300/60">
+                                    Day Breakdown
+                                </div>
+                                {DAY_OPTIONS.map((opt) => {
+                                    const isSelected = filters.dayOfWeek === opt.id;
+                                    return (
+                                        <button
+                                            key={String(opt.id)}
