@@ -276,3 +276,46 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                             : 'border-white/60 hover:scale-[1.01]'
                     }`}
                 >
+                    <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-black uppercase tracking-wider text-[#549acb] flex items-center space-x-1.5">
+                            <Flame className="w-3.5 h-3.5 text-[#549acb]" />
+                            <span>Primary Energy Focus</span>
+                        </span>
+                        <span className="px-2 py-0.5 rounded-full neu-inset text-[10px] font-extrabold text-[#44476A]">
+                            {highestVolume?.percentage || 0}% Volume
+                        </span>
+                    </div>
+                    <div className="text-xl font-black text-[#1a1c35]">
+                        {highestVolume?.name || 'Habits & Routine'}
+                    </div>
+                    <p className="text-xs text-[#717699] font-medium">
+                        Highest concentration of active challenges, visual task maps, and routines. Click to filter.
+                    </p>
+                </div>
+
+                <div
+                    onClick={() => highestEfficiency && handleToggleCategory(highestEfficiency.key)}
+                    className={`neu-card p-5 rounded-3xl space-y-2 border cursor-pointer transition-all ${
+                        selectedCategoryKey === highestEfficiency?.key
+                            ? 'ring-2 ring-emerald-500 shadow-md border-transparent'
+                            : 'border-white/60 hover:scale-[1.01]'
+                    }`}
+                >
+                    <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-black uppercase tracking-wider text-emerald-600 flex items-center space-x-1.5">
+                            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                            <span>Highest Follow-Through</span>
+                        </span>
+                        <span className="px-2 py-0.5 rounded-full neu-inset text-[10px] font-extrabold text-emerald-600">
+                            {highestEfficiency
+                                ? Math.round((highestEfficiency.completedCount / highestEfficiency.itemCount) * 100)
+                                : 0}% Rate
+                        </span>
+                    </div>
+                    <div className="text-xl font-black text-[#1a1c35]">
+                        {highestEfficiency?.name || 'Tech & Engineering'}
+                    </div>
+                    <p className="text-xs text-[#717699] font-medium">
+                        Strongest completion discipline across roadmap goals and check-ins. Click to filter.
+                    </p>
+                </div>
