@@ -96,3 +96,30 @@ export const StatsControlBar: React.FC<StatsControlBarProps> = ({
         onChangeFilters({ ...filters, dayOfWeek: day });
         setOpenDropdown(null);
     };
+
+    const handleResetAll = () => {
+        onResetCategoryFilter();
+        setOpenDropdown(null);
+        onChangeFilters({
+            timeRange: '30d',
+            customStartDate: undefined,
+            customEndDate: undefined,
+            dayOfWeek: 'all',
+            executionType: 'all',
+        });
+    };
+
+    const isAnyFilterActive =
+        filters.timeRange !== '30d' ||
+        filters.dayOfWeek !== 'all' ||
+        filters.executionType !== 'all' ||
+        activeCategoryFilter !== null;
+
+    // Derived active labels
+    const currentRangeLabel =
+        filters.timeRange === 'custom'
+            ? 'Custom Range'
+            : TIME_OPTIONS.find((t) => t.id === filters.timeRange)?.label || '30 Days';
+
+    const currentExecution = EXECUTION_OPTIONS.find((e) => e.id === filters.executionType) || EXECUTION_OPTIONS[0];
+    const currentDayLabel = DAY_OPTIONS.find((d) => d.id === filters.dayOfWeek)?.label || 'All 7 Days';
