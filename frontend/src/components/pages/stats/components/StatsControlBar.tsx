@@ -322,3 +322,22 @@ export const StatsControlBar: React.FC<StatsControlBarProps> = ({
                                     return (
                                         <button
                                             key={String(opt.id)}
+                                            type="button"
+                                            onClick={() => handleSelectDayOfWeek(opt.id)}
+                                            className={`w-full px-3 py-1.5 rounded-xl text-left transition-all flex items-center justify-between ${
+                                                isSelected
+                                                    ? 'neu-button bg-[#E0E5EC] text-[#549acb] font-black'
+                                                    : 'hover:bg-white/40 text-[#1a1c35]'
+                                            }`}
+                                        >
+                                            <span className="text-xs font-bold">{opt.label}</span>
+                                            {isSelected && <Check className="w-3.5 h-3.5 text-[#549acb]" />}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* Right Actions: Domain Badge & Reset */}
