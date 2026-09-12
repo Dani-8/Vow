@@ -139,3 +139,26 @@ export const StatsLeaderboard: React.FC<StatsLeaderboardProps> = ({ tasks }) => 
                     <p className="text-xs font-bold text-[#717699]">No items matched the current filter.</p>
                 </div>
             ) : (
+                <div className="space-y-3">
+                    {filteredTasks.map((task, index) => {
+                        const Icon = getCategoryIconComponent(task.icon || task.category);
+                        const subProgress = calculateTaskSubTaskProgress(task._id, task.subTasks);
+                        const curStreak = task.currentStreak || 0;
+                        const bestStreak = task.bestStreak || 0;
+                        const isRecordMatched = curStreak >= bestStreak && curStreak > 0;
+
+                        return (
+                            <div
+                                key={task._id}
+                                className="neu-inset p-4 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border border-white/40 bg-[#E0E5EC]/90 hover:bg-[#E0E5EC] transition-all"
+                            >
+                                <div className="flex items-center space-x-3.5 flex-1 min-w-0">
+                                    {/* Rank badge */}
+                                    <span className="w-6 text-center text-xs font-black text-[#717699] shrink-0">
+                                        #{index + 1}
+                                    </span>
+
+                                    {/* Icon */}
+                                    <div className="w-10 h-10 rounded-2xl neu-button flex items-center justify-center text-[#549acb] bg-[#E0E5EC] shrink-0">
+                                        <Icon className="w-5 h-5" />
+                                    </div>
