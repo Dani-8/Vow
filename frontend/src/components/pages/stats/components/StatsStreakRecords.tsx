@@ -8,3 +8,18 @@ interface StatsStreakRecordsProps {
     tasks: Task[];
     stats: MasterStreakStats | null;
 }
+
+export const StatsStreakRecords: React.FC<StatsStreakRecordsProps> = ({ tasks, stats }) => {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [typeFilter, setTypeFilter] = useState<'all' | 'habits' | 'goals' | 'private'>('all');
+    const [sortBy, setSortBy] = useState<'currentStreak' | 'bestStreak' | 'subtasks' | 'title'>('currentStreak');
+
+    // 1. Hall of Fame (Top 3 streaks of all time)
+    const hallOfFame = useMemo(() => {
+        const sorted = [...tasks].sort((a, b) => {
+            const bestA = Math.max(a.bestStreak || 0, a.currentStreak || 0);
+            const bestB = Math.max(b.bestStreak || 0, b.currentStreak || 0);
+            return bestB - bestA;
+        });
+        return sorted.slice(0, 3);
+    }, [tasks]);
