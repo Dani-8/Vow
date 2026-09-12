@@ -144,8 +144,8 @@ export const StatsControlBar: React.FC<StatsControlBarProps> = ({
                             type="button"
                             onClick={() => toggleDropdown('range')}
                             className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center space-x-1.5 ${openDropdown === 'range' || filters.timeRange !== '30d'
-                                    ? 'neu-button bg-[#E0E5EC] text-[#549acb] shadow-inner ring-1 ring-[#549acb]/30'
-                                    : 'neu-inset text-[#1a1c35] hover:text-[#549acb]'
+                                ? 'neu-button bg-[#E0E5EC] text-[#549acb] shadow-inner ring-1 ring-[#549acb]/30'
+                                : 'neu-inset text-[#1a1c35] hover:text-[#549acb]'
                                 }`}
                         >
                             <Calendar className="w-3.5 h-3.5 text-[#549acb]" />
@@ -170,8 +170,8 @@ export const StatsControlBar: React.FC<StatsControlBarProps> = ({
                                             type="button"
                                             onClick={() => handleSelectTimeRange(opt.id)}
                                             className={`w-full px-3 py-2 rounded-xl text-left transition-all flex items-center justify-between ${isSelected
-                                                    ? 'neu-button bg-[#E0E5EC] text-[#549acb] font-black'
-                                                    : 'hover:bg-white/40 text-[#1a1c35]'
+                                                ? 'neu-button bg-[#E0E5EC] text-[#549acb] font-black'
+                                                : 'hover:bg-white/40 text-[#1a1c35]'
                                                 }`}
                                         >
                                             <div>
@@ -234,8 +234,8 @@ export const StatsControlBar: React.FC<StatsControlBarProps> = ({
                             type="button"
                             onClick={() => toggleDropdown('type')}
                             className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center space-x-1.5 ${openDropdown === 'type' || filters.executionType !== 'all'
-                                    ? 'neu-button bg-[#E0E5EC] text-[#6366f1] shadow-inner ring-1 ring-[#6366f1]/30'
-                                    : 'neu-inset text-[#1a1c35] hover:text-[#6366f1]'
+                                ? 'neu-button bg-[#E0E5EC] text-[#6366f1] shadow-inner ring-1 ring-[#6366f1]/30'
+                                : 'neu-inset text-[#1a1c35] hover:text-[#6366f1]'
                                 }`}
                         >
                             <Layers className="w-3.5 h-3.5 text-[#6366f1]" />
@@ -260,8 +260,8 @@ export const StatsControlBar: React.FC<StatsControlBarProps> = ({
                                             type="button"
                                             onClick={() => handleSelectExecutionType(opt.id)}
                                             className={`w-full px-3 py-2 rounded-xl text-left transition-all flex items-center justify-between ${isSelected
-                                                    ? 'neu-button bg-[#E0E5EC] font-black'
-                                                    : 'hover:bg-white/40 text-[#1a1c35]'
+                                                ? 'neu-button bg-[#E0E5EC] font-black'
+                                                : 'hover:bg-white/40 text-[#1a1c35]'
                                                 }`}
                                         >
                                             <div>
@@ -291,8 +291,8 @@ export const StatsControlBar: React.FC<StatsControlBarProps> = ({
                             type="button"
                             onClick={() => toggleDropdown('day')}
                             className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center space-x-1.5 ${openDropdown === 'day' || filters.dayOfWeek !== 'all'
-                                    ? 'neu-button bg-[#E0E5EC] text-[#549acb] shadow-inner ring-1 ring-[#549acb]/30'
-                                    : 'neu-inset text-[#1a1c35] hover:text-[#549acb]'
+                                ? 'neu-button bg-[#E0E5EC] text-[#549acb] shadow-inner ring-1 ring-[#549acb]/30'
+                                : 'neu-inset text-[#1a1c35] hover:text-[#549acb]'
                                 }`}
                         >
                             <span className="w-2 h-2 rounded-full bg-[#549acb]" />
@@ -317,8 +317,8 @@ export const StatsControlBar: React.FC<StatsControlBarProps> = ({
                                             type="button"
                                             onClick={() => handleSelectDayOfWeek(opt.id)}
                                             className={`w-full px-3 py-1.5 rounded-xl text-left transition-all flex items-center justify-between ${isSelected
-                                                    ? 'neu-button bg-[#E0E5EC] text-[#549acb] font-black'
-                                                    : 'hover:bg-white/40 text-[#1a1c35]'
+                                                ? 'neu-button bg-[#E0E5EC] text-[#549acb] font-black'
+                                                : 'hover:bg-white/40 text-[#1a1c35]'
                                                 }`}
                                         >
                                             <span className="text-xs font-bold">{opt.label}</span>
