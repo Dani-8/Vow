@@ -73,3 +73,18 @@ export const StatsLeaderboard: React.FC<StatsLeaderboardProps> = ({ tasks }) => 
                             className="w-full pl-9 pr-3 py-1.5 rounded-2xl neu-inset text-xs font-semibold text-[#1a1c35] placeholder-[#717699] focus:outline-none bg-[#E0E5EC]/90"
                         />
                     </div>
+
+                    <div className="flex items-center space-x-1 neu-inset p-1 rounded-2xl bg-[#E0E5EC]/80">
+                        <select
+                            value={sortBy}
+                            onChange={(e) => setSortBy(e.target.value as any)}
+                            className="bg-transparent text-xs font-bold text-[#44476A] px-2 py-1 focus:outline-none cursor-pointer"
+                        >
+                            <option value="currentStreak">Sort: Current Streak</option>
+                            <option value="bestStreak">Sort: Best Record</option>
+                            <option value="subtasks">Sort: Subtask Progress</option>
+                            <option value="title">Sort: Alphabetical</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
