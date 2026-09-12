@@ -269,4 +269,24 @@ export const StatsControlBar: React.FC<StatsControlBarProps> = ({
                                                     ? 'neu-button bg-[#E0E5EC] font-black'
                                                     : 'hover:bg-white/40 text-[#1a1c35]'
                                             }`}
-                                        ></button>
+                                        >
+                                            <div>
+                                                <div
+                                                    className="text-xs font-black leading-tight"
+                                                    style={{ color: opt.color }}
+                                                >
+                                                    {opt.label}
+                                                </div>
+                                                <div className="text-[10px] text-[#717699] font-medium">
+                                                    {opt.sub}
+                                                </div>
+                                            </div>
+                                            {isSelected && (
+                                                <Check className="w-3.5 h-3.5" style={{ color: opt.color }} />
+                                            )}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </div>
