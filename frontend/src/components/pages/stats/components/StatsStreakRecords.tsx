@@ -290,3 +290,21 @@ export const StatsStreakRecords: React.FC<StatsStreakRecordsProps> = ({ tasks, s
                                                     </span>
                                                 )}
                                             </div>
+
+                                            <div className="flex flex-wrap items-center gap-2 pt-0.5">
+                                                <span className="text-[11px] font-bold text-[#717699]">
+                                                    {task.isHabit ? 'Daily Habit' : 'Single Goal'}
+                                                </span>
+                                                {task.category && (
+                                                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full neu-inset text-[#44476A]">
+                                                        {task.category}
+                                                    </span>
+                                                )}
+                                                {subProgress.total > 0 && (
+                                                    <span className="text-[10px] font-bold text-[#549acb] flex items-center space-x-1">
+                                                        <span>{subProgress.completed}/{subProgress.total} Subtasks ({subProgress.percent}%)</span>
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
