@@ -53,3 +53,23 @@ export const StatsStreakRecords: React.FC<StatsStreakRecordsProps> = ({ tasks, s
             return a.title.localeCompare(b.title);
         });
     }, [tasks, searchQuery, typeFilter, sortBy]);
+
+    const masterStreak = stats?.masterStreak || 0;
+    const bestMasterStreak = Math.max(masterStreak, stats?.bestMasterStreak || 0);
+
+    return (
+        <div className="space-y-6">
+            {/* Top Row: Master Resilience Highlight & Hall of Fame */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                {/* Master Streak Engine Guard */}
+                <div className="lg:col-span-4 neu-card p-6 rounded-3xl space-y-4 border border-white/60 flex flex-col justify-between">
+                    <div className="space-y-3">
+                        <div className="flex items-center space-x-2.5">
+                            <span className="p-2 rounded-xl neu-inset text-amber-500 bg-[#E0E5EC]">
+                                <Flame className="w-5 h-5 fill-amber-500" />
+                            </span>
+                            <div>
+                                <h3 className="text-sm font-black text-[#1a1c35]">Master Streak Integrity</h3>
+                                <span className="text-[10px] font-bold text-[#717699] uppercase">Global Non-Punitive Engine</span>
+                            </div>
+                        </div>
