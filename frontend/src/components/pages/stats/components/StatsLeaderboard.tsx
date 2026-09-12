@@ -111,3 +111,24 @@ export const StatsLeaderboard: React.FC<StatsLeaderboardProps> = ({ tasks }) => 
                 >
                     Daily Habits ({tasks.filter((t) => t.isHabit).length})
                 </button>
+                <button
+                    onClick={() => setTypeFilter('goals')}
+                    className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
+                        typeFilter === 'goals'
+                            ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                            : 'neu-inset text-[#717699] hover:text-[#1a1c35]'
+                    }`}
+                >
+                    Single Goals ({tasks.filter((t) => !t.isHabit).length})
+                </button>
+                <button
+                    onClick={() => setTypeFilter('private')}
+                    className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
+                        typeFilter === 'private'
+                            ? 'neu-button text-purple-600 bg-[#E0E5EC]'
+                            : 'neu-inset text-[#717699] hover:text-[#1a1c35]'
+                    }`}
+                >
+                    Growth Vault ({tasks.filter((t) => t.isPrivate).length})
+                </button>
+            </div>
