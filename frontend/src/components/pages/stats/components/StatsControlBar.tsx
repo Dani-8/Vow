@@ -79,3 +79,20 @@ export const StatsControlBar: React.FC<StatsControlBarProps> = ({
     const toggleDropdown = (menu: 'range' | 'type' | 'day') => {
         setOpenDropdown((prev) => (prev === menu ? null : menu));
     };
+
+    const handleSelectTimeRange = (range: TimeRangeOption) => {
+        onChangeFilters({ ...filters, timeRange: range });
+        if (range !== 'custom') {
+            setOpenDropdown(null);
+        }
+    };
+
+    const handleSelectExecutionType = (type: ExecutionTypeOption) => {
+        onChangeFilters({ ...filters, executionType: type });
+        setOpenDropdown(null);
+    };
+
+    const handleSelectDayOfWeek = (day: DayOfWeekOption) => {
+        onChangeFilters({ ...filters, dayOfWeek: day });
+        setOpenDropdown(null);
+    };
