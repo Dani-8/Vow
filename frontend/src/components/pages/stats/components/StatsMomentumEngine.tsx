@@ -188,3 +188,31 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
                                 <span>{overview.consistencyGrade}</span>
                             </span>
                         </div>
+
+                        <div className="flex items-baseline space-x-2">
+                            <span className="text-4xl font-black text-[#1a1c35] tracking-tight">
+                                {momentumScore}
+                            </span>
+                            <span className="text-sm font-bold text-[#717699]">/ 100</span>
+                        </div>
+
+                        {/* Progress Bar Gauge */}
+                        <div className="w-full h-2 rounded-full neu-inset overflow-hidden p-0.5">
+                            <div
+                                className="h-full rounded-full transition-all duration-700 bg-gradient-to-r from-[#549acb] to-emerald-500"
+                                style={{ width: `${momentumScore}%` }}
+                            />
+                        </div>
+
+                        <div className="flex justify-between text-[11px] font-bold text-[#717699] pt-1 border-t border-slate-300/70">
+                            <span>Active Execution Pace:</span>
+                            <span className="text-[#1a1c35] font-black">{currentActiveDays} of {effectiveDays} Days</span>
+                        </div>
+                    </div>
+
+                    {/* Psychology Coaching Cue */}
+                    <div className="neu-card p-4 rounded-2xl border border-white/60 text-xs space-y-2">
+                        <div className="flex items-center space-x-2 font-black text-[#1a1c35]">
+                            <Flame className="w-4 h-4 text-amber-500 fill-amber-500" />
+                            <span>Cadence Psychology</span>
+                        </div>
