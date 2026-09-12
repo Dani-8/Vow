@@ -89,3 +89,9 @@ export const StatsStreakRecords: React.FC<StatsStreakRecordsProps> = ({ tasks, s
                             No shame or guilt resets: your current streak tracks your current unbroken cadence, while your best score is permanently preserved.
                         </p>
                     </div>
+
+                    <div className="px-3 py-2 rounded-2xl neu-inset text-xs font-bold text-[#1a1c35] flex items-center space-x-2">
+                        <Sparkles className="w-4 h-4 text-[#549acb] shrink-0" />
+                        <span>Every daily check-in extends your lifetime score.</span>
+                    </div>
+                </div>
