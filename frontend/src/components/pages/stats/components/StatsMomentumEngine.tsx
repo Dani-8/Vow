@@ -24,6 +24,8 @@ interface StatsMomentumEngineProps {
     overview: EcosystemOverview;
     activeCategoryFilter?: string | null;
     onResetCategoryFilter?: () => void;
+    windowDays?: number;
+    rangeLabel?: string;
 }
 
 export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
@@ -31,26 +33,30 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
     overview,
     activeCategoryFilter,
     onResetCategoryFilter,
+    windowDays = 30,
+    rangeLabel,
 }) => {
-    // 1. Calculate the Rolling 30 Days (Current 30 vs Previous 30)
-    // heatmapActivities is sorted from oldest (52 weeks ago) to newest (today)
+    // 1. Calculate Rolling Window (Current N days vs Previous N days)
+    const effectiveDays = Math.max(7, Math.min(windowDays, 90));
+
     const { chartData, currentTotal, prevTotal, growthPercent, trendState, currentActiveDays } = useMemo(() => {
         const totalLen = heatmapActivities.length;
-        // Last 30 days = current window
-        const currentWindow = heatmapActivities.slice(Math.max(0, totalLen - 30));
-        // Previous 30 days before that = benchmark window
+        // Current window
+        const currentWindow = heatmapActivities.slice(Math.max(0, totalLen - effectiveDays));
+        // Benchmark window immediately preceding current
         const prevWindow = heatmapActivities.slice(
-            Math.max(0, totalLen - 60),
-            Math.max(0, totalLen - 30)
+            Math.max(0, totalLen - (effectiveDays * 2)),
+            Math.max(0, totalLen - effectiveDays)
         );
 
         let curSum = 0;
         let pSum = 0;
         let curActive = 0;
 
-        // Construct 30 day comparison array: Day 1 to Day 30
+        const count = Math.min(effectiveDays, currentWindow.length || effectiveDays);
         const data = [];
-        for (let i = 0; i < 30; i++) {
+
+        for (let i = 0; i < count; i++) {
             const curDay = currentWindow[i];
             const prevDay = prevWindow[i];
 
@@ -97,15 +103,17 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
             trendState: trend,
             currentActiveDays: curActive,
         };
-    }, [heatmapActivities]);
+    }, [heatmapActivities, effectiveDays]);
 
-    // Discipline momentum score (0 - 100) based on active days out of 30, master streak, and output
+    // Discipline momentum score (0 - 100)
     const momentumScore = useMemo(() => {
-        const baseScore = Math.min(60, Math.round((currentActiveDays / 30) * 60));
+        const baseScore = Math.min(60, Math.round((currentActiveDays / effectiveDays) * 60));
         const streakBonus = Math.min(25, (overview.masterStreak || 1) * 3);
-        const volumeBonus = Math.min(15, Math.round((currentTotal / 25) * 15));
+        const volumeBonus = Math.min(15, Math.round((currentTotal / (effectiveDays * 0.8)) * 15));
         return Math.min(100, Math.max(15, baseScore + streakBonus + volumeBonus));
-    }, [currentActiveDays, overview.masterStreak, currentTotal]);
+    }, [currentActiveDays, overview.masterStreak, currentTotal, effectiveDays]);
+
+    const titleWindowLabel = rangeLabel || `Rolling ${effectiveDays} Days`;
 
     return (
         <div className="neu-card p-6 rounded-3xl space-y-5 border border-white/60 bg-[#E0E5EC]">
@@ -121,7 +129,7 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
                                 Momentum & Discipline Arc
                             </h3>
                             <span className="text-[10px] px-2 py-0.5 rounded-full neu-inset text-[#549acb] font-extrabold uppercase tracking-wider">
-                                Rolling 30 Days
+                                {titleWindowLabel}
                             </span>
                             {activeCategoryFilter && (
                                 <button
@@ -137,7 +145,7 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
                         <p className="text-xs text-[#717699] font-medium">
                             {activeCategoryFilter
                                 ? `Showing dedicated discipline & velocity solely for ${activeCategoryFilter}`
-                                : "Real-time trajectory: Your current 30-day discipline vs. your previous month's baseline"}
+                                : `Real-time trajectory: Your current ${effectiveDays}-day discipline vs. your previous period baseline`}
                         </p>
                     </div>
                 </div>
@@ -147,7 +155,7 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
                     {trendState === 'rising' && (
                         <span className="px-3 py-1.5 rounded-xl neu-inset text-xs font-black text-emerald-600 flex items-center space-x-1.5 bg-[#E0E5EC]/90">
                             <TrendingUp className="w-4 h-4 text-emerald-600" />
-                            <span>Surging (+{growthPercent}% vs Last Mo)</span>
+                            <span>Surging (+{growthPercent}% vs Prior Period)</span>
                         </span>
                     )}
                     {trendState === 'steady' && (
@@ -165,7 +173,7 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
                 </div>
             </div>
 
-            {/* Split Content: Left Metric Command Block (35%) + Right 30-Day Dual Wave Chart (65%) */}
+            {/* Split Content: Left Metric Command Block (35%) + Right Dual Wave Chart (65%) */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
                 {/* 1. Left Command Block (4 cols) */}
                 <div className="lg:col-span-4 space-y-4">
@@ -197,8 +205,8 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
                         </div>
 
                         <div className="flex justify-between text-[11px] font-bold text-[#717699] pt-1 border-t border-slate-300/70">
-                            <span>30-Day Active Pace:</span>
-                            <span className="text-[#1a1c35] font-black">{currentActiveDays} of 30 Days</span>
+                            <span>Active Execution Pace:</span>
+                            <span className="text-[#1a1c35] font-black">{currentActiveDays} of {effectiveDays} Days</span>
                         </div>
                     </div>
 
@@ -214,7 +222,7 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
                                 {activeCategoryFilter ? (
                                     <>In <strong className="text-[#1a1c35]">{activeCategoryFilter}</strong>, you are outpacing your baseline by <strong className="text-emerald-600 font-bold">+{growthPercent}%</strong>. This domain is compounding fast.</>
                                 ) : (
-                                    <>You are outperforming your previous 30-day pace by <strong className="text-emerald-600 font-bold">+{growthPercent}%</strong>. Your unbroken discipline is compounding into permanent routine.</>
+                                    <>You are outperforming your prior pace by <strong className="text-emerald-600 font-bold">+{growthPercent}%</strong>. Your unbroken discipline is compounding into permanent routine.</>
                                 )}
                             </p>
                         )}
@@ -238,13 +246,13 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
                         )}
 
                         <div className="flex items-center justify-between text-[10px] font-extrabold text-[#717699] pt-1.5 border-t border-slate-200">
-                            <span>This Mo: <strong className="text-[#1a1c35]">{currentTotal} actions</strong></span>
-                            <span>Past Mo: <strong className="text-[#717699]">{prevTotal} actions</strong></span>
+                            <span>Current: <strong className="text-[#1a1c35]">{currentTotal} actions</strong></span>
+                            <span>Prior: <strong className="text-[#717699]">{prevTotal} actions</strong></span>
                         </div>
                     </div>
                 </div>
 
-                {/* 2. Right 30-Day Dual Wave Trajectory Chart (8 cols) */}
+                {/* 2. Right Dual Wave Trajectory Chart (8 cols) */}
                 <div className="lg:col-span-8 neu-inset p-5 rounded-3xl bg-[#E0E5EC]/80 border border-white/60 space-y-3">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1">
                         <div>
@@ -260,11 +268,11 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
                         <div className="flex items-center space-x-3 text-[11px] font-bold">
                             <div className="flex items-center space-x-1.5">
                                 <span className="w-3 h-0.5 bg-[#549acb] rounded-full" />
-                                <span className="text-[#1a1c35]">Current 30 Days</span>
+                                <span className="text-[#1a1c35]">Current ({effectiveDays}d)</span>
                             </div>
                             <div className="flex items-center space-x-1.5">
                                 <span className="w-3 h-0.5 border-t-2 border-dashed border-[#94a3b8]" />
-                                <span className="text-[#717699]">Previous 30 Days</span>
+                                <span className="text-[#717699]">Previous ({effectiveDays}d)</span>
                             </div>
                         </div>
                     </div>
@@ -301,7 +309,7 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
                                         `${value} actions`,
                                         name === 'currentActions' ? 'Current Period' : 'Previous Period',
                                     ]}
-                                    labelFormatter={(label: any) => `Day ${label} of 30`}
+                                    labelFormatter={(label: any) => `Day ${label} of ${effectiveDays}`}
                                     contentStyle={{
                                         backgroundColor: '#E0E5EC',
                                         borderRadius: '14px',
@@ -312,7 +320,7 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
                                         color: '#1a1c35',
                                     }}
                                 />
-                                {/* Previous 30 days (Dotted baseline) */}
+                                {/* Previous days (Dotted baseline) */}
                                 <Area
                                     type="monotone"
                                     dataKey="prevActions"
@@ -323,7 +331,7 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
                                     fillOpacity={1}
                                     fill="url(#prevWaveGradient)"
                                 />
-                                {/* Current 30 days (Solid Brand Blue glow) */}
+                                {/* Current days (Solid Brand Blue glow) */}
                                 <Area
                                     type="monotone"
                                     dataKey="currentActions"
@@ -338,13 +346,13 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
                     </div>
 
                     <div className="flex items-center justify-between text-[10px] text-[#717699] font-semibold px-2 pt-1 border-t border-slate-300/60">
-                        <span>Day 1 (30 days ago)</span>
+                        <span>Day 1 ({effectiveDays}d ago)</span>
                         <span className="text-[#549acb] font-bold">
                             {currentTotal >= prevTotal
                                 ? `🔥 Leading previous output by +${currentTotal - prevTotal} actions`
-                                : `Target: ${prevTotal - currentTotal} more actions to top last month`}
+                                : `Target: ${prevTotal - currentTotal} more actions to top previous period`}
                         </span>
-                        <span>Day 30 (Today)</span>
+                        <span>Day {effectiveDays} (Today)</span>
                     </div>
                 </div>
             </div>
