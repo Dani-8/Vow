@@ -157,3 +157,23 @@ export const StatsControlBar: React.FC<StatsControlBarProps> = ({
                                 }`}
                             />
                         </button>
+
+                        {/* Dropdown Menu */}
+                        {openDropdown === 'range' && (
+                            <div className="absolute left-0 mt-2 w-64 z-50 neu-card rounded-2xl p-2 bg-[#E0E5EC] border border-white/80 shadow-2xl space-y-1 animate-fadeIn">
+                                <div className="px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#717699] border-b border-slate-300/60">
+                                    Time Horizon
+                                </div>
+                                {TIME_OPTIONS.map((opt) => {
+                                    const isSelected = filters.timeRange === opt.id;
+                                    return (
+                                        <button
+                                            key={opt.id}
+                                            type="button"
+                                            onClick={() => handleSelectTimeRange(opt.id)}
+                                            className={`w-full px-3 py-2 rounded-xl text-left transition-all flex items-center justify-between ${
+                                                isSelected
+                                                    ? 'neu-button bg-[#E0E5EC] text-[#549acb] font-black'
+                                                    : 'hover:bg-white/40 text-[#1a1c35]'
+                                            }`}
+                                        ></button>
