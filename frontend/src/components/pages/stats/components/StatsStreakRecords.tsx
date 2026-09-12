@@ -73,3 +73,19 @@ export const StatsStreakRecords: React.FC<StatsStreakRecordsProps> = ({ tasks, s
                                 <span className="text-[10px] font-bold text-[#717699] uppercase">Global Non-Punitive Engine</span>
                             </div>
                         </div>
+
+                        <div className="neu-inset p-4 rounded-2xl space-y-2 bg-[#E0E5EC]/80">
+                            <div className="flex justify-between items-baseline">
+                                <span className="text-xs font-bold text-[#717699]">Active Master Streak</span>
+                                <span className="text-2xl font-black text-[#1a1c35]">{masterStreak} Days</span>
+                            </div>
+                            <div className="flex justify-between items-baseline border-t border-slate-300 pt-1.5">
+                                <span className="text-xs font-bold text-[#717699]">All-Time Master High</span>
+                                <span className="text-sm font-black text-[#549acb]">{bestMasterStreak} Days Record</span>
+                            </div>
+                        </div>
+
+                        <p className="text-xs text-[#717699] font-medium leading-relaxed">
+                            No shame or guilt resets: your current streak tracks your current unbroken cadence, while your best score is permanently preserved.
+                        </p>
+                    </div>
