@@ -133,3 +133,22 @@ export const StatsMetricGrid: React.FC<StatsMetricGridProps> = ({ overview }) =>
                                 </span>
                             </div>
                         </div>
+
+                        {/* Progress bar */}
+                        <div className="space-y-1.5 pt-1">
+                            <div className="w-full h-2 rounded-full neu-inset overflow-hidden p-0.5">
+                                <div
+                                    className={`h-full rounded-full bg-gradient-to-r ${card.progressColor} transition-all duration-500`}
+                                    style={{ width: `${Math.max(5, Math.min(100, card.progressPercent))}%` }}
+                                />
+                            </div>
+                            <p className="text-[11px] text-[#717699] font-medium leading-tight">
+                                {card.subText}
+                            </p>
+                        </div>
+                    </div>
+                );
+            })}
+        </div>
+    );
+};
