@@ -116,3 +116,28 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
                         <Zap className="w-5 h-5 fill-[#549acb]/20" />
                     </div>
                     <div>
+                        <div className="flex items-center space-x-2">
+                            <h3 className="text-base font-black text-[#1a1c35]">
+                                Momentum & Discipline Arc
+                            </h3>
+                            <span className="text-[10px] px-2 py-0.5 rounded-full neu-inset text-[#549acb] font-extrabold uppercase tracking-wider">
+                                Rolling 30 Days
+                            </span>
+                            {activeCategoryFilter && (
+                                <button
+                                    onClick={onResetCategoryFilter}
+                                    className="text-[10px] px-2.5 py-0.5 rounded-full bg-[#549acb] text-white font-extrabold flex items-center space-x-1 shadow-sm hover:opacity-90 transition-opacity"
+                                    title="Click to reset filter back to all categories"
+                                >
+                                    <span>Filtered: {activeCategoryFilter}</span>
+                                    <X className="w-3 h-3 ml-0.5" />
+                                </button>
+                            )}
+                        </div>
+                        <p className="text-xs text-[#717699] font-medium">
+                            {activeCategoryFilter
+                                ? `Showing dedicated discipline & velocity solely for ${activeCategoryFilter}`
+                                : "Real-time trajectory: Your current 30-day discipline vs. your previous month's baseline"}
+                        </p>
+                    </div>
+                </div>
