@@ -60,3 +60,16 @@ export const StatsLeaderboard: React.FC<StatsLeaderboardProps> = ({ tasks }) => 
                         </p>
                     </div>
                 </div>
+
+                {/* Search Bar & Sorter */}
+                <div className="flex flex-wrap items-center gap-2.5 w-full lg:w-auto">
+                    <div className="relative flex-1 sm:w-60">
+                        <Search className="w-4 h-4 text-[#717699] absolute left-3 top-1/2 -translate-y-1/2" />
+                        <input
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Filter habits or goals..."
+                            className="w-full pl-9 pr-3 py-1.5 rounded-2xl neu-inset text-xs font-semibold text-[#1a1c35] placeholder-[#717699] focus:outline-none bg-[#E0E5EC]/90"
+                        />
+                    </div>
