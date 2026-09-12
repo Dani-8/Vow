@@ -128,3 +128,23 @@ export const StatsStreakRecords: React.FC<StatsStreakRecordsProps> = ({ tasks, s
                                 const best = Math.max(item.bestStreak || 0, item.currentStreak || 0);
                                 const medals = ['🥇 1st Place', '🥈 2nd Place', '🥉 3rd Place'];
                                 const ringColors = ['border-amber-400', 'border-slate-400', 'border-amber-600'];
+
+                                return (
+                                    <div
+                                        key={item._id}
+                                        className={`neu-inset p-4 rounded-2xl space-y-2.5 border ${ringColors[idx]} bg-[#E0E5EC]/80 flex flex-col justify-between`}
+                                    >
+                                        <div className="space-y-2">
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-[10px] font-black uppercase tracking-wider text-[#44476A]">
+                                                    {medals[idx]}
+                                                </span>
+                                                <div className="w-7 h-7 rounded-lg neu-button flex items-center justify-center text-[#549acb] bg-[#E0E5EC]">
+                                                    <Icon className="w-3.5 h-3.5" />
+                                                </div>
+                                            </div>
+
+                                            <h4 className="text-xs font-black text-[#1a1c35] line-clamp-2">
+                                                {item.title}
+                                            </h4>
+                                        </div>
