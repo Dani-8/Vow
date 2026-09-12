@@ -43,3 +43,30 @@ import {
     AreaChart,
     Area,
 } from 'recharts';
+
+interface StatsDeepAnalyticsProps {
+    categories: CategoryBreakdownItem[];
+    heatmapActivities: DayActivity[];
+    overview: EcosystemOverview;
+    tasks?: Task[];
+    challenges?: Challenge[];
+    taskMaps?: TaskMap[];
+}
+
+// Cohesive palette matching CreateChallengeModal and brand blue (#549acb)
+const HARMONIOUS_COLORS = [
+    '#549acb', // Brand Blue
+    '#6366f1', // Indigo
+    '#10b981', // Emerald
+    '#f59e0b', // Amber
+    '#8b5cf6', // Violet
+    '#06b6d4', // Cyan
+];
+
+export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
+    categories,
+    heatmapActivities,
+    overview,
+    tasks = [],
+    challenges = [],
+}) => {
