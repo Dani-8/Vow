@@ -162,3 +162,34 @@ export const StatsLeaderboard: React.FC<StatsLeaderboardProps> = ({ tasks }) => 
                                     <div className="w-10 h-10 rounded-2xl neu-button flex items-center justify-center text-[#549acb] bg-[#E0E5EC] shrink-0">
                                         <Icon className="w-5 h-5" />
                                     </div>
+
+                                    {/* Title & Metadata */}
+                                    <div className="min-w-0 flex-1">
+                                        <div className="flex items-center space-x-2">
+                                            <h4 className="font-extrabold text-sm text-[#1a1c35] truncate">
+                                                {task.title}
+                                            </h4>
+                                            {task.isPrivate && (
+                                                <span className="p-0.5 rounded-full text-purple-600 shrink-0" title="Private Vault Item">
+                                                    <Lock className="w-3 h-3" />
+                                                </span>
+                                            )}
+                                        </div>
+
+                                        <div className="flex flex-wrap items-center gap-2 pt-0.5">
+                                            <span className="text-[11px] font-bold text-[#717699]">
+                                                {task.isHabit ? 'Daily Habit' : 'Single Goal'}
+                                            </span>
+                                            {task.category && (
+                                                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full neu-inset text-[#44476A]">
+                                                    {task.category}
+                                                </span>
+                                            )}
+                                            {subProgress.total > 0 && (
+                                                <span className="text-[10px] font-bold text-[#549acb] flex items-center space-x-1">
+                                                    <span>{subProgress.completed}/{subProgress.total} Subtasks ({subProgress.percent}%)</span>
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
