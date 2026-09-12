@@ -250,3 +250,17 @@ export const StatsStreakRecords: React.FC<StatsStreakRecordsProps> = ({ tasks, s
                         Growth Vault ({tasks.filter((t) => t.isPrivate).length})
                     </button>
                 </div>
+
+                {/* List */}
+                {filteredTasks.length === 0 ? (
+                    <div className="neu-inset p-8 rounded-2xl text-center space-y-1">
+                        <p className="text-xs font-bold text-[#717699]">No items matched the current filter.</p>
+                    </div>
+                ) : (
+                    <div className="space-y-3">
+                        {filteredTasks.map((task, index) => {
+                            const Icon = getCategoryIconComponent(task.icon || task.category);
+                            const subProgress = calculateTaskSubTaskProgress(task._id, task.subTasks);
+                            const curStreak = task.currentStreak || 0;
+                            const bestStreak = task.bestStreak || 0;
+                            const isRecordMatched = curStreak >= bestStreak && curStreak > 0;
