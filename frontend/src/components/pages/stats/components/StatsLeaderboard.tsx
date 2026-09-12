@@ -121,3 +121,21 @@ export const StatsLeaderboard: React.FC<StatsLeaderboardProps> = ({ tasks }) => 
                 >
                     Single Goals ({tasks.filter((t) => !t.isHabit).length})
                 </button>
+                <button
+                    onClick={() => setTypeFilter('private')}
+                    className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
+                        typeFilter === 'private'
+                            ? 'neu-button text-purple-600 bg-[#E0E5EC]'
+                            : 'neu-inset text-[#717699] hover:text-[#1a1c35]'
+                    }`}
+                >
+                    Growth Vault ({tasks.filter((t) => t.isPrivate).length})
+                </button>
+            </div>
+
+            {/* List */}
+            {filteredTasks.length === 0 ? (
+                <div className="neu-inset p-8 rounded-2xl text-center space-y-1">
+                    <p className="text-xs font-bold text-[#717699]">No items matched the current filter.</p>
+                </div>
+            ) : (
