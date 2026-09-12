@@ -87,3 +87,32 @@ export const StatsMetricGrid: React.FC<StatsMetricGridProps> = ({ overview }) =>
             subText: `${completedTasks} of ${totalTasks} top-level tasks marked complete.`,
         },
     ];
+
+    return (
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+            {cards.map((card) => {
+                const Icon = card.icon;
+                return (
+                    <div
+                        key={card.id}
+                        className="neu-card p-5 rounded-3xl flex flex-col justify-between space-y-4 hover:shadow-lg transition-all duration-200 border border-white/60"
+                    >
+                        {/* Top row */}
+                        <div className="flex items-start justify-between">
+                            <div className="flex items-center space-x-3">
+                                <div className={`w-11 h-11 rounded-2xl neu-button flex items-center justify-center ${card.iconColor} ${card.iconBg} shrink-0`}>
+                                    <Icon className="w-5 h-5" />
+                                </div>
+                                <div>
+                                    <h3 className="text-sm font-black text-[#1a1c35] leading-tight">
+                                        {card.title}
+                                    </h3>
+                                    <span className="text-[10px] font-bold text-[#717699] uppercase tracking-wider">
+                                        {card.primaryLabel}
+                                    </span>
+                                </div>
+                            </div>
+                            <span className="px-2 py-0.5 rounded-full neu-inset text-[10px] font-extrabold text-[#44476A]">
+                                {card.badge}
+                            </span>
+                        </div>
