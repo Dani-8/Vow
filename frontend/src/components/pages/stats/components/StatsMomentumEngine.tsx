@@ -141,3 +141,26 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
                         </p>
                     </div>
                 </div>
+
+                {/* Live Dynamic Trend Indicator */}
+                <div className="flex items-center space-x-2">
+                    {trendState === 'rising' && (
+                        <span className="px-3 py-1.5 rounded-xl neu-inset text-xs font-black text-emerald-600 flex items-center space-x-1.5 bg-[#E0E5EC]/90">
+                            <TrendingUp className="w-4 h-4 text-emerald-600" />
+                            <span>Surging (+{growthPercent}% vs Last Mo)</span>
+                        </span>
+                    )}
+                    {trendState === 'steady' && (
+                        <span className="px-3 py-1.5 rounded-xl neu-inset text-xs font-black text-[#549acb] flex items-center space-x-1.5 bg-[#E0E5EC]/90">
+                            <Minus className="w-4 h-4 text-[#549acb]" />
+                            <span>Solid Cadence ({growthPercent >= 0 ? `+${growthPercent}%` : `${growthPercent}%`})</span>
+                        </span>
+                    )}
+                    {trendState === 'cooling' && (
+                        <span className="px-3 py-1.5 rounded-xl neu-inset text-xs font-black text-amber-600 flex items-center space-x-1.5 bg-[#E0E5EC]/90">
+                            <TrendingDown className="w-4 h-4 text-amber-600" />
+                            <span>Slight Dip ({growthPercent}%)</span>
+                        </span>
+                    )}
+                </div>
+            </div>
