@@ -193,3 +193,34 @@ export const StatsLeaderboard: React.FC<StatsLeaderboardProps> = ({ tasks }) => 
                                         </div>
                                     </div>
                                 </div>
+
+                                {/* Right Streaks info */}
+                                <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto space-x-4 shrink-0 pl-9 sm:pl-0">
+                                    <div className="text-left sm:text-right space-y-0.5">
+                                        <div className="flex items-center sm:justify-end space-x-1.5">
+                                            <span className={`text-sm font-black flex items-center space-x-1 ${
+                                                curStreak > 0 ? 'text-amber-500' : 'text-[#717699]'
+                                            }`}>
+                                                <Flame className={`w-4 h-4 ${curStreak > 0 ? 'fill-amber-500' : ''}`} />
+                                                <span>{curStreak}d Streak</span>
+                                            </span>
+                                            {isRecordMatched && (
+                                                <span className="px-1.5 py-0.2 rounded-md bg-amber-500/20 text-amber-600 text-[9px] font-black uppercase">
+                                                    Record!
+                                                </span>
+                                            )}
+                                        </div>
+                                        <span className="text-[11px] font-bold text-[#549acb] flex items-center sm:justify-end space-x-1">
+                                            <Trophy className="w-3 h-3" />
+                                            <span>Best: {bestStreak} Days</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            )}
+        </div>
+    );
+};
