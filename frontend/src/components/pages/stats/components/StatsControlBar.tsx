@@ -123,3 +123,37 @@ export const StatsControlBar: React.FC<StatsControlBarProps> = ({
 
     const currentExecution = EXECUTION_OPTIONS.find((e) => e.id === filters.executionType) || EXECUTION_OPTIONS[0];
     const currentDayLabel = DAY_OPTIONS.find((d) => d.id === filters.dayOfWeek)?.label || 'All 7 Days';
+
+    return (
+        <div
+            ref={containerRef}
+            className="neu-card p-3 rounded-2xl border border-white/60 bg-[#E0E5EC] transition-all"
+        >
+            {/* Unified Sleek Slicer Row */}
+            <div className="flex flex-wrap items-center justify-between gap-2.5">
+                {/* Left: 3 Essential Custom Dropdowns */}
+                <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-[11px] font-black uppercase tracking-wider text-[#717699] mr-1 hidden sm:flex items-center space-x-1">
+                        <Filter className="w-3.5 h-3.5 text-[#549acb]" />
+                        <span>Filter:</span>
+                    </span>
+
+                    {/* 1. Custom Dropdown: TIME RANGE */}
+                    <div className="relative">
+                        <button
+                            type="button"
+                            onClick={() => toggleDropdown('range')}
+                            className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center space-x-1.5 ${
+                                openDropdown === 'range' || filters.timeRange !== '30d'
+                                    ? 'neu-button bg-[#E0E5EC] text-[#549acb] shadow-inner ring-1 ring-[#549acb]/30'
+                                    : 'neu-inset text-[#1a1c35] hover:text-[#549acb]'
+                            }`}
+                        >
+                            <Calendar className="w-3.5 h-3.5 text-[#549acb]" />
+                            <span>{currentRangeLabel}</span>
+                            <ChevronDown
+                                className={`w-3.5 h-3.5 text-[#717699] transition-transform duration-200 ${
+                                    openDropdown === 'range' ? 'rotate-180 text-[#549acb]' : ''
+                                }`}
+                            />
+                        </button>
