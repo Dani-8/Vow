@@ -379,31 +379,3 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                             </div>
                         </div>
                     </div>
-
-                    {/* Recharts Radar */}
-                    <div className="w-full h-72 py-1">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <RadarChart cx="50%" cy="50%" outerRadius="75%" data={radarData}>
-                                <PolarGrid stroke="#CBD5E1" strokeDasharray="3 3" />
-                                <PolarAngleAxis
-                                    dataKey="category"
-                                    tick={(props: any) => {
-                                        const { x, y, payload } = props;
-                                        const item = radarData.find((d) => d.category === payload.value);
-                                        const isSelected = item?.isSelected;
-                                        return (
-                                            <text
-                                                x={x}
-                                                y={y}
-                                                textAnchor="middle"
-                                                fill={isSelected ? '#549acb' : '#44476A'}
-                                                fontSize={isSelected ? 12 : 11}
-                                                fontWeight={isSelected ? 900 : 700}
-                                                style={{ cursor: 'pointer' }}
-                                                onClick={() => item && handleToggleCategory(item.key)}
-                                            >
-                                                {payload.value}
-                                                {isSelected ? ' ★' : ''}
-                                            </text>
-                                        );
-                                    }}
