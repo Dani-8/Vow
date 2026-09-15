@@ -312,31 +312,3 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                                 : 0}% Rate
                         </span>
                     </div>
-                    <div className="text-xl font-black text-[#1a1c35]">
-                        {highestEfficiency?.name || 'Tech & Engineering'}
-                    </div>
-                    <p className="text-xs text-[#717699] font-medium">
-                        Strongest completion discipline across roadmap goals and check-ins. Click to filter.
-                    </p>
-                </div>
-
-                <div className="neu-card p-5 rounded-3xl space-y-2 border border-white/60">
-                    <div className="flex items-center justify-between">
-                        <span className="text-[11px] font-black uppercase tracking-wider text-[#6366f1] flex items-center space-x-1.5">
-                            <TrendingUp className="w-3.5 h-3.5 text-[#6366f1]" />
-                            <span>Active Horizon</span>
-                        </span>
-                        <span className="px-2 py-0.5 rounded-full neu-inset text-[10px] font-extrabold text-[#6366f1]">
-                            {activeCategory ? activeCategory.name.split(' ')[0] : 'All Domains'}
-                        </span>
-                    </div>
-                    <div className="text-xl font-black text-[#1a1c35] truncate">
-                        {activeCategory ? `${activeCategory.completedCount} Completed` : `${filters.timeRange.toUpperCase()} Horizon`}
-                    </div>
-                    <p className="text-xs text-[#717699] font-medium truncate">
-                        {filters.dayOfWeek !== 'all'
-                            ? `Day filter: ${filters.dayOfWeek === 'weekdays' ? 'Weekdays only' : filters.dayOfWeek === 'weekends' ? 'Weekends only' : 'Single day'} active.`
-                            : `Cadence dynamically calculated for ${currentWindowDays} day window.`}
-                    </p>
-                </div>
-            </div>
