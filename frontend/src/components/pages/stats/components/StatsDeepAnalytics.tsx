@@ -570,3 +570,91 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                     </div>
                 </div>
             </div>
+
+            {/* 5. Discipline & Momentum Arc: Score + Trend + Dual Wave Trajectory */}
+            <StatsMomentumEngine
+                heatmapActivities={dynamicActivities}
+                overview={overview}
+                activeCategoryFilter={activeCategory ? activeCategory.name : null}
+                onResetCategoryFilter={handleResetCategoryFilter}
+                windowDays={currentWindowDays}
+                rangeLabel={
+                    filters.timeRange === 'custom'
+                        ? 'Custom Range'
+                        : `Rolling ${currentWindowDays} Days`
+                }
+            />
+
+            {/* 6. Row 2: 2 Charts - Category Conquered vs Pending Bar Chart + Dynamically dictated Execution Cadence Area Chart */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* 1. Stacked Bar Chart */}
+                <div className="neu-card p-6 rounded-3xl space-y-4 border border-white/60">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                            <div className="w-10 h-10 rounded-2xl neu-button flex items-center justify-center text-[#10b981] bg-[#E0E5EC]">
+                                <BarChart3 className="w-5 h-5" />
+                            </div>
+                            <div>
+                                <h3 className="text-base font-black text-[#1a1c35]">
+                                    Conquered vs. Pending Backlog
+                                </h3>
+                                <p className="text-xs text-[#717699] font-medium">
+                                    Click any bar to filter whole dashboard
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center space-x-2 text-[10px] font-bold">
+                            <span className="flex items-center space-x-1">
+                                <span className="w-2 h-2 rounded-full bg-[#10b981]" />
+                                <span className="text-[#44476A]">Conquered</span>
+                            </span>
+                            <span className="flex items-center space-x-1">
+                                <span className="w-2 h-2 rounded-full bg-[#CBD5E1]" />
+                                <span className="text-[#44476A]">Pending</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div className="w-full h-64 pt-2">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart
+                                data={barData}
+                                margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                                onClick={(state: any) => {
+                                    if (state && state.activePayload && state.activePayload[0]) {
+                                        const key = state.activePayload[0].payload.key;
+                                        if (key) handleToggleCategory(key);
+                                    }
+                                }}
+                                className="cursor-pointer"
+                            >
+                                <CartesianGrid strokeDasharray="3 3" stroke="#CBD5E1" vertical={false} />
+                                <XAxis
+                                    dataKey="name"
+                                    tick={{ fill: '#44476A', fontSize: 11, fontWeight: 700 }}
+                                    axisLine={{ stroke: '#CBD5E1' }}
+                                    tickLine={false}
+                                />
+                                <YAxis
+                                    tick={{ fill: '#717699', fontSize: 10 }}
+                                    axisLine={false}
+                                    tickLine={false}
+                                />
+                                <Tooltip
+                                    formatter={(val: any, name: any, item: any) => {
+                                        const payload = item?.payload;
+                                        if (name === 'completed') {
+                                            return [`${val} items (${payload?.completedPct || 0}%)`, 'Conquered'];
+                                        }
+                                        return [`${val} items (${payload?.pendingPct || 0}%)`, 'Pending Backlog'];
+                                    }}
+                                    contentStyle={{
+                                        backgroundColor: '#E0E5EC',
+                                        borderRadius: '14px',
+                                        border: '1px solid #CBD5E1',
+                                        boxShadow: '4px 4px 8px #bec3c9, -4px -4px 8px #ffffff',
+                                        fontSize: '11px',
+                                        fontWeight: 700,
+                                    }}
+                                />
