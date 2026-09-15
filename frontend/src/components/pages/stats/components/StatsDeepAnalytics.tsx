@@ -770,3 +770,34 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                                     axisLine={false}
                                     tickLine={false}
                                 />
+                                <Tooltip
+                                    formatter={(val: any) => [
+                                        `${val} actions completed`,
+                                        activeCategory ? `${activeCategory.name} Output` : 'Action Output',
+                                    ]}
+                                    contentStyle={{
+                                        backgroundColor: '#E0E5EC',
+                                        borderRadius: '14px',
+                                        border: '1px solid #CBD5E1',
+                                        boxShadow: '4px 4px 8px #bec3c9, -4px -4px 8px #ffffff',
+                                        fontSize: '11px',
+                                        fontWeight: 700,
+                                        color: '#1a1c35',
+                                    }}
+                                />
+                                <Area
+                                    type="monotone"
+                                    dataKey="actions"
+                                    stroke={activeCategory ? activeCategory.color : '#549acb'}
+                                    strokeWidth={3}
+                                    fillOpacity={1}
+                                    fill="url(#colorVelocity)"
+                                />
+                            </AreaChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
