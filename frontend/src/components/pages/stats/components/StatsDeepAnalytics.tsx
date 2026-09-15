@@ -251,17 +251,3 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                     </button>
                 </div>
             )}
-
-            {/* 3. Hero Discipline & Momentum Arc: Score + Trend + Dual Wave Trajectory */}
-            <StatsMomentumEngine
-                heatmapActivities={dynamicActivities}
-                overview={overview}
-                activeCategoryFilter={activeCategory ? activeCategory.name : null}
-                onResetCategoryFilter={handleResetCategoryFilter}
-                windowDays={currentWindowDays}
-                rangeLabel={
-                    filters.timeRange === 'custom'
-                        ? 'Custom Range'
-                        : `Rolling ${currentWindowDays} Days`
-                }
-            />
