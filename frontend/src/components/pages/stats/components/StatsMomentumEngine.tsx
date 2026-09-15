@@ -210,11 +210,11 @@ export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
                         </div>
                     </div>
 
-                    {/* Psychology Coaching Cue */}
+                    {/* Cadence Insights Cue */}
                     <div className="neu-card p-4 rounded-2xl border border-white/60 text-xs space-y-2">
                         <div className="flex items-center space-x-2 font-black text-[#1a1c35]">
                             <Flame className="w-4 h-4 text-amber-500 fill-amber-500" />
-                            <span>Cadence Psychology</span>
+                            <span>Cadence Insights</span>
                         </div>
 
                         {trendState === 'rising' && (
