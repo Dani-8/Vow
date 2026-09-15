@@ -131,3 +131,45 @@ export const StatsView: React.FC<StatsViewProps> = ({
                     </div>
                 </div>
             </div>
+
+            {/* TAB 1: OVERVIEW HUB */}
+            {activeTab === 'overview' && (
+                <div className="space-y-6 animate-fadeIn">
+                    {/* Unified 4-Pillar Metric Grid */}
+                    <StatsMetricGrid overview={overview} />
+
+                    {/* 16-Week Unified Execution Heatmap */}
+                    <StatsActivityHeatmap activities={heatmapActivities} />
+
+                    {/* Active Sprints & Roadmaps Command Hub */}
+                    <StatsActiveEcosystem
+                        challenges={challenges}
+                        taskMaps={taskMaps}
+                        onNavigateToView={onNavigateToView}
+                    />
+                </div>
+            )}
+
+            {/* TAB 2: DEEP ANALYTICS & RADAR */}
+            {activeTab === 'analytics' && (
+                <div className="space-y-6 animate-fadeIn">
+                    <StatsDeepAnalytics
+                        categories={categoryDistribution}
+                        heatmapActivities={heatmapActivities}
+                        overview={overview}
+                        tasks={allTasks}
+                        challenges={challenges}
+                        taskMaps={taskMaps}
+                    />
+                </div>
+            )}
+
+            {/* TAB 3: STREAK RECORDS & VAULT */}
+            {activeTab === 'streaks' && (
+                <div className="space-y-6 animate-fadeIn">
+                    <StatsStreakRecords tasks={allTasks} stats={stats} />
+                </div>
+            )}
+        </div>
+    );
+};
