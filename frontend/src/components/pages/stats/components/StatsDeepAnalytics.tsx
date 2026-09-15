@@ -467,3 +467,65 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                                 </button>
                             )}
                         </div>
+
+                        {/* Recharts Pie / Donut with Click-To-Filter */}
+                        <div className="w-full h-52 relative flex items-center justify-center">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <PieChart>
+                                    <Pie
+                                        data={normalizedCategories}
+                                        dataKey="itemCount"
+                                        nameKey="name"
+                                        cx="50%"
+                                        cy="50%"
+                                        innerRadius={55}
+                                        outerRadius={80}
+                                        paddingAngle={3}
+                                        stroke="#E0E5EC"
+                                        strokeWidth={2}
+                                        onClick={(entry: any) => {
+                                            const key = entry?.payload?.key || entry?.key;
+                                            if (key) handleToggleCategory(key);
+                                        }}
+                                        className="cursor-pointer"
+                                    >
+                                        {normalizedCategories.map((entry) => {
+                                            const isSelected = selectedCategoryKey === entry.key;
+                                            const isAnySelected = Boolean(selectedCategoryKey);
+                                            return (
+                                                <Cell
+                                                    key={`cell-${entry.key}`}
+                                                    fill={entry.color}
+                                                    opacity={!isAnySelected || isSelected ? 1 : 0.35}
+                                                    stroke={isSelected ? '#1a1c35' : '#E0E5EC'}
+                                                    strokeWidth={isSelected ? 3 : 2}
+                                                />
+                                            );
+                                        })}
+                                    </Pie>
+                                    <Tooltip
+                                        formatter={(val: any, name: any) => [`${val} items`, name]}
+                                        contentStyle={{
+                                            backgroundColor: '#E0E5EC',
+                                            borderRadius: '14px',
+                                            border: '1px solid #CBD5E1',
+                                            boxShadow: '4px 4px 8px #bec3c9, -4px -4px 8px #ffffff',
+                                            fontSize: '11px',
+                                            fontWeight: 700,
+                                        }}
+                                    />
+                                </PieChart>
+                            </ResponsiveContainer>
+
+                            {/* Center Donut Label */}
+                            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                                <span className="text-xl font-black text-[#1a1c35]">
+                                    {activeCategory
+                                        ? activeCategory.itemCount
+                                        : normalizedCategories.reduce((s, c) => s + c.itemCount, 0)}
+                                </span>
+                                <span className="text-[9px] font-bold uppercase text-[#717699]">
+                                    {activeCategory ? activeCategory.name.split(' ')[0] : 'Total Items'}
+                                </span>
+                            </div>
+                        </div>
