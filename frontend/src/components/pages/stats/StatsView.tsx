@@ -26,3 +26,29 @@ interface StatsViewProps {
 }
 
 export type StatsTab = 'overview' | 'analytics' | 'streaks';
+
+export const StatsView: React.FC<StatsViewProps> = ({
+    stats,
+    tasks,
+    privateTasks,
+    challenges = [],
+    onNavigateToView,
+}) => {
+    const [activeTab, setActiveTab] = useState<StatsTab>('overview');
+    const [taskMaps, setTaskMaps] = useState<TaskMap[]>([]);
+
+    // Combine all tasks
+    const allTasks = useMemo(() => [...tasks, ...privateTasks], [tasks, privateTasks]);
+
+    // Fetch task maps for roadmap metrics
+    useEffect(() => {
+        api.getTaskMaps()
+            .then((res) => {
+                if (res.maps && Array.isArray(res.maps)) {
+                    setTaskMaps(res.maps);
+                }
+            })
+            .catch((err) => {
+                console.warn('Could not fetch task maps for stats overview:', err);
+            });
+    }, []);
