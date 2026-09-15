@@ -199,7 +199,7 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
         // For 30d to 90d, break into weeks
         const weeksToShow = Math.ceil(currentWindowDays / 7);
         const weeksMap: Record<number, { label: string; actions: number; challengeLogs: number }> = {};
-        
+
         // Group activities by relative week from start of the window
         const totalActs = dynamicActivities.length;
         const actsToGroup = dynamicActivities.slice(Math.max(0, totalActs - currentWindowDays));
@@ -267,11 +267,10 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div
                     onClick={() => highestVolume && handleToggleCategory(highestVolume.key)}
-                    className={`neu-card p-5 rounded-3xl space-y-2 border cursor-pointer transition-all ${
-                        selectedCategoryKey === highestVolume?.key
+                    className={`neu-card p-5 rounded-3xl space-y-2 border cursor-pointer transition-all ${selectedCategoryKey === highestVolume?.key
                             ? 'ring-2 ring-[#549acb] shadow-md border-transparent'
                             : 'border-white/60 hover:scale-[1.01]'
-                    }`}
+                        }`}
                 >
                     <div className="flex items-center justify-between">
                         <span className="text-[11px] font-black uppercase tracking-wider text-[#549acb] flex items-center space-x-1.5">
@@ -292,11 +291,10 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
 
                 <div
                     onClick={() => highestEfficiency && handleToggleCategory(highestEfficiency.key)}
-                    className={`neu-card p-5 rounded-3xl space-y-2 border cursor-pointer transition-all ${
-                        selectedCategoryKey === highestEfficiency?.key
+                    className={`neu-card p-5 rounded-3xl space-y-2 border cursor-pointer transition-all ${selectedCategoryKey === highestEfficiency?.key
                             ? 'ring-2 ring-emerald-500 shadow-md border-transparent'
                             : 'border-white/60 hover:scale-[1.01]'
-                    }`}
+                        }`}
                 >
                     <div className="flex items-center justify-between">
                         <span className="text-[11px] font-black uppercase tracking-wider text-emerald-600 flex items-center space-x-1.5">
@@ -540,13 +538,12 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                                     <button
                                         key={cat.key}
                                         onClick={() => handleToggleCategory(cat.key)}
-                                        className={`flex items-center space-x-2 px-2.5 py-1.5 rounded-xl text-left transition-all ${
-                                            isSelected
+                                        className={`flex items-center space-x-2 px-2.5 py-1.5 rounded-xl text-left transition-all ${isSelected
                                                 ? 'neu-button bg-[#E0E5EC] ring-2 ring-[#549acb]'
                                                 : isDimmed
-                                                ? 'neu-inset opacity-50 hover:opacity-100'
-                                                : 'neu-inset bg-[#E0E5EC]/80 hover:bg-[#E0E5EC]'
-                                        }`}
+                                                    ? 'neu-inset opacity-50 hover:opacity-100'
+                                                    : 'neu-inset bg-[#E0E5EC]/80 hover:bg-[#E0E5EC]'
+                                            }`}
                                     >
                                         <span
                                             className="w-2.5 h-2.5 rounded-full shrink-0"
