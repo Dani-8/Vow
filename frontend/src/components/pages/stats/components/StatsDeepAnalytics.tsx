@@ -529,3 +529,44 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                                 </span>
                             </div>
                         </div>
+
+                        {/* Donut Legend Cards */}
+                        <div className="grid grid-cols-2 gap-2 pt-1">
+                            {normalizedCategories.slice(0, 6).map((cat) => {
+                                const isSelected = selectedCategoryKey === cat.key;
+                                const isDimmed = selectedCategoryKey !== null && !isSelected;
+
+                                return (
+                                    <button
+                                        key={cat.key}
+                                        onClick={() => handleToggleCategory(cat.key)}
+                                        className={`flex items-center space-x-2 px-2.5 py-1.5 rounded-xl text-left transition-all ${
+                                            isSelected
+                                                ? 'neu-button bg-[#E0E5EC] ring-2 ring-[#549acb]'
+                                                : isDimmed
+                                                ? 'neu-inset opacity-50 hover:opacity-100'
+                                                : 'neu-inset bg-[#E0E5EC]/80 hover:bg-[#E0E5EC]'
+                                        }`}
+                                    >
+                                        <span
+                                            className="w-2.5 h-2.5 rounded-full shrink-0"
+                                            style={{ backgroundColor: cat.color }}
+                                        />
+                                        <div className="min-w-0 flex-1">
+                                            <div className="text-[11px] font-bold text-[#1a1c35] truncate flex items-center justify-between">
+                                                <span>{cat.name}</span>
+                                                {isSelected && (
+                                                    <span className="text-[9px] text-[#549acb] font-black">✓</span>
+                                                )}
+                                            </div>
+                                            <div className="text-[9px] font-semibold text-[#717699]">
+                                                {cat.percentage}% share
+                                            </div>
+                                        </div>
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+            </div>
