@@ -129,3 +129,33 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
         }
         return 30;
     }, [filters]);
+
+    // Efficiency calculations
+    const sortedByEfficiency = useMemo(() => {
+        return [...normalizedCategories].sort((a, b) => {
+            const effA = a.itemCount > 0 ? a.completedCount / a.itemCount : 0;
+            const effB = b.itemCount > 0 ? b.completedCount / b.itemCount : 0;
+            return effB - effA;
+        });
+    }, [normalizedCategories]);
+
+    const highestEfficiency = sortedByEfficiency[0];
+    const highestVolume = useMemo(() => {
+        return [...normalizedCategories].sort((a, b) => b.itemCount - a.itemCount)[0];
+    }, [normalizedCategories]);
+
+    // 1. Radar Chart Data: Volume Focus vs Completion Strength (%)
+    const radarData = useMemo(() => {
+        return normalizedCategories.slice(0, 6).map((cat) => {
+            const strengthPercent =
+                cat.itemCount > 0 ? Math.round((cat.completedCount / cat.itemCount) * 100) : 0;
+            return {
+                category: cat.name.split(' ')[0],
+                fullName: cat.name,
+                focusVolume: cat.itemCount,
+                completionStrength: strengthPercent,
+                key: cat.key,
+                isSelected: selectedCategoryKey === cat.key,
+            };
+        });
+    }, [normalizedCategories, selectedCategoryKey]);
