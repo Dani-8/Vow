@@ -658,3 +658,56 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                                         fontWeight: 700,
                                     }}
                                 />
+                                <Bar dataKey="completed" stackId="a" fill="#10b981" radius={[0, 0, 4, 4]}>
+                                    <LabelList
+                                        dataKey="completedPct"
+                                        position="center"
+                                        formatter={(val: number) => (val >= 12 ? `${val}%` : '')}
+                                        style={{
+                                            fill: '#ffffff',
+                                            fontSize: '11px',
+                                            fontWeight: 900,
+                                            textShadow: '0 1px 2px rgba(0,0,0,0.3)',
+                                        }}
+                                    />
+                                    {barData.map((entry) => {
+                                        const isSelected = selectedCategoryKey === entry.key;
+                                        const isDimmed = selectedCategoryKey !== null && !isSelected;
+                                        return (
+                                            <Cell
+                                                key={`bar-comp-${entry.key}`}
+                                                fill="#10b981"
+                                                opacity={isDimmed ? 0.35 : 1}
+                                                stroke={isSelected ? '#1a1c35' : 'none'}
+                                                strokeWidth={isSelected ? 2 : 0}
+                                            />
+                                        );
+                                    })}
+                                </Bar>
+                                <Bar dataKey="pending" stackId="a" fill="#CBD5E1" radius={[6, 6, 0, 0]}>
+                                    <LabelList
+                                        dataKey="pendingPct"
+                                        position="center"
+                                        formatter={(val: number) => (val >= 12 ? `${val}%` : '')}
+                                        style={{
+                                            fill: '#44476A',
+                                            fontSize: '11px',
+                                            fontWeight: 900,
+                                        }}
+                                    />
+                                    {barData.map((entry) => {
+                                        const isSelected = selectedCategoryKey === entry.key;
+                                        const isDimmed = selectedCategoryKey !== null && !isSelected;
+                                        return (
+                                            <Cell
+                                                key={`bar-pend-${entry.key}`}
+                                                fill="#CBD5E1"
+                                                opacity={isDimmed ? 0.35 : 1}
+                                            />
+                                        );
+                                    })}
+                                </Bar>
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
