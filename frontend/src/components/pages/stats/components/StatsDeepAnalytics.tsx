@@ -172,36 +172,3 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
             isSelected: selectedCategoryKey === cat.key,
         }));
     }, [normalizedCategories, selectedCategoryKey]);
-
-    // 3. Weekly Execution Cadence Trend: DYNAMICALLY DICTATED BY GLOBAL RANGE
-    // If 7d or 14d, break down by Days. If 30d+, group into appropriate weekly intervals.
-    const cadenceTrend = useMemo(() => {
-        // If range is short (7d or 14d), show day-by-day cadence
-        if (currentWindowDays <= 14) {
-            return dynamicActivities.slice(-currentWindowDays).map((d) => ({
-                label: d.displayDate.split(',')[0],
-                actions: d.totalActions,
-                challengeLogs: d.challengeActions,
-            }));
-        }
-
-        // For 30d to 90d, break into weeks
-        const weeksToShow = Math.ceil(currentWindowDays / 7);
-        const weeksMap: Record<number, { label: string; actions: number; challengeLogs: number }> = {};
-        
-        // Group activities by relative week from start of the window
-        const totalActs = dynamicActivities.length;
-        const actsToGroup = dynamicActivities.slice(Math.max(0, totalActs - currentWindowDays));
-
-        actsToGroup.forEach((d, idx) => {
-            const weekIdx = Math.floor(idx / 7) + 1;
-            if (!weeksMap[weekIdx]) {
-                weeksMap[weekIdx] = {
-                    label: `Wk ${weekIdx}`,
-                    actions: 0,
-                    challengeLogs: 0,
-                };
-            }
-            weeksMap[weekIdx].actions += d.totalActions;
-            weeksMap[weekIdx].challengeLogs += d.challengeActions;
-        });
