@@ -205,16 +205,3 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
             weeksMap[weekIdx].actions += d.totalActions;
             weeksMap[weekIdx].challengeLogs += d.challengeActions;
         });
-
-        return Object.values(weeksMap);
-    }, [dynamicActivities, currentWindowDays]);
-
-    return (
-        <div className="space-y-6">
-            {/* 1. Global Analytics Control Bar (Time Horizon, Execution Type, Day-of-Week) */}
-            <StatsControlBar
-                filters={filters}
-                onChangeFilters={setFilters}
-                activeCategoryFilter={activeCategory ? activeCategory.name : null}
-                onResetCategoryFilter={handleResetCategoryFilter}
-            />
