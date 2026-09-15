@@ -159,3 +159,27 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
             };
         });
     }, [normalizedCategories, selectedCategoryKey]);
+
+    // 2. Category Stacked/Grouped Bar Chart Data with exact percentages
+    const barData = useMemo(() => {
+        return normalizedCategories.map((cat) => {
+            const completed = cat.completedCount;
+            const pending = Math.max(0, cat.itemCount - cat.completedCount);
+            const total = cat.itemCount;
+            const completedPct = total > 0 ? Math.round((completed / total) * 100) : 0;
+            const pendingPct = total > 0 ? 100 - completedPct : 0;
+
+            return {
+                name: cat.name.split(' ')[0],
+                fullName: cat.name,
+                key: cat.key,
+                completed,
+                pending,
+                total,
+                completedPct,
+                pendingPct,
+                color: cat.color,
+                isSelected: selectedCategoryKey === cat.key,
+            };
+        });
+    }, [normalizedCategories, selectedCategoryKey]);
