@@ -23,32 +23,3 @@ import {
     ShieldCheck,
     X,
     Filter,
-} from 'lucide-react';
-import {
-    Radar,
-    RadarChart,
-    PolarGrid,
-    PolarAngleAxis,
-    PolarRadiusAxis,
-    ResponsiveContainer,
-    PieChart,
-    Pie,
-    Cell,
-    Tooltip,
-    BarChart,
-    Bar,
-    XAxis,
-    YAxis,
-    CartesianGrid,
-    AreaChart,
-    Area,
-} from 'recharts';
-
-interface StatsDeepAnalyticsProps {
-    categories: CategoryBreakdownItem[];
-    heatmapActivities: DayActivity[];
-    overview: EcosystemOverview;
-    tasks?: Task[];
-    challenges?: Challenge[];
-    taskMaps?: TaskMap[];
-}
