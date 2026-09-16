@@ -191,3 +191,48 @@ export const StatsActiveEcosystem: React.FC<StatsActiveEcosystemProps> = ({
                             )}
                         </div>
                     ) : (
+                        <div className="space-y-3">
+                            {primaryMaps.map((map) => {
+                                const Icon = getCategoryIconComponent(map.icon || map.category);
+                                const totalNodes = (map.nodes || []).length;
+                                const completedNodes = (map.nodes || []).filter((n) => n.customStatus === 'completed').length;
+                                const progress = totalNodes > 0 ? Math.round((completedNodes / totalNodes) * 100) : 0;
+                                const connectionsCount = (map.connections || []).length;
+
+                                return (
+                                    <div
+                                        key={map.id}
+                                        onClick={() => {
+                                            if (onNavigateToView) {
+                                                const slug = getMapSlug(map);
+                                                window.location.hash = '';
+                                                window.history.pushState({}, '', `/app/map/${encodeURIComponent(slug)}`);
+                                                onNavigateToView('task-map');
+                                            }
+                                        }}
+                                        className="neu-inset p-4 rounded-2xl flex flex-col space-y-2.5 cursor-pointer hover:border-indigo-400/40 border border-transparent transition-all group"
+                                    >
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center space-x-3 min-w-0">
+                                                <div className="w-9 h-9 rounded-xl neu-button flex items-center justify-center text-indigo-600 bg-[#E0E5EC] shrink-0 group-hover:scale-105 transition-transform">
+                                                    <Icon className="w-4 h-4" />
+                                                </div>
+                                                <div className="min-w-0 flex-1">
+                                                    <h4 className="text-xs font-black text-[#1a1c35] group-hover:text-indigo-600 transition-colors truncate">
+                                                        {map.name}
+                                                    </h4>
+                                                    <span className="text-[10px] font-bold text-[#717699]">
+                                                        {completedNodes}/{totalNodes} Nodes Conquered
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-center space-x-2 shrink-0">
+                                                <span className="px-2 py-0.5 rounded-full neu-inset text-[10px] font-bold text-[#717699]">
+                                                    {connectionsCount} Links
+                                                </span>
+                                                <span className="px-2 py-0.5 rounded-full neu-button text-[10px] font-extrabold text-indigo-600 bg-[#E0E5EC]">
+                                                    {progress}%
+                                                </span>
+                                            </div>
+                                        </div>
