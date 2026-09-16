@@ -109,31 +109,17 @@ export const StatsView: React.FC<StatsViewProps> = ({
                         <span>Streak Records & Vault</span>
                     </button>
                 </div>
-
-                <div className="hidden sm:flex items-center space-x-3 text-xs font-bold">
-                    <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl neu-inset bg-[#E0E5EC]/80">
-                        <span className="text-[10px] uppercase font-extrabold text-[#717699]">Consistency</span>
-                        <span className="px-2 py-0.5 rounded-lg text-[10px] font-black text-white bg-[#549acb]">
-                            {overview.consistencyScore}%
-                        </span>
-                        <span className="text-[10px] text-[#717699]">({overview.consistencyGrade})</span>
-                    </div>
-
-                    <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl neu-inset bg-[#E0E5EC]/80 text-[#717699]">
-                        <Flame className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-                        <span>Master: <strong className="text-[#1a1c35]">{overview.masterStreak}d</strong></span>
-                        <span className="text-[10px] text-[#717699] border-l border-slate-300 pl-1.5">
-                            Best: <strong className="text-[#549acb]">{overview.bestMasterStreak}d</strong>
-                        </span>
-                    </div>
-                </div>
             </div>
 
             {/* TAB 1: OVERVIEW HUB */}
             {activeTab === 'overview' && (
                 <div className="space-y-6 animate-fadeIn">
                     {/* Unified 4-Pillar Metric Grid */}
-                    <StatsMetricGrid overview={overview} />
+                    <StatsMetricGrid
+                        overview={overview}
+                        onSelectTab={(tab) => setActiveTab(tab)}
+                        onNavigateToView={onNavigateToView}
+                    />
 
                     {/* 16-Week Unified Execution Heatmap */}
                     <StatsActivityHeatmap activities={heatmapActivities} />
