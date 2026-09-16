@@ -1,12 +1,21 @@
 import React from 'react';
-import { Flame, Trophy, Compass, CheckCircle2, Award, Layers, Zap } from 'lucide-react';
+import { Flame, Trophy, Compass, CheckCircle2, Award, Layers, Zap, ArrowUpRight } from 'lucide-react';
 import { EcosystemOverview } from '../statsHelpers';
 
 interface StatsMetricGridProps {
     overview: EcosystemOverview;
+    onSelectTab?: (tab: 'overview' | 'analytics' | 'streaks') => void;
+    onNavigateToView?: (
+        view: 'home' | 'landing' | 'visible' | 'private' | 'stats' | 'auth' | 'task-map' | 'challenges' | 'challenge-detail',
+        param?: string
+    ) => void;
 }
 
-export const StatsMetricGrid: React.FC<StatsMetricGridProps> = ({ overview }) => {
+export const StatsMetricGrid: React.FC<StatsMetricGridProps> = ({
+    overview,
+    onSelectTab,
+    onNavigateToView,
+}) => {
     const {
         masterStreak,
         bestMasterStreak,
@@ -40,6 +49,8 @@ export const StatsMetricGrid: React.FC<StatsMetricGridProps> = ({ overview }) =>
             subText: masterStreak >= bestMasterStreak && masterStreak > 0
                 ? '⚡ Currently matching or setting an all-time record!'
                 : `Aiming to beat your personal best of ${bestMasterStreak} days.`,
+            actionLabel: 'Open Streak Vault',
+            onClick: () => onSelectTab?.('streaks'),
         },
         {
             id: 'pillar-challenges',
@@ -55,6 +66,8 @@ export const StatsMetricGrid: React.FC<StatsMetricGridProps> = ({ overview }) =>
             progressPercent: Math.min(100, (totalSprintLogsCount % 100)),
             progressColor: 'from-[#549acb] to-[#38bdf8]',
             subText: `${activeChallengesCount} challenge${activeChallengesCount === 1 ? '' : 's'} actively in progress.`,
+            actionLabel: 'Explore Sprints',
+            onClick: () => onNavigateToView?.('challenges'),
         },
         {
             id: 'pillar-roadmap',
@@ -70,6 +83,8 @@ export const StatsMetricGrid: React.FC<StatsMetricGridProps> = ({ overview }) =>
             progressPercent: roadmapCompletionRate,
             progressColor: 'from-indigo-500 to-blue-500',
             subText: `${totalMapNodes - completedMapNodes} remaining milestone node${(totalMapNodes - completedMapNodes) === 1 ? '' : 's'} to unlock.`,
+            actionLabel: 'View Blueprints',
+            onClick: () => onNavigateToView?.('task-map'),
         },
         {
             id: 'pillar-tasks',
@@ -85,6 +100,8 @@ export const StatsMetricGrid: React.FC<StatsMetricGridProps> = ({ overview }) =>
             progressPercent: overallTaskCompletionRate,
             progressColor: 'from-emerald-500 to-teal-500',
             subText: `${completedTasks} of ${totalTasks} top-level tasks marked complete.`,
+            actionLabel: 'Deep Analytics',
+            onClick: () => onSelectTab?.('analytics'),
         },
     ];
 
@@ -95,18 +112,30 @@ export const StatsMetricGrid: React.FC<StatsMetricGridProps> = ({ overview }) =>
                 return (
                     <div
                         key={card.id}
-                        className="neu-card p-5 rounded-3xl flex flex-col justify-between space-y-4 hover:shadow-lg transition-all duration-200 border border-white/60"
+                        onClick={card.onClick}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                card.onClick?.();
+                            }
+                        }}
+                        className="neu-card p-5 rounded-3xl flex flex-col justify-between space-y-4 hover:shadow-lg transition-all duration-200 border border-white/60 cursor-pointer group text-left focus:outline-none focus:ring-2 focus:ring-[#549acb]/50"
                     >
                         {/* Top row */}
                         <div className="flex items-start justify-between">
                             <div className="flex items-center space-x-3">
-                                <div className={`w-11 h-11 rounded-2xl neu-button flex items-center justify-center ${card.iconColor} ${card.iconBg} shrink-0`}>
+                                <div className={`w-11 h-11 rounded-2xl neu-button flex items-center justify-center ${card.iconColor} ${card.iconBg} shrink-0 group-hover:scale-105 transition-transform`}>
                                     <Icon className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <h3 className="text-sm font-black text-[#1a1c35] leading-tight">
-                                        {card.title}
-                                    </h3>
+                                    <div className="flex items-center space-x-1">
+                                        <h3 className="text-sm font-black text-[#1a1c35] leading-tight group-hover:text-[#549acb] transition-colors">
+                                            {card.title}
+                                        </h3>
+                                        <ArrowUpRight className="w-3.5 h-3.5 text-[#717699] opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    </div>
                                     <span className="text-[10px] font-bold text-[#717699] uppercase tracking-wider">
                                         {card.primaryLabel}
                                     </span>
@@ -142,9 +171,14 @@ export const StatsMetricGrid: React.FC<StatsMetricGridProps> = ({ overview }) =>
                                     style={{ width: `${Math.max(5, Math.min(100, card.progressPercent))}%` }}
                                 />
                             </div>
-                            <p className="text-[11px] text-[#717699] font-medium leading-tight">
-                                {card.subText}
-                            </p>
+                            <div className="flex items-center justify-between text-[11px] font-medium leading-tight">
+                                <p className="text-[#717699] truncate flex-1 mr-2">
+                                    {card.subText}
+                                </p>
+                                <span className="text-[10px] font-black text-[#549acb] opacity-80 group-hover:opacity-100 shrink-0">
+                                    {card.actionLabel} →
+                                </span>
+                            </div>
                         </div>
                     </div>
                 );
