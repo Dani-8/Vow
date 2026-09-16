@@ -292,3 +292,75 @@ export const StatsStreakRecords: React.FC<StatsStreakRecordsProps> = ({ tasks, s
                         </div>
                     </div>
                 </div>
+
+                {/* Filter Pills */}
+                <div className="flex flex-wrap items-center gap-2">
+                    <button
+                        onClick={() => setTypeFilter('all')}
+                        className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
+                            typeFilter === 'all'
+                                ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                                : 'neu-inset text-[#717699] hover:text-[#1a1c35]'
+                        }`}
+                    >
+                        All ({tasks.length})
+                    </button>
+                    <button
+                        onClick={() => setTypeFilter('habits')}
+                        className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
+                            typeFilter === 'habits'
+                                ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                                : 'neu-inset text-[#717699] hover:text-[#1a1c35]'
+                        }`}
+                    >
+                        Daily Habits ({tasks.filter((t) => t.isHabit).length})
+                    </button>
+                    <button
+                        onClick={() => setTypeFilter('goals')}
+                        className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
+                            typeFilter === 'goals'
+                                ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                                : 'neu-inset text-[#717699] hover:text-[#1a1c35]'
+                        }`}
+                    >
+                        Single Goals ({tasks.filter((t) => !t.isHabit).length})
+                    </button>
+                    <button
+                        onClick={() => setTypeFilter('private')}
+                        className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
+                            typeFilter === 'private'
+                                ? 'neu-button text-purple-600 bg-[#E0E5EC]'
+                                : 'neu-inset text-[#717699] hover:text-[#1a1c35]'
+                        }`}
+                    >
+                        Growth Vault ({tasks.filter((t) => t.isPrivate).length})
+                    </button>
+                </div>
+
+                {/* List */}
+                {filteredTasks.length === 0 ? (
+                    <div className="neu-inset p-8 rounded-2xl text-center space-y-3 border border-dashed border-slate-300">
+                        <div className="w-10 h-10 mx-auto rounded-2xl neu-button flex items-center justify-center text-[#717699] bg-[#E0E5EC]">
+                            <Search className="w-5 h-5" />
+                        </div>
+                        <div className="space-y-1">
+                            <p className="text-xs font-bold text-[#1a1c35]">
+                                {tasks.length === 0 ? 'No tasks or habits created yet' : 'No items match your active filters'}
+                            </p>
+                            <p className="text-[11px] text-[#717699]">
+                                {tasks.length === 0
+                                    ? 'Add a new habit or task in the main dashboard to begin accumulating streaks.'
+                                    : 'Try searching for a different keyword or resetting your filter category.'}
+                            </p>
+                        </div>
+                        {tasks.length > 0 && (searchQuery || typeFilter !== 'all') && (
+                            <button
+                                onClick={resetFilters}
+                                className="px-3.5 py-1.5 rounded-xl neu-button text-xs font-black text-[#549acb] bg-[#E0E5EC] inline-flex items-center space-x-1.5"
+                            >
+                                <RotateCcw className="w-3.5 h-3.5" />
+                                <span>Reset Filters</span>
+                            </button>
+                        )}
+                    </div>
+                ) : (
