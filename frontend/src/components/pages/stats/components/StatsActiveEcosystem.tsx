@@ -50,3 +50,25 @@ export const StatsActiveEcosystem: React.FC<StatsActiveEcosystemProps> = ({
                             </button>
                         )}
                     </div>
+
+                    {activeChallenges.length === 0 ? (
+                        <div className="neu-inset p-6 rounded-2xl text-center space-y-3 border border-dashed border-slate-300">
+                            <div className="w-12 h-12 mx-auto rounded-2xl neu-button flex items-center justify-center text-[#549acb] bg-[#E0E5EC]">
+                                <Trophy className="w-6 h-6" />
+                            </div>
+                            <div className="space-y-1">
+                                <h4 className="text-xs font-black text-[#1a1c35]">No Active Sprints Running</h4>
+                                <p className="text-[11px] font-medium text-[#717699] max-w-xs mx-auto">
+                                    Commit to a 100-Day discipline sprint or habit protocol to track daily unbroken momentum here.
+                                </p>
+                            </div>
+                            {onNavigateToView && (
+                                <button
+                                    onClick={() => onNavigateToView('challenges')}
+                                    className="px-4 py-2 rounded-2xl neu-button text-xs font-black text-[#549acb] bg-[#E0E5EC] hover:scale-105 transition-all shadow-sm"
+                                >
+                                    + Launch 100-Day Challenge
+                                </button>
+                            )}
+                        </div>
+                    ) : (
