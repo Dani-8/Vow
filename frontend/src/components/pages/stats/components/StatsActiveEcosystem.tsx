@@ -236,3 +236,27 @@ export const StatsActiveEcosystem: React.FC<StatsActiveEcosystemProps> = ({
                                                 </span>
                                             </div>
                                         </div>
+
+                                        {/* Progress bar */}
+                                        <div className="space-y-1">
+                                            <div className="flex justify-between text-[10px] font-bold text-[#717699]">
+                                                <span>{completedNodes} of {totalNodes} nodes unlocked</span>
+                                                <span>{progress}%</span>
+                                            </div>
+                                            <div className="w-full h-1.5 rounded-full bg-slate-300 overflow-hidden">
+                                                <div
+                                                    className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-blue-500 transition-all duration-300"
+                                                    style={{ width: `${progress}%` }}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+};
