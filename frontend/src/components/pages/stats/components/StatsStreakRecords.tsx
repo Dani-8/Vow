@@ -151,3 +151,46 @@ export const StatsStreakRecords: React.FC<StatsStreakRecordsProps> = ({ tasks, s
                         <span className="text-[11px] leading-tight">Non-punitive resilience engine preserves lifetime momentum.</span>
                     </div>
                 </div>
+
+                {/* Hall of Fame: Top 3 Streaks with bespoke icons & colors */}
+                <div className="lg:col-span-8 neu-card p-6 rounded-3xl space-y-4 border border-white/60 flex flex-col justify-between">
+                    <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-3">
+                                <div className="w-10 h-10 rounded-2xl neu-button flex items-center justify-center text-amber-500 bg-[#E0E5EC]">
+                                    <Trophy className="w-5 h-5" />
+                                </div>
+                                <div>
+                                    <h3 className="text-base font-black text-[#1a1c35]">Streak Hall of Fame</h3>
+                                    <p className="text-xs text-[#717699] font-medium">
+                                        All-time top 3 sustained daily disciplines & habits
+                                    </p>
+                                </div>
+                            </div>
+
+                            <span className="px-2.5 py-1 rounded-full neu-inset text-[10px] font-black uppercase tracking-wider text-amber-600 flex items-center space-x-1">
+                                <Medal className="w-3.5 h-3.5" />
+                                <span>Permanent Vault</span>
+                            </span>
+                        </div>
+
+                        {hallOfFame.length === 0 ? (
+                            <div className="neu-inset p-8 rounded-2xl text-center space-y-2 border border-dashed border-slate-300">
+                                <div className="w-12 h-12 mx-auto rounded-2xl neu-button flex items-center justify-center text-amber-500 bg-[#E0E5EC]">
+                                    <Trophy className="w-6 h-6" />
+                                </div>
+                                <h4 className="text-xs font-black text-[#1a1c35]">No Streak Records Established</h4>
+                                <p className="text-[11px] font-medium text-[#717699] max-w-sm mx-auto">
+                                    Complete tasks and daily habits consistently to earn your place on the all-time podium.
+                                </p>
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                                {hallOfFame.map((item, idx) => {
+                                    const Icon = getCategoryIconComponent(item.icon || item.category);
+                                    const best = Math.max(item.bestStreak || 0, item.currentStreak || 0);
+                                    const cur = item.currentStreak || 0;
+                                    const isDoneToday = Boolean(item.completedToday || item.status === 'completed');
+                                    const rank = rankConfigs[idx] || rankConfigs[2];
+                                    const RankIcon = rank.icon;
+
