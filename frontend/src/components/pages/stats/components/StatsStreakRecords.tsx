@@ -129,11 +129,10 @@ export const StatsStreakRecords: React.FC<StatsStreakRecordsProps> = ({ tasks, s
                             <div className="pt-1 space-y-1">
                                 <div className="w-full h-2 rounded-full neu-inset overflow-hidden p-0.5">
                                     <div
-                                        className={`h-full rounded-full transition-all duration-500 ${
-                                            isNewRecord
+                                        className={`h-full rounded-full transition-all duration-500 ${isNewRecord
                                                 ? 'bg-gradient-to-r from-amber-400 to-amber-600'
                                                 : 'bg-gradient-to-r from-amber-400 to-[#549acb]'
-                                        }`}
+                                            }`}
                                         style={{ width: `${Math.max(6, Math.min(100, recordProgress))}%` }}
                                     />
                                 </div>
@@ -297,41 +296,37 @@ export const StatsStreakRecords: React.FC<StatsStreakRecordsProps> = ({ tasks, s
                 <div className="flex flex-wrap items-center gap-2">
                     <button
                         onClick={() => setTypeFilter('all')}
-                        className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
-                            typeFilter === 'all'
+                        className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${typeFilter === 'all'
                                 ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
                                 : 'neu-inset text-[#717699] hover:text-[#1a1c35]'
-                        }`}
+                            }`}
                     >
                         All ({tasks.length})
                     </button>
                     <button
                         onClick={() => setTypeFilter('habits')}
-                        className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
-                            typeFilter === 'habits'
+                        className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${typeFilter === 'habits'
                                 ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
                                 : 'neu-inset text-[#717699] hover:text-[#1a1c35]'
-                        }`}
+                            }`}
                     >
                         Daily Habits ({tasks.filter((t) => t.isHabit).length})
                     </button>
                     <button
                         onClick={() => setTypeFilter('goals')}
-                        className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
-                            typeFilter === 'goals'
+                        className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${typeFilter === 'goals'
                                 ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
                                 : 'neu-inset text-[#717699] hover:text-[#1a1c35]'
-                        }`}
+                            }`}
                     >
                         Single Goals ({tasks.filter((t) => !t.isHabit).length})
                     </button>
                     <button
                         onClick={() => setTypeFilter('private')}
-                        className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
-                            typeFilter === 'private'
+                        className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${typeFilter === 'private'
                                 ? 'neu-button text-purple-600 bg-[#E0E5EC]'
                                 : 'neu-inset text-[#717699] hover:text-[#1a1c35]'
-                        }`}
+                            }`}
                     >
                         Growth Vault ({tasks.filter((t) => t.isPrivate).length})
                     </button>
@@ -435,9 +430,8 @@ export const StatsStreakRecords: React.FC<StatsStreakRecordsProps> = ({ tasks, s
 
                                         <div className="text-left sm:text-right space-y-0.5 min-w-[100px]">
                                             <div className="flex items-center sm:justify-end space-x-1.5">
-                                                <span className={`text-sm font-black flex items-center space-x-1 ${
-                                                    curStreak > 0 ? 'text-amber-500' : 'text-[#717699]'
-                                                }`}>
+                                                <span className={`text-sm font-black flex items-center space-x-1 ${curStreak > 0 ? 'text-amber-500' : 'text-[#717699]'
+                                                    }`}>
                                                     <Flame className={`w-4 h-4 ${curStreak > 0 ? 'fill-amber-500' : ''}`} />
                                                     <span>{curStreak}d Streak</span>
                                                 </span>
