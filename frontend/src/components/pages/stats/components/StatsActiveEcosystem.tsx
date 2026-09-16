@@ -87,3 +87,37 @@ export const StatsActiveEcosystem: React.FC<StatsActiveEcosystemProps> = ({
                                     else if (log.status === 'rest') continue;
                                     else break;
                                 }
+
+                                return (
+                                    <div
+                                        key={ch._id || ch.id}
+                                        onClick={() => onNavigateToView?.('challenge-detail', ch.id || ch._id)}
+                                        className="neu-inset p-4 rounded-2xl flex flex-col space-y-2.5 cursor-pointer hover:border-[#549acb]/40 border border-transparent transition-all group"
+                                    >
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center space-x-3 min-w-0">
+                                                <div className="w-9 h-9 rounded-xl neu-button flex items-center justify-center text-[#549acb] bg-[#E0E5EC] shrink-0 group-hover:scale-105 transition-transform">
+                                                    <Icon className="w-4 h-4" />
+                                                </div>
+                                                <div className="min-w-0 flex-1">
+                                                    <h4 className="text-xs font-black text-[#1a1c35] group-hover:text-[#549acb] transition-colors truncate">
+                                                        {ch.title}
+                                                    </h4>
+                                                    <div className="flex items-center space-x-1.5 text-[10px] font-bold text-[#717699]">
+                                                        <span>{ch.category}</span>
+                                                        <span>•</span>
+                                                        <span className="text-[#549acb]">Day {completedLogs} of {targetDays}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-center space-x-2 shrink-0">
+                                                <span className="px-2 py-0.5 rounded-full neu-button text-[10px] font-black text-amber-500 flex items-center space-x-1 bg-[#E0E5EC]">
+                                                    <Flame className="w-3 h-3 fill-amber-500" />
+                                                    <span>{streak}d</span>
+                                                </span>
+                                                <span className="px-2 py-0.5 rounded-full neu-inset text-[10px] font-extrabold text-[#44476A]">
+                                                    {percent}%
+                                                </span>
+                                            </div>
+                                        </div>
