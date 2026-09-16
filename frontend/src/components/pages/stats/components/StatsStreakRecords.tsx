@@ -124,3 +124,30 @@ export const StatsStreakRecords: React.FC<StatsStreakRecordsProps> = ({ tasks, s
                                 <span className="text-xs font-bold text-[#717699]">All-Time High Mark</span>
                                 <span className="text-sm font-black text-[#549acb]">{bestMasterStreak} Days Record</span>
                             </div>
+
+                            {/* Progress bar toward beating record */}
+                            <div className="pt-1 space-y-1">
+                                <div className="w-full h-2 rounded-full neu-inset overflow-hidden p-0.5">
+                                    <div
+                                        className={`h-full rounded-full transition-all duration-500 ${
+                                            isNewRecord
+                                                ? 'bg-gradient-to-r from-amber-400 to-amber-600'
+                                                : 'bg-gradient-to-r from-amber-400 to-[#549acb]'
+                                        }`}
+                                        style={{ width: `${Math.max(6, Math.min(100, recordProgress))}%` }}
+                                    />
+                                </div>
+                                <p className="text-[10px] font-bold text-[#717699]">
+                                    {isNewRecord
+                                        ? '⚡ All-time peak active! Every day sets a new benchmark.'
+                                        : `${daysToRecord} more active day${daysToRecord === 1 ? '' : 's'} to surpass personal best.`}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="px-3 py-2 rounded-2xl neu-inset text-xs font-bold text-[#44476A] flex items-center space-x-2">
+                        <Sparkles className="w-4 h-4 text-[#549acb] shrink-0" />
+                        <span className="text-[11px] leading-tight">Non-punitive resilience engine preserves lifetime momentum.</span>
+                    </div>
+                </div>
