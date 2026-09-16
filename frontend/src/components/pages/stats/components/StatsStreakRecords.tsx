@@ -233,3 +233,16 @@ export const StatsStreakRecords: React.FC<StatsStreakRecordsProps> = ({ tasks, s
                                                     </span>
                                                 </div>
                                             </div>
+
+                                            <div className="pt-2 border-t border-slate-300/80 flex items-baseline justify-between">
+                                                <span className="text-[10px] font-bold text-[#717699]">All-Time Peak</span>
+                                                <span className={`text-base font-black ${rank.iconColor}`}>{best} Days</span>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
