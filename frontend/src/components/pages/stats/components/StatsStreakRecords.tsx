@@ -194,3 +194,42 @@ export const StatsStreakRecords: React.FC<StatsStreakRecordsProps> = ({ tasks, s
                                     const rank = rankConfigs[idx] || rankConfigs[2];
                                     const RankIcon = rank.icon;
 
+                                    return (
+                                        <div
+                                            key={item._id}
+                                            className={`neu-inset p-4 rounded-2xl space-y-3 border ${rank.ringColor} bg-[#E0E5EC]/80 flex flex-col justify-between group hover:scale-[1.01] transition-all`}
+                                        >
+                                            <div className="space-y-2.5">
+                                                <div className="flex items-center justify-between">
+                                                    <span className={`px-2 py-0.5 rounded-lg text-[9px] font-black uppercase tracking-wider flex items-center space-x-1 ${rank.badgeBg}`}>
+                                                        <RankIcon className={`w-3 h-3 ${rank.iconColor}`} />
+                                                        <span>{rank.title}</span>
+                                                    </span>
+
+                                                    <div className="w-7 h-7 rounded-lg neu-button flex items-center justify-center text-[#549acb] bg-[#E0E5EC] shrink-0">
+                                                        <Icon className="w-3.5 h-3.5" />
+                                                    </div>
+                                                </div>
+
+                                                <h4 className="text-xs font-black text-[#1a1c35] line-clamp-2 leading-snug">
+                                                    {item.title}
+                                                </h4>
+
+                                                {/* Live daily scoreboard indicator */}
+                                                <div className="flex items-center space-x-1.5">
+                                                    {isDoneToday ? (
+                                                        <span className="px-2 py-0.5 rounded-full text-[9px] font-black text-emerald-700 bg-emerald-500/15 border border-emerald-500/30 flex items-center space-x-1">
+                                                            <CheckCircle2 className="w-2.5 h-2.5 text-emerald-600" />
+                                                            <span>Done Today</span>
+                                                        </span>
+                                                    ) : (
+                                                        <span className="px-2 py-0.5 rounded-full text-[9px] font-black text-amber-700 bg-amber-500/15 border border-amber-500/30 flex items-center space-x-1">
+                                                            <Flame className="w-2.5 h-2.5 text-amber-500" />
+                                                            <span>Pending Today</span>
+                                                        </span>
+                                                    )}
+                                                    <span className="text-[10px] font-bold text-[#717699]">
+                                                        {cur}d active
+                                                    </span>
+                                                </div>
+                                            </div>
