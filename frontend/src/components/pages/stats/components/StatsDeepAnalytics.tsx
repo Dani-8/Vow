@@ -90,3 +90,52 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
         }));
     }, [categories]);
 
+    // Currently filtered category object (if any)
+    const activeCategory = useMemo(() => {
+        if (!selectedCategoryKey) return null;
+        return normalizedCategories.find((c) => c.key === selectedCategoryKey) || null;
+    }, [selectedCategoryKey, normalizedCategories]);
+
+    // Toggle category selection
+    const handleToggleCategory = (catKey: string) => {
+        setSelectedCategoryKey((prev) => (prev === catKey ? null : catKey));
+    };
+
+    const handleResetCategoryFilter = () => {
+        setSelectedCategoryKey(null);
+    };
+
+    // Category filtered base heatmap
+    const categoryFilteredHeatmap = useMemo(() => {
+        if (!activeCategory) return heatmapActivities;
+        return generateCategoryActivityHeatmap(tasks, challenges, activeCategory.name, 52);
+    }, [activeCategory, tasks, challenges, heatmapActivities]);
+
+    // Apply Global Filters (Time horizon, Day of week, Execution Type)
+    const dynamicActivities = useMemo(() => {
+        return filterActivities(categoryFilteredHeatmap, filters);
+    }, [categoryFilteredHeatmap, filters]);
+
+    // Determine window days based on filters.timeRange
+    const currentWindowDays = useMemo(() => {
+        if (filters.timeRange === '7d') return 7;
+        if (filters.timeRange === '14d') return 14;
+        if (filters.timeRange === '30d') return 30;
+        if (filters.timeRange === '90d') return 90;
+        if (filters.timeRange === 'custom' && filters.customStartDate && filters.customEndDate) {
+            const start = new Date(filters.customStartDate).getTime();
+            const end = new Date(filters.customEndDate).getTime();
+            const diff = Math.round(Math.abs(end - start) / (1000 * 60 * 60 * 24)) + 1;
+            return Math.max(7, Math.min(diff, 90));
+        }
+        return 30;
+    }, [filters]);
+
+    // Efficiency calculations
+    const sortedByEfficiency = useMemo(() => {
+        return [...normalizedCategories].sort((a, b) => {
+            const effA = a.itemCount > 0 ? a.completedCount / a.itemCount : 0;
+            const effB = b.itemCount > 0 ? b.completedCount / b.itemCount : 0;
+            return effB - effA;
+        });
+    }, [normalizedCategories]);
