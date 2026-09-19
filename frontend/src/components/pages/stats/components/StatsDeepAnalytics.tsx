@@ -325,3 +325,48 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                         : 'border-white/60 hover:scale-[1.01]'
                         }`}
                 >
+                    <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-black uppercase tracking-wider text-emerald-600 flex items-center space-x-1.5">
+                            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                            <span>Highest Follow-Through</span>
+                        </span>
+                        <span className="px-2 py-0.5 rounded-full neu-inset text-[10px] font-extrabold text-emerald-600">
+                            {highestEfficiency && highestEfficiency.itemCount > 0
+                                ? Math.round((highestEfficiency.completedCount / highestEfficiency.itemCount) * 100)
+                                : 0}% Rate
+                        </span>
+                    </div>
+                    <div className="text-xl font-black text-[#1a1c35]">
+                        {highestEfficiency?.name || 'Universal Flow'}
+                    </div>
+                    <p className="text-xs text-[#717699] font-medium leading-relaxed">
+                        {highestEfficiency && highestEfficiency.itemCount > 0
+                            ? `${highestEfficiency.completedCount} of ${highestEfficiency.itemCount} item${highestEfficiency.itemCount === 1 ? '' : 's'} completed with an unbroken ${Math.round((highestEfficiency.completedCount / highestEfficiency.itemCount) * 100)}% execution rate.`
+                            : 'Complete roadmap items or habit cycles to establish your peak discipline domain.'}
+                    </p>
+                </div>
+
+                {/* Card 3: Execution Velocity (Replaced static Horizon repeater) */}
+                <div className="neu-card p-5 rounded-3xl space-y-2 border border-white/60">
+                    <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-black uppercase tracking-wider text-[#6366f1] flex items-center space-x-1.5">
+                            <Zap className="w-3.5 h-3.5 text-[#6366f1] fill-[#6366f1]" />
+                            <span>Execution Velocity</span>
+                        </span>
+                        <span className="px-2 py-0.5 rounded-full neu-inset text-[10px] font-extrabold text-[#6366f1]">
+                            {velocityStats.totalCompleted} Conquered
+                        </span>
+                    </div>
+                    <div className="flex items-baseline space-x-2">
+                        <span className="text-xl font-black text-[#1a1c35]">
+                            {velocityStats.formattedRate}
+                        </span>
+                        <span className="text-xs font-bold text-[#717699]">actions / day</span>
+                    </div>
+                    <p className="text-xs text-[#717699] font-medium leading-relaxed">
+                        {velocityStats.totalCompleted > 0
+                            ? `${velocityStats.totalCompleted} actions finished across this ${velocityStats.windowDays}-day horizon. ${velocityStats.paceLabel}.`
+                            : `No items completed in this ${velocityStats.windowDays}-day horizon yet. Log progress to calculate velocity.`}
+                    </p>
+                </div>
+            </div>
