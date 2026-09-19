@@ -294,8 +294,8 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                 <div
                     onClick={() => highestVolume && handleToggleCategory(highestVolume.key)}
                     className={`neu-card p-5 rounded-3xl space-y-2 border cursor-pointer transition-all ${selectedCategoryKey === highestVolume?.key
-                            ? 'ring-2 ring-[#549acb] shadow-md border-transparent'
-                            : 'border-white/60 hover:scale-[1.01]'
+                        ? 'ring-2 ring-[#549acb] shadow-md border-transparent'
+                        : 'border-white/60 hover:scale-[1.01]'
                         }`}
                 >
                     <div className="flex items-center justify-between">
@@ -321,7 +321,7 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                 <div
                     onClick={() => highestEfficiency && handleToggleCategory(highestEfficiency.key)}
                     className={`neu-card p-5 rounded-3xl space-y-2 border cursor-pointer transition-all ${selectedCategoryKey === highestEfficiency?.key
-                            ? 'ring-2 ring-emerald-500 shadow-md border-transparent'
-                            : 'border-white/60 hover:scale-[1.01]'
+                        ? 'ring-2 ring-emerald-500 shadow-md border-transparent'
+                        : 'border-white/60 hover:scale-[1.01]'
                         }`}
                 >
