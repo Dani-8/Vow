@@ -155,10 +155,10 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
             ratePerDay >= 3
                 ? 'High-velocity execution'
                 : ratePerDay >= 1
-                    ? 'Consistent daily rhythm'
-                    : totalCompleted > 0
-                        ? 'Building momentum'
-                        : 'Ready for first check-in';
+                ? 'Consistent daily rhythm'
+                : totalCompleted > 0
+                ? 'Building momentum'
+                : 'Ready for first check-in';
 
         return {
             windowDays: currentWindowDays,
@@ -224,7 +224,7 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
         // For 30d to 90d, break into weeks
         const weeksToShow = Math.ceil(currentWindowDays / 7);
         const weeksMap: Record<number, { label: string; actions: number; challengeLogs: number }> = {};
-
+        
         // Group activities by relative week from start of the window
         const totalActs = dynamicActivities.length;
         const actsToGroup = dynamicActivities.slice(Math.max(0, totalActs - currentWindowDays));
@@ -293,10 +293,11 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                 {/* Card 1: Primary Energy Focus with real dynamic stats */}
                 <div
                     onClick={() => highestVolume && handleToggleCategory(highestVolume.key)}
-                    className={`neu-card p-5 rounded-3xl space-y-2 border cursor-pointer transition-all ${selectedCategoryKey === highestVolume?.key
-                        ? 'ring-2 ring-[#549acb] shadow-md border-transparent'
-                        : 'border-white/60 hover:scale-[1.01]'
-                        }`}
+                    className={`neu-card p-5 rounded-3xl space-y-2 border cursor-pointer transition-all ${
+                        selectedCategoryKey === highestVolume?.key
+                            ? 'ring-2 ring-[#549acb] shadow-md border-transparent'
+                            : 'border-white/60 hover:scale-[1.01]'
+                    }`}
                 >
                     <div className="flex items-center justify-between">
                         <span className="text-[11px] font-black uppercase tracking-wider text-[#549acb] flex items-center space-x-1.5">
@@ -320,10 +321,11 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                 {/* Card 2: Highest Follow-Through with exact numbers and finish rate */}
                 <div
                     onClick={() => highestEfficiency && handleToggleCategory(highestEfficiency.key)}
-                    className={`neu-card p-5 rounded-3xl space-y-2 border cursor-pointer transition-all ${selectedCategoryKey === highestEfficiency?.key
-                        ? 'ring-2 ring-emerald-500 shadow-md border-transparent'
-                        : 'border-white/60 hover:scale-[1.01]'
-                        }`}
+                    className={`neu-card p-5 rounded-3xl space-y-2 border cursor-pointer transition-all ${
+                        selectedCategoryKey === highestEfficiency?.key
+                            ? 'ring-2 ring-emerald-500 shadow-md border-transparent'
+                            : 'border-white/60 hover:scale-[1.01]'
+                    }`}
                 >
                     <div className="flex items-center justify-between">
                         <span className="text-[11px] font-black uppercase tracking-wider text-emerald-600 flex items-center space-x-1.5">
@@ -573,12 +575,13 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                                     <button
                                         key={cat.key}
                                         onClick={() => handleToggleCategory(cat.key)}
-                                        className={`flex items-center space-x-2 px-2.5 py-1.5 rounded-xl text-left transition-all ${isSelected
-                                            ? 'neu-button bg-[#E0E5EC] ring-2 ring-[#549acb]'
-                                            : isDimmed
+                                        className={`flex items-center space-x-2 px-2.5 py-1.5 rounded-xl text-left transition-all ${
+                                            isSelected
+                                                ? 'neu-button bg-[#E0E5EC] ring-2 ring-[#549acb]'
+                                                : isDimmed
                                                 ? 'neu-inset opacity-50 hover:opacity-100'
                                                 : 'neu-inset bg-[#E0E5EC]/80 hover:bg-[#E0E5EC]'
-                                            }`}
+                                        }`}
                                     >
                                         <span
                                             className="w-2.5 h-2.5 rounded-full shrink-0"
@@ -743,3 +746,93 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                         </ResponsiveContainer>
                     </div>
                 </div>
+
+                {/* 2. Execution Cadence Area Trend - Dynamically dictated by Global Range & Slicers */}
+                <div className="neu-card p-6 rounded-3xl space-y-4 border border-white/60">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                            <div className="w-10 h-10 rounded-2xl neu-button flex items-center justify-center text-[#549acb] bg-[#E0E5EC]">
+                                <Activity className="w-5 h-5" />
+                            </div>
+                            <div>
+                                <h3 className="text-base font-black text-[#1a1c35] flex items-center space-x-2">
+                                    <span>Execution Cadence</span>
+                                    {activeCategory && (
+                                        <span className="text-[10px] px-2 py-0.5 rounded-full neu-inset text-[#549acb] font-bold">
+                                            {activeCategory.name.split(' ')[0]}
+                                        </span>
+                                    )}
+                                </h3>
+                                <p className="text-xs text-[#717699] font-medium">
+                                    {currentWindowDays <= 14
+                                        ? `Day-by-day output volume for selected ${currentWindowDays}-day horizon`
+                                        : `Weekly pacing across the selected ${currentWindowDays}-day range`}
+                                </p>
+                            </div>
+                        </div>
+
+                        <span className="px-2.5 py-1 rounded-full neu-inset text-[10px] font-black text-[#549acb]">
+                            {currentWindowDays <= 14 ? `${currentWindowDays}D Daily` : `${Math.ceil(currentWindowDays / 7)} Wk Window`}
+                        </span>
+                    </div>
+
+                    <div className="w-full h-64 pt-2">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <AreaChart data={cadenceTrend} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                                <defs>
+                                    <linearGradient id="colorVelocity" x1="0" y1="0" x2="0" y2="1">
+                                        <stop
+                                            offset="5%"
+                                            stopColor={activeCategory ? activeCategory.color : '#549acb'}
+                                            stopOpacity={0.4}
+                                        />
+                                        <stop
+                                            offset="95%"
+                                            stopColor={activeCategory ? activeCategory.color : '#549acb'}
+                                            stopOpacity={0.0}
+                                        />
+                                    </linearGradient>
+                                </defs>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#CBD5E1" vertical={false} />
+                                <XAxis
+                                    dataKey="label"
+                                    tick={{ fill: '#44476A', fontSize: 10, fontWeight: 700 }}
+                                    axisLine={{ stroke: '#CBD5E1' }}
+                                    tickLine={false}
+                                />
+                                <YAxis
+                                    tick={{ fill: '#717699', fontSize: 10 }}
+                                    axisLine={false}
+                                    tickLine={false}
+                                />
+                                <Tooltip
+                                    formatter={(val: any) => [
+                                        `${val} actions completed`,
+                                        activeCategory ? `${activeCategory.name} Output` : 'Action Output',
+                                    ]}
+                                    contentStyle={{
+                                        backgroundColor: '#E0E5EC',
+                                        borderRadius: '14px',
+                                        border: '1px solid #CBD5E1',
+                                        boxShadow: '4px 4px 8px #bec3c9, -4px -4px 8px #ffffff',
+                                        fontSize: '11px',
+                                        fontWeight: 700,
+                                        color: '#1a1c35',
+                                    }}
+                                />
+                                <Area
+                                    type="monotone"
+                                    dataKey="actions"
+                                    stroke={activeCategory ? activeCategory.color : '#549acb'}
+                                    strokeWidth={3}
+                                    fillOpacity={1}
+                                    fill="url(#colorVelocity)"
+                                />
+                            </AreaChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
