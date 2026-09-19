@@ -573,13 +573,12 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                                     <button
                                         key={cat.key}
                                         onClick={() => handleToggleCategory(cat.key)}
-                                        className={`flex items-center space-x-2 px-2.5 py-1.5 rounded-xl text-left transition-all ${
-                                            isSelected
+                                        className={`flex items-center space-x-2 px-2.5 py-1.5 rounded-xl text-left transition-all ${isSelected
                                                 ? 'neu-button bg-[#E0E5EC] ring-2 ring-[#549acb]'
                                                 : isDimmed
-                                                ? 'neu-inset opacity-50 hover:opacity-100'
-                                                : 'neu-inset bg-[#E0E5EC]/80 hover:bg-[#E0E5EC]'
-                                        }`}
+                                                    ? 'neu-inset opacity-50 hover:opacity-100'
+                                                    : 'neu-inset bg-[#E0E5EC]/80 hover:bg-[#E0E5EC]'
+                                            }`}
                                     >
                                         <span
                                             className="w-2.5 h-2.5 rounded-full shrink-0"
