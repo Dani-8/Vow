@@ -648,3 +648,57 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                         </div>
                     </div>
 
+                    <div className="w-full h-64 pt-2">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart
+                                data={barData}
+                                margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                                onClick={(state: any) => {
+                                    if (state && state.activePayload && state.activePayload[0]) {
+                                        const key = state.activePayload[0].payload.key;
+                                        if (key) handleToggleCategory(key);
+                                    }
+                                }}
+                                className="cursor-pointer"
+                            >
+                                <CartesianGrid strokeDasharray="3 3" stroke="#CBD5E1" vertical={false} />
+                                <XAxis
+                                    dataKey="name"
+                                    tick={{ fill: '#44476A', fontSize: 11, fontWeight: 700 }}
+                                    axisLine={{ stroke: '#CBD5E1' }}
+                                    tickLine={false}
+                                />
+                                <YAxis
+                                    tick={{ fill: '#717699', fontSize: 10 }}
+                                    axisLine={false}
+                                    tickLine={false}
+                                />
+                                <Tooltip
+                                    formatter={(val: any, name: any, item: any) => {
+                                        const payload = item?.payload;
+                                        if (name === 'completed') {
+                                            return [`${val} items (${payload?.completedPct || 0}%)`, 'Conquered'];
+                                        }
+                                        return [`${val} items (${payload?.pendingPct || 0}%)`, 'Pending Backlog'];
+                                    }}
+                                    contentStyle={{
+                                        backgroundColor: '#E0E5EC',
+                                        borderRadius: '14px',
+                                        border: '1px solid #CBD5E1',
+                                        boxShadow: '4px 4px 8px #bec3c9, -4px -4px 8px #ffffff',
+                                        fontSize: '11px',
+                                        fontWeight: 700,
+                                    }}
+                                />
+                                <Bar dataKey="completed" stackId="a" fill="#10b981" radius={[0, 0, 4, 4]}>
+                                    <LabelList
+                                        dataKey="completedPct"
+                                        position="center"
+                                        formatter={(val: number) => (val >= 12 ? `${val}%` : '')}
+                                        style={{
+                                            fill: '#ffffff',
+                                            fontSize: '11px',
+                                            fontWeight: 900,
+                                            textShadow: '0 1px 2px rgba(0,0,0,0.3)',
+                                        }}
+                                    />
