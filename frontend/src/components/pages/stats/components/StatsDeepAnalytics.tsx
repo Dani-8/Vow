@@ -23,6 +23,7 @@ import {
     ShieldCheck,
     X,
     Filter,
+    Zap,
 } from 'lucide-react';
 import {
     Radar,
@@ -143,6 +144,30 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
     const highestVolume = useMemo(() => {
         return [...normalizedCategories].sort((a, b) => b.itemCount - a.itemCount)[0];
     }, [normalizedCategories]);
+
+    // Daily Execution Velocity calculation over current dynamic window
+    const velocityStats = useMemo(() => {
+        const totalCompleted = normalizedCategories.reduce((sum, c) => sum + c.completedCount, 0);
+        const ratePerDay = currentWindowDays > 0 ? totalCompleted / currentWindowDays : 0;
+        const formattedRate = ratePerDay >= 10 ? ratePerDay.toFixed(0) : ratePerDay.toFixed(1);
+
+        const paceLabel =
+            ratePerDay >= 3
+                ? 'High-velocity execution'
+                : ratePerDay >= 1
+                    ? 'Consistent daily rhythm'
+                    : totalCompleted > 0
+                        ? 'Building momentum'
+                        : 'Ready for first check-in';
+
+        return {
+            windowDays: currentWindowDays,
+            totalCompleted,
+            ratePerDay,
+            formattedRate,
+            paceLabel,
+        };
+    }, [normalizedCategories, currentWindowDays]);
 
     // 1. Radar Chart Data: Volume Focus vs Completion Strength (%)
     const radarData = useMemo(() => {
@@ -265,6 +290,7 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
 
             {/* 3. Top 3 Executive Takeaway Cards (KPIs immediately below filter bar) */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Card 1: Primary Energy Focus with real dynamic stats */}
                 <div
                     onClick={() => highestVolume && handleToggleCategory(highestVolume.key)}
                     className={`neu-card p-5 rounded-3xl space-y-2 border cursor-pointer transition-all ${selectedCategoryKey === highestVolume?.key
@@ -282,13 +308,16 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                         </span>
                     </div>
                     <div className="text-xl font-black text-[#1a1c35]">
-                        {highestVolume?.name || 'Habits & Routine'}
+                        {highestVolume?.name || 'Balanced Focus'}
                     </div>
-                    <p className="text-xs text-[#717699] font-medium">
-                        Highest concentration of active challenges, visual task maps, and routines. Click to filter.
+                    <p className="text-xs text-[#717699] font-medium leading-relaxed">
+                        {highestVolume && highestVolume.itemCount > 0
+                            ? `${highestVolume.name} holds ${highestVolume.itemCount} total item${highestVolume.itemCount === 1 ? '' : 's'} (${highestVolume.completedCount} conquered) across your ecosystem.`
+                            : 'No workload allocated yet. Create tasks, habits, or blueprints to track energy.'}
                     </p>
                 </div>
 
+                {/* Card 2: Highest Follow-Through with exact numbers and finish rate */}
                 <div
                     onClick={() => highestEfficiency && handleToggleCategory(highestEfficiency.key)}
                     className={`neu-card p-5 rounded-3xl space-y-2 border cursor-pointer transition-all ${selectedCategoryKey === highestEfficiency?.key
@@ -302,36 +331,42 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                             <span>Highest Follow-Through</span>
                         </span>
                         <span className="px-2 py-0.5 rounded-full neu-inset text-[10px] font-extrabold text-emerald-600">
-                            {highestEfficiency
+                            {highestEfficiency && highestEfficiency.itemCount > 0
                                 ? Math.round((highestEfficiency.completedCount / highestEfficiency.itemCount) * 100)
                                 : 0}% Rate
                         </span>
                     </div>
                     <div className="text-xl font-black text-[#1a1c35]">
-                        {highestEfficiency?.name || 'Tech & Engineering'}
+                        {highestEfficiency?.name || 'Universal Flow'}
                     </div>
-                    <p className="text-xs text-[#717699] font-medium">
-                        Strongest completion discipline across roadmap goals and check-ins. Click to filter.
+                    <p className="text-xs text-[#717699] font-medium leading-relaxed">
+                        {highestEfficiency && highestEfficiency.itemCount > 0
+                            ? `${highestEfficiency.completedCount} of ${highestEfficiency.itemCount} item${highestEfficiency.itemCount === 1 ? '' : 's'} completed with an unbroken ${Math.round((highestEfficiency.completedCount / highestEfficiency.itemCount) * 100)}% execution rate.`
+                            : 'Complete roadmap items or habit cycles to establish your peak discipline domain.'}
                     </p>
                 </div>
 
+                {/* Card 3: Execution Velocity (Replaced static Horizon repeater) */}
                 <div className="neu-card p-5 rounded-3xl space-y-2 border border-white/60">
                     <div className="flex items-center justify-between">
                         <span className="text-[11px] font-black uppercase tracking-wider text-[#6366f1] flex items-center space-x-1.5">
-                            <TrendingUp className="w-3.5 h-3.5 text-[#6366f1]" />
-                            <span>Active Horizon</span>
+                            <Zap className="w-3.5 h-3.5 text-[#6366f1] fill-[#6366f1]" />
+                            <span>Execution Velocity</span>
                         </span>
                         <span className="px-2 py-0.5 rounded-full neu-inset text-[10px] font-extrabold text-[#6366f1]">
-                            {activeCategory ? activeCategory.name.split(' ')[0] : 'All Domains'}
+                            {velocityStats.totalCompleted} Conquered
                         </span>
                     </div>
-                    <div className="text-xl font-black text-[#1a1c35] truncate">
-                        {activeCategory ? `${activeCategory.completedCount} Completed` : `${filters.timeRange.toUpperCase()} Horizon`}
+                    <div className="flex items-baseline space-x-2">
+                        <span className="text-xl font-black text-[#1a1c35]">
+                            {velocityStats.formattedRate}
+                        </span>
+                        <span className="text-xs font-bold text-[#717699]">actions / day</span>
                     </div>
-                    <p className="text-xs text-[#717699] font-medium truncate">
-                        {filters.dayOfWeek !== 'all'
-                            ? `Day filter: ${filters.dayOfWeek === 'weekdays' ? 'Weekdays only' : filters.dayOfWeek === 'weekends' ? 'Weekends only' : 'Single day'} active.`
-                            : `Cadence dynamically calculated for ${currentWindowDays} day window.`}
+                    <p className="text-xs text-[#717699] font-medium leading-relaxed">
+                        {velocityStats.totalCompleted > 0
+                            ? `${velocityStats.totalCompleted} actions finished across this ${velocityStats.windowDays}-day horizon. ${velocityStats.paceLabel}.`
+                            : `No items completed in this ${velocityStats.windowDays}-day horizon yet. Log progress to calculate velocity.`}
                     </p>
                 </div>
             </div>
