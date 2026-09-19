@@ -155,10 +155,10 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
             ratePerDay >= 3
                 ? 'High-velocity execution'
                 : ratePerDay >= 1
-                ? 'Consistent daily rhythm'
-                : totalCompleted > 0
-                ? 'Building momentum'
-                : 'Ready for first check-in';
+                    ? 'Consistent daily rhythm'
+                    : totalCompleted > 0
+                        ? 'Building momentum'
+                        : 'Ready for first check-in';
 
         return {
             windowDays: currentWindowDays,
