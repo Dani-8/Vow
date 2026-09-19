@@ -139,3 +139,48 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
             return effB - effA;
         });
     }, [normalizedCategories]);
+
+    const highestEfficiency = sortedByEfficiency[0];
+    const highestVolume = useMemo(() => {
+        return [...normalizedCategories].sort((a, b) => b.itemCount - a.itemCount)[0];
+    }, [normalizedCategories]);
+
+    // Daily Execution Velocity calculation over current dynamic window
+    const velocityStats = useMemo(() => {
+        const totalCompleted = normalizedCategories.reduce((sum, c) => sum + c.completedCount, 0);
+        const ratePerDay = currentWindowDays > 0 ? totalCompleted / currentWindowDays : 0;
+        const formattedRate = ratePerDay >= 10 ? ratePerDay.toFixed(0) : ratePerDay.toFixed(1);
+
+        const paceLabel =
+            ratePerDay >= 3
+                ? 'High-velocity execution'
+                : ratePerDay >= 1
+                ? 'Consistent daily rhythm'
+                : totalCompleted > 0
+                ? 'Building momentum'
+                : 'Ready for first check-in';
+
+        return {
+            windowDays: currentWindowDays,
+            totalCompleted,
+            ratePerDay,
+            formattedRate,
+            paceLabel,
+        };
+    }, [normalizedCategories, currentWindowDays]);
+
+    // 1. Radar Chart Data: Volume Focus vs Completion Strength (%)
+    const radarData = useMemo(() => {
+        return normalizedCategories.slice(0, 6).map((cat) => {
+            const strengthPercent =
+                cat.itemCount > 0 ? Math.round((cat.completedCount / cat.itemCount) * 100) : 0;
+            return {
+                category: cat.name.split(' ')[0],
+                fullName: cat.name,
+                focusVolume: cat.itemCount,
+                completionStrength: strengthPercent,
+                key: cat.key,
+                isSelected: selectedCategoryKey === cat.key,
+            };
+        });
+    }, [normalizedCategories, selectedCategoryKey]);
