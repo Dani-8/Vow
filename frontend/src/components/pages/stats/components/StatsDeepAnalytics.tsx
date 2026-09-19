@@ -277,3 +277,53 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                             </p>
                         </div>
                     </div>
+
+                    <button
+                        onClick={handleResetCategoryFilter}
+                        className="neu-button px-3 py-1.5 rounded-xl text-xs font-bold text-[#717699] hover:text-[#1a1c35] flex items-center space-x-1 transition-all"
+                    >
+                        <span>Reset Domain</span>
+                        <X className="w-3.5 h-3.5" />
+                    </button>
+                </div>
+            )}
+
+            {/* 3. Top 3 Executive Takeaway Cards (KPIs immediately below filter bar) */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Card 1: Primary Energy Focus with real dynamic stats */}
+                <div
+                    onClick={() => highestVolume && handleToggleCategory(highestVolume.key)}
+                    className={`neu-card p-5 rounded-3xl space-y-2 border cursor-pointer transition-all ${
+                        selectedCategoryKey === highestVolume?.key
+                            ? 'ring-2 ring-[#549acb] shadow-md border-transparent'
+                            : 'border-white/60 hover:scale-[1.01]'
+                    }`}
+                >
+                    <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-black uppercase tracking-wider text-[#549acb] flex items-center space-x-1.5">
+                            <Flame className="w-3.5 h-3.5 text-[#549acb]" />
+                            <span>Primary Energy Focus</span>
+                        </span>
+                        <span className="px-2 py-0.5 rounded-full neu-inset text-[10px] font-extrabold text-[#44476A]">
+                            {highestVolume?.percentage || 0}% Volume
+                        </span>
+                    </div>
+                    <div className="text-xl font-black text-[#1a1c35]">
+                        {highestVolume?.name || 'Balanced Focus'}
+                    </div>
+                    <p className="text-xs text-[#717699] font-medium leading-relaxed">
+                        {highestVolume && highestVolume.itemCount > 0
+                            ? `${highestVolume.name} holds ${highestVolume.itemCount} total item${highestVolume.itemCount === 1 ? '' : 's'} (${highestVolume.completedCount} conquered) across your ecosystem.`
+                            : 'No workload allocated yet. Create tasks, habits, or blueprints to track energy.'}
+                    </p>
+                </div>
+
+                {/* Card 2: Highest Follow-Through with exact numbers and finish rate */}
+                <div
+                    onClick={() => highestEfficiency && handleToggleCategory(highestEfficiency.key)}
+                    className={`neu-card p-5 rounded-3xl space-y-2 border cursor-pointer transition-all ${
+                        selectedCategoryKey === highestEfficiency?.key
+                            ? 'ring-2 ring-emerald-500 shadow-md border-transparent'
+                            : 'border-white/60 hover:scale-[1.01]'
+                    }`}
+                >
