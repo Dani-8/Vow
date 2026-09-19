@@ -475,3 +475,50 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                     </p>
                 </div>
 
+                {/* Donut Pie Chart: Category Focus Allocation (5 cols) */}
+                <div className="lg:col-span-5 neu-card p-6 rounded-3xl space-y-4 border border-white/60 flex flex-col justify-between">
+                    <div>
+                        <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center space-x-3">
+                                <div className="w-10 h-10 rounded-2xl neu-button flex items-center justify-center text-[#6366f1] bg-[#E0E5EC]">
+                                    <PieIcon className="w-5 h-5" />
+                                </div>
+                                <div>
+                                    <h3 className="text-base font-black text-[#1a1c35]">Focus Share (Donut)</h3>
+                                    <p className="text-xs text-[#717699] font-medium">
+                                        Click any slice or card to filter dashboard
+                                    </p>
+                                </div>
+                            </div>
+
+                            {activeCategory && (
+                                <button
+                                    onClick={handleResetCategoryFilter}
+                                    className="text-[10px] px-2 py-0.5 rounded-lg neu-inset text-[#717699] hover:text-[#1a1c35] font-bold"
+                                >
+                                    Reset
+                                </button>
+                            )}
+                        </div>
+
+                        {/* Recharts Pie / Donut with Click-To-Filter */}
+                        <div className="w-full h-52 relative flex items-center justify-center">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <PieChart>
+                                    <Pie
+                                        data={normalizedCategories}
+                                        dataKey="itemCount"
+                                        nameKey="name"
+                                        cx="50%"
+                                        cy="50%"
+                                        innerRadius={55}
+                                        outerRadius={80}
+                                        paddingAngle={3}
+                                        stroke="#E0E5EC"
+                                        strokeWidth={2}
+                                        onClick={(entry: any) => {
+                                            const key = entry?.payload?.key || entry?.key;
+                                            if (key) handleToggleCategory(key);
+                                        }}
+                                        className="cursor-pointer"
+                                    >
