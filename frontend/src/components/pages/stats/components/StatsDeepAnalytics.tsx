@@ -438,3 +438,40 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                                         );
                                     }}
                                 />
+                                <PolarRadiusAxis angle={30} domain={[0, 'auto']} tick={false} axisLine={false} />
+                                <Radar
+                                    name="Target Volume"
+                                    dataKey="focusVolume"
+                                    stroke="#549acb"
+                                    fill="#549acb"
+                                    fillOpacity={activeCategory ? 0.4 : 0.25}
+                                    strokeWidth={2}
+                                />
+                                <Radar
+                                    name="Completion %"
+                                    dataKey="completionStrength"
+                                    stroke="#10b981"
+                                    fill="#10b981"
+                                    fillOpacity={0.3}
+                                    strokeWidth={2}
+                                />
+                                <Tooltip
+                                    contentStyle={{
+                                        backgroundColor: '#E0E5EC',
+                                        borderRadius: '16px',
+                                        border: '1px solid #CBD5E1',
+                                        boxShadow: '4px 4px 8px #bec3c9, -4px -4px 8px #ffffff',
+                                        fontSize: '11px',
+                                        fontWeight: 700,
+                                        color: '#1a1c35',
+                                    }}
+                                />
+                            </RadarChart>
+                        </ResponsiveContainer>
+                    </div>
+
+                    <p className="text-[11px] text-[#717699] text-center font-medium">
+                        Blue shape charts your effort volume across life domains; green shape plots your actual finish rate percentage.
+                    </p>
+                </div>
+
