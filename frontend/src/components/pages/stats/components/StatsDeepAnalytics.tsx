@@ -224,7 +224,7 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
         // For 30d to 90d, break into weeks
         const weeksToShow = Math.ceil(currentWindowDays / 7);
         const weeksMap: Record<number, { label: string; actions: number; challengeLogs: number }> = {};
-        
+
         // Group activities by relative week from start of the window
         const totalActs = dynamicActivities.length;
         const actsToGroup = dynamicActivities.slice(Math.max(0, totalActs - currentWindowDays));
