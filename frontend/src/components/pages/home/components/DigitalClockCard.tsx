@@ -94,3 +94,18 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                 key: `cur-${d}`,
             });
         }
+
+        // Next month padding to fill a complete 35 or 42 grid
+        const remainingSlots = (7 - (days.length % 7)) % 7;
+        for (let i = 1; i <= remainingSlots; i++) {
+            days.push({
+                dayNum: i,
+                isCurrentMonth: false,
+                isToday: false,
+                hasTask: false,
+                key: `next-${i}`,
+            });
+        }
+
+        return days;
+    }, [viewDate, today, datesWithTasks]);
