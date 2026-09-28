@@ -70,3 +70,24 @@ export const HomeView: React.FC<HomeViewProps> = ({
                     onViewTaskDetail={onViewTaskDetail}
                 />
             </div>
+
+            {/* BOTTOM ROW: Quick Progress, Upcoming Deadlines, Quick Actions */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <QuickProgressCard
+                    completedTodayCount={completedTodayCount}
+                    remainingTodayCount={remainingTodayCount}
+                    progressPercent={progressPercent}
+                />
+                <UpcomingDeadlinesCard
+                    tasks={tasks}
+                    onViewTaskDetail={onViewTaskDetail}
+                />
+                <QuickActionsCard
+                    onOpenCreateModal={onOpenCreateModal}
+                    onCheckInToday={onCheckInToday}
+                    onOpenAIAssist={() => onOpenAIAssist()}
+                />
+            </div>
+        </div>
+    );
+};
