@@ -109,3 +109,40 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
 
         return days;
     }, [viewDate, today, datesWithTasks]);
+
+    return (
+        <div className="lg:col-span-4 neu-card p-5 flex flex-col justify-between">
+            {/* Top Bar: Segmented Switcher */}
+            <div className="flex items-center justify-between pb-2 border-b border-slate-200/60">
+                <span className="text-[11px] font-black uppercase tracking-wider text-[#647196]">
+                    {activeMode === 'clock' ? 'Live Clock' : 'Month Glance'}
+                </span>
+
+                <div className="flex items-center space-x-1 neu-inset p-1 rounded-xl bg-[#E0E5EC]/90 border border-white/60">
+                    <button
+                        onClick={() => setActiveMode('clock')}
+                        className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition-all ${
+                            activeMode === 'clock'
+                                ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                                : 'text-[#717699] hover:text-[#1a1c35]'
+                        }`}
+                        title="View Current Time"
+                    >
+                        <Clock className="w-3.5 h-3.5" />
+                        <span>Clock</span>
+                    </button>
+
+                    <button
+                        onClick={() => setActiveMode('calendar')}
+                        className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition-all ${
+                            activeMode === 'calendar'
+                                ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                                : 'text-[#717699] hover:text-[#1a1c35]'
+                        }`}
+                        title="View Month Calendar"
+                    >
+                        <Calendar className="w-3.5 h-3.5" />
+                        <span>Calendar</span>
+                    </button>
+                </div>
+            </div>
