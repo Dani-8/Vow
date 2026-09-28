@@ -18,3 +18,24 @@ interface HomeViewProps {
     onOpenAIAssist: (task?: Task) => void;
     onViewTaskDetail: (task: Task) => void;
 }
+
+export const HomeView: React.FC<HomeViewProps> = ({
+    tasks,
+    stats,
+    onToggleComplete,
+    onCheckInToday,
+    onOpenCreateModal,
+    onOpenAIAssist,
+    onViewTaskDetail,
+}) => {
+    const {
+        formattedHoursMinutes,
+        formattedDate,
+        formattedDayName,
+        weekDays,
+        todayTasks,
+        completedTodayCount,
+        remainingTodayCount,
+        progressPercent,
+        focusList,
+    } = useHomeData(tasks, stats);
