@@ -193,3 +193,17 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                             </button>
                         </div>
                     </div>
+
+                    {/* Day of Week Labels */}
+                    <div className="grid grid-cols-7 gap-1 text-center">
+                        {['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'].map((d, i) => (
+                            <span
+                                key={d}
+                                className={`text-[10px] font-black uppercase ${
+                                    i >= 5 ? 'text-[#549acb]' : 'text-[#717699]'
+                                }`}
+                            >
+                                {d}
+                            </span>
+                        ))}
+                    </div>
