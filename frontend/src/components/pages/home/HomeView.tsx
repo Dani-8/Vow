@@ -48,6 +48,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                     formattedHoursMinutes={formattedHoursMinutes}
                     formattedDate={formattedDate}
                     formattedDayName={formattedDayName}
+                    tasks={tasks}
                 />
                 <MasterStreakCard
                     stats={stats}
