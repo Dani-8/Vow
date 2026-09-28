@@ -39,3 +39,34 @@ export const HomeView: React.FC<HomeViewProps> = ({
         progressPercent,
         focusList,
     } = useHomeData(tasks, stats);
+
+    return (
+        <div className="space-y-6 pb-8">
+            {/* TOP ROW: Digital Clock & Master Streak Current Week */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <DigitalClockCard
+                    formattedHoursMinutes={formattedHoursMinutes}
+                    formattedDate={formattedDate}
+                    formattedDayName={formattedDayName}
+                    tasks={tasks}
+                />
+                <MasterStreakCard
+                    stats={stats}
+                    weekDays={weekDays}
+                    onCheckInToday={onCheckInToday}
+                />
+            </div>
+
+            {/* MIDDLE ROW: Today's Focus & Today's Tasks */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <TodaysFocusCard
+                    focusList={focusList}
+                    onViewTaskDetail={onViewTaskDetail}
+                />
+                <TodaysTasksCard
+                    todayTasks={todayTasks}
+                    onToggleComplete={onToggleComplete}
+                    onOpenCreateModal={onOpenCreateModal}
+                    onViewTaskDetail={onViewTaskDetail}
+                />
+            </div>
