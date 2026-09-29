@@ -67,3 +67,36 @@ export const StartFocusSessionModal: React.FC<StartFocusSessionModalProps> = ({
                     <h3 className="text-sm font-extrabold text-[#1a1c35] truncate mt-0.5">{title}</h3>
                     {subtitle && <p className="text-xs font-semibold text-[#717699] truncate">{subtitle}</p>}
                 </div>
+
+                {/* Presets */}
+                <div className="space-y-2 mb-4">
+                    <label className="text-xs font-bold text-[#515777] block">Choose Duration</label>
+                    <div className="grid grid-cols-2 gap-2.5">
+                        {PRESET_DURATIONS.map((preset) => {
+                            const isSelected = !isCustom && selectedMinutes === preset.minutes;
+                            return (
+                                <button
+                                    key={preset.minutes}
+                                    type="button"
+                                    onClick={() => {
+                                        setIsCustom(false);
+                                        setSelectedMinutes(preset.minutes);
+                                    }}
+                                    className={`p-3 rounded-2xl text-left transition-all ${
+                                        isSelected
+                                            ? 'neu-button border-2 border-[#549acb] bg-sky-50/60 shadow-md'
+                                            : 'neu-card bg-[#E0E5EC] hover:bg-[#D8DEE8]'
+                                    }`}
+                                >
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-xs font-black text-[#1a1c35]">{preset.label}</span>
+                                        <Clock className="w-3.5 h-3.5 text-[#549acb]" />
+                                    </div>
+                                    <span className="text-[10px] font-semibold text-[#717699] block mt-0.5">
+                                        {preset.desc}
+                                    </span>
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
