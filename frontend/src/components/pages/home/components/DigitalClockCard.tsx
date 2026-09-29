@@ -26,3 +26,15 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
             return 'clock';
         }
     });
+
+    const handleModeChange = (mode: 'clock' | 'calendar') => {
+        setActiveMode(mode);
+        try {
+            localStorage.setItem(STORAGE_KEY, mode);
+        } catch (e) {
+            console.error('Failed to save clock mode preference', e);
+        }
+    };
+
+    const [viewDate, setViewDate] = useState<Date>(() => new Date());
+    const today = useMemo(() => new Date(), []);
