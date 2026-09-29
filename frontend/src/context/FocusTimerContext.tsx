@@ -197,3 +197,11 @@ export const FocusTimerProvider: React.FC<{ children: ReactNode }> = ({ children
         </FocusTimerContext.Provider>
     );
 };
+
+export const useFocusTimer = () => {
+    const ctx = useContext(FocusTimerContext);
+    if (!ctx) {
+        throw new Error('useFocusTimer must be used within FocusTimerProvider');
+    }
+    return ctx;
+};
