@@ -158,3 +158,42 @@ export const FocusTimerProvider: React.FC<{ children: ReactNode }> = ({ children
     const stopSession = useCallback(() => {
         setActiveSession(null);
     }, []);
+
+    const completeSessionEarly = useCallback(() => {
+        setActiveSession((prev) => {
+            if (!prev) return null;
+            const finished = {
+                ...prev,
+                remainingSeconds: 0,
+                isRunning: false,
+                completedAt: new Date().toISOString(),
+            };
+            setJustFinishedSession(finished);
+            setIsFinishedModalOpen(true);
+            return null;
+        });
+    }, []);
+
+    const closeFinishedModal = useCallback(() => {
+        setIsFinishedModalOpen(false);
+        setJustFinishedSession(null);
+    }, []);
+
+    return (
+        <FocusTimerContext.Provider
+            value={{
+                activeSession,
+                startSession,
+                togglePlayPause,
+                resetSession,
+                stopSession,
+                completeSessionEarly,
+                isFinishedModalOpen,
+                closeFinishedModal,
+                justFinishedSession,
+            }}
+        >
+            {children}
+        </FocusTimerContext.Provider>
+    );
+};
