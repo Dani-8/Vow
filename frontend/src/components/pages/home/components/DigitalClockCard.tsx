@@ -223,3 +223,30 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                             </span>
                         ))}
                     </div>
+
+                    {/* Month Days Grid */}
+                    <div className="grid grid-cols-7 gap-1 text-center">
+                        {calendarDays.map((item) => (
+                            <div
+                                key={item.key}
+                                className={`relative h-7 flex flex-col items-center justify-center rounded-lg text-xs font-extrabold transition-all ${
+                                    item.isToday
+                                        ? 'bg-[#549acb] text-white shadow-sm ring-1 ring-[#549acb]/50'
+                                        : item.isCurrentMonth
+                                        ? 'text-[#29335a] hover:bg-[#D5DCE5]/60'
+                                        : 'text-[#94a3b8]/40'
+                                }`}
+                            >
+                                <span>{item.dayNum}</span>
+
+                                {/* Dot Indicator for days with planned tasks/milestones */}
+                                {item.hasTask && (
+                                    <span
+                                        className={`absolute bottom-0.5 w-1 h-1 rounded-full ${
+                                            item.isToday ? 'bg-white' : 'bg-[#549acb]'
+                                        }`}
+                                    />
+                                )}
+                            </div>
+                        ))}
+                    </div>
