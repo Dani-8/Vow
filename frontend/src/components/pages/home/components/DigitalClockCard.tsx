@@ -147,7 +147,7 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                         title="View Current Time"
                     >
                         <Clock className="w-3.5 h-3.5" />
-                        <span>Clock</span>
+                        {activeMode === 'clock' && <span>Clock</span>}
                     </button>
 
                     <button
@@ -159,7 +159,7 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                         title="View Month Calendar"
                     >
                         <Calendar className="w-3.5 h-3.5" />
-                        <span>Calendar</span>
+                        {activeMode === 'calendar' && <span>Calendar</span>}
                     </button>
                 </div>
             </div>
