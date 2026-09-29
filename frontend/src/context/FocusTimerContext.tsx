@@ -38,3 +38,19 @@ interface FocusTimerContextValue {
 const FocusTimerContext = createContext<FocusTimerContextValue | null>(null);
 
 const STORAGE_KEY = 'app_universal_focus_timer';
+
+export const FocusTimerProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+    const [activeSession, setActiveSession] = useState<ActiveFocusSession | null>(() => {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return null;
+            const parsed = JSON.parse(raw) as ActiveFocusSession;
+            // If it was running when reloaded, recalculate remaining or keep paused
+            return parsed;
+        } catch {
+            return null;
+        }
+    });
+
+    const [isFinishedModalOpen, setIsFinishedModalOpen] = useState(false);
+    const [justFinishedSession, setJustFinishedSession] = useState<ActiveFocusSession | null>(null);
