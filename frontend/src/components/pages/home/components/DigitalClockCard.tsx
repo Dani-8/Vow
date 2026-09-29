@@ -54,3 +54,18 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
 
     const monthName = viewDate.toLocaleString('default', { month: 'long' });
     const yearNum = viewDate.getFullYear();
+
+    // Map tasks to dates for quick dot lookup
+    const datesWithTasks = useMemo(() => {
+        const set = new Set<string>();
+        tasks.forEach((t) => {
+            const dateStr = t.endTime || t.startTime || t.createdAt;
+            if (dateStr) {
+                const d = new Date(dateStr);
+                if (!isNaN(d.getTime())) {
+                    set.add(`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`);
+                }
+            }
+        });
+        return set;
+    }, [tasks]);
