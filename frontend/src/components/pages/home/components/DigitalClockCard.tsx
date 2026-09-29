@@ -248,3 +248,20 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                             </div>
                         ))}
                     </div>
+
+                    {/* Subtle Calendar Legend / Quick Tip */}
+                    <div className="flex items-center justify-between text-[10px] text-[#717699] px-1 pt-1 border-t border-slate-200/50">
+                        <span className="flex items-center space-x-1">
+                            <span className="w-2 h-2 rounded-full bg-[#549acb]" />
+                            <span className="font-bold">Today</span>
+                        </span>
+                        <span className="flex items-center space-x-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#549acb]" />
+                            <span>Scheduled task</span>
+                        </span>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
