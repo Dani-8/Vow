@@ -99,3 +99,29 @@ export const StartFocusSessionModal: React.FC<StartFocusSessionModalProps> = ({
                         })}
                     </div>
                 </div>
+
+                {/* Custom Minutes Toggle */}
+                <div className="mb-6">
+                    <button
+                        type="button"
+                        onClick={() => setIsCustom(!isCustom)}
+                        className="text-xs font-bold text-[#549acb] hover:underline flex items-center space-x-1"
+                    >
+                        <span>{isCustom ? '← Back to presets' : '+ Or set custom minutes'}</span>
+                    </button>
+
+                    {isCustom && (
+                        <div className="mt-2 flex items-center space-x-2">
+                            <input
+                                type="number"
+                                min={1}
+                                max={180}
+                                placeholder="Minutes (e.g. 35)"
+                                value={customMinutes}
+                                onChange={(e) => setCustomMinutes(e.target.value)}
+                                className="flex-1 neu-inset px-4 py-2.5 rounded-xl text-xs font-bold text-[#1a1c35] placeholder:text-[#94a3b8] focus:outline-none focus:ring-1 focus:ring-[#549acb]"
+                            />
+                            <span className="text-xs font-bold text-[#717699]">mins</span>
+                        </div>
+                    )}
+                </div>
