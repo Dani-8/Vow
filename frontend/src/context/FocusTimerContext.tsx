@@ -96,3 +96,40 @@ export const FocusTimerProvider: React.FC<{ children: ReactNode }> = ({ children
 
         return () => clearInterval(timer);
     }, [activeSession?.isRunning]);
+
+    const startSession = useCallback(
+        ({
+            sourceType,
+            sourceId,
+            sourceTitle,
+            sourceSubtitle,
+            minutes,
+            dayNumber,
+            dateStr,
+        }: {
+            sourceType: 'task' | 'challenge';
+            sourceId: string;
+            sourceTitle: string;
+            sourceSubtitle?: string;
+            minutes: number;
+            dayNumber?: number;
+            dateStr?: string;
+        }) => {
+            const totalSec = Math.max(60, Math.round(minutes * 60));
+            const newSession: ActiveFocusSession = {
+                id: `focus_${Date.now()}`,
+                sourceType,
+                sourceId,
+                sourceTitle,
+                sourceSubtitle,
+                totalSeconds: totalSec,
+                remainingSeconds: totalSec,
+                isRunning: true,
+                startedAt: new Date().toISOString(),
+                dayNumber,
+                dateStr,
+            };
+            setActiveSession(newSession);
+        },
+        []
+    );
