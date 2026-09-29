@@ -216,9 +216,8 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                         {['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'].map((d, i) => (
                             <span
                                 key={d}
-                                className={`text-[10px] font-black uppercase ${
-                                    i >= 5 ? 'text-[#549acb]' : 'text-[#717699]'
-                                }`}
+                                className={`text-[10px] font-black uppercase ${i >= 5 ? 'text-[#549acb]' : 'text-[#717699]'
+                                    }`}
                             >
                                 {d}
                             </span>
