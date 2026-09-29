@@ -14,3 +14,27 @@ export interface ActiveFocusSession {
     dayNumber?: number; // for challenges
     dateStr?: string; // for challenges
 }
+
+interface FocusTimerContextValue {
+    activeSession: ActiveFocusSession | null;
+    startSession: (params: {
+        sourceType: 'task' | 'challenge';
+        sourceId: string;
+        sourceTitle: string;
+        sourceSubtitle?: string;
+        minutes: number;
+        dayNumber?: number;
+        dateStr?: string;
+    }) => void;
+    togglePlayPause: () => void;
+    resetSession: () => void;
+    stopSession: () => void;
+    completeSessionEarly: () => void;
+    isFinishedModalOpen: boolean;
+    closeFinishedModal: () => void;
+    justFinishedSession: ActiveFocusSession | null;
+}
+
+const FocusTimerContext = createContext<FocusTimerContextValue | null>(null);
+
+const STORAGE_KEY = 'app_universal_focus_timer';
