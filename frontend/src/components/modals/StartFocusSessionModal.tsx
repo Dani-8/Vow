@@ -58,3 +58,12 @@ export const StartFocusSessionModal: React.FC<StartFocusSessionModalProps> = ({
                         </p>
                     </div>
                 </div>
+
+                {/* Target info card */}
+                <div className="neu-inset p-3.5 rounded-2xl mb-5 bg-[#E0E5EC]/80 border border-white/40">
+                    <span className="text-[10px] font-black uppercase text-[#549acb] tracking-wider block">
+                        Target Session
+                    </span>
+                    <h3 className="text-sm font-extrabold text-[#1a1c35] truncate mt-0.5">{title}</h3>
+                    {subtitle && <p className="text-xs font-semibold text-[#717699] truncate">{subtitle}</p>}
+                </div>
