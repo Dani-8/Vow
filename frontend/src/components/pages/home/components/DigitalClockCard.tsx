@@ -163,3 +163,50 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                     </button>
                 </div>
             </div>
+
+            {/* Mode Content */}
+            {activeMode === 'clock' ? (
+                <div className="flex flex-col items-center justify-center text-center py-2">
+                    {/* Perfect Neumorphic Double-Ring Circular Clock Face */}
+                    <div className="w-44 h-44 rounded-full bg-[#E0E5EC] p-3.5 flex items-center justify-center shadow-[8px_8px_18px_rgba(163,177,198,0.65),-8px_-8px_18px_rgba(255,255,255,0.85)] border border-white/60 relative my-1">
+                        <div className="w-full h-full rounded-full bg-[#E0E5EC] shadow-[inset_7px_7px_14px_rgba(163,177,198,0.65),inset_-7px_-7px_14px_rgba(255,255,255,0.9)] flex flex-col items-center justify-center">
+                            <span className="text-3xl sm:text-4xl font-black text-[#29335a] tracking-wider font-mono">
+                                {formattedHoursMinutes}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div className="mt-2">
+                        <p className="text-sm font-bold text-[#29335a]">{formattedDate}</p>
+                        <p className="text-xs font-semibold text-[#647196]">{formattedDayName}</p>
+                    </div>
+                </div>
+            ) : (
+                <div className="flex flex-col justify-between py-1 space-y-2">
+                    {/* Calendar Month Header & Nav */}
+                    <div className="flex items-center justify-between px-1">
+                        <button
+                            onClick={handleResetToCurrentMonth}
+                            className="text-xs font-black text-[#1a1c35] hover:text-[#549acb] transition-colors"
+                            title="Jump to current month"
+                        >
+                            {monthName} <span className="text-[#717699] font-bold">{yearNum}</span>
+                        </button>
+
+                        <div className="flex items-center space-x-1">
+                            <button
+                                onClick={handlePrevMonth}
+                                className="w-6 h-6 rounded-lg neu-button flex items-center justify-center text-[#717699] hover:text-[#1a1c35] transition-all"
+                                title="Previous Month"
+                            >
+                                <ChevronLeft className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                                onClick={handleNextMonth}
+                                className="w-6 h-6 rounded-lg neu-button flex items-center justify-center text-[#717699] hover:text-[#1a1c35] transition-all"
+                                title="Next Month"
+                            >
+                                <ChevronRight className="w-3.5 h-3.5" />
+                            </button>
+                        </div>
+                    </div>
