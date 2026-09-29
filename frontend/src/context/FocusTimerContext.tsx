@@ -133,3 +133,28 @@ export const FocusTimerProvider: React.FC<{ children: ReactNode }> = ({ children
         },
         []
     );
+
+    const togglePlayPause = useCallback(() => {
+        setActiveSession((prev) => {
+            if (!prev) return null;
+            return {
+                ...prev,
+                isRunning: !prev.isRunning,
+            };
+        });
+    }, []);
+
+    const resetSession = useCallback(() => {
+        setActiveSession((prev) => {
+            if (!prev) return null;
+            return {
+                ...prev,
+                remainingSeconds: prev.totalSeconds,
+                isRunning: false,
+            };
+        });
+    }, []);
+
+    const stopSession = useCallback(() => {
+        setActiveSession(null);
+    }, []);
