@@ -54,3 +54,16 @@ export const FocusTimerProvider: React.FC<{ children: ReactNode }> = ({ children
 
     const [isFinishedModalOpen, setIsFinishedModalOpen] = useState(false);
     const [justFinishedSession, setJustFinishedSession] = useState<ActiveFocusSession | null>(null);
+
+    // Persist to local storage
+    useEffect(() => {
+        try {
+            if (activeSession) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(activeSession));
+            } else {
+                localStorage.removeItem(STORAGE_KEY);
+            }
+        } catch (e) {
+            console.error('Failed to sync timer to local storage', e);
+        }
+    }, [activeSession]);
