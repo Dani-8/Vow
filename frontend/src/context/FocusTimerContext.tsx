@@ -67,3 +67,32 @@ export const FocusTimerProvider: React.FC<{ children: ReactNode }> = ({ children
             console.error('Failed to sync timer to local storage', e);
         }
     }, [activeSession]);
+
+    // Interval countdown
+    useEffect(() => {
+        if (!activeSession || !activeSession.isRunning) return;
+
+        const timer = setInterval(() => {
+            setActiveSession((prev) => {
+                if (!prev || !prev.isRunning) return prev;
+                if (prev.remainingSeconds <= 1) {
+                    clearInterval(timer);
+                    const finished = {
+                        ...prev,
+                        remainingSeconds: 0,
+                        isRunning: false,
+                        completedAt: new Date().toISOString(),
+                    };
+                    setJustFinishedSession(finished);
+                    setIsFinishedModalOpen(true);
+                    return null;
+                }
+                return {
+                    ...prev,
+                    remainingSeconds: prev.remainingSeconds - 1,
+                };
+            });
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, [activeSession?.isRunning]);
