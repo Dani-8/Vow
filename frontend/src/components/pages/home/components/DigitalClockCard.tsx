@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Clock, Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Task } from '../../../../types';
 
@@ -9,15 +9,34 @@ interface DigitalClockCardProps {
     tasks?: Task[];
 }
 
+const STORAGE_KEY = 'home_clock_card_mode';
+
 export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
     formattedHoursMinutes,
     formattedDate,
     formattedDayName,
     tasks = [],
 }) => {
-    const [activeMode, setActiveMode] = useState<'clock' | 'calendar'>('clock');
-    const [viewDate, setViewDate] = useState<Date>(() => new Date());
+    // Persist choice in localStorage
+    const [activeMode, setActiveMode] = useState<'clock' | 'calendar'>(() => {
+        try {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            return saved === 'calendar' ? 'calendar' : 'clock';
+        } catch {
+            return 'clock';
+        }
+    });
 
+    const handleModeChange = (mode: 'clock' | 'calendar') => {
+        setActiveMode(mode);
+        try {
+            localStorage.setItem(STORAGE_KEY, mode);
+        } catch (e) {
+            console.error('Failed to save clock mode preference', e);
+        }
+    };
+
+    const [viewDate, setViewDate] = useState<Date>(() => new Date());
     const today = useMemo(() => new Date(), []);
 
     // Month Navigation
@@ -112,15 +131,15 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
 
     return (
         <div className="lg:col-span-4 neu-card p-5 flex flex-col justify-between">
-            {/* Top Bar: Segmented Switcher */}
+            {/* Top Bar: Title & Segmented Switcher */}
             <div className="flex items-center justify-between pb-2 border-b border-slate-200/60">
                 <span className="text-[11px] font-black uppercase tracking-wider text-[#647196]">
-                    {activeMode === 'clock' ? 'Live Clock' : 'Month Glance'}
+                    Current Time
                 </span>
 
                 <div className="flex items-center space-x-1 neu-inset p-1 rounded-xl bg-[#E0E5EC]/90 border border-white/60">
                     <button
-                        onClick={() => setActiveMode('clock')}
+                        onClick={() => handleModeChange('clock')}
                         className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition-all ${activeMode === 'clock'
                             ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
                             : 'text-[#717699] hover:text-[#1a1c35]'
@@ -132,7 +151,7 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                     </button>
 
                     <button
-                        onClick={() => setActiveMode('calendar')}
+                        onClick={() => handleModeChange('calendar')}
                         className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition-all ${activeMode === 'calendar'
                             ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
                             : 'text-[#717699] hover:text-[#1a1c35]'
