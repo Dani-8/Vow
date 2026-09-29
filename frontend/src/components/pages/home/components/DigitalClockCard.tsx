@@ -230,10 +230,10 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                             <div
                                 key={item.key}
                                 className={`relative h-7 flex flex-col items-center justify-center rounded-lg text-xs font-extrabold transition-all ${item.isToday
-                                        ? 'bg-[#549acb] text-white shadow-sm ring-1 ring-[#549acb]/50'
-                                        : item.isCurrentMonth
-                                            ? 'text-[#29335a] hover:bg-[#D5DCE5]/60'
-                                            : 'text-[#94a3b8]/40'
+                                    ? 'bg-[#549acb] text-white shadow-sm ring-1 ring-[#549acb]/50'
+                                    : item.isCurrentMonth
+                                        ? 'text-[#29335a] hover:bg-[#D5DCE5]/60'
+                                        : 'text-[#94a3b8]/40'
                                     }`}
                             >
                                 <span>{item.dayNum}</span>
