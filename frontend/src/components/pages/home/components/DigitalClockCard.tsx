@@ -140,10 +140,11 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                 <div className="flex items-center space-x-1 neu-inset p-1 rounded-xl bg-[#E0E5EC]/90 border border-white/60">
                     <button
                         onClick={() => handleModeChange('clock')}
-                        className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition-all ${activeMode === 'clock'
-                            ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
-                            : 'text-[#717699] hover:text-[#1a1c35]'
-                            }`}
+                        className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition-all ${
+                            activeMode === 'clock'
+                                ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                                : 'text-[#717699] hover:text-[#1a1c35]'
+                        }`}
                         title="View Current Time"
                     >
                         <Clock className="w-3.5 h-3.5" />
@@ -152,10 +153,11 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
 
                     <button
                         onClick={() => handleModeChange('calendar')}
-                        className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition-all ${activeMode === 'calendar'
-                            ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
-                            : 'text-[#717699] hover:text-[#1a1c35]'
-                            }`}
+                        className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition-all ${
+                            activeMode === 'calendar'
+                                ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                                : 'text-[#717699] hover:text-[#1a1c35]'
+                        }`}
                         title="View Month Calendar"
                     >
                         <Calendar className="w-3.5 h-3.5" />
@@ -216,8 +218,9 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                         {['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'].map((d, i) => (
                             <span
                                 key={d}
-                                className={`text-[10px] font-black uppercase ${i >= 5 ? 'text-[#549acb]' : 'text-[#717699]'
-                                    }`}
+                                className={`text-[10px] font-black uppercase ${
+                                    i >= 5 ? 'text-[#549acb]' : 'text-[#717699]'
+                                }`}
                             >
                                 {d}
                             </span>
@@ -229,20 +232,22 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                         {calendarDays.map((item) => (
                             <div
                                 key={item.key}
-                                className={`relative h-7 flex flex-col items-center justify-center rounded-lg text-xs font-extrabold transition-all ${item.isToday
-                                    ? 'bg-[#549acb] text-white shadow-sm ring-1 ring-[#549acb]/50'
-                                    : item.isCurrentMonth
+                                className={`relative h-7 flex flex-col items-center justify-center rounded-lg text-xs font-extrabold transition-all ${
+                                    item.isToday
+                                        ? 'bg-[#549acb] text-white shadow-sm ring-1 ring-[#549acb]/50'
+                                        : item.isCurrentMonth
                                         ? 'text-[#29335a] hover:bg-[#D5DCE5]/60'
                                         : 'text-[#94a3b8]/40'
-                                    }`}
+                                }`}
                             >
                                 <span>{item.dayNum}</span>
 
                                 {/* Dot Indicator for days with planned tasks/milestones */}
                                 {item.hasTask && (
                                     <span
-                                        className={`absolute bottom-0.5 w-1 h-1 rounded-full ${item.isToday ? 'bg-white' : 'bg-[#549acb]'
-                                            }`}
+                                        className={`absolute bottom-0.5 w-1 h-1 rounded-full ${
+                                            item.isToday ? 'bg-white' : 'bg-[#549acb]'
+                                        }`}
                                     />
                                 )}
                             </div>
