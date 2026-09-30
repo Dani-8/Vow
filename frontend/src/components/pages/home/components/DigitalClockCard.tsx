@@ -100,3 +100,33 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                 key: `prev-${dayNum}`,
             });
         }
+
+        const totalDays = lastDayOfMonth.getDate();
+        for (let d = 1; d <= totalDays; d++) {
+            const isToday =
+                today.getFullYear() === year &&
+                today.getMonth() === month &&
+                today.getDate() === d;
+            const hasTask = datesWithTasks.has(`${year}-${month}-${d}`);
+            days.push({
+                dayNum: d,
+                isCurrentMonth: true,
+                isToday,
+                hasTask,
+                key: `cur-${d}`,
+            });
+        }
+
+        const remainingSlots = (7 - (days.length % 7)) % 7;
+        for (let i = 1; i <= remainingSlots; i++) {
+            days.push({
+                dayNum: i,
+                isCurrentMonth: false,
+                isToday: false,
+                hasTask: false,
+                key: `next-${i}`,
+            });
+        }
+
+        return days;
+    }, [viewDate, today, datesWithTasks]);
