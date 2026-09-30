@@ -303,3 +303,46 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                     )}
                 </div>
             ) : (
+                /* CALENDAR MODE */
+                <div className="flex flex-col justify-between py-1 space-y-2">
+                    {/* Calendar Month Header & Nav */}
+                    <div className="flex items-center justify-between px-1">
+                        <button
+                            onClick={handleResetToCurrentMonth}
+                            className="text-xs font-black text-[#1a1c35] hover:text-[#549acb] transition-colors"
+                            title="Jump to current month"
+                        >
+                            {monthName} <span className="text-[#717699] font-bold">{yearNum}</span>
+                        </button>
+
+                        <div className="flex items-center space-x-1">
+                            <button
+                                onClick={handlePrevMonth}
+                                className="w-6 h-6 rounded-lg neu-button flex items-center justify-center text-[#717699] hover:text-[#1a1c35] transition-all"
+                                title="Previous Month"
+                            >
+                                <ChevronLeft className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                                onClick={handleNextMonth}
+                                className="w-6 h-6 rounded-lg neu-button flex items-center justify-center text-[#717699] hover:text-[#1a1c35] transition-all"
+                                title="Next Month"
+                            >
+                                <ChevronRight className="w-3.5 h-3.5" />
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Day of Week Labels */}
+                    <div className="grid grid-cols-7 gap-1 text-center">
+                        {['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'].map((d, i) => (
+                            <span
+                                key={d}
+                                className={`text-[10px] font-black uppercase ${
+                                    i >= 5 ? 'text-[#549acb]' : 'text-[#717699]'
+                                }`}
+                            >
+                                {d}
+                            </span>
+                        ))}
+                    </div>
