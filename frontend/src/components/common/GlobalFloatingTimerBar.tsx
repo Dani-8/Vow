@@ -47,3 +47,14 @@ export const GlobalFloatingTimerBar: React.FC<GlobalFloatingTimerBarProps> = ({
                         </h4>
                     </div>
                 </div>
+
+                {/* Big Time readout */}
+                <div
+                    onClick={onGoToHome}
+                    className="cursor-pointer neu-inset px-2.5 py-1 rounded-xl bg-[#E0E5EC]"
+                    title="Click to view on Home"
+                >
+                    <span className="text-sm font-black font-mono tracking-wider text-[#29335a]">
+                        {formattedTimer}
+                    </span>
+                </div>
