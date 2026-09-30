@@ -64,8 +64,8 @@ export const GlobalFloatingTimerBar: React.FC<GlobalFloatingTimerBarProps> = ({
                     <button
                         onClick={togglePlayPause}
                         className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${activeSession.isRunning
-                                ? 'neu-button text-amber-600'
-                                : 'neu-button-primary text-white'
+                            ? 'neu-button text-amber-600'
+                            : 'neu-button-primary text-white'
                             }`}
                         title={activeSession.isRunning ? 'Pause' : 'Resume'}
                     >
