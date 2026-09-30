@@ -52,8 +52,8 @@ export const TaskCardMenu: React.FC<TaskCardMenuProps> = ({
                         setIsFocusModalOpen(true);
                     }}
                     className={`px-2 py-1.5 rounded-xl neu-button flex items-center space-x-1 text-xs font-bold transition-all ${isThisTaskActive
-                            ? 'text-emerald-600 bg-emerald-50/80 border border-emerald-300'
-                            : 'text-[#549acb] hover:bg-white/40'
+                        ? 'text-emerald-600 bg-emerald-50/80 border border-emerald-300'
+                        : 'text-[#549acb] hover:bg-white/40'
                         }`}
                     title={isThisTaskActive ? 'Focus session actively running' : 'Start Focus Timer'}
                 >
@@ -68,8 +68,8 @@ export const TaskCardMenu: React.FC<TaskCardMenuProps> = ({
                     onOpenAIAssist(task);
                 }}
                 className={`px-2.5 py-1.5 rounded-xl neu-button flex items-center space-x-1.5 text-xs font-bold transition-all ${isStruggling
-                        ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white animate-pulse border-none shadow-md'
-                        : 'text-[#549acb] hover:bg-white/40'
+                    ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white animate-pulse border-none shadow-md'
+                    : 'text-[#549acb] hover:bg-white/40'
                     }`}
                 title="Ask Vow AI coach for micro-step breakdown or rescheduling"
             >
@@ -175,3 +175,4 @@ export const TaskCardMenu: React.FC<TaskCardMenuProps> = ({
         </div>
     );
 };
+FFFFFF
