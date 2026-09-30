@@ -76,3 +76,82 @@ export const TaskCardMenu: React.FC<TaskCardMenuProps> = ({
                 <Sparkles className={`w-3.5 h-3.5 ${isStruggling ? 'text-white' : 'text-[#549acb]'}`} />
                 <span className="hidden sm:inline">AI Help</span>
             </button>
+
+            <div className="relative" ref={menuRef}>
+                <button
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setIsMenuOpen(!isMenuOpen);
+                    }}
+                    className="p-1.5 rounded-xl neu-button text-[#717699] hover:text-[#1a1c35] transition-colors"
+                    title="More options"
+                >
+                    <MoreVertical className="w-4 h-4" />
+                </button>
+
+                {isMenuOpen && (
+                    <div
+                        onClick={(e) => e.stopPropagation()}
+                        className="absolute right-0 mt-1.5 w-48 rounded-2xl bg-[#E0E5EC] border border-white/60 shadow-xl p-1.5 z-20 animate-in fade-in zoom-in-95 duration-150"
+                    >
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setIsMenuOpen(false);
+                                setIsFocusModalOpen(true);
+                            }}
+                            className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-[#1a1c35] hover:bg-white/50 flex items-center space-x-2 transition-colors"
+                        >
+                            <Timer className="w-3.5 h-3.5 text-emerald-600" />
+                            <span>Start Focus Session</span>
+                        </button>
+
+                        <div className="my-1 border-t border-gray-300/40" />
+
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setIsMenuOpen(false);
+                                onTogglePrivate(task);
+                            }}
+                            className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-[#1a1c35] hover:bg-white/50 flex items-center space-x-2 transition-colors"
+                        >
+                            {task.isPrivate ? (
+                                <>
+                                    <Unlock className="w-3.5 h-3.5 text-purple-600" />
+                                    <span>Make Public</span>
+                                </>
+                            ) : (
+                                <>
+                                    <Lock className="w-3.5 h-3.5 text-purple-600" />
+                                    <span>Move to Growth Vault</span>
+                                </>
+                            )}
+                        </button>
+
+                        <button
+                            onClick={() => {
+                                setIsMenuOpen(false);
+                                onEditTask(task);
+                            }}
+                            className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-[#1a1c35] hover:bg-white/50 flex items-center space-x-2 transition-colors"
+                        >
+                            <Edit3 className="w-3.5 h-3.5 text-[#549acb]" />
+                            <span>Edit Task</span>
+                        </button>
+
+                        <div className="my-1 border-t border-gray-300/40" />
+
+                        <button
+                            onClick={() => {
+                                setIsMenuOpen(false);
+                                onDeleteTask(task);
+                            }}
+                            className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-rose-600 hover:bg-rose-50/60 flex items-center space-x-2 transition-colors"
+                        >
+                            <Trash2 className="w-3.5 h-3.5 text-rose-500" />
+                            <span>Delete Task</span>
+                        </button>
+                    </div>
+                )}
+            </div>
