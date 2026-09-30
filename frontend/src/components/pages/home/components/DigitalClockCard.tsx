@@ -130,3 +130,13 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
 
         return days;
     }, [viewDate, today, datesWithTasks]);
+
+    // Timer formatted values
+    const timerMinutes = activeSession ? Math.floor(activeSession.remainingSeconds / 60) : 0;
+    const timerSeconds = activeSession ? activeSession.remainingSeconds % 60 : 0;
+    const formattedTimer = `${String(timerMinutes).padStart(2, '0')}:${String(timerSeconds).padStart(2, '0')}`;
+
+    // Timer Progress
+    const timerProgress = activeSession && activeSession.totalSeconds > 0
+        ? ((activeSession.totalSeconds - activeSession.remainingSeconds) / activeSession.totalSeconds) * 100
+        : 0;
