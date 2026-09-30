@@ -55,3 +55,41 @@ export const FocusFinishedModal: React.FC<FocusFinishedModalProps> = ({
                 <p className="text-xs font-semibold text-[#717699] mb-4">
                     You logged <span className="font-extrabold text-[#1a1c35]">{durationMins} minutes</span> of uninterrupted deep focus.
                 </p>
+
+                {/* Target Session Box */}
+                <div className="neu-inset p-4 rounded-2xl mb-6 bg-[#E0E5EC]/90 text-left border border-white/60">
+                    <div className="flex items-center space-x-2 text-[10px] font-black uppercase text-[#717699] mb-1">
+                        <Clock className="w-3 h-3 text-[#549acb]" />
+                        <span>{session.sourceType === 'task' ? 'Completed Task Session' : 'Challenge Daily Sprint'}</span>
+                    </div>
+                    <h3 className="text-sm font-extrabold text-[#1a1c35] truncate">{session.sourceTitle}</h3>
+                    {session.sourceSubtitle && (
+                        <p className="text-xs font-semibold text-[#717699] truncate mt-0.5">{session.sourceSubtitle}</p>
+                    )}
+                </div>
+
+                {/* Action CTA */}
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        className="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-bold text-[#717699] hover:text-[#1a1c35]"
+                    >
+                        Dismiss
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={handleAction}
+                        className="w-full sm:w-auto neu-button-primary px-6 py-2.5 rounded-xl text-xs font-black flex items-center justify-center space-x-2 text-white shadow-md hover:scale-105 transition-all"
+                    >
+                        <CheckCircle2 className="w-4 h-4" />
+                        <span>
+                            {session.sourceType === 'task' ? 'Mark Task as Completed' : 'Save to Challenge Log'}
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
