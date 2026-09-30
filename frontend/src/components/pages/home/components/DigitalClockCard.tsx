@@ -194,3 +194,29 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                     )}
                 </div>
             </div>
+
+            {/* Mode Content */}
+            {activeSession && activeMode === 'focus' ? (
+                /* LIVE FOCUS SESSION MODE */
+                <div className="flex flex-col items-center justify-between text-center py-2 space-y-3">
+                    {/* Session Target Name */}
+                    <div className="w-full px-2">
+                        <span className="text-[10px] font-black uppercase tracking-wider text-[#549acb] block">
+                            {activeSession.sourceType === 'task' ? 'Task Focus' : 'Challenge Focus'}
+                        </span>
+                        <h4 className="text-xs font-black text-[#1a1c35] truncate max-w-full">
+                            {activeSession.sourceTitle}
+                        </h4>
+                    </div>
+
+                    {/* Neumorphic Focus Ring */}
+                    <div className="w-40 h-40 rounded-full bg-[#E0E5EC] p-3 flex items-center justify-center shadow-[8px_8px_18px_rgba(163,177,198,0.65),-8px_-8px_18px_rgba(255,255,255,0.85)] border border-white/60 relative my-0.5">
+                        <div className="w-full h-full rounded-full bg-[#E0E5EC] shadow-[inset_7px_7px_14px_rgba(163,177,198,0.65),inset_-7px_-7px_14px_rgba(255,255,255,0.9)] flex flex-col items-center justify-center relative">
+                            <span className="text-3xl font-black text-[#29335a] tracking-wider font-mono">
+                                {formattedTimer}
+                            </span>
+                            <span className="text-[10px] font-bold text-[#647196] uppercase tracking-wider mt-1">
+                                {activeSession.isRunning ? 'Streaming Live' : 'Paused'}
+                            </span>
+                        </div>
+                    </div>
