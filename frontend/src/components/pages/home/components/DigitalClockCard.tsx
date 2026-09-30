@@ -220,3 +220,59 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                             </span>
                         </div>
                     </div>
+
+                    {/* Live Progress Pill */}
+                    <div className="w-full px-4">
+                        <div className="w-full h-1.5 rounded-full neu-inset overflow-hidden">
+                            <div
+                                className="h-full bg-emerald-500 rounded-full transition-all duration-300"
+                                style={{ width: `${Math.min(100, Math.max(0, timerProgress))}%` }}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Controls Row */}
+                    <div className="flex items-center justify-center space-x-2 pt-1">
+                        <button
+                            onClick={togglePlayPause}
+                            className={`p-2.5 rounded-xl font-bold text-xs flex items-center space-x-1.5 transition-all ${
+                                activeSession.isRunning
+                                    ? 'neu-button text-amber-600 bg-[#E0E5EC]'
+                                    : 'neu-button-primary text-white'
+                            }`}
+                            title={activeSession.isRunning ? 'Pause Timer' : 'Resume Timer'}
+                        >
+                            {activeSession.isRunning ? (
+                                <Pause className="w-4 h-4 fill-current" />
+                            ) : (
+                                <Play className="w-4 h-4 fill-current" />
+                            )}
+                            <span>{activeSession.isRunning ? 'Pause' : 'Resume'}</span>
+                        </button>
+
+                        <button
+                            onClick={resetSession}
+                            className="p-2.5 rounded-xl neu-button text-[#717699] hover:text-[#1a1c35] transition-all"
+                            title="Reset Timer"
+                        >
+                            <RotateCcw className="w-4 h-4" />
+                        </button>
+
+                        <button
+                            onClick={completeSessionEarly}
+                            className="p-2.5 rounded-xl neu-button text-emerald-600 hover:text-emerald-700 transition-all"
+                            title="Complete & Log Now"
+                        >
+                            <CheckCircle2 className="w-4 h-4" />
+                        </button>
+
+                        <button
+                            onClick={stopSession}
+                            className="p-2.5 rounded-xl neu-button text-rose-500 hover:text-rose-600 transition-all"
+                            title="Cancel Session"
+                        >
+                            <X className="w-4 h-4" />
+                        </button>
+                    </div>
+                </div>
+            ) : 
