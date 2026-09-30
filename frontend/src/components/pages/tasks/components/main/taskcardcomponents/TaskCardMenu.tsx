@@ -1,6 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Sparkles, MoreVertical, Lock, Unlock, Edit3, Trash2 } from 'lucide-react';
+import { Sparkles, MoreVertical, Lock, Unlock, Edit3, Trash2, Timer } from 'lucide-react';
 import { Task } from '../../../../../../types';
+import { StartFocusSessionModal } from '../../../../../modals/StartFocusSessionModal';
+import { useFocusTimer } from '../../../../../../context/FocusTimerContext';
 
 interface TaskCardMenuProps {
     task: Task;
@@ -20,7 +22,9 @@ export const TaskCardMenu: React.FC<TaskCardMenuProps> = ({
     onDeleteTask,
 }) => {
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+    const [isFocusModalOpen, setIsFocusModalOpen] = useState<boolean>(false);
     const menuRef = useRef<HTMLDivElement>(null);
+    const { startSession, activeSession } = useFocusTimer();
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -36,8 +40,28 @@ export const TaskCardMenu: React.FC<TaskCardMenuProps> = ({
         };
     }, [isMenuOpen]);
 
+    const isThisTaskActive = activeSession?.sourceType === 'task' && activeSession.sourceId === task._id;
+
     return (
         <div className="flex items-center space-x-1.5 shrink-0">
+            {/* Quick Timer Launcher Button */}
+            {!task.status || task.status !== 'completed' ? (
+                <button
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setIsFocusModalOpen(true);
+                    }}
+                    className={`px-2 py-1.5 rounded-xl neu-button flex items-center space-x-1 text-xs font-bold transition-all ${isThisTaskActive
+                        ? 'text-emerald-600 bg-emerald-50/80 border border-emerald-300'
+                        : 'text-[#549acb] hover:bg-white/40'
+                        }`}
+                    title={isThisTaskActive ? 'Focus session actively running' : 'Start Focus Timer'}
+                >
+                    <Timer className={`w-3.5 h-3.5 ${isThisTaskActive ? 'text-emerald-500 animate-spin-slow' : 'text-[#549acb]'}`} />
+                    <span className="hidden sm:inline">{isThisTaskActive ? 'Focusing' : 'Focus'}</span>
+                </button>
+            ) : null}
+
             <button
                 onClick={(e) => {
                     e.stopPropagation();
@@ -50,7 +74,7 @@ export const TaskCardMenu: React.FC<TaskCardMenuProps> = ({
                 title="Ask Vow AI coach for micro-step breakdown or rescheduling"
             >
                 <Sparkles className={`w-3.5 h-3.5 ${isStruggling ? 'text-white' : 'text-[#549acb]'}`} />
-                <span>AI Help</span>
+                <span className="hidden sm:inline">AI Help</span>
             </button>
 
             <div className="relative" ref={menuRef}>
@@ -70,6 +94,20 @@ export const TaskCardMenu: React.FC<TaskCardMenuProps> = ({
                         onClick={(e) => e.stopPropagation()}
                         className="absolute right-0 mt-1.5 w-48 rounded-2xl bg-[#E0E5EC] border border-white/60 shadow-xl p-1.5 z-20 animate-in fade-in zoom-in-95 duration-150"
                     >
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setIsMenuOpen(false);
+                                setIsFocusModalOpen(true);
+                            }}
+                            className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-[#1a1c35] hover:bg-white/50 flex items-center space-x-2 transition-colors"
+                        >
+                            <Timer className="w-3.5 h-3.5 text-emerald-600" />
+                            <span>Start Focus Session</span>
+                        </button>
+
+                        <div className="my-1 border-t border-gray-300/40" />
+
                         <button
                             onClick={(e) => {
                                 e.stopPropagation();
@@ -117,6 +155,23 @@ export const TaskCardMenu: React.FC<TaskCardMenuProps> = ({
                     </div>
                 )}
             </div>
+
+            {/* Focus Session Config Modal */}
+            <StartFocusSessionModal
+                isOpen={isFocusModalOpen}
+                onClose={() => setIsFocusModalOpen(false)}
+                title={task.title}
+                subtitle={task.priority ? `Priority: ${task.priority}` : undefined}
+                onStart={(minutes) => {
+                    startSession({
+                        sourceType: 'task',
+                        sourceId: task._id,
+                        sourceTitle: task.title,
+                        sourceSubtitle: task.priority ? `${task.priority} Priority Task` : undefined,
+                        minutes,
+                    });
+                }}
+            />
         </div>
     );
 };
