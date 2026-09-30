@@ -158,8 +158,8 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                     <button
                         onClick={() => handleModeChange('clock')}
                         className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition-all ${activeMode === 'clock'
-                                ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
-                                : 'text-[#717699] hover:text-[#1a1c35]'
+                            ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                            : 'text-[#717699] hover:text-[#1a1c35]'
                             }`}
                         title="View Current Time"
                     >
@@ -170,8 +170,8 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                     <button
                         onClick={() => handleModeChange('calendar')}
                         className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition-all ${activeMode === 'calendar'
-                                ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
-                                : 'text-[#717699] hover:text-[#1a1c35]'
+                            ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                            : 'text-[#717699] hover:text-[#1a1c35]'
                             }`}
                         title="View Month Calendar"
                     >
@@ -183,8 +183,8 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                         <button
                             onClick={() => handleModeChange('focus')}
                             className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition-all ${activeMode === 'focus'
-                                    ? 'neu-button text-emerald-600 bg-[#E0E5EC]'
-                                    : 'text-emerald-600 hover:text-emerald-700'
+                                ? 'neu-button text-emerald-600 bg-[#E0E5EC]'
+                                : 'text-emerald-600 hover:text-emerald-700'
                                 }`}
                             title="View Active Timer"
                         >
