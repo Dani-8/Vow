@@ -75,3 +75,28 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
         });
         return set;
     }, [tasks]);
+
+    // Calendar Grid Days Calculation
+    const calendarDays = useMemo(() => {
+        const year = viewDate.getFullYear();
+        const month = viewDate.getMonth();
+
+        const firstDayOfMonth = new Date(year, month, 1);
+        const lastDayOfMonth = new Date(year, month + 1, 0);
+
+        let startDayOfWeek = firstDayOfMonth.getDay() - 1;
+        if (startDayOfWeek === -1) startDayOfWeek = 6;
+
+        const days = [];
+
+        const prevMonthLastDay = new Date(year, month, 0).getDate();
+        for (let i = startDayOfWeek - 1; i >= 0; i--) {
+            const dayNum = prevMonthLastDay - i;
+            days.push({
+                dayNum,
+                isCurrentMonth: false,
+                isToday: false,
+                hasTask: false,
+                key: `prev-${dayNum}`,
+            });
+        }
