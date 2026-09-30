@@ -185,3 +185,39 @@ export default function App() {
         activeView={activeView}
         onGoToHome={() => navigateToView('home')}
       />
+
+      <FocusFinishedModal
+        isOpen={isFinishedModalOpen}
+        onClose={closeFinishedModal}
+        session={justFinishedSession}
+        onCompleteTask={(taskId) => {
+          const allTasks = [...taskData.tasks, ...privateTasks];
+          const found = allTasks.find((t) => t._id === taskId);
+          if (found && found.status !== 'completed') {
+            taskData.handleToggleComplete(found, (t, status) => {
+              if (
+                modalState.selectedTaskForDetail &&
+                modalState.selectedTaskForDetail._id === t._id
+              ) {
+                modalState.setSelectedTaskForDetail({ ...t, status: status as any });
+              }
+            });
+          }
+        }}
+        onLogChallenge={async (challengeId, minutes, dayNumber, dateStr) => {
+          const currentCh = challengeState.challenges.find((c) => c._id === challengeId || c.id === challengeId);
+          if (currentCh) {
+            const calculatedDay = dayNumber || (currentCh.logs ? currentCh.logs.length + 1 : 1);
+            await challengeState.logDay(currentCh._id, {
+              dayNumber: calculatedDay,
+              date: dateStr || new Date().toISOString().split('T')[0],
+              status: 'completed',
+              note: `Completed ${minutes}m deep focus session.`,
+              timeSpent: `${minutes}m`,
+            });
+          }
+        }}
+      />
+    </MainLayout>
+  );
+}
