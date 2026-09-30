@@ -143,3 +143,45 @@ export default function App() {
         onCompleteSprint={challengeState.completeSprint}
         onUpdateSprintRule={challengeState.updateSprintRule}
       />
+
+      <GlobalModals
+        user={user}
+        activeView={activeView}
+        isTaskModalOpen={modalState.isTaskModalOpen}
+        onCloseTaskModal={() => modalState.setIsTaskModalOpen(false)}
+        onSubmitTask={async (data) => {
+          await taskData.handleCreateOrUpdateTask(
+            data,
+            modalState.editingTask?._id
+          );
+          modalState.setIsTaskModalOpen(false);
+        }}
+        editingTask={modalState.editingTask}
+        isPinModalOpen={modalState.isPinModalOpen}
+        onClosePinModal={() => modalState.setIsPinModalOpen(false)}
+        onSuccessPinUnlocked={async () => {
+          setIsPrivateUnlocked(true);
+          navigateToView('private');
+          try {
+            const privRes = await (await import('./api')).api.getPrivateTasks();
+            setPrivateTasks(privRes.tasks);
+          } catch (err) {
+            console.error('Failed to load private tasks:', err);
+          }
+        }}
+        isAIAssistOpen={modalState.isAIAssistOpen}
+        onCloseAIAssist={() => modalState.setIsAIAssistOpen(false)}
+        selectedTaskForAI={modalState.selectedTaskForAI}
+        isAuthModalOpen={modalState.isAuthModalOpen}
+        onCloseAuthModal={() => modalState.setIsAuthModalOpen(false)}
+        onSuccessAuth={async (loggedUser) => {
+          setUser(loggedUser);
+          await refreshData();
+          navigateToView('visible');
+        }}
+      />
+
+      <GlobalFloatingTimerBar
+        activeView={activeView}
+        onGoToHome={() => navigateToView('home')}
+      />
