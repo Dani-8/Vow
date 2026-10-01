@@ -347,3 +347,29 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                 targetEndDateObj={targetEndDateObj}
                 isTodayCompleted={todayLog?.status === 'completed'}
             />
+
+            {/* End-of-Challenge Finale / Victory Celebration Banner */}
+            {isChallengeCompleted && (
+                <div className="neu-card p-6 sm:p-7 bg-[#E0E5EC] border-2 border-amber-400/80 rounded-2xl space-y-4 shadow-md animate-in fade-in zoom-in-95 duration-300">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div className="flex items-center space-x-4">
+                            <div className="w-12 h-12 rounded-2xl neu-button flex items-center justify-center bg-amber-50 text-amber-500 shadow-sm shrink-0">
+                                <Trophy className="w-7 h-7" />
+                            </div>
+                            <div>
+                                <div className="flex items-center space-x-2">
+                                    <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full neu-inset text-amber-800 bg-amber-100">
+                                        Challenge Finale Completed!
+                                    </span>
+                                    <span className="text-xs font-bold text-emerald-700 bg-emerald-100/70 px-2 py-0.5 rounded-full neu-inset">
+                                        {totalPhasesCompletedCount} Phases Mastered
+                                    </span>
+                                </div>
+                                <h3 className="text-base sm:text-lg font-black text-[#1a1c35] mt-1">
+                                    Outstanding accomplishment! You conquered this challenge.
+                                </h3>
+                                <p className="text-xs font-bold text-[#717699]">
+                                    {totalChallengeCompletedDays} total daily check-ins logged. You can keep pushing forward by launching a bonus sprint.
+                                </p>
+                            </div>
+                        </div>
