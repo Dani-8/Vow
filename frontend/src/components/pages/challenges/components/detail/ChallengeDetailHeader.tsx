@@ -119,3 +119,62 @@ export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
                         >
                             <MoreVertical className="w-4 h-4" />
                         </button>
+
+                        {isMenuOpen && (
+                            <div
+                                onClick={(e) => e.stopPropagation()}
+                                className="absolute right-0 mt-2 w-48 rounded-2xl bg-[#E0E5EC] border border-white/60 shadow-xl p-2 z-30 animate-in fade-in zoom-in-95 duration-150"
+                            >
+                                <button
+                                    onClick={() => {
+                                        setIsMenuOpen(false);
+                                        setIsFocusModalOpen(true);
+                                    }}
+                                    className="w-full text-left px-3 py-2 text-xs font-bold text-[#1a1c35] hover:bg-white rounded-lg flex items-center space-x-2"
+                                >
+                                    <Timer className="w-3.5 h-3.5 text-emerald-600" />
+                                    <span>Start Focus Timer</span>
+                                </button>
+                                <div className="my-1 border-t border-slate-300/60" />
+                                <button
+                                    onClick={() => {
+                                        setIsMenuOpen(false);
+                                        onEdit();
+                                    }}
+                                    className="w-full text-left px-3 py-2 text-xs font-bold text-slate-700 hover:bg-white rounded-lg flex items-center space-x-2"
+                                >
+                                    <Edit3 className="w-3.5 h-3.5" />
+                                    <span>Edit Challenge</span>
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setIsMenuOpen(false);
+                                        onTogglePause();
+                                    }}
+                                    className="w-full text-left px-3 py-2 text-xs font-bold text-slate-700 hover:bg-white rounded-lg flex items-center space-x-2"
+                                >
+                                    <Coffee className="w-3.5 h-3.5" />
+                                    <span>{challenge.status === 'paused' ? 'Resume Sprint' : 'Pause Sprint'}</span>
+                                </button>
+                                <div className="my-1 border-t border-slate-300/60" />
+                                <button
+                                    onClick={() => {
+                                        setIsMenuOpen(false);
+                                        onDelete();
+                                    }}
+                                    className="w-full text-left px-3 py-2 text-xs font-bold text-rose-600 hover:bg-rose-50 rounded-lg flex items-center space-x-2"
+                                >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                    <span>Delete Challenge</span>
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            {showShareToast && (
+                <div className="p-3 rounded-xl bg-indigo-100 border border-indigo-200 text-indigo-800 text-xs font-bold text-center animate-in fade-in slide-in-from-top-2">
+                    Progress summary copied to clipboard!
+                </div>
+            )}
