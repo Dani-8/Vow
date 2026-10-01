@@ -142,3 +142,48 @@ export const LogChallengeDayModal: React.FC<LogChallengeDayModalProps> = ({
                         {error}
                     </div>
                 )}
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    {/* Day Status */}
+                    <div>
+                        <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600 mb-1.5">
+                            Day Status
+                        </label>
+                        <div className="grid grid-cols-3 gap-2">
+                            <button
+                                type="button"
+                                onClick={() => setStatus('completed')}
+                                className={`p-2.5 rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 transition-all ${status === 'completed'
+                                    ? 'neu-inset text-emerald-700 bg-emerald-50/70 border border-emerald-300'
+                                    : 'neu-button text-slate-600 hover:text-slate-900'
+                                    }`}
+                            >
+                                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                                <span>Completed</span>
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={() => setStatus('rest')}
+                                className={`p-2.5 rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 transition-all ${status === 'rest'
+                                    ? 'neu-inset text-amber-700 bg-amber-50/70 border border-amber-300'
+                                    : 'neu-button text-slate-600 hover:text-slate-900'
+                                    }`}
+                            >
+                                <Coffee className="w-4 h-4 text-amber-600 shrink-0" />
+                                <span>Rest Day</span>
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={() => setStatus('missed')}
+                                className={`p-2.5 rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 transition-all ${status === 'missed'
+                                    ? 'neu-inset text-rose-700 bg-rose-50/70 border border-rose-300'
+                                    : 'neu-button text-slate-600 hover:text-slate-900'
+                                    }`}
+                            >
+                                <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+                                <span>Missed</span>
+                            </button>
+                        </div>
+                    </div>
