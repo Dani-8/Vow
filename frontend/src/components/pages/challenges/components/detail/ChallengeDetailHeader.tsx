@@ -10,9 +10,12 @@ import {
     Trash2,
     Coffee,
     Target,
+    Timer,
 } from 'lucide-react';
 import { Challenge } from '../../../../../types';
 import { getCategoryIconComponent } from '../../../../common/categoryIcons';
+import { StartFocusSessionModal } from '../../../../modals/StartFocusSessionModal';
+import { useFocusTimer } from '../../../../../context/FocusTimerContext';
 
 interface ChallengeDetailHeaderProps {
     challenge: Challenge;
@@ -57,58 +60,62 @@ export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
 }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [showShareToast, setShowShareToast] = useState(false);
+    const [isFocusModalOpen, setIsFocusModalOpen] = useState(false);
+
+    const { startSession, activeSession } = useFocusTimer();
+
+    const isThisChallengeActive =
+        activeSession?.sourceType === 'challenge' &&
+        activeSession.sourceId === (challenge._id || challenge.id);
 
     useEffect(() => {
-        const handleClickOutside = () => setIsMenuOpen(false);
-        if (isMenuOpen) {
-            window.addEventListener('click', handleClickOutside);
+        let timer: NodeJS.Timeout;
+        if (showShareToast) {
+            timer = setTimeout(() => setShowShareToast(false), 3000);
         }
-        return () => window.removeEventListener('click', handleClickOutside);
-    }, [isMenuOpen]);
+        return () => clearTimeout(timer);
+    }, [showShareToast]);
 
     const activeDays = phaseTargetDays || challenge.targetDays;
+    const CategoryIcon = getCategoryIconComponent(challenge.category || 'Focus');
 
     const handleShare = () => {
-        const text = `I'm on Day ${currentDayNumber} of ${activeDays} on "${challenge.title}" in Vow! #VowChallenge`;
+        const shareText = `🔥 Day ${currentDayNumber} on my "${challenge.title}" challenge! Streak: ${streak} days, ${completedDaysCount} days completed. Keep grinding!`;
         if (navigator.clipboard) {
-            navigator.clipboard.writeText(text);
+            navigator.clipboard.writeText(shareText);
             setShowShareToast(true);
-            setTimeout(() => setShowShareToast(false), 3000);
         }
     };
 
-    const CategoryIcon = getCategoryIconComponent(challenge.icon || challenge.category, Target);
-
     return (
         <div className="space-y-4">
-            {/* Navigation & Action Buttons */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            {/* Top Navigation Row: Back Button & Actions */}
+            <div className="flex items-center justify-between">
                 <button
                     onClick={onBack}
-                    className="neu-button px-4 py-2 rounded-xl text-xs font-bold text-[#717699] hover:text-[#1a1c35] flex items-center space-x-2 w-fit"
+                    className="neu-button px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold text-[#54597d] hover:text-[#1a1c35] flex items-center space-x-2 transition-all"
                 >
-                    <ArrowLeft className="w-4 h-4" />
+                    <ArrowLeft className="w-4 h-4" style={{ color: accentColor }} />
                     <span>Back to Challenges</span>
                 </button>
 
-                <div className="flex items-center space-x-2 self-end sm:self-auto">
+                <div className="flex items-center space-x-2">
+                    {/* Share Progress Button */}
                     <button
                         onClick={handleShare}
-                        className="neu-button px-3.5 py-2 rounded-xl text-xs font-bold text-[#717699] hover:text-[#1a1c35] flex items-center space-x-1.5"
-                        title="Share Challenge Progress"
+                        className="neu-button p-2.5 rounded-2xl text-[#717699] hover:text-[#1a1c35] transition-all flex items-center space-x-1.5"
+                        title="Share your progress"
                     >
-                        <Share2 className="w-3.5 h-3.5" />
-                        <span>Share</span>
+                        <Share2 className="w-4 h-4" />
+                        <span className="text-xs font-bold hidden sm:inline">Share</span>
                     </button>
 
+                    {/* 3-Dot More Actions Menu */}
                     <div className="relative">
                         <button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                setIsMenuOpen((prev) => !prev);
-                            }}
-                            className="neu-button p-2 rounded-xl text-[#717699] hover:text-[#1a1c35]"
-                            title="More Options"
+                            onClick={() => setIsMenuOpen(!isMenuOpen)}
+                            className="neu-button p-2.5 rounded-2xl text-[#717699] hover:text-[#1a1c35] transition-all"
+                            title="More options"
                         >
                             <MoreVertical className="w-4 h-4" />
                         </button>
@@ -116,8 +123,19 @@ export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
                         {isMenuOpen && (
                             <div
                                 onClick={(e) => e.stopPropagation()}
-                                className="absolute right-0 mt-2 w-44 neu-card p-1.5 bg-[#E0E5EC] z-30 shadow-xl rounded-xl"
+                                className="absolute right-0 mt-2 w-48 rounded-2xl bg-[#E0E5EC] border border-white/60 shadow-xl p-2 z-30 animate-in fade-in zoom-in-95 duration-150"
                             >
+                                <button
+                                    onClick={() => {
+                                        setIsMenuOpen(false);
+                                        setIsFocusModalOpen(true);
+                                    }}
+                                    className="w-full text-left px-3 py-2 text-xs font-bold text-[#1a1c35] hover:bg-white rounded-lg flex items-center space-x-2"
+                                >
+                                    <Timer className="w-3.5 h-3.5 text-emerald-600" />
+                                    <span>Start Focus Timer</span>
+                                </button>
+                                <div className="my-1 border-t border-slate-300/60" />
                                 <button
                                     onClick={() => {
                                         setIsMenuOpen(false);
@@ -164,34 +182,34 @@ export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
             {/* Main Header Banner Card */}
             <div className="neu-card p-6 sm:p-8 bg-[#E0E5EC]">
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                    {/* Left Side: Challenge Info & Category */}
                     <div className="flex items-start space-x-4">
                         <div
-                            className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl neu-button flex items-center justify-center shadow-sm shrink-0"
-                            style={{ color: accentColor, backgroundColor: `${accentColor}18` }}
+                            className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl neu-button flex items-center justify-center shrink-0 shadow-md"
+                            style={{ color: accentColor }}
                         >
-                            <CategoryIcon className="w-8 h-8 sm:w-10 sm:h-10" style={{ color: accentColor }} />
+                            <CategoryIcon className="w-7 h-7 sm:w-8 sm:h-8" />
                         </div>
-                        <div className="space-y-1.5">
-                            <div className="flex items-center space-x-2">
+
+                        <div className="space-y-1.5 min-w-0">
+                            <div className="flex flex-wrap items-center gap-2">
                                 <span
-                                    className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full neu-inset"
+                                    className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider neu-inset"
                                     style={{ color: accentColor, backgroundColor: `${accentColor}18` }}
                                 >
-                                    {challenge.category || 'Engineering'}
+                                    {challenge.category || 'General'}
                                 </span>
-                                {isUpcoming ? (
-                                    <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full neu-inset text-indigo-700 bg-indigo-50">
-                                        Upcoming • Starts in {daysUntilStart} {daysUntilStart === 1 ? 'day' : 'days'}
+                                {challenge.status === 'paused' && (
+                                    <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-100 text-amber-700 border border-amber-300">
+                                        Sprint Paused
                                     </span>
-                                ) : challenge.status === 'paused' ? (
-                                    <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full neu-inset text-amber-700 bg-amber-50">
-                                        Paused
-                                    </span>
-                                ) : null}
+                                )}
                             </div>
-                            <h1 className="text-xl sm:text-2xl font-black text-[#1a1c35] tracking-tight">
+
+                            <h1 className="text-2xl sm:text-3xl font-black text-[#1a1c35] tracking-tight leading-tight">
                                 {challenge.title}
                             </h1>
+
                             <p className="text-xs font-semibold text-[#717699] max-w-xl">
                                 {challenge.description || 'Ship code. Learn AI. Build in public.'}
                             </p>
@@ -253,33 +271,72 @@ export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
                             </div>
                         </div>
 
-                        {isUpcoming ? (
-                            <button
-                                onClick={onCheckIn}
-                                className="px-5 py-3 rounded-2xl font-bold text-xs flex items-center justify-center space-x-2 neu-button text-indigo-700 bg-indigo-50/60 hover:bg-indigo-50 shadow-sm transition-all shrink-0"
-                            >
-                                <Clock className="w-4 h-4 text-indigo-600" />
-                                <span>Starts in {daysUntilStart} {daysUntilStart === 1 ? 'Day' : 'Days'}</span>
-                            </button>
-                        ) : (
-                            <button
-                                onClick={onCheckIn}
-                                className={`px-5 py-3 rounded-2xl font-bold text-xs flex items-center justify-center space-x-2 shadow-md transition-all shrink-0 ${isTodayCompleted
-                                    ? 'neu-button bg-emerald-50 text-emerald-700 border border-emerald-300'
-                                    : 'neu-button-primary text-white hover:scale-105'
-                                    }`}
-                            >
-                                <Calendar className="w-4 h-4" />
-                                <span>
-                                    {isTodayCompleted
-                                        ? `Day ${currentDayNumber} Logged ✓`
-                                        : `Log Day ${currentDayNumber} Check-In`}
-                                </span>
-                            </button>
-                        )}
+                        {/* Focus & Check-in Buttons */}
+                        <div className="flex items-center space-x-2 shrink-0">
+                            {/* Focus Button */}
+                            {!isUpcoming && (
+                                <button
+                                    onClick={() => setIsFocusModalOpen(true)}
+                                    className={`px-4 py-3 rounded-2xl font-bold text-xs flex items-center justify-center space-x-1.5 transition-all shadow-sm ${isThisChallengeActive
+                                        ? 'neu-button bg-emerald-50 text-emerald-700 border border-emerald-300'
+                                        : 'neu-button text-[#549acb] hover:bg-white/60'
+                                        }`}
+                                    title="Start Focus Timer for this sprint"
+                                >
+                                    <Timer className={`w-4 h-4 ${isThisChallengeActive ? 'text-emerald-600 animate-spin-slow' : 'text-[#549acb]'}`} />
+                                    <span className="hidden sm:inline">
+                                        {isThisChallengeActive ? 'Focusing' : 'Focus'}
+                                    </span>
+                                </button>
+                            )}
+
+                            {isUpcoming ? (
+                                <button
+                                    onClick={onCheckIn}
+                                    className="px-5 py-3 rounded-2xl font-bold text-xs flex items-center justify-center space-x-2 neu-button text-indigo-700 bg-indigo-50/60 hover:bg-indigo-50 shadow-sm transition-all shrink-0"
+                                >
+                                    <Clock className="w-4 h-4 text-indigo-600" />
+                                    <span>Starts in {daysUntilStart} {daysUntilStart === 1 ? 'Day' : 'Days'}</span>
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={onCheckIn}
+                                    className={`px-5 py-3 rounded-2xl font-bold text-xs flex items-center justify-center space-x-2 shadow-md transition-all shrink-0 ${isTodayCompleted
+                                        ? 'neu-button bg-emerald-50 text-emerald-700 border border-emerald-300'
+                                        : 'neu-button-primary text-white hover:scale-105'
+                                        }`}
+                                >
+                                    <Calendar className="w-4 h-4" />
+                                    <span>
+                                        {isTodayCompleted
+                                            ? `Day ${currentDayNumber} Logged ✓`
+                                            : `Log Day ${currentDayNumber} Check-In`}
+                                    </span>
+                                </button>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
+
+            {/* Focus Session Modal */}
+            <StartFocusSessionModal
+                isOpen={isFocusModalOpen}
+                onClose={() => setIsFocusModalOpen(false)}
+                title={challenge.title}
+                subtitle={`Day ${currentDayNumber} Challenge Sprint`}
+                onStart={(minutes) => {
+                    startSession({
+                        sourceType: 'challenge',
+                        sourceId: challenge._id || challenge.id || '',
+                        sourceTitle: challenge.title,
+                        sourceSubtitle: `Day ${currentDayNumber} Sprint`,
+                        minutes,
+                        dayNumber: currentDayNumber,
+                        dateStr: new Date().toISOString().split('T')[0],
+                    });
+                }}
+            />
         </div>
     );
 };

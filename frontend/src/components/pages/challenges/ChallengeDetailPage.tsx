@@ -469,6 +469,8 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                     dayNumber={selectedDayForModal.dayNumber}
                     dateStr={selectedDayForModal.dateStr}
                     existingLog={selectedDayForModal.existingLog}
+                    challengeTitle={challenge.title}
+                    challengeId={challengeId}
                     onSaveLog={async (logData) => {
                         await onLogDay(challengeId, {
                             ...logData,
