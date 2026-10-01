@@ -6,10 +6,12 @@ import {
     AlertCircle,
     Clock,
     Sparkles,
-    Camera,
     Calendar,
+    Timer,
 } from 'lucide-react';
 import { ChallengeLog } from '../../../../../types';
+import { StartFocusSessionModal } from '../../../../modals/StartFocusSessionModal';
+import { useFocusTimer } from '../../../../../context/FocusTimerContext';
 
 interface LogChallengeDayModalProps {
     isOpen: boolean;
@@ -17,6 +19,8 @@ interface LogChallengeDayModalProps {
     dayNumber: number;
     dateStr: string;
     existingLog?: ChallengeLog | null;
+    challengeTitle?: string;
+    challengeId?: string;
     onSaveLog: (logData: {
         dayNumber: number;
         date: string;
@@ -33,6 +37,8 @@ export const LogChallengeDayModal: React.FC<LogChallengeDayModalProps> = ({
     dayNumber,
     dateStr,
     existingLog,
+    challengeTitle,
+    challengeId,
     onSaveLog,
     onDeleteLog,
 }) => {
@@ -41,6 +47,9 @@ export const LogChallengeDayModal: React.FC<LogChallengeDayModalProps> = ({
     const [timeSpent, setTimeSpent] = useState('1h 30m');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [isFocusModalOpen, setIsFocusModalOpen] = useState(false);
+
+    const { startSession, activeSession } = useFocusTimer();
 
     useEffect(() => {
         if (existingLog) {
@@ -77,6 +86,11 @@ export const LogChallengeDayModal: React.FC<LogChallengeDayModalProps> = ({
         }
     };
 
+    const isThisChallengeActive =
+        activeSession?.sourceType === 'challenge' &&
+        activeSession.sourceId === challengeId &&
+        activeSession.dayNumber === dayNumber;
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4 overflow-y-auto animate-in fade-in duration-200">
             <div className="neu-card w-full max-w-lg p-6 sm:p-7 bg-[#E0E5EC] relative my-6">
@@ -88,19 +102,39 @@ export const LogChallengeDayModal: React.FC<LogChallengeDayModalProps> = ({
                     <X className="w-5 h-5" />
                 </button>
 
-                <div className="flex items-center space-x-3 mb-5">
-                    <div className="w-12 h-12 rounded-2xl neu-button flex items-center justify-center text-purple-600 bg-purple-50 shrink-0">
-                        <span className="text-base font-black">#{dayNumber}</span>
+                <div className="flex items-center justify-between mb-5 pr-8">
+                    <div className="flex items-center space-x-3">
+                        <div className="w-12 h-12 rounded-2xl neu-button flex items-center justify-center text-purple-600 bg-purple-50 shrink-0">
+                            <span className="text-base font-black">#{dayNumber}</span>
+                        </div>
+                        <div>
+                            <h2 className="text-lg font-black text-[#1a1c35]">
+                                Log Day {dayNumber} Check-In
+                            </h2>
+                            <p className="text-xs font-semibold text-[#717699] flex items-center space-x-1">
+                                <Calendar className="w-3.5 h-3.5 inline" />
+                                <span>{dateStr}</span>
+                            </p>
+                        </div>
                     </div>
-                    <div>
-                        <h2 className="text-lg font-black text-[#1a1c35]">
-                            Log Day {dayNumber} Check-In
-                        </h2>
-                        <p className="text-xs font-semibold text-[#717699] flex items-center space-x-1">
-                            <Calendar className="w-3.5 h-3.5 inline" />
-                            <span>{dateStr}</span>
-                        </p>
-                    </div>
+
+                    {/* Quick Focus Button in Log Modal */}
+                    {challengeId && (
+                        <button
+                            type="button"
+                            onClick={() => setIsFocusModalOpen(true)}
+                            className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all ${isThisChallengeActive
+                                ? 'neu-button text-emerald-700 bg-emerald-50 border border-emerald-300'
+                                : 'neu-button text-[#549acb] hover:bg-white/60'
+                                }`}
+                            title="Start Focus Session for today's log"
+                        >
+                            <Timer className={`w-3.5 h-3.5 ${isThisChallengeActive ? 'text-emerald-600 animate-spin-slow' : 'text-[#549acb]'}`} />
+                            <span className="hidden sm:inline">
+                                {isThisChallengeActive ? 'Timer Active' : 'Start Focus'}
+                            </span>
+                        </button>
+                    )}
                 </div>
 
                 {error && (
@@ -171,9 +205,21 @@ export const LogChallengeDayModal: React.FC<LogChallengeDayModalProps> = ({
                     {/* Time spent */}
                     {status === 'completed' && (
                         <div>
-                            <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600 mb-1.5">
-                                Time Spent
-                            </label>
+                            <div className="flex items-center justify-between mb-1.5">
+                                <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
+                                    Time Spent
+                                </label>
+                                {challengeId && (
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsFocusModalOpen(true)}
+                                        className="text-[11px] font-extrabold text-[#549acb] hover:underline flex items-center space-x-1"
+                                    >
+                                        <Timer className="w-3 h-3" />
+                                        <span>Or time with Focus Timer</span>
+                                    </button>
+                                )}
+                            </div>
                             <div className="flex items-center space-x-2">
                                 <input
                                     type="text"
@@ -235,6 +281,28 @@ export const LogChallengeDayModal: React.FC<LogChallengeDayModalProps> = ({
                         </div>
                     </div>
                 </form>
+
+                {/* Focus Session Trigger Modal */}
+                {challengeId && (
+                    <StartFocusSessionModal
+                        isOpen={isFocusModalOpen}
+                        onClose={() => setIsFocusModalOpen(false)}
+                        title={challengeTitle || 'Challenge Daily Sprint'}
+                        subtitle={`Day ${dayNumber} Focus Session (${dateStr})`}
+                        onStart={(minutes) => {
+                            startSession({
+                                sourceType: 'challenge',
+                                sourceId: challengeId,
+                                sourceTitle: challengeTitle || 'Challenge Daily Sprint',
+                                sourceSubtitle: `Day ${dayNumber} Log`,
+                                minutes,
+                                dayNumber,
+                                dateStr,
+                            });
+                            onClose();
+                        }}
+                    />
+                )}
             </div>
         </div>
     );
