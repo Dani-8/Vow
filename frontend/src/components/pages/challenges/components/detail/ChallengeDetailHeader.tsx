@@ -178,3 +178,52 @@ export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
                     Progress summary copied to clipboard!
                 </div>
             )}
+
+            {/* Main Header Banner Card */}
+            <div className="neu-card p-6 sm:p-8 bg-[#E0E5EC]">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                    {/* Left Side: Challenge Info & Category */}
+                    <div className="flex items-start space-x-4">
+                        <div
+                            className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl neu-button flex items-center justify-center shrink-0 shadow-md"
+                            style={{ color: accentColor }}
+                        >
+                            <CategoryIcon className="w-7 h-7 sm:w-8 sm:h-8" />
+                        </div>
+
+                        <div className="space-y-1.5 min-w-0">
+                            <div className="flex flex-wrap items-center gap-2">
+                                <span
+                                    className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider neu-inset"
+                                    style={{ color: accentColor, backgroundColor: `${accentColor}18` }}
+                                >
+                                    {challenge.category || 'General'}
+                                </span>
+                                {challenge.status === 'paused' && (
+                                    <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-100 text-amber-700 border border-amber-300">
+                                        Sprint Paused
+                                    </span>
+                                )}
+                            </div>
+
+                            <h1 className="text-2xl sm:text-3xl font-black text-[#1a1c35] tracking-tight leading-tight">
+                                {challenge.title}
+                            </h1>
+
+                            <p className="text-xs font-semibold text-[#717699] max-w-xl">
+                                {challenge.description || 'Ship code. Learn AI. Build in public.'}
+                            </p>
+                            <div className="flex items-center space-x-2 pt-1 text-[11px] font-bold text-[#515777]">
+                                <Calendar className="w-3.5 h-3.5" style={{ color: accentColor }} />
+                                <span>
+                                    {startDateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} –{' '}
+                                    {targetEndDateObj.toLocaleDateString('en-US', {
+                                        month: 'short',
+                                        day: 'numeric',
+                                        year: 'numeric',
+                                    })}{' '}
+                                    ({activeDays} Days)
+                                </span>
+                            </div>
+                        </div>
+                    </div>
