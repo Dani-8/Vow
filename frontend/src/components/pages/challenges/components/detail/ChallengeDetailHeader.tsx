@@ -277,11 +277,10 @@ export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
                             {!isUpcoming && (
                                 <button
                                     onClick={() => setIsFocusModalOpen(true)}
-                                    className={`px-4 py-3 rounded-2xl font-bold text-xs flex items-center justify-center space-x-1.5 transition-all shadow-sm ${
-                                        isThisChallengeActive
+                                    className={`px-4 py-3 rounded-2xl font-bold text-xs flex items-center justify-center space-x-1.5 transition-all shadow-sm ${isThisChallengeActive
                                             ? 'neu-button bg-emerald-50 text-emerald-700 border border-emerald-300'
                                             : 'neu-button text-[#549acb] hover:bg-white/60'
-                                    }`}
+                                        }`}
                                     title="Start Focus Timer for this sprint"
                                 >
                                     <Timer className={`w-4 h-4 ${isThisChallengeActive ? 'text-emerald-600 animate-spin-slow' : 'text-[#549acb]'}`} />
@@ -302,11 +301,10 @@ export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
                             ) : (
                                 <button
                                     onClick={onCheckIn}
-                                    className={`px-5 py-3 rounded-2xl font-bold text-xs flex items-center justify-center space-x-2 shadow-md transition-all shrink-0 ${
-                                        isTodayCompleted
+                                    className={`px-5 py-3 rounded-2xl font-bold text-xs flex items-center justify-center space-x-2 shadow-md transition-all shrink-0 ${isTodayCompleted
                                             ? 'neu-button bg-emerald-50 text-emerald-700 border border-emerald-300'
                                             : 'neu-button-primary text-white hover:scale-105'
-                                    }`}
+                                        }`}
                                 >
                                     <Calendar className="w-4 h-4" />
                                     <span>
