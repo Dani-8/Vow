@@ -227,3 +227,46 @@ export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
                             </div>
                         </div>
                     </div>
+
+                    {/* Stats Metric Strip + Action Button */}
+                    <div className="flex flex-col sm:flex-row lg:flex-col xl:flex-row items-stretch sm:items-center lg:items-end xl:items-center gap-4">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-2.5 text-center">
+                            <div className="neu-inset px-3 py-2 rounded-xl">
+                                <span className="text-[9px] font-extrabold text-[#717699] uppercase block">Day</span>
+                                <span className="text-lg font-black text-[#1a1c35]">
+                                    {isUpcoming ? '—' : `#${currentDayNumber}`}
+                                </span>
+                                <span className="text-[9px] text-[#717699] block font-semibold">
+                                    {isUpcoming ? `In ${daysUntilStart}d` : `of ${activeDays}`}
+                                </span>
+                            </div>
+
+                            <div className="neu-inset px-3 py-2 rounded-xl">
+                                <span className="text-[9px] font-extrabold text-[#717699] uppercase block">Completed</span>
+                                <span className="text-lg font-black text-emerald-600">{completedDaysCount}</span>
+                                <span className="text-[9px] text-emerald-700 block font-semibold">Days</span>
+                            </div>
+
+                            <div className="neu-inset px-3 py-2 rounded-xl bg-amber-50/30">
+                                <span className="text-[9px] font-extrabold text-amber-700 uppercase flex items-center justify-center space-x-0.5">
+                                    <Flame className="w-2.5 h-2.5 text-amber-500 fill-amber-500" />
+                                    <span>Streak</span>
+                                </span>
+                                <span className="text-lg font-black text-amber-600">{streak}</span>
+                                <span className="text-[9px] text-amber-700 block font-semibold">Days</span>
+                            </div>
+
+                            <div className="neu-inset px-3 py-2 rounded-xl">
+                                <span className="text-[9px] font-extrabold text-[#717699] uppercase block">Remaining</span>
+                                <span className="text-lg font-black text-slate-700">{remainingDays}</span>
+                                <span className="text-[9px] text-[#717699] block font-semibold">Days</span>
+                            </div>
+
+                            <div className="neu-inset px-3 py-2 rounded-xl col-span-2 sm:col-span-1">
+                                <span className="text-[9px] font-extrabold text-[#717699] uppercase block">Success Rate</span>
+                                <span className="text-lg font-black text-[#1a1c35]">{successRate}%</span>
+                                <span className="text-[9px] font-bold text-emerald-600 flex items-center justify-center">
+                                    {isUpcoming ? 'Ready' : 'On Track ↗'}
+                                </span>
+                            </div>
+                        </div>
