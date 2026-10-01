@@ -574,3 +574,26 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                     }}
                 />
             )}
+
+            {/* Delete Challenge Modal */}
+            {isDeleteModalOpen && (
+                <DeleteChallengeModal
+                    isOpen={isDeleteModalOpen}
+                    onClose={() => setIsDeleteModalOpen(false)}
+                    challengeTitle={challenge.title}
+                    isDeleting={isDeleting}
+                    onConfirm={async () => {
+                        try {
+                            setIsDeleting(true);
+                            await onDeleteChallenge(challengeId);
+                            setIsDeleteModalOpen(false);
+                            onBack();
+                        } finally {
+                            setIsDeleting(false);
+                        }
+                    }}
+                />
+            )}
+        </div>
+    );
+};
