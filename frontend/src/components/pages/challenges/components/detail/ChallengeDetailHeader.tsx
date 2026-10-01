@@ -270,3 +270,53 @@ export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
                                 </span>
                             </div>
                         </div>
+
+                        {/* Focus & Check-in Buttons */}
+                        <div className="flex items-center space-x-2 shrink-0">
+                            {/* Focus Button */}
+                            {!isUpcoming && (
+                                <button
+                                    onClick={() => setIsFocusModalOpen(true)}
+                                    className={`px-4 py-3 rounded-2xl font-bold text-xs flex items-center justify-center space-x-1.5 transition-all shadow-sm ${
+                                        isThisChallengeActive
+                                            ? 'neu-button bg-emerald-50 text-emerald-700 border border-emerald-300'
+                                            : 'neu-button text-[#549acb] hover:bg-white/60'
+                                    }`}
+                                    title="Start Focus Timer for this sprint"
+                                >
+                                    <Timer className={`w-4 h-4 ${isThisChallengeActive ? 'text-emerald-600 animate-spin-slow' : 'text-[#549acb]'}`} />
+                                    <span className="hidden sm:inline">
+                                        {isThisChallengeActive ? 'Focusing' : 'Focus'}
+                                    </span>
+                                </button>
+                            )}
+
+                            {isUpcoming ? (
+                                <button
+                                    onClick={onCheckIn}
+                                    className="px-5 py-3 rounded-2xl font-bold text-xs flex items-center justify-center space-x-2 neu-button text-indigo-700 bg-indigo-50/60 hover:bg-indigo-50 shadow-sm transition-all shrink-0"
+                                >
+                                    <Clock className="w-4 h-4 text-indigo-600" />
+                                    <span>Starts in {daysUntilStart} {daysUntilStart === 1 ? 'Day' : 'Days'}</span>
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={onCheckIn}
+                                    className={`px-5 py-3 rounded-2xl font-bold text-xs flex items-center justify-center space-x-2 shadow-md transition-all shrink-0 ${
+                                        isTodayCompleted
+                                            ? 'neu-button bg-emerald-50 text-emerald-700 border border-emerald-300'
+                                            : 'neu-button-primary text-white hover:scale-105'
+                                    }`}
+                                >
+                                    <Calendar className="w-4 h-4" />
+                                    <span>
+                                        {isTodayCompleted
+                                            ? `Day ${currentDayNumber} Logged ✓`
+                                            : `Log Day ${currentDayNumber} Check-In`}
+                                    </span>
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
