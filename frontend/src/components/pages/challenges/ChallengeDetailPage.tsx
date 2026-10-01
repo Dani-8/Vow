@@ -51,3 +51,73 @@ interface ChallengeDetailPageProps {
     ) => Promise<void>;
     onUpdateSprintRule?: (challengeId: string, sprintId: string, rule: string) => Promise<void>;
 }
+
+const getAccentColor = (challenge?: Partial<Challenge>): string => {
+    if (!challenge?.color) return '#549acb';
+    if (challenge.color.startsWith('#')) return challenge.color;
+    const map: Record<string, string> = {
+        purple: '#8b5cf6',
+        blue: '#549acb',
+        indigo: '#6366f1',
+        emerald: '#10b981',
+        amber: '#f59e0b',
+        rose: '#f43f5e',
+        cyan: '#06b6d4',
+    };
+    return map[challenge.color] || '#549acb';
+};
+
+export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
+    challenge,
+    onBack,
+    onUpdateChallenge,
+    onDeleteChallenge,
+    onLogDay,
+    onDeleteLog,
+    onStartNextSprint,
+    onCompleteSprint,
+    onUpdateSprintRule,
+}) => {
+    const accentColor = getAccentColor(challenge);
+    const challengeId = challenge.id || challenge._id;
+
+    // Sprint/Phase state - Ensure there is always at least Phase 1
+    const sprints = useMemo(() => {
+        if (challenge.sprints && challenge.sprints.length > 0) {
+            return challenge.sprints;
+        }
+        const defaultSprint: ChallengeSprint = {
+            id: `sprint-${challenge.id || challenge._id || 'init'}-1`,
+            phaseNumber: 1,
+            title: `${challenge.title} (Phase 1)`,
+            targetDays: challenge.targetDays || 30,
+            startDate: challenge.startDate || new Date().toISOString(),
+            targetEndDate: challenge.targetEndDate,
+            rule: challenge.rule,
+            status: challenge.status || 'active',
+            logs: challenge.logs || [],
+            createdAt: challenge.createdAt || new Date().toISOString(),
+            updatedAt: challenge.updatedAt || new Date().toISOString(),
+        };
+        return [defaultSprint];
+    }, [challenge]);
+
+    const isChallengeCompleted =
+        challenge.status === 'completed' ||
+        (sprints.length > 0 && sprints.every((s) => s.status === 'completed'));
+
+    const [selectedSprintId, setSelectedSprintId] = useState<string | undefined>(
+        challenge.currentSprintId || (sprints.length > 0 ? sprints[sprints.length - 1].id : undefined)
+    );
+
+    // Keep selectedSprintId synchronized whenever the challenge or its sprints change
+    useEffect(() => {
+        if (challenge.currentSprintId && sprints.some((s) => s.id === challenge.currentSprintId)) {
+            setSelectedSprintId(challenge.currentSprintId);
+        } else if (sprints.length > 0) {
+            if (!selectedSprintId || !sprints.some((s) => s.id === selectedSprintId)) {
+                const active = sprints.find((s) => s.status === 'active');
+                setSelectedSprintId(active ? active.id : sprints[sprints.length - 1].id);
+            }
+        }
+    }, [challenge.id, challenge._id, challenge.currentSprintId, sprints]);
