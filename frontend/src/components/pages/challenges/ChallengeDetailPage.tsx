@@ -398,3 +398,48 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                     </div>
                 </div>
             )}
+
+            {/* Sprints Navigator */}
+            <SprintPhaseNavigator
+                sprints={sprints}
+                activeSprintId={activeSprint?.id || sprints[0]?.id}
+                accentColor={accentColor}
+                onSelectSprint={(id) => setSelectedSprintId(id)}
+                onCompleteCurrentSprintPrompt={(sprint) => setSprintToComplete(sprint)}
+            />
+
+            {/* Retrospective Summary Banner if active phase is completed */}
+            {activeSprint && activeSprint.status === 'completed' && activeSprint.retrospective && (
+                <SprintRetrospectiveBanner
+                    sprint={activeSprint}
+                    accentColor={accentColor}
+                    onEditRetrospectivePrompt={() => setSprintToComplete(activeSprint)}
+                />
+            )}
+
+            {/* Main Content 2-Column Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                {/* Left Column: Progress Matrix & Sub-Cards */}
+                <div className="lg:col-span-8 space-y-6">
+                    <ChallengeProgressMatrix
+                        accentColor={accentColor}
+                        gridWeeks={gridWeeks}
+                        startDateObj={startDateObj}
+                        targetEndDateObj={targetEndDateObj}
+                        onOpenDayModal={handleOpenDayModal}
+                    />
+
+                    <ChallengeRulesAndTags
+                        challenge={challenge}
+                        activeSprint={activeSprint}
+                        accentColor={accentColor}
+                        onEdit={() => setIsEditModalOpen(true)}
+                        onUpdateSprintRule={
+                            onUpdateSprintRule && activeSprint
+                                ? async (newRule) => {
+                                    await onUpdateSprintRule(challengeId, activeSprint.id, newRule);
+                                }
+                                : undefined
+                        }
+                    />
+                </div>
