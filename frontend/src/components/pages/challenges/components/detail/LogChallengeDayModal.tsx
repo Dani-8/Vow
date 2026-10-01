@@ -123,10 +123,11 @@ export const LogChallengeDayModal: React.FC<LogChallengeDayModalProps> = ({
                         <button
                             type="button"
                             onClick={() => setIsFocusModalOpen(true)}
-                            className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all ${isThisChallengeActive
-                                ? 'neu-button text-emerald-700 bg-emerald-50 border border-emerald-300'
-                                : 'neu-button text-[#549acb] hover:bg-white/60'
-                                }`}
+                            className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all ${
+                                isThisChallengeActive
+                                    ? 'neu-button text-emerald-700 bg-emerald-50 border border-emerald-300'
+                                    : 'neu-button text-[#549acb] hover:bg-white/60'
+                            }`}
                             title="Start Focus Session for today's log"
                         >
                             <Timer className={`w-3.5 h-3.5 ${isThisChallengeActive ? 'text-emerald-600 animate-spin-slow' : 'text-[#549acb]'}`} />
@@ -281,3 +282,29 @@ export const LogChallengeDayModal: React.FC<LogChallengeDayModalProps> = ({
                         </div>
                     </div>
                 </form>
+
+                {/* Focus Session Trigger Modal */}
+                {challengeId && (
+                    <StartFocusSessionModal
+                        isOpen={isFocusModalOpen}
+                        onClose={() => setIsFocusModalOpen(false)}
+                        title={challengeTitle || 'Challenge Daily Sprint'}
+                        subtitle={`Day ${dayNumber} Focus Session (${dateStr})`}
+                        onStart={(minutes) => {
+                            startSession({
+                                sourceType: 'challenge',
+                                sourceId: challengeId,
+                                sourceTitle: challengeTitle || 'Challenge Daily Sprint',
+                                sourceSubtitle: `Day ${dayNumber} Log`,
+                                minutes,
+                                dayNumber,
+                                dateStr,
+                            });
+                            onClose();
+                        }}
+                    />
+                )}
+            </div>
+        </div>
+    );
+};
