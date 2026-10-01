@@ -486,3 +486,40 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                     }
                 />
             )}
+
+            {/* Complete Sprint Modal */}
+            {sprintToComplete && (
+                <CompleteSprintModal
+                    isOpen={true}
+                    onClose={() => setSprintToComplete(null)}
+                    sprint={sprintToComplete}
+                    accentColor={accentColor}
+                    isFinalSprint={
+                        sprints.length === 0 ||
+                        sprintToComplete.id === sprints[sprints.length - 1].id
+                    }
+                    onConfirmComplete={async (retro, actionAfter) => {
+                        const markChallengeCompleted = actionAfter === 'complete_challenge';
+                        if (onCompleteSprint) {
+                            await onCompleteSprint(
+                                challengeId,
+                                sprintToComplete.id,
+                                retro,
+                                markChallengeCompleted
+                            );
+                        } else {
+                            const updatedSprints = (challenge.sprints || []).map((s) =>
+                                s.id === sprintToComplete.id
+                                    ? { ...s, status: 'completed' as const, retrospective: retro }
+                                    : s
+                            );
+                            const updates: Partial<Challenge> = { sprints: updatedSprints };
+                            if (markChallengeCompleted) {
+                                updates.status = 'completed';
+                            }
+                            await onUpdateChallenge(challengeId, updates);
+                        }
+                    }}
+                    onStartNextSprintPrompt={() => setIsStartSprintModalOpen(true)}
+                />
+            )}
