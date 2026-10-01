@@ -373,3 +373,28 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                                 </p>
                             </div>
                         </div>
+
+                        <div className="flex flex-wrap items-center gap-2.5">
+                            {challenge.status === 'completed' && (
+                                <button
+                                    onClick={async () => {
+                                        await onUpdateChallenge(challengeId, { status: 'active' });
+                                    }}
+                                    className="px-3.5 py-2 rounded-xl neu-button text-xs font-bold text-slate-700 hover:text-slate-900 flex items-center space-x-1.5"
+                                >
+                                    <RotateCcw className="w-3.5 h-3.5" />
+                                    <span>Re-open Challenge</span>
+                                </button>
+                            )}
+                            <button
+                                onClick={() => setIsStartSprintModalOpen(true)}
+                                className="px-5 py-2.5 rounded-xl neu-button-primary text-xs font-bold text-white shadow-md flex items-center space-x-2"
+                            >
+                                <Sparkles className="w-4 h-4" />
+                                <span>Extend / Start Next Sprint</span>
+                                <ArrowRight className="w-4 h-4" />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
