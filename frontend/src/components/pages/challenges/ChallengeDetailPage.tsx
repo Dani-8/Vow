@@ -443,3 +443,20 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
                         }
                     />
                 </div>
+
+                {/* Right Column: Daily Reflection Logs Feed */}
+                <div className="lg:col-span-4 space-y-4">
+                    <ChallengeReflectionFeed
+                        logs={phaseLogs}
+                        accentColor={accentColor}
+                        onOpenDayModal={handleOpenDayModal}
+                        onLogFirst={() =>
+                            handleOpenDayModal(
+                                currentDayNumber,
+                                new Date().toISOString().split('T')[0],
+                                todayLog
+                            )
+                        }
+                    />
+                </div>
+            </div>
