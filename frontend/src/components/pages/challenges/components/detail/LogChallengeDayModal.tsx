@@ -243,3 +243,41 @@ export const LogChallengeDayModal: React.FC<LogChallengeDayModalProps> = ({
                             </div>
                         </div>
                     )}
+
+                    {/* Actions */}
+                    <div className="pt-3 border-t border-slate-200/60 flex items-center justify-between">
+                        {existingLog && onDeleteLog ? (
+                            <button
+                                type="button"
+                                onClick={async () => {
+                                    if (window.confirm('Delete this day log?')) {
+                                        await onDeleteLog(existingLog.id);
+                                        onClose();
+                                    }
+                                }}
+                                className="px-3 py-2 rounded-xl neu-button text-xs font-bold text-rose-600 hover:bg-rose-50"
+                            >
+                                Delete Log
+                            </button>
+                        ) : (
+                            <div />
+                        )}
+
+                        <div className="flex items-center space-x-2">
+                            <button
+                                type="button"
+                                onClick={onClose}
+                                className="px-4 py-2 rounded-xl neu-button text-xs font-bold text-slate-600"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="submit"
+                                disabled={isSubmitting}
+                                className="px-6 py-2 rounded-xl neu-button-primary text-xs font-bold text-white shadow-md disabled:opacity-50"
+                            >
+                                {isSubmitting ? 'Saving...' : 'Save Check-In'}
+                            </button>
+                        </div>
+                    </div>
+                </form>
