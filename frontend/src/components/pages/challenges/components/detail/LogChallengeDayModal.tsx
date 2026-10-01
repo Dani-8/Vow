@@ -187,3 +187,59 @@ export const LogChallengeDayModal: React.FC<LogChallengeDayModalProps> = ({
                             </button>
                         </div>
                     </div>
+
+                    {/* Reflection Note */}
+                    <div>
+                        <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600 mb-1.5">
+                            Micro-Reflection / Work Log
+                        </label>
+                        <textarea
+                            rows={3}
+                            value={note}
+                            onChange={(e) => setNote(e.target.value)}
+                            placeholder="e.g. Built RAG pipeline with Gemini API and vector DB."
+                            className="w-full px-4 py-2.5 rounded-xl neu-input text-xs font-medium resize-none"
+                        />
+                    </div>
+
+                    {/* Time spent */}
+                    {status === 'completed' && (
+                        <div>
+                            <div className="flex items-center justify-between mb-1.5">
+                                <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
+                                    Time Spent
+                                </label>
+                                {challengeId && (
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsFocusModalOpen(true)}
+                                        className="text-[11px] font-extrabold text-[#549acb] hover:underline flex items-center space-x-1"
+                                    >
+                                        <Timer className="w-3 h-3" />
+                                        <span>Or time with Focus Timer</span>
+                                    </button>
+                                )}
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <input
+                                    type="text"
+                                    value={timeSpent}
+                                    onChange={(e) => setTimeSpent(e.target.value)}
+                                    placeholder="e.g. 1h 45m"
+                                    className="w-full px-4 py-2 rounded-xl neu-input text-xs font-bold"
+                                />
+                                <div className="flex space-x-1">
+                                    {['30m', '1h', '1h 30m', '2h', '3h'].map((t) => (
+                                        <button
+                                            key={t}
+                                            type="button"
+                                            onClick={() => setTimeSpent(t)}
+                                            className="px-2 py-1 rounded-lg text-[10px] font-bold neu-button text-slate-600 hover:text-indigo-600"
+                                        >
+                                            {t}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    )}
