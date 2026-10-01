@@ -30,3 +30,58 @@ interface LogChallengeDayModalProps {
     }) => Promise<void>;
     onDeleteLog?: (logId: string) => Promise<void>;
 }
+
+export const LogChallengeDayModal: React.FC<LogChallengeDayModalProps> = ({
+    isOpen,
+    onClose,
+    dayNumber,
+    dateStr,
+    existingLog,
+    challengeTitle,
+    challengeId,
+    onSaveLog,
+    onDeleteLog,
+}) => {
+    const [status, setStatus] = useState<'completed' | 'rest' | 'missed'>('completed');
+    const [note, setNote] = useState('');
+    const [timeSpent, setTimeSpent] = useState('1h 30m');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [isFocusModalOpen, setIsFocusModalOpen] = useState(false);
+
+    const { startSession, activeSession } = useFocusTimer();
+
+    useEffect(() => {
+        if (existingLog) {
+            setStatus(existingLog.status || 'completed');
+            setNote(existingLog.note || '');
+            setTimeSpent(existingLog.timeSpent || '1h 30m');
+        } else {
+            setStatus('completed');
+            setNote('');
+            setTimeSpent('1h 00m');
+        }
+        setError(null);
+    }, [existingLog, isOpen, dayNumber]);
+
+    if (!isOpen) return null;
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            setIsSubmitting(true);
+            setError(null);
+            await onSaveLog({
+                dayNumber,
+                date: dateStr,
+                status,
+                note: note.trim(),
+                timeSpent: status === 'completed' ? timeSpent : '—',
+            });
+            onClose();
+        } catch (err: any) {
+            setError(err.message || 'Failed to save daily log');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
