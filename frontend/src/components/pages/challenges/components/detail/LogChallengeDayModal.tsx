@@ -117,3 +117,29 @@ export const LogChallengeDayModal: React.FC<LogChallengeDayModalProps> = ({
                             </p>
                         </div>
                     </div>
+
+                    {/* Quick Focus Button in Log Modal */}
+                    {challengeId && (
+                        <button
+                            type="button"
+                            onClick={() => setIsFocusModalOpen(true)}
+                            className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all ${
+                                isThisChallengeActive
+                                    ? 'neu-button text-emerald-700 bg-emerald-50 border border-emerald-300'
+                                    : 'neu-button text-[#549acb] hover:bg-white/60'
+                            }`}
+                            title="Start Focus Session for today's log"
+                        >
+                            <Timer className={`w-3.5 h-3.5 ${isThisChallengeActive ? 'text-emerald-600 animate-spin-slow' : 'text-[#549acb]'}`} />
+                            <span className="hidden sm:inline">
+                                {isThisChallengeActive ? 'Timer Active' : 'Start Focus'}
+                            </span>
+                        </button>
+                    )}
+                </div>
+
+                {error && (
+                    <div className="mb-4 p-3 rounded-xl bg-rose-100 border border-rose-200 text-rose-700 text-xs font-semibold">
+                        {error}
+                    </div>
+                )}
