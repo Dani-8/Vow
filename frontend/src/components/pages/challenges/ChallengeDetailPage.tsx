@@ -121,3 +121,64 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
             }
         }
     }, [challenge.id, challenge._id, challenge.currentSprintId, sprints]);
+
+    const activeSprint = useMemo(() => {
+        if (!sprints || sprints.length === 0) return null;
+        if (selectedSprintId) {
+            return sprints.find((s) => s.id === selectedSprintId) || sprints[sprints.length - 1];
+        }
+        return sprints[sprints.length - 1];
+    }, [sprints, selectedSprintId]);
+
+    // Modals
+    const [selectedDayForModal, setSelectedDayForModal] = useState<{
+        dayNumber: number;
+        dateStr: string;
+        existingLog?: ChallengeLog | null;
+    } | null>(null);
+
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [isStartSprintModalOpen, setIsStartSprintModalOpen] = useState(false);
+    const [sprintToComplete, setSprintToComplete] = useState<ChallengeSprint | null>(null);
+
+    // Overall totals across entire challenge
+    const totalChallengeCompletedDays = useMemo(() => {
+        const allLogs = challenge.logs || [];
+        return allLogs.filter((l) => l.status === 'completed').length;
+    }, [challenge.logs]);
+
+    const totalPhasesCompletedCount = useMemo(() => {
+        return sprints.filter((s) => s.status === 'completed').length;
+    }, [sprints]);
+
+    // Calculate elapsed days and stats scoped to the active phase/sprint
+    const {
+        currentDayNumber,
+        isUpcoming,
+        daysUntilStart,
+        startDateObj,
+        targetEndDateObj,
+        completedDaysCount,
+        successRate,
+        remainingDays,
+        streak,
+        phaseTargetDays,
+        phaseLogs,
+    } = useMemo(() => {
+        const targetDays = activeSprint?.targetDays || challenge.targetDays;
+        const start = new Date(activeSprint?.startDate || challenge.startDate || new Date());
+        const startMidnight = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+        const nowMidnight = new Date();
+        nowMidnight.setHours(0, 0, 0, 0);
+
+        const diffMs = nowMidnight.getTime() - startMidnight.getTime();
+        const daysDiff = Math.floor(diffMs / 86400000);
+        const upcoming = daysDiff < 0;
+        const untilStart = upcoming ? Math.abs(daysDiff) : 0;
+        const currentDay = upcoming ? 0 : Math.min(targetDays, daysDiff + 1);
+
+        const targetEnd = new Date(
+            activeSprint?.targetEndDate || challenge.targetEndDate || start.getTime() + targetDays * 86400000
+        );
