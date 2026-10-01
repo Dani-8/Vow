@@ -226,3 +226,72 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
             phaseLogs: currentPhaseLogs,
         };
     }, [challenge, activeSprint]);
+
+    // Build the 7-row calendar grid for the selected phase duration
+    const gridWeeks = useMemo(() => {
+        const totalDays = phaseTargetDays;
+        const weeks: {
+            weekIndex: number;
+            days: ({
+                dayNumber: number;
+                date: Date;
+                dateStr: string;
+                dayOfWeek: number;
+                log?: ChallengeLog;
+                isToday: boolean;
+                isPast: boolean;
+                isFuture: boolean;
+            } | null)[];
+        }[] = [];
+
+        const startDayOfWeek = (startDateObj.getDay() + 6) % 7;
+
+        let currentWeekDays: any[] = [];
+        let weekIndex = 1;
+
+        for (let p = 0; p < startDayOfWeek; p++) {
+            currentWeekDays.push(null);
+        }
+
+        for (let dayNum = 1; dayNum <= totalDays; dayNum++) {
+            const dayDate = new Date(startDateObj.getTime() + (dayNum - 1) * 86400000);
+            const dateStr = dayDate.toISOString().split('T')[0];
+            const log = phaseLogs.find((l) => Number(l.dayNumber) === dayNum);
+
+            const isToday = !isUpcoming && dayNum === currentDayNumber;
+            const isPast = !isUpcoming && dayNum < currentDayNumber;
+            const isFuture = isUpcoming || dayNum > currentDayNumber;
+
+            currentWeekDays.push({
+                dayNumber: dayNum,
+                date: dayDate,
+                dateStr,
+                dayOfWeek: (dayDate.getDay() + 6) % 7,
+                log,
+                isToday,
+                isPast,
+                isFuture,
+            });
+
+            if (currentWeekDays.length === 7) {
+                weeks.push({
+                    weekIndex,
+                    days: currentWeekDays,
+                });
+                currentWeekDays = [];
+                weekIndex++;
+            }
+        }
+
+        if (currentWeekDays.length > 0) {
+            while (currentWeekDays.length < 7) {
+                currentWeekDays.push(null);
+            }
+            weeks.push({
+                weekIndex,
+                days: currentWeekDays,
+            });
+        }
+
+        return weeks;
+    }, [phaseTargetDays, phaseLogs, startDateObj, currentDayNumber, isUpcoming]);
