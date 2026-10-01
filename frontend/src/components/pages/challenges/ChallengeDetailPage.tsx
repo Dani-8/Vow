@@ -182,3 +182,47 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
         const targetEnd = new Date(
             activeSprint?.targetEndDate || challenge.targetEndDate || start.getTime() + targetDays * 86400000
         );
+
+        // Get logs for this phase
+        const currentPhaseLogs = activeSprint?.logs && activeSprint.logs.length > 0
+            ? activeSprint.logs
+            : (activeSprint?.phaseNumber === 1 || !activeSprint)
+                ? challenge.logs || []
+                : activeSprint?.logs || [];
+
+        const completed = currentPhaseLogs.filter((l) => l.status === 'completed').length;
+        const rate = targetDays > 0 ? Math.round((completed / targetDays) * 100) : 0;
+        const remaining = Math.max(0, targetDays - completed);
+
+        // Calculate consecutive completed streak
+        let currentStreak = 0;
+        if (!upcoming && currentDay >= 1) {
+            const todayLog = currentPhaseLogs.find((l) => Number(l.dayNumber) === currentDay);
+            let checkDay = todayLog?.status === 'completed' ? currentDay : currentDay - 1;
+            while (checkDay >= 1) {
+                const log = currentPhaseLogs.find((l) => Number(l.dayNumber) === checkDay);
+                if (log?.status === 'completed') {
+                    currentStreak++;
+                    checkDay--;
+                } else if (log?.status === 'rest') {
+                    checkDay--;
+                } else {
+                    break;
+                }
+            }
+        }
+
+        return {
+            currentDayNumber: currentDay,
+            isUpcoming: upcoming,
+            daysUntilStart: untilStart,
+            startDateObj: start,
+            targetEndDateObj: targetEnd,
+            completedDaysCount: completed,
+            successRate: rate,
+            remainingDays: remaining,
+            streak: currentStreak,
+            phaseTargetDays: targetDays,
+            phaseLogs: currentPhaseLogs,
+        };
+    }, [challenge, activeSprint]);
