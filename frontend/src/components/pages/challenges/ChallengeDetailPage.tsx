@@ -295,3 +295,55 @@ export const ChallengeDetailPage: React.FC<ChallengeDetailPageProps> = ({
 
         return weeks;
     }, [phaseTargetDays, phaseLogs, startDateObj, currentDayNumber, isUpcoming]);
+
+    // Today's log for the active phase if present
+    const todayLog = phaseLogs.find((l) => Number(l.dayNumber) === currentDayNumber);
+
+    const handleOpenDayModal = (dayNumber: number, dateStr: string, log?: ChallengeLog) => {
+        setSelectedDayForModal({
+            dayNumber,
+            dateStr,
+            existingLog: log || null,
+        });
+    };
+
+    return (
+        <div className="space-y-6 animate-in fade-in duration-300 pb-12">
+            {/* Top Navigation & Challenge Header Card */}
+            <ChallengeDetailHeader
+                challenge={challenge}
+                accentColor={accentColor}
+                phaseTargetDays={phaseTargetDays}
+                onBack={onBack}
+                onEdit={() => setIsEditModalOpen(true)}
+                onDelete={() => setIsDeleteModalOpen(true)}
+                onTogglePause={async () => {
+                    const newStatus = challenge.status === 'paused' ? 'active' : 'paused';
+                    await onUpdateChallenge(challengeId, { status: newStatus });
+                }}
+                onCheckIn={() => {
+                    if (isUpcoming) {
+                        handleOpenDayModal(
+                            1,
+                            startDateObj.toISOString().split('T')[0],
+                            phaseLogs.find((l) => Number(l.dayNumber) === 1)
+                        );
+                    } else {
+                        handleOpenDayModal(
+                            currentDayNumber,
+                            new Date().toISOString().split('T')[0],
+                            todayLog
+                        );
+                    }
+                }}
+                isUpcoming={isUpcoming}
+                daysUntilStart={daysUntilStart}
+                currentDayNumber={currentDayNumber}
+                completedDaysCount={completedDaysCount}
+                streak={streak}
+                remainingDays={remainingDays}
+                successRate={successRate}
+                startDateObj={startDateObj}
+                targetEndDateObj={targetEndDateObj}
+                isTodayCompleted={todayLog?.status === 'completed'}
+            />
