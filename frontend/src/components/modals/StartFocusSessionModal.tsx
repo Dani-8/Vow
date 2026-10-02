@@ -90,10 +90,11 @@ export const StartFocusSessionModal: React.FC<StartFocusSessionModalProps> = ({
                                         setIsCustom(false);
                                         setSelectedMinutes(preset.minutes);
                                     }}
-                                    className={`p-3 rounded-2xl text-left transition-all relative ${isSelected
-                                        ? 'neu-button border-2 border-[#549acb] bg-sky-50/80 shadow-[inset_2px_2px_5px_rgba(84,154,203,0.15),4px_4px_10px_rgba(163,177,198,0.5)] ring-2 ring-[#549acb]/30'
-                                        : 'neu-card bg-[#E0E5EC] hover:bg-[#D8DEE8] border border-transparent'
-                                        }`}
+                                    className={`p-3 rounded-2xl text-left transition-all relative ${
+                                        isSelected
+                                            ? 'neu-button border-2 border-[#549acb] bg-sky-50/80 shadow-[inset_2px_2px_5px_rgba(84,154,203,0.15),4px_4px_10px_rgba(163,177,198,0.5)] ring-2 ring-[#549acb]/30'
+                                            : 'neu-card bg-[#E0E5EC] hover:bg-[#D8DEE8] border border-transparent'
+                                    }`}
                                 >
                                     <div className="flex items-center justify-between">
                                         <span className={`text-xs font-black ${isSelected ? 'text-[#549acb]' : 'text-[#1a1c35]'}`}>
@@ -180,3 +181,27 @@ export const StartFocusSessionModal: React.FC<StartFocusSessionModalProps> = ({
                         </div>
                     )}
                 </div>
+
+                {/* Submit Action */}
+                <div className="flex items-center justify-end space-x-3 pt-3 border-t border-slate-200/60">
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        className="px-4 py-2.5 rounded-xl text-xs font-bold text-[#717699] hover:text-[#1a1c35]"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={handleConfirm}
+                        className="neu-button-primary px-5 py-2.5 rounded-xl text-xs font-extrabold flex items-center space-x-2 text-white shadow-md hover:scale-105 transition-all"
+                    >
+                        <Play className="w-3.5 h-3.5 fill-current" />
+                        <span>Start Focus Timer</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
