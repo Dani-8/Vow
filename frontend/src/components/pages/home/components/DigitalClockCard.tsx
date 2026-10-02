@@ -201,3 +201,164 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                     </button>
                 </div>
             </div>
+
+            {/* Mode Content */}
+            {activeMode === 'focus' ? (
+                activeSession ? (
+                    /* LIVE ACTIVE FOCUS SESSION */
+                    <div className="flex flex-col items-center justify-between text-center py-2 space-y-3">
+                        {/* Session Target Name */}
+                        <div className="w-full px-2">
+                            <span className="text-[10px] font-black uppercase tracking-wider text-[#549acb] block">
+                                {activeSession.sourceType === 'task' ? 'Task Focus' : 'Challenge Focus'}
+                            </span>
+                            <h4 className="text-xs font-black text-[#1a1c35] truncate max-w-full">
+                                {activeSession.sourceTitle}
+                            </h4>
+                        </div>
+
+                        {/* Neumorphic Focus Ring */}
+                        <div className="w-40 h-40 rounded-full bg-[#E0E5EC] p-3 flex items-center justify-center shadow-[8px_8px_18px_rgba(163,177,198,0.65),-8px_-8px_18px_rgba(255,255,255,0.85)] border border-white/60 relative my-0.5">
+                            <div className="w-full h-full rounded-full bg-[#E0E5EC] shadow-[inset_7px_7px_14px_rgba(163,177,198,0.65),inset_-7px_-7px_14px_rgba(255,255,255,0.9)] flex flex-col items-center justify-center relative">
+                                <span className="text-3xl font-black text-[#29335a] tracking-wider font-mono">
+                                    {formattedTimer}
+                                </span>
+                                <span className="text-[10px] font-bold text-[#647196] uppercase tracking-wider mt-1">
+                                    {activeSession.isRunning ? 'Streaming Live' : 'Paused'}
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Live Progress Pill */}
+                        <div className="w-full px-4">
+                            <div className="w-full h-1.5 rounded-full neu-inset overflow-hidden">
+                                <div
+                                    className="h-full bg-emerald-500 rounded-full transition-all duration-300"
+                                    style={{ width: `${Math.min(100, Math.max(0, timerProgress))}%` }}
+                                />
+                            </div>
+                        </div>
+
+                        {/* Controls Row */}
+                        <div className="flex items-center justify-center space-x-2 pt-1">
+                            <button
+                                onClick={togglePlayPause}
+                                className={`p-2.5 rounded-xl font-bold text-xs flex items-center space-x-1.5 transition-all ${
+                                    activeSession.isRunning
+                                        ? 'neu-button text-amber-600 bg-[#E0E5EC]'
+                                        : 'neu-button-primary text-white'
+                                }`}
+                                title={activeSession.isRunning ? 'Pause Timer' : 'Resume Timer'}
+                            >
+                                {activeSession.isRunning ? (
+                                    <Pause className="w-4 h-4 fill-current" />
+                                ) : (
+                                    <Play className="w-4 h-4 fill-current" />
+                                )}
+                                <span>{activeSession.isRunning ? 'Pause' : 'Resume'}</span>
+                            </button>
+
+                            <button
+                                onClick={resetSession}
+                                className="p-2.5 rounded-xl neu-button text-[#717699] hover:text-[#1a1c35] transition-all"
+                                title="Reset Timer"
+                            >
+                                <RotateCcw className="w-4 h-4" />
+                            </button>
+
+                            <button
+                                onClick={completeSessionEarly}
+                                className="p-2.5 rounded-xl neu-button text-emerald-600 hover:text-emerald-700 transition-all"
+                                title="Complete & Log Now"
+                            >
+                                <CheckCircle2 className="w-4 h-4" />
+                            </button>
+
+                            <button
+                                onClick={stopSession}
+                                className="p-2.5 rounded-xl neu-button text-rose-500 hover:text-rose-600 transition-all"
+                                title="Cancel Session"
+                            >
+                                <X className="w-4 h-4" />
+                            </button>
+                        </div>
+                    </div>
+                ) : (
+                    /* EMPTY TIMER STATE (No session active) */
+                    <div className="flex flex-col items-center justify-center text-center py-4 space-y-3">
+                        {/* Standby Dial */}
+                        <div className="w-36 h-36 rounded-full bg-[#E0E5EC] p-3 flex items-center justify-center shadow-[6px_6px_14px_rgba(163,177,198,0.6),-6px_-6px_14px_rgba(255,255,255,0.85)] border border-white/60 relative">
+                            <div className="w-full h-full rounded-full bg-[#E0E5EC] shadow-[inset_5px_5px_10px_rgba(163,177,198,0.5),inset_-5px_-5px_10px_rgba(255,255,255,0.9)] flex flex-col items-center justify-center text-slate-400">
+                                <Timer className="w-8 h-8 text-[#94a3b8] mb-1" />
+                                <span className="text-xl font-bold font-mono tracking-widest text-[#717699]">
+                                    00:00
+                                </span>
+                            </div>
+                        </div>
+
+                        <div className="space-y-1 px-4">
+                            <h4 className="text-xs font-black text-[#1a1c35]">No Active Focus Timer</h4>
+                            <p className="text-[11px] font-semibold text-[#717699] leading-relaxed">
+                                Open any <span className="text-[#549acb] font-bold">Task</span> or <span className="text-[#549acb] font-bold">Challenge</span> and click <span className="text-[#549acb] font-bold">"Focus"</span> to launch a deep-work timer.
+                            </p>
+                        </div>
+                    </div>
+                )
+            ) : activeMode === 'clock' ? (
+                /* REGULAR CLOCK MODE */
+                <div className="flex flex-col items-center justify-center text-center py-2">
+                    {/* Perfect Neumorphic Double-Ring Circular Clock Face */}
+                    <div className="w-44 h-44 rounded-full bg-[#E0E5EC] p-3.5 flex items-center justify-center shadow-[8px_8px_18px_rgba(163,177,198,0.65),-8px_-8px_18px_rgba(255,255,255,0.85)] border border-white/60 relative my-1">
+                        <div className="w-full h-full rounded-full bg-[#E0E5EC] shadow-[inset_7px_7px_14px_rgba(163,177,198,0.65),inset_-7px_-7px_14px_rgba(255,255,255,0.9)] flex flex-col items-center justify-center">
+                            <span className="text-3xl sm:text-4xl font-black text-[#29335a] tracking-wider font-mono">
+                                {formattedHoursMinutes}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div className="mt-2">
+                        <p className="text-sm font-bold text-[#29335a]">{formattedDate}</p>
+                        <p className="text-xs font-semibold text-[#647196]">{formattedDayName}</p>
+                    </div>
+
+                    {/* Small notice if a session is currently running in background */}
+                    {activeSession && (
+                        <button
+                            onClick={() => setActiveMode('focus')}
+                            className="mt-2 text-[10px] font-extrabold text-emerald-600 bg-emerald-50/80 px-2.5 py-1 rounded-full neu-inset flex items-center space-x-1"
+                        >
+                            <Zap className="w-3 h-3 text-emerald-500" />
+                            <span>Timer active: {formattedTimer} (Click to view)</span>
+                        </button>
+                    )}
+                </div>
+            ) : (
+                /* CALENDAR MODE */
+                <div className="flex flex-col justify-between py-1 space-y-2">
+                    {/* Calendar Month Header & Nav */}
+                    <div className="flex items-center justify-between px-1">
+                        <button
+                            onClick={handleResetToCurrentMonth}
+                            className="text-xs font-black text-[#1a1c35] hover:text-[#549acb] transition-colors"
+                            title="Jump to current month"
+                        >
+                            {monthName} <span className="text-[#717699] font-bold">{yearNum}</span>
+                        </button>
+
+                        <div className="flex items-center space-x-1">
+                            <button
+                                onClick={handlePrevMonth}
+                                className="w-6 h-6 rounded-lg neu-button flex items-center justify-center text-[#717699] hover:text-[#1a1c35] transition-all"
+                                title="Previous Month"
+                            >
+                                <ChevronLeft className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                                onClick={handleNextMonth}
+                                className="w-6 h-6 rounded-lg neu-button flex items-center justify-center text-[#717699] hover:text-[#1a1c35] transition-all"
+                                title="Next Month"
+                            >
+                                <ChevronRight className="w-3.5 h-3.5" />
+                            </button>
+                        </div>
+                    </div>
