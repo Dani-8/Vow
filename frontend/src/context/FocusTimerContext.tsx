@@ -15,193 +15,21 @@ export interface ActiveFocusSession {
     dateStr?: string; // for challenges
 }
 
-interface FocusTimerContextValue {
-    activeSession: ActiveFocusSession | null;
-    startSession: (params: {
-        sourceType: 'task' | 'challenge';
-        sourceId: string;
-        sourceTitle: string;
-        sourceSubtitle?: string;
-        minutes: number;
-        dayNumber?: number;
-        dateStr?: string;
-    }) => void;
-    togglePlayPause: () => void;
-    resetSession: () => void;
-    stopSession: () => void;
-    completeSessionEarly: () => void;
-    isFinishedModalOpen: boolean;
-    closeFinishedModal: () => void;
-    justFinishedSession: ActiveFocusSession | null;
+export interface CompletedFocusSessionRecord {
+    id: string;
+    sourceType: 'task' | 'challenge';
+    sourceId: string;
+    sourceTitle: string;
+    durationMinutes: number;
+    completedAt: string;
 }
 
-const FocusTimerContext = createContext<FocusTimerContextValue | null>(null);
-
-const STORAGE_KEY = 'app_universal_focus_timer';
-
-export const FocusTimerProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [activeSession, setActiveSession] = useState<ActiveFocusSession | null>(() => {
-        try {
-            const raw = localStorage.getItem(STORAGE_KEY);
-            if (!raw) return null;
-            const parsed = JSON.parse(raw) as ActiveFocusSession;
-            // If it was running when reloaded, recalculate remaining or keep paused
-            return parsed;
-        } catch {
-            return null;
-        }
-    });
-
-    const [isFinishedModalOpen, setIsFinishedModalOpen] = useState(false);
-    const [justFinishedSession, setJustFinishedSession] = useState<ActiveFocusSession | null>(null);
-
-    // Persist to local storage
-    useEffect(() => {
-        try {
-            if (activeSession) {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(activeSession));
-            } else {
-                localStorage.removeItem(STORAGE_KEY);
-            }
-        } catch (e) {
-            console.error('Failed to sync timer to local storage', e);
-        }
-    }, [activeSession]);
-
-    // Interval countdown
-    useEffect(() => {
-        if (!activeSession || !activeSession.isRunning) return;
-
-        const timer = setInterval(() => {
-            setActiveSession((prev) => {
-                if (!prev || !prev.isRunning) return prev;
-                if (prev.remainingSeconds <= 1) {
-                    clearInterval(timer);
-                    const finished = {
-                        ...prev,
-                        remainingSeconds: 0,
-                        isRunning: false,
-                        completedAt: new Date().toISOString(),
-                    };
-                    setJustFinishedSession(finished);
-                    setIsFinishedModalOpen(true);
-                    return null;
-                }
-                return {
-                    ...prev,
-                    remainingSeconds: prev.remainingSeconds - 1,
-                };
-            });
-        }, 1000);
-
-        return () => clearInterval(timer);
-    }, [activeSession?.isRunning]);
-
-    const startSession = useCallback(
-        ({
-            sourceType,
-            sourceId,
-            sourceTitle,
-            sourceSubtitle,
-            minutes,
-            dayNumber,
-            dateStr,
-        }: {
-            sourceType: 'task' | 'challenge';
-            sourceId: string;
-            sourceTitle: string;
-            sourceSubtitle?: string;
-            minutes: number;
-            dayNumber?: number;
-            dateStr?: string;
-        }) => {
-            const totalSec = Math.max(60, Math.round(minutes * 60));
-            const newSession: ActiveFocusSession = {
-                id: `focus_${Date.now()}`,
-                sourceType,
-                sourceId,
-                sourceTitle,
-                sourceSubtitle,
-                totalSeconds: totalSec,
-                remainingSeconds: totalSec,
-                isRunning: true,
-                startedAt: new Date().toISOString(),
-                dayNumber,
-                dateStr,
-            };
-            setActiveSession(newSession);
-        },
-        []
-    );
-
-    const togglePlayPause = useCallback(() => {
-        setActiveSession((prev) => {
-            if (!prev) return null;
-            return {
-                ...prev,
-                isRunning: !prev.isRunning,
-            };
-        });
-    }, []);
-
-    const resetSession = useCallback(() => {
-        setActiveSession((prev) => {
-            if (!prev) return null;
-            return {
-                ...prev,
-                remainingSeconds: prev.totalSeconds,
-                isRunning: false,
-            };
-        });
-    }, []);
-
-    const stopSession = useCallback(() => {
-        setActiveSession(null);
-    }, []);
-
-    const completeSessionEarly = useCallback(() => {
-        setActiveSession((prev) => {
-            if (!prev) return null;
-            const finished = {
-                ...prev,
-                remainingSeconds: 0,
-                isRunning: false,
-                completedAt: new Date().toISOString(),
-            };
-            setJustFinishedSession(finished);
-            setIsFinishedModalOpen(true);
-            return null;
-        });
-    }, []);
-
-    const closeFinishedModal = useCallback(() => {
-        setIsFinishedModalOpen(false);
-        setJustFinishedSession(null);
-    }, []);
-
-    return (
-        <FocusTimerContext.Provider
-            value={{
-                activeSession,
-                startSession,
-                togglePlayPause,
-                resetSession,
-                stopSession,
-                completeSessionEarly,
-                isFinishedModalOpen,
-                closeFinishedModal,
-                justFinishedSession,
-            }}
-        >
-            {children}
-        </FocusTimerContext.Provider>
-    );
-};
-
-export const useFocusTimer = () => {
-    const ctx = useContext(FocusTimerContext);
-    if (!ctx) {
-        throw new Error('useFocusTimer must be used within FocusTimerProvider');
-    }
-    return ctx;
-};
+export interface StartSessionParams {
+    sourceType: 'task' | 'challenge';
+    sourceId: string;
+    sourceTitle: string;
+    sourceSubtitle?: string;
+    minutes: number;
+    dayNumber?: number;
+    dateStr?: string;
+}
