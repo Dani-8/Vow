@@ -95,11 +95,10 @@ export const TaskDetailHeader: React.FC<TaskDetailHeaderProps> = ({
                     {task.status !== 'completed' && (
                         <button
                             onClick={() => setIsFocusModalOpen(true)}
-                            className={`px-3.5 py-2 rounded-2xl text-xs font-black flex items-center space-x-1.5 transition-all ${
-                                isThisTaskActive
-                                    ? 'neu-button bg-emerald-50 text-emerald-700 border border-emerald-300 shadow-sm'
-                                    : 'neu-button-primary text-white hover:scale-105 shadow-md'
-                            }`}
+                            className={`px-3.5 py-2 rounded-2xl text-xs font-black flex items-center space-x-1.5 transition-all ${isThisTaskActive
+                                ? 'neu-button bg-emerald-50 text-emerald-700 border border-emerald-300 shadow-sm'
+                                : 'neu-button-primary text-white hover:scale-105 shadow-md'
+                                }`}
                         >
                             <Timer className={`w-4 h-4 ${isThisTaskActive ? 'animate-spin-slow text-emerald-600' : 'text-white'}`} />
                             <span>{isThisTaskActive ? 'Focus Running' : 'Start Focus Timer'}</span>
