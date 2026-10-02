@@ -58,3 +58,73 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
 
     const monthName = viewDate.toLocaleString('default', { month: 'long' });
     const yearNum = viewDate.getFullYear();
+
+    // Map tasks to dates for quick dot lookup
+    const datesWithTasks = useMemo(() => {
+        const set = new Set<string>();
+        tasks.forEach((t) => {
+            const dateStr = t.endTime || t.startTime || t.createdAt;
+            if (dateStr) {
+                const d = new Date(dateStr);
+                if (!isNaN(d.getTime())) {
+                    set.add(`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`);
+                }
+            }
+        });
+        return set;
+    }, [tasks]);
+
+    // Calendar Grid Days Calculation
+    const calendarDays = useMemo(() => {
+        const year = viewDate.getFullYear();
+        const month = viewDate.getMonth();
+
+        const firstDayOfMonth = new Date(year, month, 1);
+        const lastDayOfMonth = new Date(year, month + 1, 0);
+
+        let startDayOfWeek = firstDayOfMonth.getDay() - 1;
+        if (startDayOfWeek === -1) startDayOfWeek = 6;
+
+        const days = [];
+
+        const prevMonthLastDay = new Date(year, month, 0).getDate();
+        for (let i = startDayOfWeek - 1; i >= 0; i--) {
+            const dayNum = prevMonthLastDay - i;
+            days.push({
+                dayNum,
+                isCurrentMonth: false,
+                isToday: false,
+                hasTask: false,
+                key: `prev-${dayNum}`,
+            });
+        }
+
+        const totalDays = lastDayOfMonth.getDate();
+        for (let d = 1; d <= totalDays; d++) {
+            const isToday =
+                today.getFullYear() === year &&
+                today.getMonth() === month &&
+                today.getDate() === d;
+            const hasTask = datesWithTasks.has(`${year}-${month}-${d}`);
+            days.push({
+                dayNum: d,
+                isCurrentMonth: true,
+                isToday,
+                hasTask,
+                key: `cur-${d}`,
+            });
+        }
+
+        const remainingSlots = (7 - (days.length % 7)) % 7;
+        for (let i = 1; i <= remainingSlots; i++) {
+            days.push({
+                dayNum: i,
+                isCurrentMonth: false,
+                isToday: false,
+                hasTask: false,
+                key: `next-${i}`,
+            });
+        }
+
+        return days;
+    }, [viewDate, today, datesWithTasks]);
