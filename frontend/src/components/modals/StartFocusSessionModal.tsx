@@ -151,3 +151,32 @@ export const StartFocusSessionModal: React.FC<StartFocusSessionModalProps> = ({
                                         <span className="text-xs font-bold text-[#717699]">hrs</span>
                                     </div>
                                 </div>
+
+                                {/* Minutes input */}
+                                <div>
+                                    <label className="text-[11px] font-bold text-[#515777] block mb-1">
+                                        Minutes
+                                    </label>
+                                    <div className="flex items-center space-x-1.5">
+                                        <input
+                                            type="number"
+                                            min={0}
+                                            max={59}
+                                            placeholder="30"
+                                            value={customMinutes}
+                                            onChange={(e) => setCustomMinutes(e.target.value)}
+                                            className="w-full neu-card px-3 py-2 rounded-xl text-xs font-bold text-[#1a1c35] text-center focus:outline-none focus:ring-2 focus:ring-[#549acb] border border-white/60"
+                                        />
+                                        <span className="text-xs font-bold text-[#717699]">mins</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p className="text-[10px] text-[#717699] text-center pt-1">
+                                Total duration:{' '}
+                                <strong className="text-[#1a1c35]">
+                                    {(parseInt(customHours, 10) || 0) * 60 + (parseInt(customMinutes, 10) || 0)} minutes
+                                </strong>
+                            </p>
+                        </div>
+                    )}
+                </div>
