@@ -91,8 +91,8 @@ export const StartFocusSessionModal: React.FC<StartFocusSessionModalProps> = ({
                                         setSelectedMinutes(preset.minutes);
                                     }}
                                     className={`p-3 rounded-2xl text-left transition-all relative ${isSelected
-                                            ? 'neu-button border-2 border-[#549acb] bg-sky-50/80 shadow-[inset_2px_2px_5px_rgba(84,154,203,0.15),4px_4px_10px_rgba(163,177,198,0.5)] ring-2 ring-[#549acb]/30'
-                                            : 'neu-card bg-[#E0E5EC] hover:bg-[#D8DEE8] border border-transparent'
+                                        ? 'neu-button border-2 border-[#549acb] bg-sky-50/80 shadow-[inset_2px_2px_5px_rgba(84,154,203,0.15),4px_4px_10px_rgba(163,177,198,0.5)] ring-2 ring-[#549acb]/30'
+                                        : 'neu-card bg-[#E0E5EC] hover:bg-[#D8DEE8] border border-transparent'
                                         }`}
                                 >
                                     <div className="flex items-center justify-between">
