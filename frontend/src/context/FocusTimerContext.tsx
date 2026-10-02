@@ -212,3 +212,104 @@ export const FocusTimerProvider: React.FC<{ children: ReactNode }> = ({ children
         },
         []
     );
+
+    // Safe entry point: checks if a different timer is already running
+    const requestStartSession = useCallback(
+        (params: StartSessionParams) => {
+            if (
+                activeSession &&
+                activeSession.remainingSeconds > 0 &&
+                (activeSession.sourceId !== params.sourceId || activeSession.sourceType !== params.sourceType)
+            ) {
+                setConflictPendingSession(params);
+                setIsConflictModalOpen(true);
+                return;
+            }
+            startSession(params);
+        },
+        [activeSession, startSession]
+    );
+
+    const confirmConflictSwitch = useCallback(() => {
+        if (conflictPendingSession) {
+            startSession(conflictPendingSession);
+            setConflictPendingSession(null);
+            setIsConflictModalOpen(false);
+        }
+    }, [conflictPendingSession, startSession]);
+
+    const closeConflictModal = useCallback(() => {
+        setIsConflictModalOpen(false);
+        setConflictPendingSession(null);
+    }, []);
+
+    const togglePlayPause = useCallback(() => {
+        setActiveSession((prev) => {
+            if (!prev) return null;
+            return {
+                ...prev,
+                isRunning: !prev.isRunning,
+            };
+        });
+    }, []);
+
+    const resetSession = useCallback(() => {
+        setActiveSession((prev) => {
+            if (!prev) return null;
+            return {
+                ...prev,
+                remainingSeconds: prev.totalSeconds,
+                isRunning: false,
+            };
+        });
+    }, []);
+
+    const stopSession = useCallback(() => {
+        setActiveSession(null);
+    }, []);
+
+    const completeSessionEarly = useCallback(() => {
+        setActiveSession((prev) => {
+            if (!prev) return null;
+            const finished = {
+                ...prev,
+                remainingSeconds: 0,
+                isRunning: false,
+                completedAt: new Date().toISOString(),
+            };
+            saveCompletedSessionToHistory(finished);
+            playChimeSound();
+            setJustFinishedSession(finished);
+            setIsFinishedModalOpen(true);
+            return null;
+        });
+    }, []);
+
+    const closeFinishedModal = useCallback(() => {
+        setIsFinishedModalOpen(false);
+        setJustFinishedSession(null);
+    }, []);
+
+    return (
+        <FocusTimerContext.Provider
+            value={{
+                activeSession,
+                startSession,
+                requestStartSession,
+                togglePlayPause,
+                resetSession,
+                stopSession,
+                completeSessionEarly,
+                isFinishedModalOpen,
+                closeFinishedModal,
+                justFinishedSession,
+                isConflictModalOpen,
+                conflictPendingSession,
+                closeConflictModal,
+                confirmConflictSwitch,
+            }}
+        >
+            {children}
+        </FocusTimerContext.Provider>
+    );
+};
