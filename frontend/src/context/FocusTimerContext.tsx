@@ -152,3 +152,63 @@ export const FocusTimerProvider: React.FC<{ children: ReactNode }> = ({ children
             console.error('Failed to sync timer to local storage', e);
         }
     }, [activeSession]);
+
+    // Interval countdown
+    useEffect(() => {
+        if (!activeSession || !activeSession.isRunning) return;
+
+        const timer = setInterval(() => {
+            setActiveSession((prev) => {
+                if (!prev || !prev.isRunning) return prev;
+                if (prev.remainingSeconds <= 1) {
+                    clearInterval(timer);
+                    const finished = {
+                        ...prev,
+                        remainingSeconds: 0,
+                        isRunning: false,
+                        completedAt: new Date().toISOString(),
+                    };
+                    saveCompletedSessionToHistory(finished);
+                    playChimeSound();
+                    setJustFinishedSession(finished);
+                    setIsFinishedModalOpen(true);
+                    return null;
+                }
+                return {
+                    ...prev,
+                    remainingSeconds: prev.remainingSeconds - 1,
+                };
+            });
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, [activeSession?.isRunning]);
+
+    const startSession = useCallback(
+        ({
+            sourceType,
+            sourceId,
+            sourceTitle,
+            sourceSubtitle,
+            minutes,
+            dayNumber,
+            dateStr,
+        }: StartSessionParams) => {
+            const totalSec = Math.max(60, Math.round(minutes * 60));
+            const newSession: ActiveFocusSession = {
+                id: `focus_${Date.now()}`,
+                sourceType,
+                sourceId,
+                sourceTitle,
+                sourceSubtitle,
+                totalSeconds: totalSec,
+                remainingSeconds: totalSec,
+                isRunning: true,
+                startedAt: new Date().toISOString(),
+                dayNumber,
+                dateStr,
+            };
+            setActiveSession(newSession);
+        },
+        []
+    );
