@@ -51,11 +51,10 @@ export const TaskCardMenu: React.FC<TaskCardMenuProps> = ({
                         e.stopPropagation();
                         setIsFocusModalOpen(true);
                     }}
-                    className={`px-2 py-1.5 rounded-xl neu-button flex items-center space-x-1 text-xs font-bold transition-all ${
-                        isThisTaskActive
+                    className={`px-2 py-1.5 rounded-xl neu-button flex items-center space-x-1 text-xs font-bold transition-all ${isThisTaskActive
                             ? 'text-emerald-600 bg-emerald-50/80 border border-emerald-300'
                             : 'text-[#549acb] hover:bg-white/40'
-                    }`}
+                        }`}
                     title={isThisTaskActive ? 'Focus session actively running' : 'Start Focus Timer'}
                 >
                     <Timer className={`w-3.5 h-3.5 ${isThisTaskActive ? 'text-emerald-500 animate-spin-slow' : 'text-[#549acb]'}`} />
@@ -68,11 +67,10 @@ export const TaskCardMenu: React.FC<TaskCardMenuProps> = ({
                     e.stopPropagation();
                     onOpenAIAssist(task);
                 }}
-                className={`px-2.5 py-1.5 rounded-xl neu-button flex items-center space-x-1.5 text-xs font-bold transition-all ${
-                    isStruggling
+                className={`px-2.5 py-1.5 rounded-xl neu-button flex items-center space-x-1.5 text-xs font-bold transition-all ${isStruggling
                         ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white animate-pulse border-none shadow-md'
                         : 'text-[#549acb] hover:bg-white/40'
-                }`}
+                    }`}
                 title="Ask Vow AI coach for micro-step breakdown or rescheduling"
             >
                 <Sparkles className={`w-3.5 h-3.5 ${isStruggling ? 'text-white' : 'text-[#549acb]'}`} />
