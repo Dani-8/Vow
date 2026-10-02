@@ -57,3 +57,18 @@ export default function App() {
       />
     );
   }
+
+  // Standalone Auth View
+  if (activeView === 'auth') {
+    return (
+      <AuthPage
+        onSuccess={async (loggedUser) => {
+          setUser(loggedUser);
+          await refreshData();
+          navigateToView('home');
+        }}
+        onBypass={handleBypassAuth}
+        onBackToHome={() => navigateToView('landing')}
+      />
+    );
+  }
