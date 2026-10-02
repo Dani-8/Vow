@@ -115,3 +115,39 @@ export const StartFocusSessionModal: React.FC<StartFocusSessionModalProps> = ({
                         })}
                     </div>
                 </div>
+
+                {/* Custom Time Toggle (Hours + Minutes) */}
+                <div className="mb-6">
+                    <button
+                        type="button"
+                        onClick={() => setIsCustom(!isCustom)}
+                        className={`text-xs font-bold flex items-center space-x-1 ${isCustom ? 'text-[#549acb] font-black' : 'text-[#717699] hover:text-[#549acb]'}`}
+                    >
+                        <span>{isCustom ? '← Back to quick presets' : '+ Or enter custom hours & minutes'}</span>
+                    </button>
+
+                    {isCustom && (
+                        <div className="mt-3 p-3.5 rounded-2xl neu-inset bg-[#E0E5EC]/80 border border-sky-300/50 space-y-2">
+                            <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#549acb] block">
+                                Set Custom Time
+                            </span>
+                            <div className="grid grid-cols-2 gap-3">
+                                {/* Hours input */}
+                                <div>
+                                    <label className="text-[11px] font-bold text-[#515777] block mb-1">
+                                        Hours
+                                    </label>
+                                    <div className="flex items-center space-x-1.5">
+                                        <input
+                                            type="number"
+                                            min={0}
+                                            max={12}
+                                            placeholder="0"
+                                            value={customHours}
+                                            onChange={(e) => setCustomHours(e.target.value)}
+                                            className="w-full neu-card px-3 py-2 rounded-xl text-xs font-bold text-[#1a1c35] text-center focus:outline-none focus:ring-2 focus:ring-[#549acb] border border-white/60"
+                                            autoFocus
+                                        />
+                                        <span className="text-xs font-bold text-[#717699]">hrs</span>
+                                    </div>
+                                </div>
