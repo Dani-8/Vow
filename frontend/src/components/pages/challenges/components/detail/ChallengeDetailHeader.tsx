@@ -62,7 +62,7 @@ export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
     const [showShareToast, setShowShareToast] = useState(false);
     const [isFocusModalOpen, setIsFocusModalOpen] = useState(false);
 
-    const { startSession, activeSession } = useFocusTimer();
+    const { requestStartSession, activeSession } = useFocusTimer();
 
     const isThisChallengeActive =
         activeSession?.sourceType === 'challenge' &&
@@ -326,7 +326,7 @@ export const ChallengeDetailHeader: React.FC<ChallengeDetailHeaderProps> = ({
                 title={challenge.title}
                 subtitle={`Day ${currentDayNumber} Challenge Sprint`}
                 onStart={(minutes) => {
-                    startSession({
+                    requestStartSession({
                         sourceType: 'challenge',
                         sourceId: challenge._id || challenge.id || '',
                         sourceTitle: challenge.title,

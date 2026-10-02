@@ -45,7 +45,7 @@ export const TaskDetailHeader: React.FC<TaskDetailHeaderProps> = ({
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isFocusModalOpen, setIsFocusModalOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
-    const { startSession, activeSession } = useFocusTimer();
+    const { requestStartSession, activeSession } = useFocusTimer();
 
     // Close dropdown menu on click outside
     useEffect(() => {
@@ -335,7 +335,7 @@ export const TaskDetailHeader: React.FC<TaskDetailHeaderProps> = ({
                 title={task.title}
                 subtitle={task.priority ? `Priority: ${task.priority}` : undefined}
                 onStart={(minutes) => {
-                    startSession({
+                    requestStartSession({
                         sourceType: 'task',
                         sourceId: task._id,
                         sourceTitle: task.title,
