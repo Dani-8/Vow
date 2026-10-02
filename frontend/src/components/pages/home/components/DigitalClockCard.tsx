@@ -161,8 +161,8 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                     <button
                         onClick={() => handleModeChange('clock')}
                         className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition-all ${activeMode === 'clock'
-                                ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
-                                : 'text-[#717699] hover:text-[#1a1c35]'
+                            ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                            : 'text-[#717699] hover:text-[#1a1c35]'
                             }`}
                         title="View Current Time"
                     >
@@ -174,8 +174,8 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                     <button
                         onClick={() => handleModeChange('calendar')}
                         className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition-all ${activeMode === 'calendar'
-                                ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
-                                : 'text-[#717699] hover:text-[#1a1c35]'
+                            ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                            : 'text-[#717699] hover:text-[#1a1c35]'
                             }`}
                         title="View Month Calendar"
                     >
@@ -187,12 +187,12 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                     <button
                         onClick={() => handleModeChange('focus')}
                         className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition-all ${activeMode === 'focus'
-                                ? activeSession
-                                    ? 'neu-button text-emerald-600 bg-[#E0E5EC]'
-                                    : 'neu-button text-[#549acb] bg-[#E0E5EC]'
-                                : activeSession
-                                    ? 'text-emerald-600 hover:text-emerald-700'
-                                    : 'text-[#717699] hover:text-[#1a1c35]'
+                            ? activeSession
+                                ? 'neu-button text-emerald-600 bg-[#E0E5EC]'
+                                : 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                            : activeSession
+                                ? 'text-emerald-600 hover:text-emerald-700'
+                                : 'text-[#717699] hover:text-[#1a1c35]'
                             }`}
                         title={activeSession ? 'View Active Focus Timer' : 'Focus Timer'}
                     >
@@ -244,8 +244,8 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                             <button
                                 onClick={togglePlayPause}
                                 className={`p-2.5 rounded-xl font-bold text-xs flex items-center space-x-1.5 transition-all ${activeSession.isRunning
-                                        ? 'neu-button text-amber-600 bg-[#E0E5EC]'
-                                        : 'neu-button-primary text-white'
+                                    ? 'neu-button text-amber-600 bg-[#E0E5EC]'
+                                    : 'neu-button-primary text-white'
                                     }`}
                                 title={activeSession.isRunning ? 'Pause Timer' : 'Resume Timer'}
                             >
@@ -381,10 +381,10 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                             <div
                                 key={item.key}
                                 className={`relative h-7 flex flex-col items-center justify-center rounded-lg text-xs font-extrabold transition-all ${item.isToday
-                                        ? 'bg-[#549acb] text-white shadow-sm ring-1 ring-[#549acb]/50'
-                                        : item.isCurrentMonth
-                                            ? 'text-[#29335a] hover:bg-[#D5DCE5]/60'
-                                            : 'text-[#94a3b8]/40'
+                                    ? 'bg-[#549acb] text-white shadow-sm ring-1 ring-[#549acb]/50'
+                                    : item.isCurrentMonth
+                                        ? 'text-[#29335a] hover:bg-[#D5DCE5]/60'
+                                        : 'text-[#94a3b8]/40'
                                     }`}
                             >
                                 <span>{item.dayNum}</span>
