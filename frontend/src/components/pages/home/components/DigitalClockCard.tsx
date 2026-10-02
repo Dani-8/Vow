@@ -160,11 +160,10 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                     {/* Clock Tab */}
                     <button
                         onClick={() => handleModeChange('clock')}
-                        className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition-all ${
-                            activeMode === 'clock'
+                        className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition-all ${activeMode === 'clock'
                                 ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
                                 : 'text-[#717699] hover:text-[#1a1c35]'
-                        }`}
+                            }`}
                         title="View Current Time"
                     >
                         <Clock className="w-3.5 h-3.5" />
@@ -174,11 +173,10 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                     {/* Calendar Tab */}
                     <button
                         onClick={() => handleModeChange('calendar')}
-                        className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition-all ${
-                            activeMode === 'calendar'
+                        className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition-all ${activeMode === 'calendar'
                                 ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
                                 : 'text-[#717699] hover:text-[#1a1c35]'
-                        }`}
+                            }`}
                         title="View Month Calendar"
                     >
                         <Calendar className="w-3.5 h-3.5" />
@@ -188,15 +186,14 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                     {/* Focus / Timer Tab (ALWAYS VISIBLE) */}
                     <button
                         onClick={() => handleModeChange('focus')}
-                        className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition-all ${
-                            activeMode === 'focus'
+                        className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition-all ${activeMode === 'focus'
                                 ? activeSession
                                     ? 'neu-button text-emerald-600 bg-[#E0E5EC]'
                                     : 'neu-button text-[#549acb] bg-[#E0E5EC]'
                                 : activeSession
-                                ? 'text-emerald-600 hover:text-emerald-700'
-                                : 'text-[#717699] hover:text-[#1a1c35]'
-                        }`}
+                                    ? 'text-emerald-600 hover:text-emerald-700'
+                                    : 'text-[#717699] hover:text-[#1a1c35]'
+                            }`}
                         title={activeSession ? 'View Active Focus Timer' : 'Focus Timer'}
                     >
                         <Timer className={`w-3.5 h-3.5 ${activeSession ? 'animate-spin-slow' : ''}`} />
