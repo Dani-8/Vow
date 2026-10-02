@@ -91,3 +91,64 @@ const playChimeSound = () => {
         // AudioContext not allowed or not supported; gracefully ignore
     }
 };
+
+export const getCompletedFocusSessions = (): CompletedFocusSessionRecord[] => {
+    try {
+        const raw = localStorage.getItem(HISTORY_STORAGE_KEY);
+        if (!raw) return [];
+        return JSON.parse(raw);
+    } catch {
+        return [];
+    }
+};
+
+const saveCompletedSessionToHistory = (session: ActiveFocusSession) => {
+    try {
+        const existing = getCompletedFocusSessions();
+        const durationMinutes = Math.max(1, Math.round((session.totalSeconds - session.remainingSeconds) / 60));
+        const newRecord: CompletedFocusSessionRecord = {
+            id: session.id,
+            sourceType: session.sourceType,
+            sourceId: session.sourceId,
+            sourceTitle: session.sourceTitle,
+            durationMinutes,
+            completedAt: session.completedAt || new Date().toISOString(),
+        };
+        const updated = [newRecord, ...existing].slice(0, 100);
+        localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(updated));
+    } catch (e) {
+        console.error('Failed to save focus session history', e);
+    }
+};
+
+export const FocusTimerProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+    const [activeSession, setActiveSession] = useState<ActiveFocusSession | null>(() => {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return null;
+            const parsed = JSON.parse(raw) as ActiveFocusSession;
+            return parsed;
+        } catch {
+            return null;
+        }
+    });
+
+    const [isFinishedModalOpen, setIsFinishedModalOpen] = useState(false);
+    const [justFinishedSession, setJustFinishedSession] = useState<ActiveFocusSession | null>(null);
+
+    // Conflict state
+    const [isConflictModalOpen, setIsConflictModalOpen] = useState(false);
+    const [conflictPendingSession, setConflictPendingSession] = useState<StartSessionParams | null>(null);
+
+    // Persist to local storage
+    useEffect(() => {
+        try {
+            if (activeSession) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(activeSession));
+            } else {
+                localStorage.removeItem(STORAGE_KEY);
+            }
+        } catch (e) {
+            console.error('Failed to sync timer to local storage', e);
+        }
+    }, [activeSession]);
