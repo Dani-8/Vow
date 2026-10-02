@@ -75,3 +75,44 @@ export const StartFocusSessionModal: React.FC<StartFocusSessionModalProps> = ({
                     <h3 className="text-sm font-extrabold text-[#1a1c35] truncate mt-0.5">{title}</h3>
                     {subtitle && <p className="text-xs font-semibold text-[#717699] truncate">{subtitle}</p>}
                 </div>
+
+                {/* Presets Grid */}
+                <div className="space-y-2 mb-4">
+                    <label className="text-xs font-bold text-[#515777] block">Choose Duration</label>
+                    <div className="grid grid-cols-2 gap-2.5">
+                        {PRESET_DURATIONS.map((preset) => {
+                            const isSelected = !isCustom && selectedMinutes === preset.minutes;
+                            return (
+                                <button
+                                    key={preset.minutes}
+                                    type="button"
+                                    onClick={() => {
+                                        setIsCustom(false);
+                                        setSelectedMinutes(preset.minutes);
+                                    }}
+                                    className={`p-3 rounded-2xl text-left transition-all relative ${
+                                        isSelected
+                                            ? 'neu-button border-2 border-[#549acb] bg-sky-50/80 shadow-[inset_2px_2px_5px_rgba(84,154,203,0.15),4px_4px_10px_rgba(163,177,198,0.5)] ring-2 ring-[#549acb]/30'
+                                            : 'neu-card bg-[#E0E5EC] hover:bg-[#D8DEE8] border border-transparent'
+                                    }`}
+                                >
+                                    <div className="flex items-center justify-between">
+                                        <span className={`text-xs font-black ${isSelected ? 'text-[#549acb]' : 'text-[#1a1c35]'}`}>
+                                            {preset.label}
+                                        </span>
+                                        {isSelected ? (
+                                            <div className="w-4 h-4 rounded-full bg-[#549acb] flex items-center justify-center text-white">
+                                                <Check className="w-2.5 h-2.5 stroke-[3]" />
+                                            </div>
+                                        ) : (
+                                            <Clock className="w-3.5 h-3.5 text-[#717699]" />
+                                        )}
+                                    </div>
+                                    <span className={`text-[10px] font-semibold block mt-0.5 ${isSelected ? 'text-sky-800' : 'text-[#717699]'}`}>
+                                        {preset.desc}
+                                    </span>
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
