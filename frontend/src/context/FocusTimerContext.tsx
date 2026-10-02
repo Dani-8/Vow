@@ -33,3 +33,291 @@ export interface StartSessionParams {
     dayNumber?: number;
     dateStr?: string;
 }
+
+interface FocusTimerContextValue {
+    activeSession: ActiveFocusSession | null;
+    startSession: (params: StartSessionParams) => void;
+    requestStartSession: (params: StartSessionParams) => void;
+    togglePlayPause: () => void;
+    resetSession: () => void;
+    stopSession: () => void;
+    completeSessionEarly: () => void;
+    isFinishedModalOpen: boolean;
+    closeFinishedModal: () => void;
+    justFinishedSession: ActiveFocusSession | null;
+    isConflictModalOpen: boolean;
+    conflictPendingSession: StartSessionParams | null;
+    closeConflictModal: () => void;
+    confirmConflictSwitch: () => void;
+}
+
+const FocusTimerContext = createContext<FocusTimerContextValue | null>(null);
+
+const STORAGE_KEY = 'app_universal_focus_timer';
+const HISTORY_STORAGE_KEY = 'app_focus_session_history';
+
+// Play pleasant web audio chime on session finish
+const playChimeSound = () => {
+    try {
+        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+        if (!AudioContextClass) return;
+        const ctx = new AudioContextClass();
+        const now = ctx.currentTime;
+
+        // Chime tone 1
+        const osc1 = ctx.createOscillator();
+        const gain1 = ctx.createGain();
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(523.25, now); // C5
+        gain1.gain.setValueAtTime(0.2, now);
+        gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+        osc1.connect(gain1);
+        gain1.connect(ctx.destination);
+        osc1.start(now);
+        osc1.stop(now + 0.8);
+
+        // Chime tone 2 (harmonious fifth)
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(783.99, now + 0.15); // G5
+        gain2.gain.setValueAtTime(0.25, now + 0.15);
+        gain2.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+        osc2.start(now + 0.15);
+        osc2.stop(now + 1.2);
+    } catch {
+        // AudioContext not allowed or not supported; gracefully ignore
+    }
+};
+
+export const getCompletedFocusSessions = (): CompletedFocusSessionRecord[] => {
+    try {
+        const raw = localStorage.getItem(HISTORY_STORAGE_KEY);
+        if (!raw) return [];
+        return JSON.parse(raw);
+    } catch {
+        return [];
+    }
+};
+
+const saveCompletedSessionToHistory = (session: ActiveFocusSession) => {
+    try {
+        const existing = getCompletedFocusSessions();
+        const durationMinutes = Math.max(1, Math.round((session.totalSeconds - session.remainingSeconds) / 60));
+        const newRecord: CompletedFocusSessionRecord = {
+            id: session.id,
+            sourceType: session.sourceType,
+            sourceId: session.sourceId,
+            sourceTitle: session.sourceTitle,
+            durationMinutes,
+            completedAt: session.completedAt || new Date().toISOString(),
+        };
+        const updated = [newRecord, ...existing].slice(0, 100);
+        localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(updated));
+    } catch (e) {
+        console.error('Failed to save focus session history', e);
+    }
+};
+
+export const FocusTimerProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+    const [activeSession, setActiveSession] = useState<ActiveFocusSession | null>(() => {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return null;
+            const parsed = JSON.parse(raw) as ActiveFocusSession;
+            return parsed;
+        } catch {
+            return null;
+        }
+    });
+
+    const [isFinishedModalOpen, setIsFinishedModalOpen] = useState(false);
+    const [justFinishedSession, setJustFinishedSession] = useState<ActiveFocusSession | null>(null);
+
+    // Conflict state
+    const [isConflictModalOpen, setIsConflictModalOpen] = useState(false);
+    const [conflictPendingSession, setConflictPendingSession] = useState<StartSessionParams | null>(null);
+
+    // Persist to local storage
+    useEffect(() => {
+        try {
+            if (activeSession) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(activeSession));
+            } else {
+                localStorage.removeItem(STORAGE_KEY);
+            }
+        } catch (e) {
+            console.error('Failed to sync timer to local storage', e);
+        }
+    }, [activeSession]);
+
+    // Interval countdown
+    useEffect(() => {
+        if (!activeSession || !activeSession.isRunning) return;
+
+        const timer = setInterval(() => {
+            setActiveSession((prev) => {
+                if (!prev || !prev.isRunning) return prev;
+                if (prev.remainingSeconds <= 1) {
+                    clearInterval(timer);
+                    const finished = {
+                        ...prev,
+                        remainingSeconds: 0,
+                        isRunning: false,
+                        completedAt: new Date().toISOString(),
+                    };
+                    saveCompletedSessionToHistory(finished);
+                    playChimeSound();
+                    setJustFinishedSession(finished);
+                    setIsFinishedModalOpen(true);
+                    return null;
+                }
+                return {
+                    ...prev,
+                    remainingSeconds: prev.remainingSeconds - 1,
+                };
+            });
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, [activeSession?.isRunning]);
+
+    const startSession = useCallback(
+        ({
+            sourceType,
+            sourceId,
+            sourceTitle,
+            sourceSubtitle,
+            minutes,
+            dayNumber,
+            dateStr,
+        }: StartSessionParams) => {
+            const totalSec = Math.max(60, Math.round(minutes * 60));
+            const newSession: ActiveFocusSession = {
+                id: `focus_${Date.now()}`,
+                sourceType,
+                sourceId,
+                sourceTitle,
+                sourceSubtitle,
+                totalSeconds: totalSec,
+                remainingSeconds: totalSec,
+                isRunning: true,
+                startedAt: new Date().toISOString(),
+                dayNumber,
+                dateStr,
+            };
+            setActiveSession(newSession);
+        },
+        []
+    );
+
+    // Safe entry point: checks if a different timer is already running
+    const requestStartSession = useCallback(
+        (params: StartSessionParams) => {
+            if (
+                activeSession &&
+                activeSession.remainingSeconds > 0 &&
+                (activeSession.sourceId !== params.sourceId || activeSession.sourceType !== params.sourceType)
+            ) {
+                setConflictPendingSession(params);
+                setIsConflictModalOpen(true);
+                return;
+            }
+            startSession(params);
+        },
+        [activeSession, startSession]
+    );
+
+    const confirmConflictSwitch = useCallback(() => {
+        if (conflictPendingSession) {
+            startSession(conflictPendingSession);
+            setConflictPendingSession(null);
+            setIsConflictModalOpen(false);
+        }
+    }, [conflictPendingSession, startSession]);
+
+    const closeConflictModal = useCallback(() => {
+        setIsConflictModalOpen(false);
+        setConflictPendingSession(null);
+    }, []);
+
+    const togglePlayPause = useCallback(() => {
+        setActiveSession((prev) => {
+            if (!prev) return null;
+            return {
+                ...prev,
+                isRunning: !prev.isRunning,
+            };
+        });
+    }, []);
+
+    const resetSession = useCallback(() => {
+        setActiveSession((prev) => {
+            if (!prev) return null;
+            return {
+                ...prev,
+                remainingSeconds: prev.totalSeconds,
+                isRunning: false,
+            };
+        });
+    }, []);
+
+    const stopSession = useCallback(() => {
+        setActiveSession(null);
+    }, []);
+
+    const completeSessionEarly = useCallback(() => {
+        setActiveSession((prev) => {
+            if (!prev) return null;
+            const finished = {
+                ...prev,
+                remainingSeconds: 0,
+                isRunning: false,
+                completedAt: new Date().toISOString(),
+            };
+            saveCompletedSessionToHistory(finished);
+            playChimeSound();
+            setJustFinishedSession(finished);
+            setIsFinishedModalOpen(true);
+            return null;
+        });
+    }, []);
+
+    const closeFinishedModal = useCallback(() => {
+        setIsFinishedModalOpen(false);
+        setJustFinishedSession(null);
+    }, []);
+
+    return (
+        <FocusTimerContext.Provider
+            value={{
+                activeSession,
+                startSession,
+                requestStartSession,
+                togglePlayPause,
+                resetSession,
+                stopSession,
+                completeSessionEarly,
+                isFinishedModalOpen,
+                closeFinishedModal,
+                justFinishedSession,
+                isConflictModalOpen,
+                conflictPendingSession,
+                closeConflictModal,
+                confirmConflictSwitch,
+            }}
+        >
+            {children}
+        </FocusTimerContext.Provider>
+    );
+};
+
+export const useFocusTimer = () => {
+    const ctx = useContext(FocusTimerContext);
+    if (!ctx) {
+        throw new Error('useFocusTimer must be used within FocusTimerProvider');
+    }
+    return ctx;
+};
