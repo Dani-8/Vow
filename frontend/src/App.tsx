@@ -10,13 +10,24 @@ import { AppRouter } from './components/pages/router/AppRouter';
 import { GlobalModals } from './components/modals/GlobalModals';
 import { GlobalFloatingTimerBar } from './components/common/GlobalFloatingTimerBar';
 import { FocusFinishedModal } from './components/modals/FocusFinishedModal';
+import { ActiveTimerConflictModal } from './components/modals/ActiveTimerConflictModal';
 import { useFocusTimer } from './context/FocusTimerContext';
+import { getTaskSlug } from './components/pages/router/AppRouter';
 
 export default function App() {
   const taskData = useTaskData();
   const modalState = useModalState();
   const challengeState = useChallenges(taskData.user);
-  const { isFinishedModalOpen, closeFinishedModal, justFinishedSession } = useFocusTimer();
+  const {
+    isFinishedModalOpen,
+    closeFinishedModal,
+    justFinishedSession,
+    activeSession,
+    isConflictModalOpen,
+    conflictPendingSession,
+    closeConflictModal,
+    confirmConflictSwitch,
+  } = useFocusTimer();
 
   const {
     user,
@@ -183,7 +194,38 @@ export default function App() {
 
       <GlobalFloatingTimerBar
         activeView={activeView}
-        onGoToHome={() => navigateToView('home')}
+        onNavigateToTarget={(sourceType, sourceId) => {
+          if (sourceType === 'task') {
+            const allTasks = [...taskData.tasks, ...privateTasks];
+            const found = allTasks.find((t) => t._id === sourceId);
+            if (found) {
+              modalState.setSelectedTaskForDetail(found);
+              taskData.navigate(`/app/task/${getTaskSlug(found)}`);
+            } else {
+              navigateToView('home');
+            }
+          } else if (sourceType === 'challenge') {
+            const foundCh = challengeState.challenges.find(
+              (c) => c._id === sourceId || c.id === sourceId
+            );
+            if (foundCh) {
+              challengeState.setSelectedChallenge(foundCh);
+              navigateToView('challenge-detail', foundCh.id || foundCh._id);
+            } else {
+              navigateToView('challenges');
+            }
+          } else {
+            navigateToView('home');
+          }
+        }}
+      />
+
+      <ActiveTimerConflictModal
+        isOpen={isConflictModalOpen}
+        onClose={closeConflictModal}
+        activeSession={activeSession}
+        newSessionTarget={conflictPendingSession}
+        onConfirmSwitch={confirmConflictSwitch}
       />
 
       <FocusFinishedModal
