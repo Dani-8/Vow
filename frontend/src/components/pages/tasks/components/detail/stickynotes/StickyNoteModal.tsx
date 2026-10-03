@@ -295,3 +295,90 @@ export const StickyNoteModal: React.FC<StickyNoteModalProps> = ({
                                         </li>
                                     );
                                 }
+
+                                if (/^\d+\.\s+/.test(line)) {
+                                    return (
+                                        <div
+                                            key={idx}
+                                            className={`ml-2 text-xs font-semibold ${currentTheme.textColor} flex items-center space-x-1.5`}
+                                            style={{ height: '28px' }}
+                                        >
+                                            <span className="font-bold opacity-75">{line.match(/^\d+\./)?.[0]}</span>
+                                            <span>{line.replace(/^\d+\.\s*/, '')}</span>
+                                        </div>
+                                    );
+                                }
+
+                                if (line.startsWith('> ')) {
+                                    return (
+                                        <p
+                                            key={idx}
+                                            className={`italic pl-3 border-l-2 border-current/40 text-xs font-serif ${currentTheme.textColor}`}
+                                            style={{ height: '28px' }}
+                                        >
+                                            {line.substring(2)}
+                                        </p>
+                                    );
+                                }
+
+                                if (line.trim() === '') {
+                                    return <div key={idx} style={{ height: '28px' }} />;
+                                }
+
+                                return (
+                                    <p
+                                        key={idx}
+                                        className={`text-xs font-medium ${currentTheme.textColor}`}
+                                        style={{ height: '28px' }}
+                                    >
+                                        {line}
+                                    </p>
+                                );
+                            })}
+                        </div>
+
+                        {note && (
+                            <div className="flex items-center justify-between pt-2 border-t border-black/5 text-[11px] text-slate-600 font-medium">
+                                <div className="flex items-center space-x-4">
+                                    <span className="flex items-center space-x-1">
+                                        <Calendar className="w-3 h-3 text-slate-400" />
+                                        <span>Created: {new Date(note.createdAt).toLocaleDateString()}</span>
+                                    </span>
+                                    <span className="flex items-center space-x-1">
+                                        <Clock className="w-3 h-3 text-slate-400" />
+                                        <span>Updated: {new Date(note.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                    </span>
+                                </div>
+                                <button
+                                    onClick={handleOpenExtract}
+                                    className="text-indigo-600 hover:text-indigo-800 font-bold flex items-center space-x-1"
+                                >
+                                    <Sparkles className="w-3 h-3" />
+                                    <span>Convert to Subtasks</span>
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {/* MODE 2: EDITING / FORM VIEW */}
+                {isEditing && !extractMode && (
+                    <form onSubmit={handleSaveSubmit} className="p-6 space-y-4">
+                        <div className="space-y-1">
+                            <label className="text-[11px] font-black uppercase tracking-wider opacity-75 text-slate-700">
+                                Note Title (Optional)
+                            </label>
+                            <input
+                                type="text"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                placeholder="e.g. Formula Sheet, Key Rules, Blockers..."
+                                className={`w-full p-2.5 rounded-xl text-xs font-bold focus:outline-none border ${currentTheme.lineBorder} bg-white/70 ${currentTheme.textColor} placeholder:text-slate-400`}
+                            />
+                        </div>
+
+                        {/* Color Selector */}
+                        <StickyNoteColorPicker
+                            selectedColor={color}
+                            onSelectColor={setColor}
+                        />
