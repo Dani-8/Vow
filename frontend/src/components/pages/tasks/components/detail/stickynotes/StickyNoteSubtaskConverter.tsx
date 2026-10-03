@@ -46,11 +46,10 @@ export const StickyNoteSubtaskConverter: React.FC<StickyNoteSubtaskConverterProp
                         return (
                             <label
                                 key={idx}
-                                className={`p-3 rounded-xl border flex items-center space-x-3 cursor-pointer transition-all ${
-                                    isChecked
-                                        ? 'bg-white border-indigo-300 shadow-xs'
-                                        : 'bg-white/50 border-black/10 opacity-75'
-                                }`}
+                                className={`p-3 rounded-xl border flex items-center space-x-3 cursor-pointer transition-all ${isChecked
+                                    ? 'bg-white border-indigo-300 shadow-xs'
+                                    : 'bg-white/50 border-black/10 opacity-75'
+                                    }`}
                             >
                                 <input
                                     type="checkbox"
