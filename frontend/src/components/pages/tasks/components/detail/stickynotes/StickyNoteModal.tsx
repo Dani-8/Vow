@@ -247,3 +247,51 @@ export const StickyNoteModal: React.FC<StickyNoteModalProps> = ({
                         </button>
                     </div>
                 </div>
+
+                {/* MODE 1: READ / PAPER VIEW */}
+                {!isEditing && !extractMode && (
+                    <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+                        <div
+                            className={`min-h-[160px] p-5 rounded-2xl border ${currentTheme.lineBorder} bg-white/50 backdrop-blur-2xs shadow-inner space-y-2`}
+                            style={{
+                                backgroundImage: `repeating-linear-gradient(transparent, transparent 27px, ${currentTheme.ruledLineColor} 28px)`,
+                                lineHeight: '28px',
+                            }}
+                        >
+                            {content.split('\n').map((line, idx) => {
+                                if (line.startsWith('- [ ]') || line.startsWith('- [x]')) {
+                                    const isChecked = line.startsWith('- [x]');
+                                    return (
+                                        <div
+                                            key={idx}
+                                            onClick={() => handleToggleCheckbox(idx)}
+                                            className="flex items-center space-x-2.5 cursor-pointer group/check"
+                                            style={{ height: '28px' }}
+                                        >
+                                            <div className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${isChecked
+                                                ? 'bg-emerald-600 border-emerald-600 text-white shadow-xs'
+                                                : 'border-slate-400 bg-white/80 group-hover/check:border-slate-600'
+                                                }`}>
+                                                {isChecked && <Check className="w-3 h-3 stroke-[3]" />}
+                                            </div>
+                                            <span className={`text-xs font-semibold select-none ${isChecked
+                                                ? 'line-through opacity-50 text-slate-500'
+                                                : currentTheme.textColor
+                                                }`}>
+                                                {line.replace(/^-\s*\[[ x]\]\s*/, '')}
+                                            </span>
+                                        </div>
+                                    );
+                                }
+
+                                if (line.startsWith('- ') || line.startsWith('• ') || line.startsWith('* ')) {
+                                    return (
+                                        <li
+                                            key={idx}
+                                            className={`ml-5 list-disc text-xs font-semibold ${currentTheme.textColor}`}
+                                            style={{ height: '28px' }}
+                                        >
+                                            {line.replace(/^[-*•]\s*/, '')}
+                                        </li>
+                                    );
+                                }
