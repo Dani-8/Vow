@@ -92,3 +92,54 @@ export const StickyNoteModal: React.FC<StickyNoteModalProps> = ({
     const handleSaveSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!content.trim()) return;
+
+        onSave({
+            title: title.trim() || undefined,
+            content: content.trim(),
+            color,
+            isPinned,
+        });
+        setIsEditing(false);
+    };
+
+    // Toggle interactive checkboxes directly in view mode
+    const handleToggleCheckbox = (lineIdx: number) => {
+        const lines = content.split('\n');
+        const targetLine = lines[lineIdx];
+        if (targetLine.startsWith('- [ ]')) {
+            lines[lineIdx] = targetLine.replace('- [ ]', '- [x]');
+        } else if (targetLine.startsWith('- [x]')) {
+            lines[lineIdx] = targetLine.replace('- [x]', '- [ ]');
+        }
+        const updatedContent = lines.join('\n');
+        setContent(updatedContent);
+
+        onSave({
+            title: title.trim() || undefined,
+            content: updatedContent,
+            color,
+            isPinned,
+        });
+    };
+
+    // Detect checklist items or bullet lines in content
+    const handleOpenExtract = () => {
+        const lines = content.split('\n');
+        const detected: string[] = [];
+
+        lines.forEach((line) => {
+            const trimmed = line.trim();
+            if (trimmed.startsWith('- [ ]') || trimmed.startsWith('- [x]') || trimmed.startsWith('* [ ]')) {
+                const text = trimmed.replace(/^[-*]\s*\[[ x]\]\s*/, '').trim();
+                if (text.length > 1) detected.push(text);
+            } else if (trimmed.startsWith('- ') || trimmed.startsWith('* ') || /^\d+\.\s+/.test(trimmed)) {
+                const text = trimmed.replace(/^[-*]|\d+\.\s*/, '').trim();
+                if (text.length > 1 && !text.startsWith('#')) detected.push(text);
+            }
+        });
+
+        const unique = Array.from(new Set(detected));
+        setDetectedTasks(unique);
+        setSelectedToImport(unique);
+        setExtractMode(true);
+    };
