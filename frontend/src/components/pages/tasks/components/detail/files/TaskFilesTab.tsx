@@ -162,11 +162,10 @@ export const TaskFilesTab: React.FC<TaskFilesTabProps> = ({
                         <button
                             key={t.id}
                             onClick={() => setFilterType(t.id)}
-                            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                                filterType === t.id
+                            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${filterType === t.id
                                     ? 'neu-inset text-[#549acb] font-black'
                                     : 'neu-button text-[#717699] hover:text-[#1a1c35]'
-                            }`}
+                                }`}
                         >
                             {t.label}
                         </button>
