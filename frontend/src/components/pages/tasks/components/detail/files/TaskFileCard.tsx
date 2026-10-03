@@ -39,3 +39,55 @@ export const TaskFileCard: React.FC<TaskFileCardProps> = ({
                 <div className="p-2.5 rounded-xl neu-inset bg-[#dbe2ee]/70 shrink-0">
                     {getAttachmentIcon(attachment)}
                 </div>
+
+                <div className="flex items-center space-x-1">
+                    {attachment.url && attachment.url !== '#' && (
+                        <a
+                            href={attachment.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-1.5 rounded-lg neu-button text-slate-500 hover:text-indigo-600"
+                            title="Open resource"
+                        >
+                            <ExternalLink className="w-3.5 h-3.5" />
+                        </a>
+                    )}
+                    <button
+                        onClick={() => onDeleteAttachment(attachment.id)}
+                        className="p-1.5 rounded-lg neu-button text-slate-400 hover:text-rose-600 transition-colors"
+                        title="Delete attachment"
+                    >
+                        <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                </div>
+            </div>
+
+            {/* Image Preview if applicable */}
+            {attachment.type === 'image' && attachment.previewUrl && (
+                <div className="h-28 w-full rounded-xl overflow-hidden neu-inset bg-slate-900/10">
+                    <img
+                        src={attachment.previewUrl}
+                        alt={attachment.name}
+                        className="w-full h-full object-cover"
+                    />
+                </div>
+            )}
+
+            {/* Meta */}
+            <div>
+                <h4 className="text-xs font-bold text-[#1a1c35] line-clamp-1" title={attachment.name}>
+                    {attachment.name}
+                </h4>
+                <div className="flex items-center justify-between mt-1 text-[10px] text-slate-400 font-medium">
+                    <span>{attachment.size || 'Web link'}</span>
+                    <span>
+                        {new Date(attachment.uploadedAt).toLocaleDateString(undefined, {
+                            month: 'short',
+                            day: 'numeric',
+                        })}
+                    </span>
+                </div>
+            </div>
+        </div>
+    );
+};
