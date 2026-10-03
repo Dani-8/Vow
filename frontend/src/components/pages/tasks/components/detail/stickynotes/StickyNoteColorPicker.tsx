@@ -24,11 +24,10 @@ export const StickyNoteColorPicker: React.FC<StickyNoteColorPickerProps> = ({
                             key={c}
                             type="button"
                             onClick={() => onSelectColor(c)}
-                            className={`p-2 rounded-xl border text-center flex flex-col items-center space-y-1 transition-all ${theme.paperBg} ${theme.border} ${
-                                isSelected
-                                    ? 'ring-2 ring-indigo-600 ring-offset-1 scale-105 shadow-sm font-black'
-                                    : 'opacity-70 hover:opacity-100 hover:scale-102'
-                            }`}
+                            className={`p-2 rounded-xl border text-center flex flex-col items-center space-y-1 transition-all ${theme.paperBg} ${theme.border} ${isSelected
+                                ? 'ring-2 ring-indigo-600 ring-offset-1 scale-105 shadow-sm font-black'
+                                : 'opacity-70 hover:opacity-100 hover:scale-102'
+                                }`}
                         >
                             <span className={`w-3.5 h-3.5 rounded-full ${theme.accentDot} shadow-xs`} />
                             <span className="text-[10px] text-slate-800 font-semibold">
