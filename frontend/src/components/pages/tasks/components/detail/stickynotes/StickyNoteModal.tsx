@@ -198,3 +198,52 @@ export const StickyNoteModal: React.FC<StickyNoteModalProps> = ({
                             </h3>
                         </div>
                     </div>
+
+                    <div className="flex items-center space-x-1.5">
+                        {!isEditing && !extractMode && (
+                            <>
+                                <button
+                                    onClick={handleCopyNote}
+                                    className="p-2 rounded-xl bg-black/5 hover:bg-black/10 text-slate-700 transition-colors"
+                                    title="Copy note text"
+                                >
+                                    {copied ? <CheckCheck className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
+                                </button>
+                                <button
+                                    onClick={handleOpenExtract}
+                                    className="p-2 rounded-xl bg-black/5 hover:bg-black/10 text-indigo-700 transition-colors"
+                                    title="Extract checklist items to Subtasks"
+                                >
+                                    <ListPlus className="w-4 h-4" />
+                                </button>
+                                <button
+                                    onClick={() => setIsEditing(true)}
+                                    className="p-2 rounded-xl bg-black/5 hover:bg-black/10 text-slate-700 transition-colors"
+                                    title="Edit Note"
+                                >
+                                    <Edit3 className="w-4 h-4" />
+                                </button>
+                                {onDelete && note && (
+                                    <button
+                                        onClick={() => {
+                                            if (window.confirm('Delete this sticky note?')) {
+                                                onDelete(note.id);
+                                                onClose();
+                                            }
+                                        }}
+                                        className="p-2 rounded-xl bg-black/5 hover:bg-rose-500/20 text-rose-700 transition-colors"
+                                        title="Delete Note"
+                                    >
+                                        <Trash2 className="w-4 h-4" />
+                                    </button>
+                                )}
+                            </>
+                        )}
+                        <button
+                            onClick={onClose}
+                            className="p-2 rounded-xl bg-black/5 hover:bg-black/10 text-slate-700 transition-colors"
+                        >
+                            <X className="w-4 h-4" />
+                        </button>
+                    </div>
+                </div>
