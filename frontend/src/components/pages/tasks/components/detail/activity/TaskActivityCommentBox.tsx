@@ -52,11 +52,10 @@ export const TaskActivityCommentBox: React.FC<TaskActivityCommentBoxProps> = ({
                                         key={cat.id}
                                         type="button"
                                         onClick={() => setCommentCategory(cat.id as any)}
-                                        className={`px-2.5 py-1 rounded-xl text-[11px] font-bold transition-all flex items-center space-x-1 ${
-                                            isSelected
+                                        className={`px-2.5 py-1 rounded-xl text-[11px] font-bold transition-all flex items-center space-x-1 ${isSelected
                                                 ? 'neu-inset text-indigo-600 font-black'
                                                 : 'neu-button text-slate-500 hover:text-slate-800'
-                                        }`}
+                                            }`}
                                     >
                                         <Icon className="w-3 h-3" />
                                         <span>{cat.label}</span>
