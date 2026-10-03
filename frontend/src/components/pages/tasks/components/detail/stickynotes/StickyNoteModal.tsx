@@ -46,3 +46,49 @@ export const StickyNoteModal: React.FC<StickyNoteModalProps> = ({
     onDelete,
     onAddSubTask,
 }) => {
+    const [isEditing, setIsEditing] = useState(false);
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
+    const [color, setColor] = useState<NoteColor>('yellow');
+    const [isPinned, setIsPinned] = useState(false);
+    const [copied, setCopied] = useState(false);
+
+    // Subtask extraction state inside modal
+    const [extractMode, setExtractMode] = useState(false);
+    const [detectedTasks, setDetectedTasks] = useState<string[]>([]);
+    const [selectedToImport, setSelectedToImport] = useState<string[]>([]);
+
+    useEffect(() => {
+        if (note) {
+            setTitle(note.title || '');
+            setContent(note.content || '');
+            setColor(note.color || 'yellow');
+            setIsPinned(!!note.isPinned);
+            setIsEditing(initialEditMode);
+        } else {
+            setTitle('');
+            setContent('');
+            setColor('yellow');
+            setIsPinned(false);
+            setIsEditing(true);
+        }
+        setExtractMode(false);
+        setDetectedTasks([]);
+        setSelectedToImport([]);
+        setCopied(false);
+    }, [note, isOpen, initialEditMode]);
+
+    if (!isOpen) return null;
+
+    const currentTheme = STICKY_COLOR_THEMES[color] || STICKY_COLOR_THEMES.yellow;
+
+    const handleCopyNote = () => {
+        const textToCopy = `${title ? title + '\n\n' : ''}${content}`;
+        navigator.clipboard.writeText(textToCopy);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
+    const handleSaveSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!content.trim()) return;
