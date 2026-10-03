@@ -90,3 +90,54 @@ export const TaskActivityItemRow: React.FC<TaskActivityItemRowProps> = ({
                 </span>
             );
         }
+
+        if (category === 'update') {
+            return (
+                <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md bg-indigo-100 text-indigo-800 border border-indigo-200 text-[10px] font-black uppercase tracking-wider">
+                    <TrendingUp className="w-3 h-3 text-indigo-600" />
+                    <span>Progress Update</span>
+                </span>
+            );
+        }
+
+        return null;
+    };
+
+    return (
+        <div className="flex items-start space-x-3.5 group">
+            <div className="p-2 rounded-xl neu-button shrink-0 mt-0.5 bg-[#E0E5EC]">
+                {getActivityIcon(item.type, item.meta)}
+            </div>
+
+            <div className="flex-1 neu-card p-3.5 bg-[#E0E5EC] space-y-1.5 rounded-2xl border border-white/60">
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                        <span className="text-xs font-black text-[#1a1c35]">
+                            {item.authorName || 'System'}
+                        </span>
+                        {renderCategoryBadge()}
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                        <span className="text-[10px] text-slate-400 font-medium">
+                            {formatTimestamp(item.timestamp)}
+                        </span>
+                        {onDeleteActivity && (
+                            <button
+                                onClick={() => onDeleteActivity(item.id)}
+                                className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded-md text-slate-400 hover:text-rose-600"
+                                title="Delete entry"
+                            >
+                                <Trash2 className="w-3 h-3" />
+                            </button>
+                        )}
+                    </div>
+                </div>
+
+                <p className="text-xs text-[#4a4e69] leading-relaxed font-medium">
+                    {item.message}
+                </p>
+            </div>
+        </div>
+    );
+};
