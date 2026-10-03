@@ -26,11 +26,10 @@ export const FileUploadZone: React.FC<FileUploadZoneProps> = ({
             onDragLeave={onDragLeave}
             onDrop={onDrop}
             onClick={onBrowseClick}
-            className={`p-6 rounded-2xl border-2 border-dashed transition-all cursor-pointer flex flex-col items-center justify-center text-center space-y-2.5 ${
-                isDragging
-                    ? 'border-[#549acb] bg-indigo-50/50 scale-[1.01]'
-                    : 'border-[#c8d0e0] hover:border-[#549acb] bg-[#E0E5EC] neu-inset'
-            }`}
+            className={`p-6 rounded-2xl border-2 border-dashed transition-all cursor-pointer flex flex-col items-center justify-center text-center space-y-2.5 ${isDragging
+                ? 'border-[#549acb] bg-indigo-50/50 scale-[1.01]'
+                : 'border-[#c8d0e0] hover:border-[#549acb] bg-[#E0E5EC] neu-inset'
+                }`}
         >
             <input
                 ref={fileInputRef}
