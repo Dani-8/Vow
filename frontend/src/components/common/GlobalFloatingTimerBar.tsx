@@ -65,3 +65,34 @@ export const GlobalFloatingTimerBar: React.FC<GlobalFloatingTimerBarProps> = ({
                         {formattedTimer}
                     </span>
                 </div>
+
+                {/* Controls */}
+                <div className="flex items-center space-x-1 border-l border-slate-300/60 pl-2">
+                    <button
+                        onClick={togglePlayPause}
+                        className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${
+                            activeSession.isRunning
+                                ? 'neu-button text-amber-600'
+                                : 'neu-button-primary text-white'
+                        }`}
+                        title={activeSession.isRunning ? 'Pause' : 'Resume'}
+                    >
+                        {activeSession.isRunning ? (
+                            <Pause className="w-3.5 h-3.5 fill-current" />
+                        ) : (
+                            <Play className="w-3.5 h-3.5 fill-current" />
+                        )}
+                    </button>
+
+                    <button
+                        onClick={stopSession}
+                        className="w-7 h-7 rounded-lg neu-button text-rose-500 hover:text-rose-600 flex items-center justify-center transition-all"
+                        title="Cancel Session"
+                    >
+                        <X className="w-3.5 h-3.5" />
+                    </button>
+                </div>
+            </div>
+        </aside>
+    );
+};
