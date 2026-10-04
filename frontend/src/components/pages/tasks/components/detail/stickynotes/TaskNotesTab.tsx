@@ -95,8 +95,8 @@ export const TaskNotesTab: React.FC<TaskNotesTabProps> = ({
                         <button
                             onClick={() => setColorFilter('all')}
                             className={`px-2.5 py-1 rounded-xl text-[10px] font-bold transition-all ${colorFilter === 'all'
-                                    ? 'neu-button text-[#1a1c35] font-black'
-                                    : 'text-slate-500 hover:text-slate-800'
+                                ? 'neu-button text-[#1a1c35] font-black'
+                                : 'text-slate-500 hover:text-slate-800'
                                 }`}
                         >
                             All ({stickyNotes.length})
@@ -111,8 +111,8 @@ export const TaskNotesTab: React.FC<TaskNotesTabProps> = ({
                                     key={c}
                                     onClick={() => setColorFilter(colorFilter === c ? 'all' : c)}
                                     className={`w-6 h-6 rounded-full flex items-center justify-center transition-all ${theme.accentDot} ${colorFilter === c
-                                            ? 'ring-2 ring-[#549acb] ring-offset-2 scale-110 shadow-sm'
-                                            : 'opacity-70 hover:opacity-100'
+                                        ? 'ring-2 ring-[#549acb] ring-offset-2 scale-110 shadow-sm'
+                                        : 'opacity-70 hover:opacity-100'
                                         }`}
                                     title={`Filter by ${theme.name} (${count})`}
                                 >
