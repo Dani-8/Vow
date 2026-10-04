@@ -132,3 +132,54 @@ export const TaskNotesTab: React.FC<TaskNotesTabProps> = ({
                     <span>New Sticky Note</span>
                 </button>
             </div>
+
+            {/* Notes Grid */}
+            {filteredNotes.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                    {filteredNotes.map((note) => (
+                        <StickyNoteCard
+                            key={note.id}
+                            note={note}
+                            onSelectNote={handleOpenEdit}
+                            onTogglePin={(id, isPinned) => onUpdateStickyNote(id, { isPinned })}
+                            onDeleteNote={onDeleteStickyNote}
+                        />
+                    ))}
+                </div>
+            ) : (
+                /* Empty State */
+                <div className="neu-card p-12 text-center rounded-3xl space-y-4 max-w-lg mx-auto bg-[#E0E5EC]/80 border border-white/60">
+                    <div className="w-16 h-16 rounded-2xl neu-button mx-auto flex items-center justify-center text-amber-500 bg-[#E0E5EC]">
+                        <StickyNote className="w-8 h-8" />
+                    </div>
+                    <div className="space-y-1">
+                        <h3 className="text-base font-black text-[#1a1c35]">
+                            {searchQuery || colorFilter !== 'all' ? 'No matching sticky notes' : 'No Sticky Notes Yet'}
+                        </h3>
+                        <p className="text-xs text-[#717699] max-w-sm mx-auto leading-relaxed">
+                            {searchQuery || colorFilter !== 'all'
+                                ? 'Try resetting your search query or color filters to see all notes.'
+                                : 'Pin quick thoughts, rules, checklists, code snippets, or formulas directly to this task board.'}
+                        </p>
+                    </div>
+                    {searchQuery || colorFilter !== 'all' ? (
+                        <button
+                            onClick={() => {
+                                setSearchQuery('');
+                                setColorFilter('all');
+                            }}
+                            className="neu-button px-4 py-2 rounded-xl text-xs font-bold text-slate-700"
+                        >
+                            Reset Filters
+                        </button>
+                    ) : (
+                        <button
+                            onClick={handleOpenAdd}
+                            className="neu-button-primary px-5 py-2.5 rounded-xl text-xs font-bold text-white inline-flex items-center space-x-1.5 shadow-md"
+                        >
+                            <Plus className="w-4 h-4" />
+                            <span>Create Your First Note</span>
+                        </button>
+                    )}
+                </div>
+            )}
