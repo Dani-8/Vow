@@ -94,3 +94,104 @@ export function useDeepAnalyticsData({
         const ratePerDay = currentWindowDays > 0 ? totalCompleted / currentWindowDays : 0;
         const formattedRate = ratePerDay >= 10 ? ratePerDay.toFixed(0) : ratePerDay.toFixed(1);
 
+        const paceLabel =
+            ratePerDay >= 3
+                ? 'High-velocity execution'
+                : ratePerDay >= 1
+                ? 'Consistent daily rhythm'
+                : totalCompleted > 0
+                ? 'Building momentum'
+                : 'Ready for first check-in';
+
+        return {
+            windowDays: currentWindowDays,
+            totalCompleted,
+            ratePerDay,
+            formattedRate,
+            paceLabel,
+        };
+    }, [normalizedCategories, currentWindowDays]);
+
+    // 8. Radar Chart Data
+    const radarData = useMemo(() => {
+        return normalizedCategories.slice(0, 6).map((cat) => {
+            const strengthPercent =
+                cat.itemCount > 0 ? Math.round((cat.completedCount / cat.itemCount) * 100) : 0;
+            return {
+                category: cat.name.split(' ')[0],
+                fullName: cat.name,
+                focusVolume: cat.itemCount,
+                completionStrength: strengthPercent,
+                key: cat.key,
+                isSelected: selectedCategoryKey === cat.key,
+            };
+        });
+    }, [normalizedCategories, selectedCategoryKey]);
+
+    // 9. Bar Chart Data
+    const barData = useMemo(() => {
+        return normalizedCategories.map((cat) => {
+            const completed = cat.completedCount;
+            const pending = Math.max(0, cat.itemCount - cat.completedCount);
+            const total = cat.itemCount;
+            const completedPct = total > 0 ? Math.round((completed / total) * 100) : 0;
+            const pendingPct = total > 0 ? 100 - completedPct : 0;
+
+            return {
+                name: cat.name.split(' ')[0],
+                fullName: cat.name,
+                key: cat.key,
+                completed,
+                pending,
+                total,
+                completedPct,
+                pendingPct,
+                color: cat.color,
+                isSelected: selectedCategoryKey === cat.key,
+            };
+        });
+    }, [normalizedCategories, selectedCategoryKey]);
+
+    // 10. Cadence Trend Data
+    const cadenceTrend = useMemo(() => {
+        if (currentWindowDays <= 14) {
+            return dynamicActivities.slice(-currentWindowDays).map((d) => ({
+                label: d.displayDate.split(',')[0],
+                actions: d.totalActions,
+                challengeLogs: d.challengeActions,
+            }));
+        }
+
+        const weeksMap: Record<number, { label: string; actions: number; challengeLogs: number }> = {};
+        const totalActs = dynamicActivities.length;
+        const actsToGroup = dynamicActivities.slice(Math.max(0, totalActs - currentWindowDays));
+
+        actsToGroup.forEach((d, idx) => {
+            const weekIdx = Math.floor(idx / 7) + 1;
+            if (!weeksMap[weekIdx]) {
+                weeksMap[weekIdx] = {
+                    label: `Wk ${weekIdx}`,
+                    actions: 0,
+                    challengeLogs: 0,
+                };
+            }
+            weeksMap[weekIdx].actions += d.totalActions;
+            weeksMap[weekIdx].challengeLogs += d.challengeActions;
+        });
+
+        return Object.values(weeksMap);
+    }, [dynamicActivities, currentWindowDays]);
+
+    return {
+        normalizedCategories,
+        activeCategory,
+        currentWindowDays,
+        dynamicActivities,
+        highestEfficiency,
+        highestVolume,
+        velocityStats,
+        radarData,
+        barData,
+        cadenceTrend,
+    };
+}
