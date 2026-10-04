@@ -43,3 +43,32 @@ export const TaskNotesTab: React.FC<TaskNotesTabProps> = ({
         setEditingNote(note);
         setIsModalOpen(true);
     };
+
+    // Save handler passed into modal
+    const handleSaveModal = (data: {
+        title?: string;
+        content: string;
+        color: NoteColor;
+        isPinned?: boolean;
+    }) => {
+        if (editingNote) {
+            onUpdateStickyNote(editingNote.id, data);
+        } else {
+            onAddStickyNote(data);
+        }
+    };
+
+    // Filter and sort notes (Pinned first)
+    const filteredNotes = stickyNotes
+        .filter((n) => {
+            const matchesColor = colorFilter === 'all' || n.color === colorFilter;
+            const matchesSearch =
+                (n.title && n.title.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                n.content.toLowerCase().includes(searchQuery.toLowerCase());
+            return matchesColor && matchesSearch;
+        })
+        .sort((a, b) => {
+            if (a.isPinned && !b.isPinned) return -1;
+            if (!a.isPinned && b.isPinned) return 1;
+            return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+        });
