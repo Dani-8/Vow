@@ -2,11 +2,11 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { MasterStreakStats, Task, Challenge } from '../../../types';
 import { TaskMap } from '../task-map/types';
 import { api } from '../../../api';
-import { StatsMetricGrid } from './components/StatsMetricGrid';
-import { StatsActivityHeatmap } from './components/StatsActivityHeatmap';
-import { StatsActiveEcosystem } from './components/StatsActiveEcosystem';
-import { StatsDeepAnalytics } from './components/StatsDeepAnalytics';
-import { StatsStreakRecords } from './components/StatsStreakRecords';
+import { StatsMetricGrid } from './tabs/StatsMetricGrid';
+import { StatsActivityHeatmap } from './tabs/StatsActivityHeatmap';
+import { StatsActiveEcosystem } from './tabs/StatsActiveEcosystem';
+import { StatsDeepAnalytics } from './tabs/StatsDeepAnalytics';
+import { StatsStreakRecords } from './tabs/StatsStreakRecords';
 import { LayoutDashboard, BarChart3, Trophy, Flame } from 'lucide-react';
 import {
     calculateEcosystemOverview,
