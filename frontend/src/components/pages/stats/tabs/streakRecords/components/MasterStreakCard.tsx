@@ -48,11 +48,10 @@ export const MasterStreakCard: React.FC<MasterStreakCardProps> = ({
                     <div className="pt-1 space-y-1">
                         <div className="w-full h-2 rounded-full neu-inset overflow-hidden p-0.5">
                             <div
-                                className={`h-full rounded-full transition-all duration-500 ${
-                                    isNewRecord
+                                className={`h-full rounded-full transition-all duration-500 ${isNewRecord
                                         ? 'bg-gradient-to-r from-amber-400 to-amber-600'
                                         : 'bg-gradient-to-r from-amber-400 to-[#549acb]'
-                                }`}
+                                    }`}
                                 style={{ width: `${Math.max(6, Math.min(100, recordProgress))}%` }}
                             />
                         </div>
