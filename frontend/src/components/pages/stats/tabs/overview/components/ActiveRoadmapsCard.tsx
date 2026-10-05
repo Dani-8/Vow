@@ -100,3 +100,27 @@ export const ActiveRoadmapsCard: React.FC<ActiveRoadmapsCardProps> = ({
                                         </span>
                                     </div>
 
+                                    <div className="space-y-1">
+                                        <div className="flex justify-between text-[10px] font-bold text-[#717699]">
+                                            <span className="flex items-center space-x-1">
+                                                <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                                                <span>{completedNodes} conquered</span>
+                                            </span>
+                                            <span>{totalNodes - completedNodes} remaining</span>
+                                        </div>
+                                        <div className="w-full h-2 rounded-full neu-inset overflow-hidden p-0.5">
+                                            <div
+                                                className="h-full rounded-full bg-gradient-to-r from-sky-400 to-[#549acb] transition-all duration-300"
+                                                style={{ width: `${percent}%` }}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
