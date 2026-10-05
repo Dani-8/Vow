@@ -144,3 +144,42 @@ export const OverviewMetricGrid: React.FC<OverviewMetricGridProps> = ({
                                 {card.badge}
                             </span>
                         </div>
+
+                        <div className="flex items-baseline justify-between pt-1">
+                            <div>
+                                <span className="text-3xl font-black text-[#1a1c35] tracking-tight">
+                                    {card.primaryValue}
+                                </span>
+                            </div>
+                            <div className="text-right">
+                                <span className="text-xs font-black text-[#549acb] block">
+                                    {card.secondaryValue}
+                                </span>
+                                <span className="text-[10px] font-semibold text-[#717699]">
+                                    {card.secondaryLabel}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div className="space-y-1.5 pt-1">
+                            <div className="w-full h-2 rounded-full neu-inset overflow-hidden p-0.5">
+                                <div
+                                    className={`h-full rounded-full bg-gradient-to-r ${card.progressColor} transition-all duration-500`}
+                                    style={{ width: `${Math.max(5, Math.min(100, card.progressPercent))}%` }}
+                                />
+                            </div>
+                            <div className="flex items-center justify-between text-[11px] font-medium leading-tight">
+                                <p className="text-[#717699] truncate flex-1 mr-2">
+                                    {card.subText}
+                                </p>
+                                <span className="text-[10px] font-black text-[#549acb] opacity-80 group-hover:opacity-100 shrink-0">
+                                    {card.actionLabel} →
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                );
+            })}
+        </div>
+    );
+};
