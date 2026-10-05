@@ -49,3 +49,22 @@ export const StatsStreakRecordsTab: React.FC<StatsStreakRecordsTabProps> = ({ ta
                 />
                 <StreakHallOfFame hallOfFame={hallOfFame} />
             </div>
+
+            {/* Complete Habits & Goals Streak Leaderboard */}
+            <StreakLeaderboard
+                totalTasksCount={tasks.length}
+                habitsCount={tasks.filter((t) => t.isHabit).length}
+                goalsCount={tasks.filter((t) => !t.isHabit).length}
+                vaultCount={tasks.filter((t) => t.isPrivate).length}
+                filteredTasks={filteredTasks}
+                searchQuery={searchQuery}
+                typeFilter={typeFilter}
+                sortBy={sortBy}
+                onSearchChange={setSearchQuery}
+                onTypeFilterChange={setTypeFilter}
+                onSortChange={setSortBy}
+                onResetFilters={resetFilters}
+            />
+        </div>
+    );
+};
