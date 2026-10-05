@@ -42,3 +42,42 @@ export function useStreakRecordsData({
             return true;
         });
 
+        return list.sort((a, b) => {
+            if (sortBy === 'currentStreak') {
+                return (b.currentStreak || 0) - (a.currentStreak || 0);
+            }
+            if (sortBy === 'bestStreak') {
+                return (b.bestStreak || 0) - (a.bestStreak || 0);
+            }
+            if (sortBy === 'subtasks') {
+                const progA = calculateTaskSubTaskProgress(a._id, a.subTasks);
+                const progB = calculateTaskSubTaskProgress(b._id, b.subTasks);
+                return progB.percent - progA.percent;
+            }
+            return a.title.localeCompare(b.title);
+        });
+    }, [tasks, searchQuery, typeFilter, sortBy]);
+
+    // 3. Master Streak calculations
+    const masterStreak = stats?.masterStreak || 0;
+    const bestMasterStreak = Math.max(masterStreak, stats?.bestMasterStreak || 0);
+
+    const recordProgress =
+        bestMasterStreak > 0
+            ? Math.min(100, Math.round((masterStreak / bestMasterStreak) * 100))
+            : masterStreak > 0
+            ? 100
+            : 0;
+    const daysToRecord = Math.max(0, bestMasterStreak - masterStreak);
+    const isNewRecord = masterStreak >= bestMasterStreak && masterStreak > 0;
+
+    return {
+        hallOfFame,
+        filteredTasks,
+        masterStreak,
+        bestMasterStreak,
+        recordProgress,
+        daysToRecord,
+        isNewRecord,
+    };
+}
