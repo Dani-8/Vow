@@ -82,41 +82,37 @@ export const StreakLeaderboard: React.FC<StreakLeaderboardProps> = ({
             <div className="flex flex-wrap items-center gap-2">
                 <button
                     onClick={() => onTypeFilterChange('all')}
-                    className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
-                        typeFilter === 'all'
+                    className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${typeFilter === 'all'
                             ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
                             : 'neu-inset text-[#717699] hover:text-[#1a1c35]'
-                    }`}
+                        }`}
                 >
                     All ({totalTasksCount})
                 </button>
                 <button
                     onClick={() => onTypeFilterChange('habits')}
-                    className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
-                        typeFilter === 'habits'
+                    className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${typeFilter === 'habits'
                             ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
                             : 'neu-inset text-[#717699] hover:text-[#1a1c35]'
-                    }`}
+                        }`}
                 >
                     Daily Habits ({habitsCount})
                 </button>
                 <button
                     onClick={() => onTypeFilterChange('goals')}
-                    className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
-                        typeFilter === 'goals'
+                    className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${typeFilter === 'goals'
                             ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
                             : 'neu-inset text-[#717699] hover:text-[#1a1c35]'
-                    }`}
+                        }`}
                 >
                     Single Goals ({goalsCount})
                 </button>
                 <button
                     onClick={() => onTypeFilterChange('private')}
-                    className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
-                        typeFilter === 'private'
+                    className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${typeFilter === 'private'
                             ? 'neu-button text-purple-600 bg-[#E0E5EC]'
                             : 'neu-inset text-[#717699] hover:text-[#1a1c35]'
-                    }`}
+                        }`}
                 >
                     Growth Vault ({vaultCount})
                 </button>
