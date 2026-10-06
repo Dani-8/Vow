@@ -137,7 +137,7 @@ export const StreakLeaderboard: React.FC<StreakLeaderboardProps> = ({
                     {totalTasksCount > 0 && (searchQuery || typeFilter !== 'all') && (
                         <button
                             onClick={onResetFilters}
-                            className="px-3.5 py-1.5 rounded-xl neu-button text-xs font-black text-[#549acb] bg-[#E0E5EC] inline-flex items-center space-x-1.5"
+                            className="px-3.5 py-1.5 rounded    -xl neu-button text-xs font-black text-[#549acb] bg-[#E0E5EC] inline-flex items-center space-x-1.5"
                         >
                             <RotateCcw className="w-3.5 h-3.5" />
                             <span>Reset Filters</span>
