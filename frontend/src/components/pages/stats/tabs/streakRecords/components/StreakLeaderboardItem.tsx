@@ -87,3 +87,12 @@ export const StreakLeaderboardItem: React.FC<StreakLeaderboardItemProps> = ({ ta
                             </span>
                         )}
                     </div>
+                    <span className="text-[11px] font-bold text-[#549acb] flex items-center sm:justify-end space-x-1">
+                        <Trophy className="w-3 h-3" />
+                        <span>Best: {bestStreak} Days</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    );
+};
