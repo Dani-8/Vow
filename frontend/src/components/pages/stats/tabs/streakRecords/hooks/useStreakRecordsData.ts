@@ -66,8 +66,8 @@ export function useStreakRecordsData({
         bestMasterStreak > 0
             ? Math.min(100, Math.round((masterStreak / bestMasterStreak) * 100))
             : masterStreak > 0
-            ? 100
-            : 0;
+                ? 100
+                : 0;
     const daysToRecord = Math.max(0, bestMasterStreak - masterStreak);
     const isNewRecord = masterStreak >= bestMasterStreak && masterStreak > 0;
 
