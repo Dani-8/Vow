@@ -75,9 +75,8 @@ export const StreakLeaderboardItem: React.FC<StreakLeaderboardItemProps> = ({ ta
 
                 <div className="text-left sm:text-right space-y-0.5 min-w-[100px]">
                     <div className="flex items-center sm:justify-end space-x-1.5">
-                        <span className={`text-sm font-black flex items-center space-x-1 ${
-                            curStreak > 0 ? 'text-amber-500' : 'text-[#717699]'
-                        }`}>
+                        <span className={`text-sm font-black flex items-center space-x-1 ${curStreak > 0 ? 'text-amber-500' : 'text-[#717699]'
+                            }`}>
                             <Flame className={`w-4 h-4 ${curStreak > 0 ? 'fill-amber-500' : ''}`} />
                             <span>{curStreak}d Streak</span>
                         </span>
