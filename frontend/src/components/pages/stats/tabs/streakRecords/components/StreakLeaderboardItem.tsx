@@ -39,3 +39,51 @@ export const StreakLeaderboardItem: React.FC<StreakLeaderboardItemProps> = ({ ta
                             </span>
                         )}
                     </div>
+
+                    <div className="flex flex-wrap items-center gap-2 pt-0.5">
+                        <span className="text-[11px] font-bold text-[#717699]">
+                            {task.isHabit ? 'Daily Habit' : 'Single Goal'}
+                        </span>
+                        {task.category && (
+                            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full neu-inset text-[#44476A]">
+                                {task.category}
+                            </span>
+                        )}
+                        {subProgress.total > 0 && (
+                            <span className="text-[10px] font-bold text-[#549acb] flex items-center space-x-1">
+                                <span>{subProgress.completed}/{subProgress.total} Subtasks ({subProgress.percent}%)</span>
+                            </span>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto space-x-4 shrink-0 pl-9 sm:pl-0">
+                <div className="flex items-center space-x-1.5">
+                    {isDoneToday ? (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-black text-emerald-700 bg-emerald-500/15 border border-emerald-500/30 flex items-center space-x-1">
+                            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                            <span>Done Today</span>
+                        </span>
+                    ) : (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-black text-[#717699] bg-slate-300/40 border border-slate-300 flex items-center space-x-1">
+                            <Clock className="w-3 h-3 text-[#717699]" />
+                            <span>Pending</span>
+                        </span>
+                    )}
+                </div>
+
+                <div className="text-left sm:text-right space-y-0.5 min-w-[100px]">
+                    <div className="flex items-center sm:justify-end space-x-1.5">
+                        <span className={`text-sm font-black flex items-center space-x-1 ${
+                            curStreak > 0 ? 'text-amber-500' : 'text-[#717699]'
+                        }`}>
+                            <Flame className={`w-4 h-4 ${curStreak > 0 ? 'fill-amber-500' : ''}`} />
+                            <span>{curStreak}d Streak</span>
+                        </span>
+                        {isRecordMatched && (
+                            <span className="px-1.5 py-0.2 rounded-md bg-amber-500/20 text-amber-600 text-[9px] font-black uppercase">
+                                Record!
+                            </span>
+                        )}
+                    </div>
