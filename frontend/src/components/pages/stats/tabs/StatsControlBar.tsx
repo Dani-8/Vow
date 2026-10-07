@@ -227,21 +227,3 @@ export const StatsControlBar: React.FC<StatsControlBarProps> = ({
                             </div>
                         )}
                     </div>
-
-                    {/* 2. Custom Dropdown: EXECUTION TYPE */}
-                    <div className="relative">
-                        <button
-                            type="button"
-                            onClick={() => toggleDropdown('type')}
-                            className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center space-x-1.5 ${openDropdown === 'type' || filters.executionType !== 'all'
-                                ? 'neu-button bg-[#E0E5EC] text-[#6366f1] shadow-inner ring-1 ring-[#6366f1]/30'
-                                : 'neu-inset text-[#1a1c35] hover:text-[#6366f1]'
-                                }`}
-                        >
-                            <Layers className="w-3.5 h-3.5 text-[#6366f1]" />
-                            <span>{currentExecution.label}</span>
-                            <ChevronDown
-                                className={`w-3.5 h-3.5 text-[#717699] transition-transform duration-200 ${openDropdown === 'type' ? 'rotate-180 text-[#6366f1]' : ''
-                                    }`}
-                            />
-                        </button>
