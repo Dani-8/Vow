@@ -743,32 +743,3 @@ export const StatsDeepAnalytics: React.FC<StatsDeepAnalyticsProps> = ({
                         </ResponsiveContainer>
                     </div>
                 </div>
-
-                {/* 2. Execution Cadence Area Trend - Dynamically dictated by Global Range & Slicers */}
-                <div className="neu-card p-6 rounded-3xl space-y-4 border border-white/60">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 rounded-2xl neu-button flex items-center justify-center text-[#549acb] bg-[#E0E5EC]">
-                                <Activity className="w-5 h-5" />
-                            </div>
-                            <div>
-                                <h3 className="text-base font-black text-[#1a1c35] flex items-center space-x-2">
-                                    <span>Execution Cadence</span>
-                                    {activeCategory && (
-                                        <span className="text-[10px] px-2 py-0.5 rounded-full neu-inset text-[#549acb] font-bold">
-                                            {activeCategory.name.split(' ')[0]}
-                                        </span>
-                                    )}
-                                </h3>
-                                <p className="text-xs text-[#717699] font-medium">
-                                    {currentWindowDays <= 14
-                                        ? `Day-by-day output volume for selected ${currentWindowDays}-day horizon`
-                                        : `Weekly pacing across the selected ${currentWindowDays}-day range`}
-                                </p>
-                            </div>
-                        </div>
-
-                        <span className="px-2.5 py-1 rounded-full neu-inset text-[10px] font-black text-[#549acb]">
-                            {currentWindowDays <= 14 ? `${currentWindowDays}D Daily` : `${Math.ceil(currentWindowDays / 7)} Wk Window`}
-                        </span>
-                    </div>
