@@ -108,24 +108,3 @@ export const StatsControlBar: React.FC<StatsControlBarProps> = ({
             executionType: 'all',
         });
     };
-
-    const isAnyFilterActive =
-        filters.timeRange !== '30d' ||
-        filters.dayOfWeek !== 'all' ||
-        filters.executionType !== 'all' ||
-        activeCategoryFilter !== null;
-
-    // Derived active labels
-    const currentRangeLabel =
-        filters.timeRange === 'custom'
-            ? 'Custom Range'
-            : TIME_OPTIONS.find((t) => t.id === filters.timeRange)?.label || '30 Days';
-
-    const currentExecution = EXECUTION_OPTIONS.find((e) => e.id === filters.executionType) || EXECUTION_OPTIONS[0];
-    const currentDayLabel = DAY_OPTIONS.find((d) => d.id === filters.dayOfWeek)?.label || 'All 7 Days';
-
-    return (
-        <div
-            ref={containerRef}
-            className="neu-card p-3 rounded-2xl border border-white/60 bg-[#E0E5EC] transition-all"
-        >
