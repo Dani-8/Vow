@@ -105,3 +105,21 @@ export const StatsMetricGrid: React.FC<StatsMetricGridProps> = ({
         },
     ];
 
+    return (
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+            {cards.map((card) => {
+                const Icon = card.icon;
+                return (
+                    <div
+                        key={card.id}
+                        onClick={card.onClick}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                card.onClick?.();
+                            }
+                        }}
+                        className="neu-card p-5 rounded-3xl flex flex-col justify-between space-y-4 hover:shadow-lg transition-all duration-200 border border-white/60 cursor-pointer group text-left focus:outline-none focus:ring-2 focus:ring-[#549acb]/50"
+                    >
