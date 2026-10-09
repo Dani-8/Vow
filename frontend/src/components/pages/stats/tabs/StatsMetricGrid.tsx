@@ -10,24 +10,3 @@ interface StatsMetricGridProps {
         param?: string
     ) => void;
 }
-
-export const StatsMetricGrid: React.FC<StatsMetricGridProps> = ({
-    overview,
-    onSelectTab,
-    onNavigateToView,
-}) => {
-    const {
-        masterStreak,
-        bestMasterStreak,
-        totalSprintLogsCount,
-        activeChallengesCount,
-        totalTrophiesEarned,
-        completedMapNodes,
-        totalMapNodes,
-        roadmapCompletionRate,
-        completedSubtasks,
-        totalSubtasks,
-        completedTasks,
-        totalTasks,
-        overallTaskCompletionRate,
-    } = overview;
