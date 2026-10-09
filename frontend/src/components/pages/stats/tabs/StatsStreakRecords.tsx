@@ -213,35 +213,3 @@ export const StatsStreakRecords: React.FC<StatsStreakRecordsProps> = ({ tasks, s
                                                 <h4 className="text-xs font-black text-[#1a1c35] line-clamp-2 leading-snug">
                                                     {item.title}
                                                 </h4>
-
-                                                {/* Live daily scoreboard indicator */}
-                                                <div className="flex items-center space-x-1.5">
-                                                    {isDoneToday ? (
-                                                        <span className="px-2 py-0.5 rounded-full text-[9px] font-black text-emerald-700 bg-emerald-500/15 border border-emerald-500/30 flex items-center space-x-1">
-                                                            <CheckCircle2 className="w-2.5 h-2.5 text-emerald-600" />
-                                                            <span>Done Today</span>
-                                                        </span>
-                                                    ) : (
-                                                        <span className="px-2 py-0.5 rounded-full text-[9px] font-black text-amber-700 bg-amber-500/15 border border-amber-500/30 flex items-center space-x-1">
-                                                            <Flame className="w-2.5 h-2.5 text-amber-500" />
-                                                            <span>Pending Today</span>
-                                                        </span>
-                                                    )}
-                                                    <span className="text-[10px] font-bold text-[#717699]">
-                                                        {cur}d active
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            <div className="pt-2 border-t border-slate-300/80 flex items-baseline justify-between">
-                                                <span className="text-[10px] font-bold text-[#717699]">All-Time Peak</span>
-                                                <span className={`text-base font-black ${rank.iconColor}`}>{best} Days</span>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </div>
