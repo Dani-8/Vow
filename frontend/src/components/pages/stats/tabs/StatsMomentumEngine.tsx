@@ -27,24 +27,3 @@ interface StatsMomentumEngineProps {
     windowDays?: number;
     rangeLabel?: string;
 }
-
-export const StatsMomentumEngine: React.FC<StatsMomentumEngineProps> = ({
-    heatmapActivities,
-    overview,
-    activeCategoryFilter,
-    onResetCategoryFilter,
-    windowDays = 30,
-    rangeLabel,
-}) => {
-    // 1. Calculate Rolling Window (Current N days vs Previous N days)
-    const effectiveDays = Math.max(7, Math.min(windowDays, 90));
-
-    const { chartData, currentTotal, prevTotal, growthPercent, trendState, currentActiveDays } = useMemo(() => {
-        const totalLen = heatmapActivities.length;
-        // Current window
-        const currentWindow = heatmapActivities.slice(Math.max(0, totalLen - effectiveDays));
-        // Benchmark window immediately preceding current
-        const prevWindow = heatmapActivities.slice(
-            Math.max(0, totalLen - (effectiveDays * 2)),
-            Math.max(0, totalLen - effectiveDays)
-        );
