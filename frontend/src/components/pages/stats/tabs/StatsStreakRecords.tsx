@@ -331,39 +331,3 @@ export const StatsStreakRecords: React.FC<StatsStreakRecordsProps> = ({ tasks, s
                         Growth Vault ({tasks.filter((t) => t.isPrivate).length})
                     </button>
                 </div>
-
-                {/* List */}
-                {filteredTasks.length === 0 ? (
-                    <div className="neu-inset p-8 rounded-2xl text-center space-y-3 border border-dashed border-slate-300">
-                        <div className="w-10 h-10 mx-auto rounded-2xl neu-button flex items-center justify-center text-[#717699] bg-[#E0E5EC]">
-                            <Search className="w-5 h-5" />
-                        </div>
-                        <div className="space-y-1">
-                            <p className="text-xs font-bold text-[#1a1c35]">
-                                {tasks.length === 0 ? 'No tasks or habits created yet' : 'No items match your active filters'}
-                            </p>
-                            <p className="text-[11px] text-[#717699]">
-                                {tasks.length === 0
-                                    ? 'Add a new habit or task in the main dashboard to begin accumulating streaks.'
-                                    : 'Try searching for a different keyword or resetting your filter category.'}
-                            </p>
-                        </div>
-                        {tasks.length > 0 && (searchQuery || typeFilter !== 'all') && (
-                            <button
-                                onClick={resetFilters}
-                                className="px-3.5 py-1.5 rounded-xl neu-button text-xs font-black text-[#549acb] bg-[#E0E5EC] inline-flex items-center space-x-1.5"
-                            >
-                                <RotateCcw className="w-3.5 h-3.5" />
-                                <span>Reset Filters</span>
-                            </button>
-                        )}
-                    </div>
-                ) : (
-                    <div className="space-y-3">
-                        {filteredTasks.map((task, index) => {
-                            const Icon = getCategoryIconComponent(task.icon || task.category);
-                            const subProgress = calculateTaskSubTaskProgress(task._id, task.subTasks);
-                            const curStreak = task.currentStreak || 0;
-                            const bestStreak = task.bestStreak || 0;
-                            const isRecordMatched = curStreak >= bestStreak && curStreak > 0;
-                            const isDoneToday = Boolean(task.completedToday || task.status === 'completed');
