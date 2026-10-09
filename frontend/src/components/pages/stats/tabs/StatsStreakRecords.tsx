@@ -183,33 +183,4 @@ export const StatsStreakRecords: React.FC<StatsStreakRecordsProps> = ({ tasks, s
                                     Complete tasks and daily habits consistently to earn your place on the all-time podium.
                                 </p>
                             </div>
-                        ) : (
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
-                                {hallOfFame.map((item, idx) => {
-                                    const Icon = getCategoryIconComponent(item.icon || item.category);
-                                    const best = Math.max(item.bestStreak || 0, item.currentStreak || 0);
-                                    const cur = item.currentStreak || 0;
-                                    const isDoneToday = Boolean(item.completedToday || item.status === 'completed');
-                                    const rank = rankConfigs[idx] || rankConfigs[2];
-                                    const RankIcon = rank.icon;
-
-                                    return (
-                                        <div
-                                            key={item._id}
-                                            className={`neu-inset p-4 rounded-2xl space-y-3 border ${rank.ringColor} bg-[#E0E5EC]/80 flex flex-col justify-between group hover:scale-[1.01] transition-all`}
-                                        >
-                                            <div className="space-y-2.5">
-                                                <div className="flex items-center justify-between">
-                                                    <span className={`px-2 py-0.5 rounded-lg text-[9px] font-black uppercase tracking-wider flex items-center space-x-1 ${rank.badgeBg}`}>
-                                                        <RankIcon className={`w-3 h-3 ${rank.iconColor}`} />
-                                                        <span>{rank.title}</span>
-                                                    </span>
-
-                                                    <div className="w-7 h-7 rounded-lg neu-button flex items-center justify-center text-[#549acb] bg-[#E0E5EC] shrink-0">
-                                                        <Icon className="w-3.5 h-3.5" />
-                                                    </div>
-                                                </div>
-
-                                                <h4 className="text-xs font-black text-[#1a1c35] line-clamp-2 leading-snug">
-                                                    {item.title}
-                                                </h4>
+                        ) 
