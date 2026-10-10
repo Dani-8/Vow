@@ -80,3 +80,28 @@ export const StatsView: React.FC<StatsViewProps> = ({
         () => calculateCategoryDistribution(allTasks, challenges, taskMaps),
         [allTasks, challenges, taskMaps]
     );
+
+    return (
+        <div className="space-y-6 pb-12">
+            {/* 3-Tab Navigator */}
+            <div className="flex items-center justify-between border-b border-slate-200/60 pb-3">
+                <div className="flex items-center space-x-2 neu-inset p-1.5 rounded-2xl bg-[#E0E5EC]/90 border border-white/60">
+                    {STATS_TABS.map(({ id, label, icon: Icon }) => {
+                        const isActive = activeTab === id;
+                        return (
+                            <button
+                                key={id}
+                                onClick={() => setActiveTab(id)}
+                                className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${
+                                    isActive
+                                        ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                                        : 'text-[#717699] hover:text-[#1a1c35]'
+                                }`}
+                            >
+                                <Icon className="w-4 h-4" />
+                                <span>{label}</span>
+                            </button>
+                        );
+                    })}
+                </div>
+            </div>
