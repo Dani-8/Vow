@@ -33,3 +33,30 @@ export interface StartSessionParams {
     dayNumber?: number;
     dateStr?: string;
 }
+
+interface FocusTimerContextValue {
+    activeSession: ActiveFocusSession | null;
+    startSession: (params: StartSessionParams) => void;
+    requestStartSession: (params: StartSessionParams) => void;
+    togglePlayPause: () => void;
+    resetSession: () => void;
+    stopSession: () => void;
+    completeSessionEarly: () => void;
+    isFinishedModalOpen: boolean;
+    closeFinishedModal: () => void;
+    justFinishedSession: ActiveFocusSession | null;
+    isConflictModalOpen: boolean;
+    conflictPendingSession: StartSessionParams | null;
+    closeConflictModal: () => void;
+    confirmConflictSwitch: () => void;
+    // Zen Mode
+    isZenModeOpen: boolean;
+    openZenMode: () => void;
+    closeZenMode: () => void;
+    toggleZenMode: () => void;
+}
+
+const FocusTimerContext = createContext<FocusTimerContextValue | null>(null);
+
+const STORAGE_KEY = 'app_universal_focus_timer';
+const HISTORY_STORAGE_KEY = 'app_focus_session_history';
