@@ -2,12 +2,10 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { MasterStreakStats, Task, Challenge } from '../../../types';
 import { TaskMap } from '../task-map/types';
 import { api } from '../../../api';
-import { StatsMetricGrid } from './tabs/StatsMetricGrid';
-import { StatsActivityHeatmap } from './tabs/StatsActivityHeatmap';
-import { StatsActiveEcosystem } from './tabs/StatsActiveEcosystem';
-import { StatsDeepAnalytics } from './tabs/StatsDeepAnalytics';
-import { StatsStreakRecords } from './tabs/StatsStreakRecords';
-import { LayoutDashboard, BarChart3, Trophy, Flame } from 'lucide-react';
+import { StatsOverviewTab } from './tabs/overview/StatsOverviewTab';
+import { StatsDeepAnalyticsTab } from './tabs/deepAnalytics/StatsDeepAnalyticsTab';
+import { StatsStreakRecordsTab } from './tabs/streakRecords/StatsStreakRecordsTab';
+import { LayoutDashboard, BarChart3, Trophy } from 'lucide-react';
 import {
     calculateEcosystemOverview,
     generateActivityHeatmap,
@@ -26,6 +24,18 @@ interface StatsViewProps {
 }
 
 export type StatsTab = 'overview' | 'analytics' | 'streaks';
+
+interface TabItem {
+    id: StatsTab;
+    label: string;
+    icon: React.ComponentType<{ className?: string }>;
+}
+
+const STATS_TABS: TabItem[] = [
+    { id: 'overview', label: 'Overview Hub', icon: LayoutDashboard },
+    { id: 'analytics', label: 'Deep Analytics', icon: BarChart3 },
+    { id: 'streaks', label: 'Streak Records & Vault', icon: Trophy },
+];
 
 export const StatsView: React.FC<StatsViewProps> = ({
     stats,
@@ -76,82 +86,53 @@ export const StatsView: React.FC<StatsViewProps> = ({
             {/* 3-Tab Navigator */}
             <div className="flex items-center justify-between border-b border-slate-200/60 pb-3">
                 <div className="flex items-center space-x-2 neu-inset p-1.5 rounded-2xl bg-[#E0E5EC]/90 border border-white/60">
-                    <button
-                        onClick={() => setActiveTab('overview')}
-                        className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${activeTab === 'overview'
-                            ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
-                            : 'text-[#717699] hover:text-[#1a1c35]'
-                            }`}
-                    >
-                        <LayoutDashboard className="w-4 h-4" />
-                        <span>Overview Hub</span>
-                    </button>
-
-                    <button
-                        onClick={() => setActiveTab('analytics')}
-                        className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${activeTab === 'analytics'
-                            ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
-                            : 'text-[#717699] hover:text-[#1a1c35]'
-                            }`}
-                    >
-                        <BarChart3 className="w-4 h-4" />
-                        <span>Deep Analytics</span>
-                    </button>
-
-                    <button
-                        onClick={() => setActiveTab('streaks')}
-                        className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${activeTab === 'streaks'
-                            ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
-                            : 'text-[#717699] hover:text-[#1a1c35]'
-                            }`}
-                    >
-                        <Trophy className="w-4 h-4" />
-                        <span>Streak Records & Vault</span>
-                    </button>
+                    {STATS_TABS.map(({ id, label, icon: Icon }) => {
+                        const isActive = activeTab === id;
+                        return (
+                            <button
+                                key={id}
+                                onClick={() => setActiveTab(id)}
+                                className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${
+                                    isActive
+                                        ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                                        : 'text-[#717699] hover:text-[#1a1c35]'
+                                }`}
+                            >
+                                <Icon className="w-4 h-4" />
+                                <span>{label}</span>
+                            </button>
+                        );
+                    })}
                 </div>
             </div>
 
             {/* TAB 1: OVERVIEW HUB */}
             {activeTab === 'overview' && (
-                <div className="space-y-6 animate-fadeIn">
-                    {/* Unified 4-Pillar Metric Grid */}
-                    <StatsMetricGrid
-                        overview={overview}
-                        onSelectTab={(tab) => setActiveTab(tab)}
-                        onNavigateToView={onNavigateToView}
-                    />
-
-                    {/* 16-Week Unified Execution Heatmap */}
-                    <StatsActivityHeatmap activities={heatmapActivities} />
-
-                    {/* Active Sprints & Roadmaps Command Hub */}
-                    <StatsActiveEcosystem
-                        challenges={challenges}
-                        taskMaps={taskMaps}
-                        onNavigateToView={onNavigateToView}
-                    />
-                </div>
+                <StatsOverviewTab
+                    overview={overview}
+                    heatmapActivities={heatmapActivities}
+                    challenges={challenges}
+                    taskMaps={taskMaps}
+                    onSelectTab={(tab) => setActiveTab(tab)}
+                    onNavigateToView={onNavigateToView}
+                />
             )}
 
             {/* TAB 2: DEEP ANALYTICS & RADAR */}
             {activeTab === 'analytics' && (
-                <div className="space-y-6 animate-fadeIn">
-                    <StatsDeepAnalytics
-                        categories={categoryDistribution}
-                        heatmapActivities={heatmapActivities}
-                        overview={overview}
-                        tasks={allTasks}
-                        challenges={challenges}
-                        taskMaps={taskMaps}
-                    />
-                </div>
+                <StatsDeepAnalyticsTab
+                    categories={categoryDistribution}
+                    heatmapActivities={heatmapActivities}
+                    overview={overview}
+                    tasks={allTasks}
+                    challenges={challenges}
+                    taskMaps={taskMaps}
+                />
             )}
 
             {/* TAB 3: STREAK RECORDS & VAULT */}
             {activeTab === 'streaks' && (
-                <div className="space-y-6 animate-fadeIn">
-                    <StatsStreakRecords tasks={allTasks} stats={stats} />
-                </div>
+                <StatsStreakRecordsTab tasks={allTasks} stats={stats} />
             )}
         </div>
     );
