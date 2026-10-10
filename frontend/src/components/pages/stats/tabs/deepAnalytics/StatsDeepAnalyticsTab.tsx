@@ -26,3 +26,45 @@ interface StatsDeepAnalyticsTabProps {
     challenges?: Challenge[];
     taskMaps?: TaskMap[];
 }
+
+export const StatsDeepAnalyticsTab: React.FC<StatsDeepAnalyticsTabProps> = ({
+    categories,
+    heatmapActivities,
+    overview,
+    tasks = [],
+    challenges = [],
+}) => {
+    const [selectedCategoryKey, setSelectedCategoryKey] = useState<string | null>(null);
+    const [filters, setFilters] = useState<AnalyticsFilterState>({
+        timeRange: '30d',
+        dayOfWeek: 'all',
+        executionType: 'all',
+    });
+
+    const handleToggleCategory = (catKey: string) => {
+        setSelectedCategoryKey((prev) => (prev === catKey ? null : catKey));
+    };
+
+    const handleResetCategoryFilter = () => {
+        setSelectedCategoryKey(null);
+    };
+
+    const {
+        normalizedCategories,
+        activeCategory,
+        currentWindowDays,
+        dynamicActivities,
+        highestEfficiency,
+        highestVolume,
+        velocityStats,
+        radarData,
+        barData,
+        cadenceTrend,
+    } = useDeepAnalyticsData({
+        categories,
+        heatmapActivities,
+        tasks,
+        challenges,
+        filters,
+        selectedCategoryKey,
+    });
