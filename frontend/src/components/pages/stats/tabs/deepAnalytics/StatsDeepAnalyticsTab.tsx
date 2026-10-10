@@ -106,3 +106,35 @@ export const StatsDeepAnalyticsTab: React.FC<StatsDeepAnalyticsTabProps> = ({
                     onResetCategoryFilter={handleResetCategoryFilter}
                 />
             </div>
+
+            {/* 4. Discipline & Momentum Engine */}
+            <AnalyticsMomentumEngine
+                heatmapActivities={dynamicActivities}
+                overview={overview}
+                activeCategoryFilter={activeCategory ? activeCategory.name : null}
+                onResetCategoryFilter={handleResetCategoryFilter}
+                windowDays={currentWindowDays}
+                rangeLabel={
+                    filters.timeRange === 'custom'
+                        ? 'Custom Range'
+                        : `Rolling ${currentWindowDays} Days`
+                }
+            />
+
+            {/* 5. Row 2: Conquered vs Pending Bar + Execution Cadence Area */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <AnalyticsBacklogBar
+                    barData={barData}
+                    selectedCategoryKey={selectedCategoryKey}
+                    onToggleCategory={handleToggleCategory}
+                />
+                <AnalyticsCadenceArea
+                    cadenceTrend={cadenceTrend}
+                    currentWindowDays={currentWindowDays}
+                    activeCategoryName={activeCategory?.name || null}
+                    activeCategoryColor={activeCategory ? activeCategory.color : '#549acb'}
+                />
+            </div>
+        </div>
+    );
+};
