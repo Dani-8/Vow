@@ -105,3 +105,35 @@ export const StatsView: React.FC<StatsViewProps> = ({
                     })}
                 </div>
             </div>
+
+            {/* TAB 1: OVERVIEW HUB */}
+            {activeTab === 'overview' && (
+                <StatsOverviewTab
+                    overview={overview}
+                    heatmapActivities={heatmapActivities}
+                    challenges={challenges}
+                    taskMaps={taskMaps}
+                    onSelectTab={(tab) => setActiveTab(tab)}
+                    onNavigateToView={onNavigateToView}
+                />
+            )}
+
+            {/* TAB 2: DEEP ANALYTICS & RADAR */}
+            {activeTab === 'analytics' && (
+                <StatsDeepAnalyticsTab
+                    categories={categoryDistribution}
+                    heatmapActivities={heatmapActivities}
+                    overview={overview}
+                    tasks={allTasks}
+                    challenges={challenges}
+                    taskMaps={taskMaps}
+                />
+            )}
+
+            {/* TAB 3: STREAK RECORDS & VAULT */}
+            {activeTab === 'streaks' && (
+                <StatsStreakRecordsTab tasks={allTasks} stats={stats} />
+            )}
+        </div>
+    );
+};
