@@ -275,3 +275,65 @@ export const FocusTimerProvider: React.FC<{ children: ReactNode }> = ({ children
     const stopSession = useCallback(() => {
         setActiveSession(null);
     }, []);
+
+    const completeSessionEarly = useCallback(() => {
+        setActiveSession((prev) => {
+            if (!prev) return null;
+            const finished = {
+                ...prev,
+                remainingSeconds: 0,
+                isRunning: false,
+                completedAt: new Date().toISOString(),
+            };
+            saveCompletedSessionToHistory(finished);
+            playChimeSound();
+            setJustFinishedSession(finished);
+            setIsFinishedModalOpen(true);
+            return null;
+        });
+    }, []);
+
+    const closeFinishedModal = useCallback(() => {
+        setIsFinishedModalOpen(false);
+        setJustFinishedSession(null);
+    }, []);
+
+    const openZenMode = useCallback(() => setIsZenModeOpen(true), []);
+    const closeZenMode = useCallback(() => setIsZenModeOpen(false), []);
+    const toggleZenMode = useCallback(() => setIsZenModeOpen((prev) => !prev), []);
+
+    return (
+        <FocusTimerContext.Provider
+            value={{
+                activeSession,
+                startSession,
+                requestStartSession,
+                togglePlayPause,
+                resetSession,
+                stopSession,
+                completeSessionEarly,
+                isFinishedModalOpen,
+                closeFinishedModal,
+                justFinishedSession,
+                isConflictModalOpen,
+                conflictPendingSession,
+                closeConflictModal,
+                confirmConflictSwitch,
+                isZenModeOpen,
+                openZenMode,
+                closeZenMode,
+                toggleZenMode,
+            }}
+        >
+            {children}
+        </FocusTimerContext.Provider>
+    );
+};
+
+export const useFocusTimer = () => {
+    const ctx = useContext(FocusTimerContext);
+    if (!ctx) {
+        throw new Error('useFocusTimer must be used within FocusTimerProvider');
+    }
+    return ctx;
+};
