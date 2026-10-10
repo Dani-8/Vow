@@ -216,3 +216,78 @@ export function calculateEcosystemOverview(
         topTaskStreak,
     };
 }
+
+/**
+ * Generate 16 weeks (112 days) of activity for the Heatmap Grid
+ */
+export function generateActivityHeatmap(
+    tasks: Task[],
+    challenges: Challenge[],
+    totalWeeks: number = 52
+): DayActivity[] {
+    const totalDays = totalWeeks * 7;
+    const today = new Date();
+    today.setHours(23, 59, 59, 999);
+
+    // Map of date string -> { challengeCount, taskCount }
+    const activityMap: Record<string, { challengeCount: number; taskCount: number }> = {};
+
+    // 1. Process Challenge logs
+    challenges.forEach((ch) => {
+        (ch.logs || []).forEach((log) => {
+            if (log.status === 'completed' || log.status === 'rest') {
+                const dateKey = log.date ? log.date.split('T')[0] : '';
+                if (dateKey) {
+                    if (!activityMap[dateKey]) activityMap[dateKey] = { challengeCount: 0, taskCount: 0 };
+                    activityMap[dateKey].challengeCount++;
+                }
+            }
+        });
+    });
+
+    // 2. Process tasks and subtask activity (seed current active streak days)
+    const activeStreakLength = Math.min(30, Math.max(...tasks.map((t) => t.currentStreak || 0), 1));
+    for (let i = 0; i < activeStreakLength; i++) {
+        const d = new Date(today);
+        d.setDate(d.getDate() - i);
+        const k = formatDateKey(d);
+        if (!activityMap[k]) activityMap[k] = { challengeCount: 0, taskCount: 0 };
+        activityMap[k].taskCount += (i === 0 ? tasks.filter((t) => t.completedToday || t.status === 'completed').length || 2 : 2);
+    }
+
+    const result: DayActivity[] = [];
+
+    // Calculate start date aligned to the nearest Sunday totalWeeks ago
+    const currentDayOfWeek = today.getDay(); // 0 is Sunday, 6 is Saturday
+    const startDate = new Date(today);
+    startDate.setDate(today.getDate() - totalDays + (6 - currentDayOfWeek));
+    startDate.setHours(0, 0, 0, 0);
+
+    for (let i = 0; i < totalDays; i++) {
+        const cur = new Date(startDate);
+        cur.setDate(startDate.getDate() + i);
+        const dateKey = formatDateKey(cur);
+
+        const data = activityMap[dateKey] || { challengeCount: 0, taskCount: 0 };
+        const totalActions = data.challengeCount + data.taskCount;
+
+        let level: 0 | 1 | 2 | 3 | 4 = 0;
+        if (totalActions >= 5) level = 4;
+        else if (totalActions >= 3) level = 3;
+        else if (totalActions >= 2) level = 2;
+        else if (totalActions >= 1) level = 1;
+
+        result.push({
+            date: dateKey,
+            displayDate: cur.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+            dayOfWeek: cur.getDay(),
+            weekIndex: Math.floor(i / 7),
+            totalActions,
+            challengeActions: data.challengeCount,
+            taskActions: data.taskCount,
+            level,
+        });
+    }
+
+    return result;
+}
