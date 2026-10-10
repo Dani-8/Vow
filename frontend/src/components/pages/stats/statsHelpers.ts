@@ -331,3 +331,61 @@ export function generateCategoryActivityHeatmap(
 
     return generateActivityHeatmap(filteredTasks, filteredChallenges, totalWeeks);
 }
+
+/**
+ * Category & Focus Distribution
+ */
+export function calculateCategoryDistribution(
+    tasks: Task[],
+    challenges: Challenge[],
+    taskMaps: TaskMap[]
+): CategoryBreakdownItem[] {
+    const categoryTotals: Record<
+        string,
+        { itemCount: number; completedCount: number; color: string; iconId: string }
+    > = {
+        'Tech & Engineering': { itemCount: 0, completedCount: 0, color: '#549acb', iconId: 'code' },
+        'Fitness & Health': { itemCount: 0, completedCount: 0, color: '#10b981', iconId: 'dumbbell' },
+        'Learning & Mind': { itemCount: 0, completedCount: 0, color: '#8b5cf6', iconId: 'book' },
+        'Business & Finance': { itemCount: 0, completedCount: 0, color: '#f59e0b', iconId: 'briefcase' },
+        'Habits & Routine': { itemCount: 0, completedCount: 0, color: '#6366f1', iconId: 'calendar' },
+        'Creative & Craft': { itemCount: 0, completedCount: 0, color: '#06b6d4', iconId: 'palette' },
+    };
+
+    // 1. Tasks
+    tasks.forEach((t) => {
+        const cat = categorize(t.category || (t.tags && t.tags[0]), t.title);
+        categoryTotals[cat].itemCount++;
+        if (t.status === 'completed' || t.completedToday) categoryTotals[cat].completedCount++;
+    });
+
+    // 2. Challenges
+    challenges.forEach((c) => {
+        const cat = categorize(c.category, c.title);
+        categoryTotals[cat].itemCount += 2; // Weight challenges more heavily
+        if (c.status === 'completed') categoryTotals[cat].completedCount += 2;
+        else categoryTotals[cat].completedCount += 1;
+    });
+
+    // 3. Task Maps
+    taskMaps.forEach((m) => {
+        const cat = categorize(m.category, m.name);
+        categoryTotals[cat].itemCount += 3;
+        categoryTotals[cat].completedCount += 2;
+    });
+
+    const totalWeight = Object.values(categoryTotals).reduce((sum, c) => sum + c.itemCount, 0);
+
+    return Object.entries(categoryTotals)
+        .map(([name, data]) => ({
+            name,
+            key: name.toLowerCase().replace(/[^a-z0-9]/g, '-'),
+            itemCount: data.itemCount,
+            completedCount: data.completedCount,
+            percentage: totalWeight > 0 ? Math.round((data.itemCount / totalWeight) * 100) : 0,
+            color: data.color,
+            iconId: data.iconId,
+        }))
+        .filter((item) => item.itemCount > 0)
+        .sort((a, b) => b.percentage - a.percentage);
+}
