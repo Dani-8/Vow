@@ -220,3 +220,58 @@ export const FocusTimerProvider: React.FC<{ children: ReactNode }> = ({ children
         },
         []
     );
+
+    // Safe entry point: checks if a different timer is already running
+    const requestStartSession = useCallback(
+        (params: StartSessionParams) => {
+            if (
+                activeSession &&
+                activeSession.remainingSeconds > 0 &&
+                (activeSession.sourceId !== params.sourceId || activeSession.sourceType !== params.sourceType)
+            ) {
+                setConflictPendingSession(params);
+                setIsConflictModalOpen(true);
+                return;
+            }
+            startSession(params);
+        },
+        [activeSession, startSession]
+    );
+
+    const confirmConflictSwitch = useCallback(() => {
+        if (conflictPendingSession) {
+            startSession(conflictPendingSession);
+            setConflictPendingSession(null);
+            setIsConflictModalOpen(false);
+        }
+    }, [conflictPendingSession, startSession]);
+
+    const closeConflictModal = useCallback(() => {
+        setIsConflictModalOpen(false);
+        setConflictPendingSession(null);
+    }, []);
+
+    const togglePlayPause = useCallback(() => {
+        setActiveSession((prev) => {
+            if (!prev) return null;
+            return {
+                ...prev,
+                isRunning: !prev.isRunning,
+            };
+        });
+    }, []);
+
+    const resetSession = useCallback(() => {
+        setActiveSession((prev) => {
+            if (!prev) return null;
+            return {
+                ...prev,
+                remainingSeconds: prev.totalSeconds,
+                isRunning: false,
+            };
+        });
+    }, []);
+
+    const stopSession = useCallback(() => {
+        setActiveSession(null);
+    }, []);
