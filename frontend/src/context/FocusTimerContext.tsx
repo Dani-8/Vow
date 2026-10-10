@@ -49,6 +49,11 @@ interface FocusTimerContextValue {
     conflictPendingSession: StartSessionParams | null;
     closeConflictModal: () => void;
     confirmConflictSwitch: () => void;
+    // Zen Mode
+    isZenModeOpen: boolean;
+    openZenMode: () => void;
+    closeZenMode: () => void;
+    toggleZenMode: () => void;
 }
 
 const FocusTimerContext = createContext<FocusTimerContextValue | null>(null);
@@ -139,6 +144,9 @@ export const FocusTimerProvider: React.FC<{ children: ReactNode }> = ({ children
     // Conflict state
     const [isConflictModalOpen, setIsConflictModalOpen] = useState(false);
     const [conflictPendingSession, setConflictPendingSession] = useState<StartSessionParams | null>(null);
+
+    // Zen Mode state
+    const [isZenModeOpen, setIsZenModeOpen] = useState(false);
 
     // Persist to local storage
     useEffect(() => {
@@ -290,6 +298,10 @@ export const FocusTimerProvider: React.FC<{ children: ReactNode }> = ({ children
         setJustFinishedSession(null);
     }, []);
 
+    const openZenMode = useCallback(() => setIsZenModeOpen(true), []);
+    const closeZenMode = useCallback(() => setIsZenModeOpen(false), []);
+    const toggleZenMode = useCallback(() => setIsZenModeOpen((prev) => !prev), []);
+
     return (
         <FocusTimerContext.Provider
             value={{
@@ -307,6 +319,10 @@ export const FocusTimerProvider: React.FC<{ children: ReactNode }> = ({ children
                 conflictPendingSession,
                 closeConflictModal,
                 confirmConflictSwitch,
+                isZenModeOpen,
+                openZenMode,
+                closeZenMode,
+                toggleZenMode,
             }}
         >
             {children}
