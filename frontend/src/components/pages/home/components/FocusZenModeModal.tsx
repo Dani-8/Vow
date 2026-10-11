@@ -136,7 +136,7 @@ export const FocusZenModeModal: React.FC<FocusZenModeModalProps> = ({ isOpen, on
             <main className="flex flex-col items-center justify-center my-auto z-10 space-y-6">
                 {/* Breathing Ambient Halo around Clock Face */}
                 <div className="relative flex items-center justify-center">
-                    
+
                     {/* LAYER 1: Current Aura Glow (Crossfades smoothly via opacity) */}
                     <div
                         className="absolute -inset-8 sm:-inset-14 rounded-full blur-3xl pointer-events-none transition-opacity duration-1000 ease-in-out"
