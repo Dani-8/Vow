@@ -208,3 +208,11 @@ export const FocusZenModeModal: React.FC<FocusZenModeModalProps> = ({ isOpen, on
                         </div>
                     </div>
                 </div>
+
+                {/* Progress Text */}
+                <div className="text-center">
+                    <span className="text-xs font-bold text-[#647196]">
+                        {Math.round(progressPercent)}% elapsed of {Math.round(activeSession.totalSeconds / 60)}m goal
+                    </span>
+                </div>
+            </main>
