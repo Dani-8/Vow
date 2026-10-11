@@ -165,7 +165,7 @@ export const FocusZenModeModal: React.FC<FocusZenModeModalProps> = ({ isOpen, on
                     <div className="w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-[#E0E5EC] p-5 sm:p-7 flex items-center justify-center shadow-[14px_14px_30px_rgba(163,177,198,0.7),-14px_-14px_30px_rgba(255,255,255,0.95)] border border-white/70 relative">
                         {/* Inner Inset Cavity */}
                         <div className="w-full h-full rounded-full bg-[#E0E5EC] shadow-[inset_10px_10px_20px_rgba(163,177,198,0.65),inset_-10px_-10px_20px_rgba(255,255,255,0.95)] flex flex-col items-center justify-center relative p-6">
-                            
+
                             {/* Running indicator badge */}
                             <div className="mb-2 flex items-center space-x-1.5 neu-badge px-3 py-1 rounded-full bg-[#E0E5EC]/90">
                                 <Sparkles className="w-3 h-3 text-[#549acb]" />
