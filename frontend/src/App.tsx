@@ -14,3 +14,32 @@ import { ActiveTimerConflictModal } from './components/modals/ActiveTimerConflic
 import { FocusZenModeModal } from './components/pages/home/components/FocusZenModeModal';
 import { useFocusTimer } from './context/FocusTimerContext';
 import { getTaskSlug } from './components/pages/router/AppRouter';
+
+export default function App() {
+  const taskData = useTaskData();
+  const modalState = useModalState();
+  const challengeState = useChallenges(taskData.user);
+  const {
+    isFinishedModalOpen,
+    closeFinishedModal,
+    justFinishedSession,
+    activeSession,
+    isConflictModalOpen,
+    conflictPendingSession,
+    closeConflictModal,
+    confirmConflictSwitch,
+    isZenModeOpen,
+    closeZenMode,
+  } = useFocusTimer();
+
+  const {
+    user,
+    setUser,
+    activeView,
+    navigateToView,
+    handleBypassAuth,
+    refreshData,
+    privateTasks,
+    setPrivateTasks,
+    setIsPrivateUnlocked,
+  } = taskData;
