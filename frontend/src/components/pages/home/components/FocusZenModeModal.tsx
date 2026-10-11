@@ -231,11 +231,10 @@ export const FocusZenModeModal: React.FC<FocusZenModeModalProps> = ({ isOpen, on
                 {/* Huge Primary Play / Pause button */}
                 <button
                     onClick={togglePlayPause}
-                    className={`px-8 py-4 rounded-2xl font-black text-sm flex items-center space-x-2.5 transition-all shadow-xl hover:scale-105 active:scale-95 ${
-                        activeSession.isRunning
+                    className={`px-8 py-4 rounded-2xl font-black text-sm flex items-center space-x-2.5 transition-all shadow-xl hover:scale-105 active:scale-95 ${activeSession.isRunning
                             ? 'neu-button text-amber-600 hover:text-amber-700 bg-[#E0E5EC]'
                             : 'neu-button-primary text-white'
-                    }`}
+                        }`}
                     title={activeSession.isRunning ? 'Pause (Space)' : 'Resume (Space)'}
                 >
                     {activeSession.isRunning ? (
