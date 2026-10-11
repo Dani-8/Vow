@@ -102,4 +102,58 @@ export default function App() {
       }}
       onLogout={taskData.handleLogout}
       onBypassAuth={handleBypassAuth}
-    ></MainLayout>
+    >
+      <AppRouter
+        activeView={activeView}
+        location={taskData.location}
+        user={user}
+        tasks={taskData.tasks}
+        privateTasks={privateTasks}
+        filteredTasks={taskData.filteredTasks}
+        stats={taskData.stats}
+        isPrivateUnlocked={taskData.isPrivateUnlocked}
+        selectedTaskForDetail={modalState.selectedTaskForDetail}
+        setSelectedTaskForDetail={modalState.setSelectedTaskForDetail}
+        searchQuery={taskData.searchQuery}
+        setSearchQuery={taskData.setSearchQuery}
+        filter={taskData.filter}
+        setFilter={taskData.setFilter}
+        navigate={taskData.navigate}
+        navigateToView={navigateToView}
+        setIsPrivateUnlocked={setIsPrivateUnlocked}
+        onCheckInToday={taskData.handleDirectCheckIn}
+        onToggleComplete={(task) =>
+          taskData.handleToggleComplete(task, (t, status) => {
+            if (
+              modalState.selectedTaskForDetail &&
+              modalState.selectedTaskForDetail._id === t._id
+            ) {
+              modalState.setSelectedTaskForDetail({ ...t, status: status as any });
+            }
+          })
+        }
+        onTogglePrivate={(task) =>
+          taskData.handleTogglePrivate(task, () =>
+            modalState.setIsPinModalOpen(true)
+          )
+        }
+        onEditTask={modalState.openEditTaskModal}
+        onDeleteTask={taskData.handleDeleteTask}
+        onOpenAIAssist={modalState.openAIAssistModal}
+        onOpenCreateModal={modalState.openCreateTaskModal}
+        onOpenPinModal={() => {
+          modalState.setIsPinModalOpen(true);
+          navigateToView('private');
+        }}
+        challenges={challengeState.challenges}
+        selectedChallenge={challengeState.selectedChallenge}
+        setSelectedChallenge={challengeState.setSelectedChallenge}
+        onCreateChallenge={challengeState.createChallenge}
+        onUpdateChallenge={challengeState.updateChallenge}
+        onDeleteChallenge={challengeState.deleteChallenge}
+        onLogChallengeDay={challengeState.logDay}
+        onDeleteChallengeLog={challengeState.deleteLog}
+        onStartNextSprint={challengeState.startNextSprint}
+        onCompleteSprint={challengeState.completeSprint}
+        onUpdateSprintRule={challengeState.updateSprintRule}
+      /></MainLayout>
