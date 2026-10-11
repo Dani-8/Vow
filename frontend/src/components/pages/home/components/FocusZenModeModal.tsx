@@ -216,3 +216,37 @@ export const FocusZenModeModal: React.FC<FocusZenModeModalProps> = ({ isOpen, on
                     </span>
                 </div>
             </main>
+
+            {/* BOTTOM BAR: Minimal Zen Controls */}
+            <footer className="w-full max-w-md mx-auto flex items-center justify-center space-x-4 z-10 pt-2 pb-2">
+                {/* Reset button */}
+                <button
+                    onClick={resetSession}
+                    className="p-4 rounded-2xl neu-button text-[#717699] hover:text-[#1a1c35] transition-all hover:scale-105 active:scale-95 shadow-md"
+                    title="Reset timer"
+                >
+                    <RotateCcw className="w-5 h-5" />
+                </button>
+
+                {/* Huge Primary Play / Pause button */}
+                <button
+                    onClick={togglePlayPause}
+                    className={`px-8 py-4 rounded-2xl font-black text-sm flex items-center space-x-2.5 transition-all shadow-xl hover:scale-105 active:scale-95 ${
+                        activeSession.isRunning
+                            ? 'neu-button text-amber-600 hover:text-amber-700 bg-[#E0E5EC]'
+                            : 'neu-button-primary text-white'
+                    }`}
+                    title={activeSession.isRunning ? 'Pause (Space)' : 'Resume (Space)'}
+                >
+                    {activeSession.isRunning ? (
+                        <>
+                            <Pause className="w-5 h-5 fill-current" />
+                            <span>Pause</span>
+                        </>
+                    ) : (
+                        <>
+                            <Play className="w-5 h-5 fill-current" />
+                            <span>Resume</span>
+                        </>
+                    )}
+                </button>
