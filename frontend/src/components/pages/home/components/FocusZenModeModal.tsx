@@ -110,3 +110,24 @@ export const FocusZenModeModal: React.FC<FocusZenModeModalProps> = ({ isOpen, on
                         </h2>
                     </div>
                 </div>
+
+                {/* Right: Shortcut indicators & Exit Zen button completely aligned to right */}
+                <div className="flex items-center space-x-2 sm:space-x-3">
+                    <div className="hidden md:flex items-center space-x-1.5 neu-inset px-3.5 py-2 rounded-2xl text-[10px] font-bold text-[#717699] bg-[#E0E5EC]/85 backdrop-blur-md border border-white/60">
+                        <span>Press</span>
+                        <kbd className="px-1.5 py-0.5 rounded bg-white/80 text-[#1a1c35] font-mono font-bold shadow-xs">Space</kbd>
+                        <span>to pause •</span>
+                        <kbd className="px-1.5 py-0.5 rounded bg-white/80 text-[#1a1c35] font-mono font-bold shadow-xs">Esc</kbd>
+                        <span>to exit</span>
+                    </div>
+
+                    <button
+                        onClick={onClose}
+                        className="neu-button px-4 py-2.5 rounded-2xl text-xs font-black text-[#515777] hover:text-[#1a1c35] flex items-center space-x-1.5 shadow-md hover:scale-105 active:scale-95 transition-all"
+                        title="Exit Zen Mode (Esc)"
+                    >
+                        <Minimize2 className="w-4 h-4 text-[#549acb]" />
+                        <span className="hidden xs:inline">Exit Zen</span>
+                    </button>
+                </div>
+            </header>
