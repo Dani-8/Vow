@@ -184,3 +184,23 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                         <Calendar className="w-3.5 h-3.5" />
                         {activeMode === 'calendar' && <span>Calendar</span>}
                     </button>
+
+                    {/* Focus / Timer Tab (ALWAYS VISIBLE) */}
+                    <button
+                        onClick={() => handleModeChange('focus')}
+                        className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition-all ${
+                            activeMode === 'focus'
+                                ? activeSession
+                                    ? 'neu-button text-emerald-600 bg-[#E0E5EC]'
+                                    : 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                                : activeSession
+                                ? 'text-emerald-600 hover:text-emerald-700'
+                                : 'text-[#717699] hover:text-[#1a1c35]'
+                        }`}
+                        title={activeSession ? 'View Active Focus Timer' : 'Focus Timer'}
+                    >
+                        <Timer className={`w-3.5 h-3.5 ${activeSession ? 'animate-spin-slow' : ''}`} />
+                        {activeMode === 'focus' && <span>Timer</span>}
+                    </button>
+                </div>
+            </div>
