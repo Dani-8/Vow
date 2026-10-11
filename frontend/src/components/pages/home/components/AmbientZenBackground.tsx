@@ -48,3 +48,38 @@ const generateInitialOrbs = (): FloatingOrb[] => {
         scale: getRandomBetween(90, 120) / 100,
     }));
 };
+
+export const AmbientZenBackground: React.FC = () => {
+    const [orbs, setOrbs] = useState<FloatingOrb[]>(() => generateInitialOrbs());
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setOrbs((prevOrbs) =>
+                prevOrbs.map((orb, index) => {
+                    const shouldMove = Math.random() > 0.2;
+                    if (!shouldMove) return orb;
+
+                    const bound = REGION_BOUNDS[index % REGION_BOUNDS.length];
+                    // Pick a fresh random coordinate within its home zone with gentle freedom jitter
+                    const jitterTop = getRandomBetween(-10, 10);
+                    const jitterLeft = getRandomBetween(-10, 10);
+
+                    const targetTop = Math.max(3, Math.min(94, getRandomBetween(bound.minTop, bound.maxTop) + jitterTop));
+                    const targetLeft = Math.max(3, Math.min(94, getRandomBetween(bound.minLeft, bound.maxLeft) + jitterLeft));
+
+                    return {
+                        ...orb,
+                        color: Math.random() > 0.35 ? getRandomItem(ZEN_PALETTE) : orb.color,
+                        top: targetTop,
+                        left: targetLeft,
+                        size: getRandomBetween(240, 440),
+                        opacity: getRandomBetween(14, 30) / 100,
+                        duration: getRandomBetween(6, 15),
+                        scale: getRandomBetween(85, 125) / 100,
+                    };
+                })
+            );
+        }, 4000);
+
+        return () => clearInterval(interval);
+    }, []);
