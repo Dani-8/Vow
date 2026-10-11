@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Clock, Calendar, ChevronLeft, ChevronRight, Play, Pause, RotateCcw, CheckCircle2, Timer, Zap, X, Info } from 'lucide-react';
+import { Clock, Calendar, ChevronLeft, ChevronRight, Play, Pause, RotateCcw, CheckCircle2, Timer, Zap, X, Info, Maximize2 } from 'lucide-react';
 import { Task } from '../../../../types';
 import { useFocusTimer } from '../../../../context/FocusTimerContext';
 
@@ -18,7 +18,7 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
     formattedDayName,
     tasks = [],
 }) => {
-    const { activeSession, togglePlayPause, resetSession, completeSessionEarly, stopSession } = useFocusTimer();
+    const { activeSession, togglePlayPause, resetSession, completeSessionEarly, stopSession, openZenMode } = useFocusTimer();
 
     // Persist choice in localStorage
     const [activeMode, setActiveMode] = useState<'clock' | 'calendar' | 'focus'>(() => {
@@ -279,6 +279,14 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                                 title="Cancel Session"
                             >
                                 <X className="w-4 h-4" />
+                            </button>
+
+                            <button
+                                onClick={openZenMode}
+                                className="p-2.5 rounded-xl neu-button text-[#549acb] hover:text-[#3d84b5] transition-all hover:scale-105"
+                                title="Open Fullscreen Zen Mode (⛶)"
+                            >
+                                <Maximize2 className="w-4 h-4" />
                             </button>
                         </div>
                     </div>
