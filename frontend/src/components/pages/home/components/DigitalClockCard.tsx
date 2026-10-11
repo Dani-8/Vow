@@ -155,3 +155,18 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                     )}
                 </div>
+
+                <div className="flex items-center space-x-1 neu-inset p-1 rounded-xl bg-[#E0E5EC]/90 border border-white/60">
+                    {/* Clock Tab */}
+                    <button
+                        onClick={() => handleModeChange('clock')}
+                        className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition-all ${
+                            activeMode === 'clock'
+                                ? 'neu-button text-[#549acb] bg-[#E0E5EC]'
+                                : 'text-[#717699] hover:text-[#1a1c35]'
+                        }`}
+                        title="View Current Time"
+                    >
+                        <Clock className="w-3.5 h-3.5" />
+                        {activeMode === 'clock' && <span>Clock</span>}
+                    </button>
