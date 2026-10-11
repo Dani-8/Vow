@@ -43,3 +43,35 @@ export default function App() {
     setPrivateTasks,
     setIsPrivateUnlocked,
   } = taskData;
+
+  // Standalone Landing View
+  if (activeView === 'landing') {
+    return (
+      <LandingPage
+        onEnterApp={() => {
+          if (!user) {
+            navigateToView('auth');
+          } else {
+            navigateToView('home');
+          }
+        }}
+        onOpenAuth={() => navigateToView('auth')}
+        onBypassAuth={handleBypassAuth}
+      />
+    );
+  }
+
+  // Standalone Auth View
+  if (activeView === 'auth') {
+    return (
+      <AuthPage
+        onSuccess={async (loggedUser) => {
+          setUser(loggedUser);
+          await refreshData();
+          navigateToView('home');
+        }}
+        onBypass={handleBypassAuth}
+        onBackToHome={() => navigateToView('landing')}
+      />
+    );
+  }
