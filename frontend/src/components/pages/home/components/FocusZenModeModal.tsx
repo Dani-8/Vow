@@ -160,3 +160,51 @@ export const FocusZenModeModal: React.FC<FocusZenModeModalProps> = ({ isOpen, on
                             transform: activeSession.isRunning ? 'scale(1.06)' : 'scale(1)',
                         }}
                     />
+
+                    {/* Outer Neumorphic Dial */}
+                    <div className="w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-[#E0E5EC] p-5 sm:p-7 flex items-center justify-center shadow-[14px_14px_30px_rgba(163,177,198,0.7),-14px_-14px_30px_rgba(255,255,255,0.95)] border border-white/70 relative">
+                        {/* Inner Inset Cavity */}
+                        <div className="w-full h-full rounded-full bg-[#E0E5EC] shadow-[inset_10px_10px_20px_rgba(163,177,198,0.65),inset_-10px_-10px_20px_rgba(255,255,255,0.95)] flex flex-col items-center justify-center relative p-6">
+                            
+                            {/* Running indicator badge */}
+                            <div className="mb-2 flex items-center space-x-1.5 neu-badge px-3 py-1 rounded-full bg-[#E0E5EC]/90">
+                                <Sparkles className="w-3 h-3 text-[#549acb]" />
+                                <span className="text-[10px] font-black uppercase tracking-widest text-[#515777]">
+                                    {activeSession.isRunning ? 'Deep Immersion' : 'Session Paused'}
+                                </span>
+                            </div>
+
+                            {/* Massive Clock Font */}
+                            <span className="text-5xl sm:text-7xl font-black font-mono tracking-tight text-[#1a1c35] drop-shadow-xs">
+                                {formattedTimer}
+                            </span>
+
+                            {/* Subtitle / Day note */}
+                            <p className="text-xs sm:text-sm font-semibold text-[#717699] text-center max-w-[200px] truncate mt-1">
+                                {activeSession.sourceSubtitle || 'Maintain laser focus'}
+                            </p>
+
+                            {/* Circular-style bottom progress arc pill with smooth cross-fading color layers */}
+                            <div className="w-36 sm:w-44 h-2 rounded-full neu-inset overflow-hidden mt-4 relative">
+                                {/* Layer 1: Current Gradient */}
+                                <div
+                                    className="absolute inset-y-0 left-0 rounded-full transition-all duration-1000 ease-in-out shadow-sm"
+                                    style={{
+                                        width: `${Math.min(100, Math.max(0, progressPercent))}%`,
+                                        background: `linear-gradient(90deg, ${currentColors.c1}, ${currentColors.c2})`,
+                                        opacity: fadeToNext ? 0 : 1,
+                                    }}
+                                />
+                                {/* Layer 2: Next Gradient */}
+                                <div
+                                    className="absolute inset-y-0 left-0 rounded-full transition-all duration-1000 ease-in-out shadow-sm"
+                                    style={{
+                                        width: `${Math.min(100, Math.max(0, progressPercent))}%`,
+                                        background: `linear-gradient(90deg, ${nextColors.c1}, ${nextColors.c2})`,
+                                        opacity: fadeToNext ? 1 : 0,
+                                    }}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
