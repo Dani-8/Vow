@@ -156,4 +156,4 @@ export default function App() {
         onStartNextSprint={challengeState.startNextSprint}
         onCompleteSprint={challengeState.completeSprint}
         onUpdateSprintRule={challengeState.updateSprintRule}
-      /></MainLayout>
+      />
