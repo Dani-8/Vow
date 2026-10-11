@@ -54,3 +54,26 @@ export const FocusZenModeModal: React.FC<FocusZenModeModalProps> = ({ isOpen, on
 
         return () => clearInterval(timer);
     }, [isOpen]);
+
+    // Keyboard shortcuts: Esc to close, Space to toggle play/pause
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const handleKeyDown = (e: KeyboardEvent) => {
+            const target = e.target as HTMLElement;
+            if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA')) return;
+
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                onClose();
+            } else if (e.code === 'Space') {
+                e.preventDefault();
+                togglePlayPause();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isOpen, onClose, togglePlayPause]);
+
+    if (!isOpen || !activeSession) return null;
