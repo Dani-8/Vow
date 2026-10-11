@@ -77,3 +77,11 @@ export const FocusZenModeModal: React.FC<FocusZenModeModalProps> = ({ isOpen, on
     }, [isOpen, onClose, togglePlayPause]);
 
     if (!isOpen || !activeSession) return null;
+
+    const timerMinutes = Math.floor(activeSession.remainingSeconds / 60);
+    const timerSeconds = activeSession.remainingSeconds % 60;
+    const formattedTimer = `${String(timerMinutes).padStart(2, '0')}:${String(timerSeconds).padStart(2, '0')}`;
+
+    const progressPercent = activeSession.totalSeconds > 0
+        ? ((activeSession.totalSeconds - activeSession.remainingSeconds) / activeSession.totalSeconds) * 100
+        : 0;
