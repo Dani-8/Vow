@@ -243,11 +243,10 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                         <div className="flex items-center justify-center space-x-2 pt-1">
                             <button
                                 onClick={togglePlayPause}
-                                className={`p-2.5 rounded-xl font-bold text-xs flex items-center space-x-1.5 transition-all ${
-                                    activeSession.isRunning
+                                className={`p-2.5 rounded-xl font-bold text-xs flex items-center space-x-1.5 transition-all ${activeSession.isRunning
                                         ? 'neu-button text-amber-600 bg-[#E0E5EC]'
                                         : 'neu-button-primary text-white'
-                                }`}
+                                    }`}
                                 title={activeSession.isRunning ? 'Pause Timer' : 'Resume Timer'}
                             >
                                 {activeSession.isRunning ? (
