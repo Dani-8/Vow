@@ -222,3 +222,16 @@ export default function App() {
           }
         }}
       />
+
+      <ActiveTimerConflictModal
+        isOpen={isConflictModalOpen}
+        onClose={closeConflictModal}
+        activeSession={activeSession}
+        newSessionTarget={conflictPendingSession}
+        onConfirmSwitch={confirmConflictSwitch}
+      />
+
+      <FocusZenModeModal
+        isOpen={isZenModeOpen}
+        onClose={closeZenMode}
+      />
