@@ -83,3 +83,28 @@ export const AmbientZenBackground: React.FC = () => {
 
         return () => clearInterval(interval);
     }, []);
+
+    return (
+        <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
+            {orbs.map((orb) => (
+                <div
+                    key={orb.id}
+                    className="absolute rounded-full blur-3xl pointer-events-none will-change-transform"
+                    style={{
+                        top: `${orb.top}%`,
+                        left: `${orb.left}%`,
+                        width: `${orb.size}px`,
+                        height: `${orb.size}px`,
+                        backgroundColor: orb.color,
+                        opacity: orb.opacity,
+                        transform: `translate(-50%, -50%) scale(${orb.scale})`,
+                        transition: `all ${orb.duration}s cubic-bezier(0.4, 0, 0.2, 1)`,
+                    }}
+                />
+            ))}
+
+            {/* Subtle atmospheric overlay */}
+            <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-slate-400/10 mix-blend-overlay" />
+        </div>
+    );
+};
