@@ -131,3 +131,32 @@ export const FocusZenModeModal: React.FC<FocusZenModeModalProps> = ({ isOpen, on
                     </button>
                 </div>
             </header>
+
+            {/* CENTER: Breathing Neumorphic Clock Face */}
+            <main className="flex flex-col items-center justify-center my-auto z-10 space-y-6">
+                {/* Breathing Ambient Halo around Clock Face */}
+                <div className="relative flex items-center justify-center">
+                    
+                    {/* LAYER 1: Current Aura Glow (Crossfades smoothly via opacity) */}
+                    <div
+                        className="absolute -inset-8 sm:-inset-14 rounded-full blur-3xl pointer-events-none transition-opacity duration-1000 ease-in-out"
+                        style={{
+                            background: activeSession.isRunning
+                                ? `radial-gradient(circle, ${currentColors.c1}45 0%, ${currentColors.c2}30 65%, transparent 100%)`
+                                : 'radial-gradient(circle, rgba(163,177,198,0.2) 0%, transparent 100%)',
+                            opacity: fadeToNext ? 0 : 1,
+                            transform: activeSession.isRunning ? 'scale(1.06)' : 'scale(1)',
+                        }}
+                    />
+
+                    {/* LAYER 2: Next Aura Glow (Fades in seamlessly over Layer 1) */}
+                    <div
+                        className="absolute -inset-8 sm:-inset-14 rounded-full blur-3xl pointer-events-none transition-opacity duration-1000 ease-in-out"
+                        style={{
+                            background: activeSession.isRunning
+                                ? `radial-gradient(circle, ${nextColors.c1}45 0%, ${nextColors.c2}30 65%, transparent 100%)`
+                                : 'radial-gradient(circle, rgba(163,177,198,0.2) 0%, transparent 100%)',
+                            opacity: fadeToNext ? 1 : 0,
+                            transform: activeSession.isRunning ? 'scale(1.06)' : 'scale(1)',
+                        }}
+                    />
