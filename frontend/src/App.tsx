@@ -194,3 +194,31 @@ export default function App() {
           navigateToView('visible');
         }}
       />
+
+      <GlobalFloatingTimerBar
+        activeView={activeView}
+        onNavigateToTarget={(sourceType, sourceId) => {
+          if (sourceType === 'task') {
+            const allTasks = [...taskData.tasks, ...privateTasks];
+            const found = allTasks.find((t) => t._id === sourceId);
+            if (found) {
+              modalState.setSelectedTaskForDetail(found);
+              taskData.navigate(`/app/task/${getTaskSlug(found)}`);
+            } else {
+              navigateToView('home');
+            }
+          } else if (sourceType === 'challenge') {
+            const foundCh = challengeState.challenges.find(
+              (c) => c._id === sourceId || c.id === sourceId
+            );
+            if (foundCh) {
+              challengeState.setSelectedChallenge(foundCh);
+              navigateToView('challenge-detail', foundCh.id || foundCh._id);
+            } else {
+              navigateToView('challenges');
+            }
+          } else {
+            navigateToView('home');
+          }
+        }}
+      />
