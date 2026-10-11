@@ -256,3 +256,38 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                                 )}
                                 <span>{activeSession.isRunning ? 'Pause' : 'Resume'}</span>
                             </button>
+
+                            <button
+                                onClick={resetSession}
+                                className="p-2.5 rounded-xl neu-button text-[#717699] hover:text-[#1a1c35] transition-all"
+                                title="Reset Timer"
+                            >
+                                <RotateCcw className="w-4 h-4" />
+                            </button>
+
+                            <button
+                                onClick={completeSessionEarly}
+                                className="p-2.5 rounded-xl neu-button text-emerald-600 hover:text-emerald-700 transition-all"
+                                title="Complete & Log Now"
+                            >
+                                <CheckCircle2 className="w-4 h-4" />
+                            </button>
+
+                            <button
+                                onClick={stopSession}
+                                className="p-2.5 rounded-xl neu-button text-rose-500 hover:text-rose-600 transition-all"
+                                title="Cancel Session"
+                            >
+                                <X className="w-4 h-4" />
+                            </button>
+
+                            <button
+                                onClick={openZenMode}
+                                className="p-2.5 rounded-xl neu-button text-[#549acb] hover:text-[#3d84b5] transition-all hover:scale-105"
+                                title="Open Fullscreen Zen Mode (⛶)"
+                            >
+                                <Maximize2 className="w-4 h-4" />
+                            </button>
+                        </div>
+                    </div>
+                ) : (
