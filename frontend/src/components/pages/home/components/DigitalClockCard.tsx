@@ -291,3 +291,24 @@ export const DigitalClockCard: React.FC<DigitalClockCardProps> = ({
                         </div>
                     </div>
                 ) : (
+                    /* EMPTY TIMER STATE (No session active) */
+                    <div className="flex flex-col items-center justify-center text-center py-4 space-y-3">
+                        {/* Standby Dial */}
+                        <div className="w-36 h-36 rounded-full bg-[#E0E5EC] p-3 flex items-center justify-center shadow-[6px_6px_14px_rgba(163,177,198,0.6),-6px_-6px_14px_rgba(255,255,255,0.85)] border border-white/60 relative">
+                            <div className="w-full h-full rounded-full bg-[#E0E5EC] shadow-[inset_5px_5px_10px_rgba(163,177,198,0.5),inset_-5px_-5px_10px_rgba(255,255,255,0.9)] flex flex-col items-center justify-center text-slate-400">
+                                <Timer className="w-8 h-8 text-[#94a3b8] mb-1" />
+                                <span className="text-xl font-bold font-mono tracking-widest text-[#717699]">
+                                    00:00
+                                </span>
+                            </div>
+                        </div>
+
+                        <div className="space-y-1 px-4">
+                            <h4 className="text-xs font-black text-[#1a1c35]">No Active Focus Timer</h4>
+                            <p className="text-[11px] font-semibold text-[#717699] leading-relaxed">
+                                Open any <span className="text-[#549acb] font-bold">Task</span> or <span className="text-[#549acb] font-bold">Challenge</span> and click <span className="text-[#549acb] font-bold">"Focus"</span> to launch a deep-work timer.
+                            </p>
+                        </div>
+                    </div>
+                )
+            ) : activeMode === 'clock' ? (
