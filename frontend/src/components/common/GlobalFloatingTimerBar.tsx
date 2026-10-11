@@ -1,5 +1,5 @@
 import React from 'react';
-import { Timer, Play, Pause, X, ExternalLink } from 'lucide-react';
+import { Timer, Play, Pause, X, ExternalLink, Maximize2 } from 'lucide-react';
 import { useFocusTimer } from '../../context/FocusTimerContext';
 
 interface GlobalFloatingTimerBarProps {
@@ -11,7 +11,7 @@ export const GlobalFloatingTimerBar: React.FC<GlobalFloatingTimerBarProps> = ({
     activeView,
     onNavigateToTarget,
 }) => {
-    const { activeSession, togglePlayPause, stopSession } = useFocusTimer();
+    const { activeSession, togglePlayPause, stopSession, openZenMode } = useFocusTimer();
 
     if (!activeSession) return null;
 
@@ -89,6 +89,14 @@ export const GlobalFloatingTimerBar: React.FC<GlobalFloatingTimerBarProps> = ({
                         title="Cancel Session"
                     >
                         <X className="w-3.5 h-3.5" />
+                    </button>
+
+                    <button
+                        onClick={openZenMode}
+                        className="w-7 h-7 rounded-lg neu-button text-[#549acb] hover:text-[#3d84b5] flex items-center justify-center transition-all"
+                        title="Open Fullscreen Zen Mode (⛶)"
+                    >
+                        <Maximize2 className="w-3.5 h-3.5" />
                     </button>
                 </div>
             </div>
