@@ -85,3 +85,28 @@ export const FocusZenModeModal: React.FC<FocusZenModeModalProps> = ({ isOpen, on
     const progressPercent = activeSession.totalSeconds > 0
         ? ((activeSession.totalSeconds - activeSession.remainingSeconds) / activeSession.totalSeconds) * 100
         : 0;
+
+    return (
+        <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Zen Focus Mode"
+            className="fixed inset-0 z-[100] flex flex-col justify-between p-4 sm:p-8 md:p-10 overflow-hidden bg-[#E0E5EC] select-none animate-in fade-in duration-300"
+        >
+            {/* AMBIENT GLOWING AURORA LIGHT ORBS (Free random movement, spaced zones, random timing) */}
+            <AmbientZenBackground />
+
+            {/* TOP BAR: Pushed totally to left and right corners */}
+            <header className="w-full flex items-center justify-between z-10 px-2 sm:px-4">
+                {/* Left: Zen Focus info pill */}
+                <div className="flex items-center space-x-3 neu-inset px-4 py-2.5 rounded-2xl bg-[#E0E5EC]/85 backdrop-blur-md border border-white/60 shadow-xs">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                    <div>
+                        <span className="text-[10px] font-black uppercase tracking-widest text-[#549acb] block">
+                            Zen Focus • {activeSession.sourceType === 'task' ? 'Task Block' : 'Challenge Sprint'}
+                        </span>
+                        <h2 className="text-xs sm:text-sm font-black text-[#1a1c35] truncate max-w-[190px] sm:max-w-md lg:max-w-xl">
+                            {activeSession.sourceTitle}
+                        </h2>
+                    </div>
+                </div>
