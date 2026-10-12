@@ -70,14 +70,3 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                     ))}
                 </div>
             )}
-
-            <TaskCardFooter
-                currentStreak={currentStreak}
-                bestStreak={bestStreak}
-                isCompleted={isCompleted}
-                timeLeftStr={timeLeftStr}
-                isStruggling={isStruggling}
-            />
-        </div>
-    );
-};
