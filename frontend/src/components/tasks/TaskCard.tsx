@@ -41,18 +41,3 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                         : ''
                 }`}
         >
-            <div className="flex items-start justify-between gap-3 mb-2">
-                <TaskCardHeader
-                    task={task}
-                    isCompleted={isCompleted}
-                    onToggleComplete={onToggleComplete}
-                />
-                <TaskCardMenu
-                    task={task}
-                    isStruggling={isStruggling}
-                    onOpenAIAssist={onOpenAIAssist}
-                    onTogglePrivate={onTogglePrivate}
-                    onEditTask={onEditTask}
-                    onDeleteTask={onDeleteTask}
-                />
-            </div>
