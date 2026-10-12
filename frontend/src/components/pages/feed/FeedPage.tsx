@@ -60,3 +60,19 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
             return [];
         }
     });
+
+    // Feed Navigation Sub-Tab: "All Posts" vs "Saved Vault"
+    const [feedTab, setFeedTab] = useState<'all' | 'saved'>('all');
+    const [selectedCategory, setSelectedCategory] = useState<FeedCategory | 'all'>('all');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [isCreateOpen, setIsCreateOpen] = useState(false);
+    const [copiedId, setCopiedId] = useState<string | null>(null);
+
+    // Sync to storage
+    useEffect(() => {
+        try {
+            localStorage.setItem(STORAGE_POSTS_KEY, JSON.stringify(posts));
+        } catch (e) {
+            console.error('Failed to sync posts', e);
+        }
+    }, [posts]);
