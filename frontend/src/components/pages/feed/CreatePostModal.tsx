@@ -104,3 +104,33 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
                             })}
                         </div>
                     </div>
+
+                    {/* Title */}
+                    <div>
+                        <label className="text-[11px] font-bold text-[#515777] block mb-1 uppercase tracking-wider">
+                            Headline / Rule
+                        </label>
+                        <input
+                            type="text"
+                            required
+                            placeholder="e.g. Goal + Deadline + Plan = Strategy"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            className="w-full neu-inset px-4 py-2.5 rounded-xl text-xs font-bold text-[#1a1c35] placeholder:text-[#94a3b8] focus:outline-none focus:ring-2 focus:ring-[#549acb]"
+                        />
+                    </div>
+
+                    {/* Content */}
+                    <div>
+                        <label className="text-[11px] font-bold text-[#515777] block mb-1 uppercase tracking-wider">
+                            Content & Framework
+                        </label>
+                        <textarea
+                            required
+                            rows={4}
+                            placeholder="Share the formula, your routine, or the insight that helped you stay disciplined..."
+                            value={content}
+                            onChange={(e) => setContent(e.target.value)}
+                            className="w-full neu-inset p-3 rounded-xl text-xs font-semibold text-[#1a1c35] placeholder:text-[#94a3b8] focus:outline-none focus:ring-2 focus:ring-[#549acb] resize-none"
+                        />
+                    </div>
