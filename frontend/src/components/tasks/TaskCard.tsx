@@ -15,18 +15,3 @@ export interface TaskCardProps {
     onDeleteTask: (task: Task) => void;
     onViewDetails?: (task: Task) => void;
 }
-
-export const TaskCard: React.FC<TaskCardProps> = ({
-    task,
-    onToggleComplete,
-    onTogglePrivate,
-    onOpenAIAssist,
-    onEditTask,
-    onDeleteTask,
-    onViewDetails,
-}) => {
-    const { timeLeftStr, isStruggling } = useTaskTimer(task);
-
-    const currentStreak = task.effectiveCurrentStreak ?? task.currentStreak ?? 0;
-    const bestStreak = task.effectiveBestStreak ?? task.bestStreak ?? 0;
-    const isCompleted = task.status === 'completed';
