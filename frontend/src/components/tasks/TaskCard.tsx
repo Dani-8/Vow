@@ -56,17 +56,3 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                     onDeleteTask={onDeleteTask}
                 />
             </div>
-
-            {task.tags && task.tags.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 mb-3 pl-10">
-                    {task.tags.map((tag, i) => (
-                        <span
-                            key={i}
-                            className="text-[10px] font-bold text-[#717699] neu-inset bg-[#E0E5EC] px-2 py-0.5 rounded-lg flex items-center space-x-1 uppercase tracking-wider"
-                        >
-                            <Tag className="w-2.5 h-2.5 text-[#717699]" />
-                            <span>{tag}</span>
-                        </span>
-                    ))}
-                </div>
-            )}
