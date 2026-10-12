@@ -334,3 +334,47 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                     </p>
                 </div>
             ) : (
+                <div className="space-y-4">
+                    {displayedPosts.map((post) => {
+                        const isLiked = likedIds.includes(post.id);
+                        const isSaved = savedIds.includes(post.id);
+                        const badge = getCategoryBadge(post.category);
+                        const BadgeIcon = badge.icon;
+
+                        return (
+                            <article
+                                key={post.id}
+                                className="neu-card p-6 bg-[#E0E5EC] rounded-3xl border border-white/60 shadow-lg hover:shadow-xl transition-all space-y-4 text-left"
+                            >
+                                {/* Post Top: Author Info & Category Badge */}
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center space-x-3">
+                                        <div className="w-10 h-10 rounded-2xl neu-inset bg-gradient-to-tr from-sky-500/20 to-purple-500/20 flex items-center justify-center font-black text-sm text-[#1a1c35] border border-white/60">
+                                            {post.authorName.slice(0, 2).toUpperCase()}
+                                        </div>
+                                        <div>
+                                            <div className="flex items-center space-x-2">
+                                                <h4 className="text-sm font-black text-[#1a1c35]">
+                                                    {post.authorName}
+                                                </h4>
+                                                {post.authorBadge && (
+                                                    <span className="text-[10px] font-bold text-[#717699] bg-white/60 px-2 py-0.5 rounded-md neu-inset">
+                                                        {post.authorBadge}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <span className="text-[10px] font-semibold text-[#717699] block mt-0.5">
+                                                {new Date(post.createdAt).toLocaleDateString('en-US', {
+                                                    month: 'short',
+                                                    day: 'numeric',
+                                                })}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* Category Pill */}
+                                    <span className={`px-2.5 py-1 rounded-xl text-[10px] font-black uppercase tracking-wider flex items-center space-x-1.5 border ${badge.color}`}>
+                                        <BadgeIcon className="w-3.5 h-3.5" />
+                                        <span>{badge.label}</span>
+                                    </span>
+                                </div>
