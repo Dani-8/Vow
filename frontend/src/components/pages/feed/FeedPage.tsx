@@ -145,3 +145,43 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
             // fallback
         }
     };
+
+    // Handle New Post Creation
+    const handleCreatePost = (newPostData: Omit<FeedPost, 'id' | 'likesCount' | 'savesCount' | 'createdAt' | 'isLiked' | 'isSaved'>) => {
+        const newPost: FeedPost = {
+            ...newPostData,
+            id: `post_${Date.now()}`,
+            likesCount: 1,
+            savesCount: 0,
+            createdAt: new Date().toISOString(),
+        };
+        // Auto-like author's own post
+        setLikedIds((prev) => [...prev, newPost.id]);
+        setPosts((prev) => [newPost, ...prev]);
+    };
+
+    // Filtered Posts
+    const displayedPosts = useMemo(() => {
+        return posts.filter((post) => {
+            // Tab filter (All vs Saved)
+            if (feedTab === 'saved' && !savedIds.includes(post.id)) {
+                return false;
+            }
+            // Category filter
+            if (selectedCategory !== 'all' && post.category !== selectedCategory) {
+                return false;
+            }
+            // Search query
+            if (searchQuery.trim()) {
+                const q = searchQuery.toLowerCase();
+                const matchesTitle = post.title.toLowerCase().includes(q);
+                const matchesContent = post.content.toLowerCase().includes(q);
+                const matchesAuthor = post.authorName.toLowerCase().includes(q);
+                const matchesTags = post.tags.some((t) => t.toLowerCase().includes(q));
+                if (!matchesTitle && !matchesContent && !matchesAuthor && !matchesTags) {
+                    return false;
+                }
+            }
+            return true;
+        });
+    }, [posts, feedTab, savedIds, selectedCategory, searchQuery]);
