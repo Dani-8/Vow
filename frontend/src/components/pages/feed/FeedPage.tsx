@@ -40,3 +40,23 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
             return INITIAL_FEED_POSTS;
         }
     });
+
+    // 2. Saved post IDs (The user's Saved Vault)
+    const [savedIds, setSavedIds] = useState<string[]>(() => {
+        try {
+            const raw = localStorage.getItem(STORAGE_SAVED_IDS_KEY);
+            return raw ? JSON.parse(raw) : ['post_reel_formula']; // default save the popular formula
+        } catch {
+            return ['post_reel_formula'];
+        }
+    });
+
+    // 3. Liked post IDs
+    const [likedIds, setLikedIds] = useState<string[]>(() => {
+        try {
+            const raw = localStorage.getItem(STORAGE_LIKED_IDS_KEY);
+            return raw ? JSON.parse(raw) : [];
+        } catch {
+            return [];
+        }
+    });
