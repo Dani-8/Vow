@@ -92,3 +92,24 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
             console.error('Failed to sync liked posts', e);
         }
     }, [likedIds]);
+
+    // Handle Like Toggle
+    const handleToggleLike = (postId: string) => {
+        const isCurrentlyLiked = likedIds.includes(postId);
+        const newLiked = isCurrentlyLiked
+            ? likedIds.filter((id) => id !== postId)
+            : [...likedIds, postId];
+        setLikedIds(newLiked);
+
+        setPosts((prev) =>
+            prev.map((p) => {
+                if (p.id === postId) {
+                    return {
+                        ...p,
+                        likesCount: isCurrentlyLiked ? Math.max(0, p.likesCount - 1) : p.likesCount + 1,
+                    };
+                }
+                return p;
+            })
+        );
+    };
