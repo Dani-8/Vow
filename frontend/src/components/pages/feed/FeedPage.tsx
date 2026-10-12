@@ -214,3 +214,35 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                 };
         }
     };
+
+    return (
+        <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-6 space-y-6 animate-in fade-in duration-300">
+            {/* Header Hero Banner */}
+            <div className="neu-card p-6 sm:p-8 bg-[#E0E5EC] rounded-3xl border border-white/60 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div className="space-y-1.5">
+                    <div className="flex items-center space-x-2">
+                        <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-sky-100 text-[#549acb] border border-sky-300">
+                            Community & Mindset
+                        </span>
+                        <span className="text-xs font-bold text-[#717699]">
+                            {posts.length} Shared Wisdom Blocks
+                        </span>
+                    </div>
+                    <h1 className="text-2xl sm:text-3xl font-black text-[#1a1c35] tracking-tight">
+                        Discipline & Strategy Feed
+                    </h1>
+                    <p className="text-xs sm:text-sm font-semibold text-[#717699] max-w-xl">
+                        Formulas, rules, and milestone breakthroughs from disciplined builders. Save the best frameworks to your personal vault.
+                    </p>
+                </div>
+
+                <div className="flex items-center space-x-3 shrink-0">
+                    <button
+                        onClick={() => setIsCreateOpen(true)}
+                        className="neu-button-primary px-5 py-3 rounded-2xl text-xs sm:text-sm font-black flex items-center space-x-2 text-white shadow-lg hover:scale-105 active:scale-95 transition-all"
+                    >
+                        <Plus className="w-4 h-4 stroke-[3]" />
+                        <span>Post Framework</span>
+                    </button>
+                </div>
+            </div>
