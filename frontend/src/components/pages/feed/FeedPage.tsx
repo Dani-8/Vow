@@ -253,8 +253,8 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                     <button
                         onClick={() => setFeedTab('all')}
                         className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${feedTab === 'all'
-                                ? 'neu-button text-[#549acb] bg-[#E0E5EC] shadow-sm'
-                                : 'text-[#717699] hover:text-[#1a1c35]'
+                            ? 'neu-button text-[#549acb] bg-[#E0E5EC] shadow-sm'
+                            : 'text-[#717699] hover:text-[#1a1c35]'
                             }`}
                     >
                         <TrendingUp className="w-4 h-4" />
@@ -264,8 +264,8 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                     <button
                         onClick={() => setFeedTab('saved')}
                         className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${feedTab === 'saved'
-                                ? 'neu-button text-amber-600 bg-[#E0E5EC] shadow-sm'
-                                : 'text-[#717699] hover:text-[#1a1c35]'
+                            ? 'neu-button text-amber-600 bg-[#E0E5EC] shadow-sm'
+                            : 'text-[#717699] hover:text-[#1a1c35]'
                             }`}
                     >
                         <BookmarkCheck className="w-4 h-4 text-amber-500" />
@@ -291,8 +291,8 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                 <button
                     onClick={() => setSelectedCategory('all')}
                     className={`px-3.5 py-1.5 rounded-xl text-xs font-black whitespace-nowrap transition-all ${selectedCategory === 'all'
-                            ? 'neu-button-primary text-white shadow-sm'
-                            : 'neu-button text-[#717699] hover:text-[#1a1c35]'
+                        ? 'neu-button-primary text-white shadow-sm'
+                        : 'neu-button text-[#717699] hover:text-[#1a1c35]'
                         }`}
                 >
                     All Categories
@@ -307,8 +307,8 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                             key={cat}
                             onClick={() => setSelectedCategory(cat)}
                             className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 whitespace-nowrap transition-all ${isSelected
-                                    ? 'neu-button text-[#549acb] bg-[#E0E5EC] border-2 border-[#549acb] font-black'
-                                    : 'neu-card bg-[#E0E5EC] hover:bg-[#D8DEE8] text-[#515777]'
+                                ? 'neu-button text-[#549acb] bg-[#E0E5EC] border-2 border-[#549acb] font-black'
+                                : 'neu-card bg-[#E0E5EC] hover:bg-[#D8DEE8] text-[#515777]'
                                 }`}
                         >
                             <Icon className="w-3.5 h-3.5" />
@@ -414,8 +414,8 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                                             type="button"
                                             onClick={() => handleToggleLike(post.id)}
                                             className={`neu-button px-3 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all ${isLiked
-                                                    ? 'text-rose-600 bg-rose-50/80 border-rose-300 font-black shadow-inner'
-                                                    : 'text-[#717699] hover:text-[#1a1c35]'
+                                                ? 'text-rose-600 bg-rose-50/80 border-rose-300 font-black shadow-inner'
+                                                : 'text-[#717699] hover:text-[#1a1c35]'
                                                 }`}
                                             title={isLiked ? 'Unlike' : 'Give Respect'}
                                         >
@@ -428,8 +428,8 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                                             type="button"
                                             onClick={() => handleToggleSave(post.id)}
                                             className={`neu-button px-3 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all ${isSaved
-                                                    ? 'text-amber-600 bg-amber-50/80 border-amber-300 font-black shadow-inner'
-                                                    : 'text-[#717699] hover:text-[#1a1c35]'
+                                                ? 'text-amber-600 bg-amber-50/80 border-amber-300 font-black shadow-inner'
+                                                : 'text-[#717699] hover:text-[#1a1c35]'
                                                 }`}
                                             title={isSaved ? 'Saved in Vault' : 'Save to Vault'}
                                         >
