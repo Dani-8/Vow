@@ -152,3 +152,20 @@ export interface Task {
   category?: string;
   icon?: string;
 }
+
+export interface MasterStreakStats {
+  masterStreak: number;
+  bestMasterStreak?: number;
+  activeToday: boolean;
+  totalCheckIns: number;
+  completedDaysSet: string[];
+  totalTasks: number;
+  totalHabits: number;
+}
+
+export interface AIChatMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  text: string;
+  timestamp: string;
+}
