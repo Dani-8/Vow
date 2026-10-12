@@ -108,3 +108,47 @@ export interface TaskActivityItem {
   timestamp: string;
   meta?: Record<string, any>;
 }
+
+export interface TaskStickyNote {
+  id: string;
+  title?: string;
+  content: string;
+  color: 'yellow' | 'green' | 'blue' | 'purple' | 'rose' | 'gray';
+  isPinned?: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface TaskNote {
+  content: string;
+  lastSavedAt: string;
+}
+
+export interface Task {
+  _id: string;
+  userId: string;
+  title: string;
+  description?: string;
+  consequenceOfSkipping?: string;
+  consequencesOfSkipping?: string[];
+  tags: string[];
+  startTime?: string | null;
+  endTime?: string | null;
+  status: 'todo' | 'in_progress' | 'completed';
+  priority?: 'High' | 'Medium' | 'Low';
+  isPrivate: boolean;
+  isHabit: boolean;
+  currentStreak: number;
+  bestStreak: number;
+  effectiveCurrentStreak?: number;
+  effectiveBestStreak?: number;
+  completedToday?: boolean;
+  missedPreviousDays?: boolean;
+  lastCompletedDate?: string | null;
+  completionHistory?: string[];
+  createdAt: string;
+  updatedAt: string;
+  subTasks?: SubTask[];
+  category?: string;
+  icon?: string;
+}
