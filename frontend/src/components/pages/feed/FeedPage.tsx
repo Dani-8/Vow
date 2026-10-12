@@ -285,3 +285,37 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                     />
                 </div>
             </div>
+
+            {/* Category Filter Pills */}
+            <div className="flex items-center space-x-2 overflow-x-auto pb-1 scrollbar-none">
+                <button
+                    onClick={() => setSelectedCategory('all')}
+                    className={`px-3.5 py-1.5 rounded-xl text-xs font-black whitespace-nowrap transition-all ${
+                        selectedCategory === 'all'
+                            ? 'neu-button-primary text-white shadow-sm'
+                            : 'neu-button text-[#717699] hover:text-[#1a1c35]'
+                    }`}
+                >
+                    All Categories
+                </button>
+
+                {(['formula', 'win', 'insight', 'discipline'] as FeedCategory[]).map((cat) => {
+                    const badge = getCategoryBadge(cat);
+                    const Icon = badge.icon;
+                    const isSelected = selectedCategory === cat;
+                    return (
+                        <button
+                            key={cat}
+                            onClick={() => setSelectedCategory(cat)}
+                            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 whitespace-nowrap transition-all ${
+                                isSelected
+                                    ? 'neu-button text-[#549acb] bg-[#E0E5EC] border-2 border-[#549acb] font-black'
+                                    : 'neu-card bg-[#E0E5EC] hover:bg-[#D8DEE8] text-[#515777]'
+                            }`}
+                        >
+                            <Icon className="w-3.5 h-3.5" />
+                            <span>{badge.label}</span>
+                        </button>
+                    );
+                })}
+            </div>
