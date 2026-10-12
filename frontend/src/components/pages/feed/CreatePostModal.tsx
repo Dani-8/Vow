@@ -76,3 +76,32 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
                         </p>
                     </div>
                 </div>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    {/* Category Selection */}
+                    <div>
+                        <label className="text-[11px] font-bold text-[#515777] block mb-1.5 uppercase tracking-wider">
+                            Post Type
+                        </label>
+                        <div className="grid grid-cols-2 gap-2">
+                            {CATEGORIES.map((cat) => {
+                                const Icon = cat.icon;
+                                const isSelected = category === cat.id;
+                                return (
+                                    <button
+                                        key={cat.id}
+                                        type="button"
+                                        onClick={() => setCategory(cat.id)}
+                                        className={`p-2.5 rounded-xl text-left transition-all flex items-center space-x-2 ${
+                                            isSelected
+                                                ? 'neu-button border-2 border-[#549acb] bg-sky-50/80 text-[#549acb]'
+                                                : 'neu-card bg-[#E0E5EC] hover:bg-[#D8DEE8] text-[#515777]'
+                                        }`}
+                                    >
+                                        <Icon className={`w-4 h-4 shrink-0 ${isSelected ? 'text-[#549acb]' : 'text-[#717699]'}`} />
+                                        <span className="text-xs font-black truncate">{cat.label}</span>
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </div>
