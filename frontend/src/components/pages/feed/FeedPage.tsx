@@ -285,3 +285,183 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                     />
                 </div>
             </div>
+
+            {/* Category Filter Pills */}
+            <div className="flex items-center space-x-2 overflow-x-auto pb-1 scrollbar-none">
+                <button
+                    onClick={() => setSelectedCategory('all')}
+                    className={`px-3.5 py-1.5 rounded-xl text-xs font-black whitespace-nowrap transition-all ${selectedCategory === 'all'
+                        ? 'neu-button-primary text-white shadow-sm'
+                        : 'neu-button text-[#717699] hover:text-[#1a1c35]'
+                        }`}
+                >
+                    All Categories
+                </button>
+
+                {(['formula', 'win', 'insight', 'discipline'] as FeedCategory[]).map((cat) => {
+                    const badge = getCategoryBadge(cat);
+                    const Icon = badge.icon;
+                    const isSelected = selectedCategory === cat;
+                    return (
+                        <button
+                            key={cat}
+                            onClick={() => setSelectedCategory(cat)}
+                            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 whitespace-nowrap transition-all ${isSelected
+                                ? 'neu-button text-[#549acb] bg-[#E0E5EC] border-2 border-[#549acb] font-black'
+                                : 'neu-card bg-[#E0E5EC] hover:bg-[#D8DEE8] text-[#515777]'
+                                }`}
+                        >
+                            <Icon className="w-3.5 h-3.5" />
+                            <span>{badge.label}</span>
+                        </button>
+                    );
+                })}
+            </div>
+
+            {/* Posts Stream */}
+            {displayedPosts.length === 0 ? (
+                <div className="neu-inset p-12 rounded-3xl text-center space-y-3 bg-[#E0E5EC]/80 border border-white/60">
+                    <div className="w-12 h-12 mx-auto rounded-2xl neu-button flex items-center justify-center text-[#717699]">
+                        <Bookmark className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-base font-black text-[#1a1c35]">
+                        {feedTab === 'saved' ? 'No Saved Posts in Your Vault Yet' : 'No Posts Found'}
+                    </h3>
+                    <p className="text-xs font-semibold text-[#717699] max-w-sm mx-auto">
+                        {feedTab === 'saved'
+                            ? 'Click the bookmark icon on any post in the feed to save key formulas and rules here.'
+                            : 'Try adjusting your search query or category filters, or publish a new framework.'}
+                    </p>
+                </div>
+            ) : (
+                <div className="space-y-4">
+                    {displayedPosts.map((post) => {
+                        const isLiked = likedIds.includes(post.id);
+                        const isSaved = savedIds.includes(post.id);
+                        const badge = getCategoryBadge(post.category);
+                        const BadgeIcon = badge.icon;
+
+                        return (
+                            <article
+                                key={post.id}
+                                className="neu-card p-6 bg-[#E0E5EC] rounded-3xl border border-white/60 shadow-lg hover:shadow-xl transition-all space-y-4 text-left"
+                            >
+                                {/* Post Top: Author Info & Category Badge */}
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center space-x-3">
+                                        <div className="w-10 h-10 rounded-2xl neu-inset bg-gradient-to-tr from-sky-500/20 to-purple-500/20 flex items-center justify-center font-black text-sm text-[#1a1c35] border border-white/60">
+                                            {post.authorName.slice(0, 2).toUpperCase()}
+                                        </div>
+                                        <div>
+                                            <div className="flex items-center space-x-2">
+                                                <h4 className="text-sm font-black text-[#1a1c35]">
+                                                    {post.authorName}
+                                                </h4>
+                                                {post.authorBadge && (
+                                                    <span className="text-[10px] font-bold text-[#717699] bg-white/60 px-2 py-0.5 rounded-md neu-inset">
+                                                        {post.authorBadge}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <span className="text-[10px] font-semibold text-[#717699] block mt-0.5">
+                                                {new Date(post.createdAt).toLocaleDateString('en-US', {
+                                                    month: 'short',
+                                                    day: 'numeric',
+                                                })}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* Category Pill */}
+                                    <span className={`px-2.5 py-1 rounded-xl text-[10px] font-black uppercase tracking-wider flex items-center space-x-1.5 border ${badge.color}`}>
+                                        <BadgeIcon className="w-3.5 h-3.5" />
+                                        <span>{badge.label}</span>
+                                    </span>
+                                </div>
+
+                                {/* Post Title & Content */}
+                                <div className="space-y-2">
+                                    <h3 className="text-base sm:text-lg font-black text-[#1a1c35]">
+                                        {post.title}
+                                    </h3>
+                                    <div className="neu-inset p-4 rounded-2xl bg-white/40 border border-white/60">
+                                        <p className="text-xs sm:text-sm font-medium text-[#29335a] leading-relaxed whitespace-pre-line">
+                                            {post.content}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Tags */}
+                                {post.tags && post.tags.length > 0 && (
+                                    <div className="flex flex-wrap gap-1.5">
+                                        {post.tags.map((tag) => (
+                                            <span
+                                                key={tag}
+                                                onClick={() => setSearchQuery(tag)}
+                                                className="cursor-pointer text-[10px] font-bold text-[#549acb] hover:text-[#3d84b5] bg-sky-50/60 px-2 py-0.5 rounded-lg border border-sky-200/50"
+                                            >
+                                                #{tag}
+                                            </span>
+                                        ))}
+                                    </div>
+                                )}
+
+                                {/* Bottom Action Bar: Like, Save to Vault, Share */}
+                                <div className="flex items-center justify-between pt-3 border-t border-slate-200/60">
+                                    <div className="flex items-center space-x-2">
+                                        {/* Like / Flame Reaction */}
+                                        <button
+                                            type="button"
+                                            onClick={() => handleToggleLike(post.id)}
+                                            className={`neu-button px-3 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all ${isLiked
+                                                ? 'text-rose-600 bg-rose-50/80 border-rose-300 font-black shadow-inner'
+                                                : 'text-[#717699] hover:text-[#1a1c35]'
+                                                }`}
+                                            title={isLiked ? 'Unlike' : 'Give Respect'}
+                                        >
+                                            <Flame className={`w-3.5 h-3.5 ${isLiked ? 'fill-rose-500 text-rose-500' : ''}`} />
+                                            <span>{post.likesCount}</span>
+                                        </button>
+
+                                        {/* Save to Vault */}
+                                        <button
+                                            type="button"
+                                            onClick={() => handleToggleSave(post.id)}
+                                            className={`neu-button px-3 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all ${isSaved
+                                                ? 'text-amber-600 bg-amber-50/80 border-amber-300 font-black shadow-inner'
+                                                : 'text-[#717699] hover:text-[#1a1c35]'
+                                                }`}
+                                            title={isSaved ? 'Saved in Vault' : 'Save to Vault'}
+                                        >
+                                            <Bookmark className={`w-3.5 h-3.5 ${isSaved ? 'fill-amber-500 text-amber-500' : ''}`} />
+                                            <span>{isSaved ? 'Saved in Vault' : 'Save'}</span>
+                                        </button>
+                                    </div>
+
+                                    {/* Share Button */}
+                                    <button
+                                        type="button"
+                                        onClick={() => handleShare(post.id, post.title)}
+                                        className="neu-button px-3 py-1.5 rounded-xl text-xs font-bold text-[#717699] hover:text-[#1a1c35] flex items-center space-x-1.5"
+                                        title="Copy quote"
+                                    >
+                                        <Share2 className="w-3.5 h-3.5" />
+                                        <span>{copiedId === post.id ? 'Copied!' : 'Share'}</span>
+                                    </button>
+                                </div>
+                            </article>
+                        );
+                    })}
+                </div>
+            )}
+
+            {/* Create Post Modal */}
+            <CreatePostModal
+                isOpen={isCreateOpen}
+                onClose={() => setIsCreateOpen(false)}
+                onSubmit={handleCreatePost}
+                currentUser={currentUser}
+            />
+        </div>
+    );
+};
