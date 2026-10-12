@@ -378,3 +378,15 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                                         <span>{badge.label}</span>
                                     </span>
                                 </div>
+
+                                {/* Post Title & Content */}
+                                <div className="space-y-2">
+                                    <h3 className="text-base sm:text-lg font-black text-[#1a1c35]">
+                                        {post.title}
+                                    </h3>
+                                    <div className="neu-inset p-4 rounded-2xl bg-white/40 border border-white/60">
+                                        <p className="text-xs sm:text-sm font-medium text-[#29335a] leading-relaxed whitespace-pre-line">
+                                            {post.content}
+                                        </p>
+                                    </div>
+                                </div>
