@@ -181,3 +181,27 @@ export function useTaskData() {
                 );
             }
         };
+
+        window.addEventListener(SUBTASKS_UPDATED_EVENT, handleSubTasksUpdated);
+        return () => {
+            window.removeEventListener(SUBTASKS_UPDATED_EVENT, handleSubTasksUpdated);
+        };
+    }, []);
+
+    const refreshData = async () => {
+        if (!user) return;
+        try {
+            const tasksRes = await api.getTasks();
+            setTasks(tasksRes.tasks || []);
+
+            const statsRes = await api.getMasterStats();
+            setStats(statsRes);
+
+            if (isPrivateUnlocked) {
+                const privRes = await api.getPrivateTasks();
+                setPrivateTasks(privRes.tasks || []);
+            }
+        } catch (err) {
+            console.error('Refresh failed:', err);
+        }
+    };
