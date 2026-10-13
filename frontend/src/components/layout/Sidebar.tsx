@@ -149,3 +149,25 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         </button>
                     </div>
                 )}
+
+                <button
+                    onClick={() => {
+                        if (!user && onBypassAuth) {
+                            onBypassAuth();
+                        }
+                        onOpenCreateModal();
+                    }}
+                    className={`w-full py-3 rounded-2xl neu-button-primary font-bold text-xs flex items-center justify-center space-x-2 transition-all duration-300 ${
+                        collapsed ? 'px-0' : 'px-4'
+                    }`}
+                    title="Create New Goal / Habit"
+                >
+                    <Plus className="w-4 h-4 shrink-0" />
+                    <span
+                        className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${
+                            collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[120px]'
+                        }`}
+                    >
+                        New Goal
+                    </span>
+                </button>
