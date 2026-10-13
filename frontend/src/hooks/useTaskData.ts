@@ -261,3 +261,15 @@ export function useTaskData() {
         },
         editingTaskId?: string | null
     ) => {
+        if (!user) {
+            navigateToView('auth');
+            return;
+        }
+
+        if (editingTaskId) {
+            await api.updateTask(editingTaskId, taskData);
+        } else {
+            await api.createTask(taskData);
+        }
+        await refreshData();
+    };
