@@ -34,3 +34,48 @@ export function useTaskData() {
         if (path.startsWith('/app')) return 'home';
         return 'landing';
     };
+
+    const activeView = getActiveViewFromPath(location.pathname);
+
+    const navigateToView = (view: 'home' | 'feed' | 'landing' | 'visible' | 'private' | 'stats' | 'auth' | 'task-map' | 'challenges' | 'challenge-detail', param?: string) => {
+        switch (view) {
+            case 'home':
+                navigate('/app');
+                break;
+            case 'feed':
+                navigate('/app/feed');
+                break;
+            case 'landing':
+                navigate('/');
+                break;
+            case 'auth':
+                navigate('/auth');
+                break;
+            case 'visible':
+                navigate('/app/tasks');
+                break;
+            case 'private':
+                navigate('/app/vault');
+                break;
+            case 'stats':
+                navigate('/app/stats');
+                break;
+            case 'task-map':
+                if (param) {
+                    navigate(`/app/map/${param}`);
+                } else {
+                    navigate('/app/map');
+                }
+                break;
+            case 'challenges':
+                navigate('/app/challenges');
+                break;
+            case 'challenge-detail':
+                if (param) {
+                    navigate(`/app/challenges/${param}`);
+                } else {
+                    navigate('/app/challenges');
+                }
+                break;
+        }
+    };
