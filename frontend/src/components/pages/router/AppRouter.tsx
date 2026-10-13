@@ -262,3 +262,47 @@ export const AppRouter: React.FC<AppRouterProps> = ({
       );
     }
   }
+
+  if (activeView === 'challenges') {
+    return (
+      <ChallengesPage
+        challenges={challenges}
+        onSelectChallenge={(ch) => {
+          setSelectedChallenge(ch);
+          navigateToView('challenge-detail', ch.id || ch._id);
+        }}
+        onCreateChallenge={onCreateChallenge}
+        onUpdateChallenge={onUpdateChallenge}
+        onDeleteChallenge={onDeleteChallenge}
+      />
+    );
+  }
+
+  return (
+    <TasksPage
+      tasks={filteredTasks}
+      searchQuery={searchQuery}
+      onSearchChange={setSearchQuery}
+      activeFilter={filter}
+      onFilterChange={setFilter}
+      onToggleComplete={onToggleComplete}
+      onTogglePrivate={(t) => onTogglePrivate(t)}
+      onOpenAIAssist={onOpenAIAssist}
+      onEditTask={onEditTask}
+      onDeleteTask={onDeleteTask}
+      onViewDetails={(t) => {
+        setSelectedTaskForDetail(t);
+        navigate(`/app/task/${getTaskSlug(t)}`);
+      }}
+      onCreateNewGoal={onOpenCreateModal}
+      isVaultView={activeView === 'private'}
+      isVaultUnlocked={isPrivateUnlocked}
+      onOpenPinModal={onOpenPinModal}
+      onLockVault={() => {
+        clearStoredPin();
+        setIsPrivateUnlocked(false);
+        navigateToView('visible');
+      }}
+    />
+  );
+};
