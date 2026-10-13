@@ -205,3 +205,23 @@ export function useTaskData() {
             console.error('Refresh failed:', err);
         }
     };
+
+    const handleBypassAuth = async () => {
+        try {
+            setLoading(true);
+            const res = await api.demoBypass();
+            setUser(res.user);
+
+            const tasksRes = await api.getTasks();
+            setTasks(tasksRes.tasks || []);
+
+            const statsRes = await api.getMasterStats();
+            setStats(statsRes);
+
+            navigateToView('visible');
+        } catch (err: any) {
+            alert(err.message || 'Bypass login failed');
+        } finally {
+            setLoading(false);
+        }
+    };
