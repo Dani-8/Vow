@@ -51,3 +51,23 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
                 onLogout={onLogout}
                 onBypassAuth={onBypassAuth}
             />
+
+            {/* Main Content Column */}
+            <div className="flex-1 min-w-0 flex flex-col">
+                {/* Header Bar */}
+                <Header
+                    user={user}
+                    stats={stats}
+                    activeView={activeView}
+                    onNavigateLanding={() => onNavigate('landing')}
+                    onOpenAuthModal={onOpenAuthModal}
+                    onLogout={onLogout}
+                    onBypassAuth={onBypassAuth}
+                />
+
+                {/* View Router Workspace Content */}
+                <main className="flex-1">{children}</main>
+            </div>
+        </div>
+    );
+};
