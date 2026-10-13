@@ -227,3 +227,25 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     </button>
                 </nav>
             </div>
+
+            <div className="space-y-4">
+                {stats && (
+                    <div
+                        onClick={() => onNavigate('stats')}
+                        className={`neu-inset rounded-2xl cursor-pointer hover:border-[#549acb] transition-all duration-300 overflow-hidden ${
+                            collapsed ? 'opacity-0 max-h-0 p-0 m-0 pointer-events-none' : 'opacity-100 p-3 max-h-24'
+                        }`}
+                    >
+                        <div className="flex items-center justify-between whitespace-nowrap">
+                            <div className="min-w-0">
+                                <span className="text-[10px] font-extrabold text-[#717699] uppercase block truncate">Master Streak</span>
+                                <span className="text-sm font-black text-[#549acb]">{stats.masterStreak} Days</span>
+                            </div>
+                            <div className="w-8 h-8 rounded-full master-streak-ring flex items-center justify-center p-0.5 shrink-0">
+                                <div className="w-full h-full rounded-full bg-[#E0E5EC] flex items-center justify-center text-xs">
+                                    <Flame className="w-4 h-4 text-orange-500 fill-orange-500" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
