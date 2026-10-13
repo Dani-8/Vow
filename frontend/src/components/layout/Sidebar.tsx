@@ -203,8 +203,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             }
                         }}
                         className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${activeView === 'private'
-                                ? 'neu-inset text-purple-600'
-                                : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
+                            ? 'neu-inset text-purple-600'
+                            : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
                             }`}
                     >
                         {isPrivateUnlocked ? (
@@ -227,3 +227,83 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     </button>
                 </nav>
             </div>
+
+            <div className="space-y-4">
+                {stats && (
+                    <div
+                        onClick={() => onNavigate('stats')}
+                        className={`neu-inset rounded-2xl cursor-pointer hover:border-[#549acb] transition-all duration-300 overflow-hidden ${collapsed ? 'opacity-0 max-h-0 p-0 m-0 pointer-events-none' : 'opacity-100 p-3 max-h-24'
+                            }`}
+                    >
+                        <div className="flex items-center justify-between whitespace-nowrap">
+                            <div className="min-w-0">
+                                <span className="text-[10px] font-extrabold text-[#717699] uppercase block truncate">Master Streak</span>
+                                <span className="text-sm font-black text-[#549acb]">{stats.masterStreak} Days</span>
+                            </div>
+                            <div className="w-8 h-8 rounded-full master-streak-ring flex items-center justify-center p-0.5 shrink-0">
+                                <div className="w-full h-full rounded-full bg-[#E0E5EC] flex items-center justify-center text-xs">
+                                    <Flame className="w-4 h-4 text-orange-500 fill-orange-500" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                <div className="pt-2 border-t border-white/40">
+                    {user ? (
+                        <div className={`flex items-center ${collapsed ? 'justify-center' : 'justify-between'} neu-inset p-2 rounded-2xl transition-all duration-300`}>
+                            <div className="flex items-center space-x-2 min-w-0">
+                                <div className="w-8 h-8 rounded-xl neu-button flex items-center justify-center text-[#549acb] font-bold shrink-0">
+                                    <UserIcon className="w-4 h-4" />
+                                </div>
+                                <div
+                                    className={`min-w-0 whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0 pointer-events-none' : 'opacity-100 max-w-[110px]'
+                                        }`}
+                                >
+                                    <p className="text-xs font-bold text-[#1a1c35] truncate">{user.name}</p>
+                                    <p className="text-[10px] text-[#717699] truncate">{user.email}</p>
+                                </div>
+                            </div>
+                            <button
+                                onClick={onLogout}
+                                className={`p-1.5 rounded-xl neu-button text-[#717699] hover:text-rose-600 transition-all duration-300 shrink-0 ${collapsed ? 'hidden opacity-0 max-w-0' : 'opacity-100'
+                                    }`}
+                                title="Sign Out"
+                            >
+                                <LogOut className="w-3.5 h-3.5" />
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="space-y-2">
+                            <button
+                                onClick={onOpenAuthModal}
+                                className={`w-full py-2.5 rounded-xl neu-button text-[#549acb] font-bold text-xs flex items-center justify-center space-x-2 transition-all duration-300 ${collapsed ? 'px-0' : 'px-3'
+                                    }`}
+                            >
+                                <LogIn className="w-4 h-4 shrink-0" />
+                                <span
+                                    className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[120px]'
+                                        }`}
+                                >
+                                    Sign In / Demo
+                                </span>
+                            </button>
+
+                            {onBypassAuth && (
+                                <button
+                                    onClick={onBypassAuth}
+                                    className={`w-full py-1.5 text-[10px] font-bold text-emerald-700 bg-emerald-100/70 rounded-xl hover:bg-emerald-200/80 flex items-center justify-center space-x-1 transition-all duration-300 overflow-hidden ${collapsed ? 'opacity-0 max-h-0 p-0 m-0 pointer-events-none' : 'opacity-100 max-h-10'
+                                        }`}
+                                    title="Testing bypass: auto login demo account"
+                                >
+                                    <ShieldCheck className="w-3 h-3 shrink-0" />
+                                    <span className="whitespace-nowrap">Instant Dev Bypass</span>
+                                </button>
+                            )}
+                        </div>
+                    )}
+                </div>
+            </div>
+        </aside>
+    );
+};
