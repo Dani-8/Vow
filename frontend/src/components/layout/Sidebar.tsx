@@ -171,3 +171,30 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         New Goal
                     </span>
                 </button>
+
+                {/* Main Navigation */}
+                <nav className="space-y-2 pt-2">
+                    {NAV_ITEMS.map((item) => {
+                        const Icon = item.icon;
+                        const isActive = item.activeViews.includes(activeView);
+                        return (
+                            <button
+                                key={item.id}
+                                onClick={() => onNavigate(item.id)}
+                                className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${
+                                    isActive
+                                        ? item.activeClass
+                                        : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
+                                }`}
+                            >
+                                <Icon className="w-4 h-4 shrink-0" />
+                                <span
+                                    className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${
+                                        collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
+                                    }`}
+                                >
+                                    {item.label}
+                                </span>
+                            </button>
+                        );
+                    })}
