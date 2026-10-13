@@ -214,3 +214,19 @@ export const AppRouter: React.FC<AppRouterProps> = ({
   if (activeView === 'feed') {
     return <FeedPage currentUser={user} onNavigateToView={navigateToView} />;
   }
+
+  if (activeView === 'stats') {
+    return (
+      <StatsView
+        stats={stats}
+        tasks={tasks}
+        privateTasks={privateTasks}
+        challenges={challenges}
+        onNavigateToView={navigateToView}
+      />
+    );
+  }
+
+  if (activeView === 'task-map') {
+    return <TaskMapPage tasks={[...tasks, ...privateTasks]} onBackToHome={() => navigateToView('home')} />;
+  }
