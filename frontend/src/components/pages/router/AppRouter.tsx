@@ -168,3 +168,28 @@ export const AppRouter: React.FC<AppRouterProps> = ({
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
+
+    return (
+      <TaskDetailPage
+        task={currentTask}
+        onBack={() => {
+          if (selectedTaskForDetail?.isPrivate || currentTask.isPrivate) {
+            navigate('/app/vault');
+          } else {
+            navigate('/app/tasks');
+          }
+        }}
+        onToggleComplete={onToggleComplete}
+        onTogglePrivate={onTogglePrivate}
+        onEditTask={onEditTask}
+        onDeleteTask={(t) => {
+          onDeleteTask(t);
+          if (t.isPrivate) {
+            navigate('/app/vault');
+          } else {
+            navigate('/app/tasks');
+          }
+        }}
+      />
+    );
+  }
