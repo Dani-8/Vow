@@ -274,3 +274,34 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             </button>
                         </div>
                     ) : (
+                        <div className="space-y-2">
+                            <button
+                                onClick={onOpenAuthModal}
+                                className={`w-full py-2.5 rounded-xl neu-button text-[#549acb] font-bold text-xs flex items-center justify-center space-x-2 transition-all duration-300 ${
+                                    collapsed ? 'px-0' : 'px-3'
+                                }`}
+                            >
+                                <LogIn className="w-4 h-4 shrink-0" />
+                                <span
+                                    className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${
+                                        collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[120px]'
+                                    }`}
+                                >
+                                    Sign In / Demo
+                                </span>
+                            </button>
+
+                            {onBypassAuth && (
+                                <button
+                                    onClick={onBypassAuth}
+                                    className={`w-full py-1.5 text-[10px] font-bold text-emerald-700 bg-emerald-100/70 rounded-xl hover:bg-emerald-200/80 flex items-center justify-center space-x-1 transition-all duration-300 overflow-hidden ${
+                                        collapsed ? 'opacity-0 max-h-0 p-0 m-0 pointer-events-none' : 'opacity-100 max-h-10'
+                                    }`}
+                                    title="Testing bypass: auto login demo account"
+                                >
+                                    <ShieldCheck className="w-3 h-3 shrink-0" />
+                                    <span className="whitespace-nowrap">Instant Dev Bypass</span>
+                                </button>
+                            )}
+                        </div>
+                    )}
