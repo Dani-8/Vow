@@ -15,3 +15,58 @@ export const getTaskSlug = (task: Task): string => {
     .replace(/^-+|-+$/g, '');
   return slug ? (shortId ? `${slug}-${shortId}` : slug) : task._id;
 };
+
+import { TaskDetailPage } from '../tasks/TaskDetailPage';
+import { TasksPage } from '../tasks/TasksPage';
+import { StatsView } from '../stats/StatsView';
+import { HomeView } from '../home/HomeView';
+import { TaskMapPage } from '../task-map/TaskMapPage';
+import { ChallengesPage } from '../challenges/ChallengesPage';
+import { ChallengeDetailPage } from '../challenges/ChallengeDetailPage';
+import { FeedPage } from '../feed/FeedPage';
+
+import { FilterCategory } from '../tasks/components/main/TaskControlsBar';
+import { Challenge } from '../../../types';
+
+interface AppRouterProps {
+  activeView: ActiveView;
+  location: Location;
+  user: User | null;
+  tasks: Task[];
+  privateTasks: Task[];
+  filteredTasks: Task[];
+  stats: MasterStreakStats | null;
+  isPrivateUnlocked: boolean;
+  selectedTaskForDetail: Task | null;
+  setSelectedTaskForDetail: (task: Task | null) => void;
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  filter: FilterCategory;
+  setFilter: (filter: FilterCategory) => void;
+  navigate: NavigateFunction;
+  navigateToView: (view: 'home' | 'landing' | 'visible' | 'private' | 'stats' | 'auth' | 'task-map' | 'challenges' | 'challenge-detail', param?: string) => void;
+  setIsPrivateUnlocked: (unlocked: boolean) => void;
+  onCheckInToday: () => void;
+  onToggleComplete: (task: Task) => void;
+  onTogglePrivate: (task: Task) => void;
+  onEditTask: (task: Task) => void;
+  onDeleteTask: (task: Task) => void;
+  onOpenAIAssist: (task?: Task) => void;
+  onOpenCreateModal: () => void;
+  onOpenPinModal: () => void;
+  challenges: Challenge[];
+  selectedChallenge: Challenge | null;
+  setSelectedChallenge: (challenge: Challenge | null) => void;
+  onCreateChallenge: (data: Partial<Challenge>) => Promise<void>;
+  onUpdateChallenge: (id: string, updates: Partial<Challenge>) => Promise<void>;
+  onDeleteChallenge: (id: string) => Promise<void>;
+  onLogChallengeDay: (
+    id: string,
+    logData: {
+      dayNumber: number;
+      date?: string;
+      status?: 'completed' | 'rest' | 'missed';
+      note?: string;
+      timeSpent?: string;
+    }
+  ) => Promise<void>;
