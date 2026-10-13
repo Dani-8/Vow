@@ -230,3 +230,35 @@ export const AppRouter: React.FC<AppRouterProps> = ({
   if (activeView === 'task-map') {
     return <TaskMapPage tasks={[...tasks, ...privateTasks]} onBackToHome={() => navigateToView('home')} />;
   }
+
+  if (activeView === 'challenge-detail' || (selectedChallenge && activeView === 'challenges' && location.pathname.startsWith('/app/challenges/'))) {
+    const challengeParam = decodeURIComponent(location.pathname.replace('/app/challenges/', ''));
+    const currentChallenge =
+      challenges.find(
+        (c) =>
+          (c.id && c.id.toLowerCase() === challengeParam.toLowerCase()) ||
+          c._id === challengeParam ||
+          (c.title && c.title.toLowerCase().replace(/[^a-z0-9]+/g, '-') === challengeParam.toLowerCase())
+      ) ||
+      selectedChallenge ||
+      challenges[0];
+
+    if (currentChallenge) {
+      return (
+        <ChallengeDetailPage
+          challenge={currentChallenge}
+          onBack={() => {
+            setSelectedChallenge(null);
+            navigateToView('challenges');
+          }}
+          onUpdateChallenge={onUpdateChallenge}
+          onDeleteChallenge={onDeleteChallenge}
+          onLogDay={onLogChallengeDay}
+          onDeleteLog={onDeleteChallengeLog}
+          onStartNextSprint={onStartNextSprint}
+          onCompleteSprint={onCompleteSprint}
+          onUpdateSprintRule={onUpdateSprintRule}
+        />
+      );
+    }
+  }
