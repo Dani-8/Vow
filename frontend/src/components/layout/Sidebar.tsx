@@ -193,3 +193,40 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             </button>
                         );
                     })}
+
+                    <button
+                        onClick={() => {
+                            if (!isPrivateUnlocked) {
+                                onOpenPinModal();
+                            } else {
+                                onNavigate('private');
+                            }
+                        }}
+                        className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${
+                            activeView === 'private'
+                                ? 'neu-inset text-purple-600'
+                                : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
+                        }`}
+                    >
+                        {isPrivateUnlocked ? (
+                            <Unlock className="w-4 h-4 shrink-0" />
+                        ) : (
+                            <Lock className="w-4 h-4 shrink-0" />
+                        )}
+                        <div
+                            className={`flex items-center justify-between flex-1 min-w-0 whitespace-nowrap overflow-hidden transition-all duration-300 ${
+                                collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
+                            }`}
+                        >
+                            <span className="truncate">Growth Vault</span>
+                            <span
+                                className={`text-[9px] px-1.5 py-0.5 rounded neu-inset font-bold ml-2 shrink-0 ${
+                                    activeView === 'private' ? 'text-purple-600' : 'text-[#717699]'
+                                }`}
+                            >
+                                {isPrivateUnlocked ? 'OPEN' : 'PIN'}
+                            </span>
+                        </div>
+                    </button>
+                </nav>
+            </div>
