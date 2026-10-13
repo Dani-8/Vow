@@ -248,3 +248,31 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         </div>
                     </div>
                 )}
+
+                <div className="pt-2 border-t border-white/40">
+                    {user ? (
+                        <div className={`flex items-center ${collapsed ? 'justify-center' : 'justify-between'} neu-inset p-2 rounded-2xl transition-all duration-300`}>
+                            <div className="flex items-center space-x-2 min-w-0">
+                                <div className="w-8 h-8 rounded-xl neu-button flex items-center justify-center text-[#549acb] font-bold shrink-0">
+                                    <UserIcon className="w-4 h-4" />
+                                </div>
+                                <div
+                                    className={`min-w-0 whitespace-nowrap overflow-hidden transition-all duration-300 ${
+                                        collapsed ? 'opacity-0 max-w-0 pointer-events-none' : 'opacity-100 max-w-[110px]'
+                                    }`}
+                                >
+                                    <p className="text-xs font-bold text-[#1a1c35] truncate">{user.name}</p>
+                                    <p className="text-[10px] text-[#717699] truncate">{user.email}</p>
+                                </div>
+                            </div>
+                            <button
+                                onClick={onLogout}
+                                className={`p-1.5 rounded-xl neu-button text-[#717699] hover:text-rose-600 transition-all duration-300 shrink-0 ${
+                                    collapsed ? 'hidden opacity-0 max-w-0' : 'opacity-100'
+                                }`}
+                                title="Sign Out"
+                            >
+                                <LogOut className="w-3.5 h-3.5" />
+                            </button>
+                        </div>
+                    ) : (
