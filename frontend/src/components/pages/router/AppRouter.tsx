@@ -23,6 +23,7 @@ import { HomeView } from '../home/HomeView';
 import { TaskMapPage } from '../task-map/TaskMapPage';
 import { ChallengesPage } from '../challenges/ChallengesPage';
 import { ChallengeDetailPage } from '../challenges/ChallengeDetailPage';
+import { FeedPage } from '../feed/FeedPage';
 
 import { FilterCategory } from '../tasks/components/main/TaskControlsBar';
 import { Challenge } from '../../../types';
@@ -208,6 +209,10 @@ export const AppRouter: React.FC<AppRouterProps> = ({
         }}
       />
     );
+  }
+
+  if (activeView === 'feed') {
+    return <FeedPage currentUser={user} onNavigateToView={navigateToView} />;
   }
 
   if (activeView === 'stats') {
