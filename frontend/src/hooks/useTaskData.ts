@@ -235,3 +235,29 @@ export function useTaskData() {
             console.error('Check-in failed:', err);
         }
     };
+
+    const handleLogout = () => {
+        removeToken();
+        clearStoredPin();
+        setUser(null);
+        setTasks([]);
+        setPrivateTasks([]);
+        setStats(null);
+        setIsPrivateUnlocked(false);
+        navigateToView('landing');
+    };
+
+    const handleCreateOrUpdateTask = async (
+        taskData: {
+            title: string;
+            description?: string;
+            consequenceOfSkipping?: string;
+            consequencesOfSkipping?: string[];
+            tags?: string[];
+            startTime?: string | null;
+            endTime?: string | null;
+            isPrivate?: boolean;
+            isHabit?: boolean;
+        },
+        editingTaskId?: string | null
+    ) => {
