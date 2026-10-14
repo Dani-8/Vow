@@ -177,3 +177,35 @@ export const api = {
       method: 'DELETE',
     });
   },
+
+  // Stats
+  async getMasterStats() {
+    return fetchAPI<MasterStreakStats>('/api/tasks/stats/master');
+  },
+
+  async checkInToday() {
+    return fetchAPI<{ message: string; stats: MasterStreakStats }>('/api/tasks/checkin-today', {
+      method: 'POST',
+    });
+  },
+
+  // AI Assist
+  async requestAIAssist(payload: {
+    taskTitle: string;
+    description?: string;
+    tags?: string[];
+    endTime?: string | null;
+    status?: string;
+    userMessage?: string;
+    chatHistory?: { role: 'user' | 'assistant'; text: string }[];
+  }) {
+    return fetchAPI<{ reply: string }>('/api/ai/task-assist', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+  },
+
+  // Task Maps (Firestore cloud persistence)
+  async getTaskMaps() {
+    return fetchAPI<{ maps: any[] }>('/api/task-maps');
+  },
