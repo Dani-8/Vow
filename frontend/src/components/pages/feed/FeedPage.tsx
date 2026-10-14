@@ -171,3 +171,52 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
             // fallback
         }
     };
+
+    // Handle New Post Creation
+    const handleCreatePost = async (newPostData: Omit<FeedPost, 'id' | 'likesCount' | 'savesCount' | 'createdAt' | 'isLiked' | 'isSaved'>) => {
+        const localId = `post_${Date.now()}`;
+        const newPost: FeedPost = {
+            ...newPostData,
+            id: localId,
+            likesCount: 1,
+            savesCount: 0,
+            createdAt: new Date().toISOString(),
+        };
+
+        // Optimistic update
+        setLikedIds((prev) => [...prev, localId]);
+        setPosts((prev) => [newPost, ...prev]);
+
+        // Sync with backend
+        try {
+            const res = await api.createFeedPost(newPostData);
+            if (res.post) {
+                setPosts((prev) => [res.post, ...prev.filter((p) => p.id !== localId)]);
+            }
+        } catch (e) {
+            console.warn('Could not sync post with backend:', e);
+        }
+    };
+
+    // Filtered Posts
+    const displayedPosts = useMemo(() => {
+        return posts.filter((post) => {
+            if (feedTab === 'saved' && !savedIds.includes(post.id)) {
+                return false;
+            }
+            if (selectedCategory !== 'all' && post.category !== selectedCategory) {
+                return false;
+            }
+            if (searchQuery.trim()) {
+                const q = searchQuery.toLowerCase();
+                const matchesTitle = post.title.toLowerCase().includes(q);
+                const matchesContent = post.content.toLowerCase().includes(q);
+                const matchesAuthor = post.authorName.toLowerCase().includes(q);
+                const matchesTags = post.tags.some((t) => t.toLowerCase().includes(q));
+                if (!matchesTitle && !matchesContent && !matchesAuthor && !matchesTags) {
+                    return false;
+                }
+            }
+            return true;
+        });
+    }, [posts, feedTab, savedIds, selectedCategory, searchQuery]);
