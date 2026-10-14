@@ -354,3 +354,37 @@ export function useTaskData() {
 
         return true;
     });
+
+    return {
+        navigate,
+        location,
+        user,
+        setUser,
+        tasks,
+        setTasks,
+        privateTasks,
+        setPrivateTasks,
+        stats,
+        activeView,
+        navigateToView,
+        filter,
+        setFilter,
+        searchQuery,
+        setSearchQuery,
+        sidebarCollapsed,
+        setSidebarCollapsed,
+        isPrivateUnlocked,
+        setIsPrivateUnlocked,
+        loading,
+        errorMsg,
+        refreshData,
+        handleBypassAuth,
+        handleDirectCheckIn,
+        handleLogout,
+        handleCreateOrUpdateTask,
+        handleToggleComplete,
+        handleTogglePrivate,
+        handleDeleteTask,
+        filteredTasks,
+    };
+}
