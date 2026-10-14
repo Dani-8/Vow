@@ -273,3 +273,27 @@ export function useTaskData() {
             navigateToView('auth');
             return;
         }
+
+        if (editingTaskId) {
+            await api.updateTask(editingTaskId, taskData);
+        } else {
+            await api.createTask(taskData);
+        }
+        await refreshData();
+    };
+
+    const handleToggleComplete = async (
+        task: Task,
+        onOptimisticUpdate?: (task: Task, newStatus: string) => void
+    ) => {
+        const isComp = task.status === 'completed';
+        const newStatus = isComp ? 'in_progress' : 'completed';
+
+        const updateTaskList = (list: Task[]) =>
+            list.map((t) => (t._id === task._id ? { ...t, status: newStatus } : t));
+
+        setTasks(updateTaskList);
+        setPrivateTasks(updateTaskList);
+        if (onOptimisticUpdate) {
+            onOptimisticUpdate(task, newStatus);
+        }
