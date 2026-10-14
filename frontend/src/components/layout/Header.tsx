@@ -27,6 +27,8 @@ export const Header: React.FC<HeaderProps> = ({
         switch (activeView) {
             case 'home':
                 return 'Home';
+            case 'feed':
+                return 'Mindset & Motivation Feed';
             case 'visible':
                 return 'Tasks & Habits';
             case 'private':
@@ -62,7 +64,11 @@ export const Header: React.FC<HeaderProps> = ({
                             Vow Workspace
                         </span>
                     </div>
-                    {user ? (
+                    {activeView === 'feed' ? (
+                        <p className="text-xs text-[#717699] font-medium truncate">
+                            Community Motivation Vault • <span className="text-[#549acb] font-bold">Goal & Discipline Formulas</span> (No noise, pure drive)
+                        </p>
+                    ) : user ? (
                         <p className="text-xs text-[#717699] font-medium truncate">
                             Welcome back, <strong className="text-[#1a1c35] font-bold">{user.name}</strong> • Active Session
                         </p>
