@@ -109,3 +109,22 @@ router.post('/', (req: Request, res: Response) => {
     feedPostsStore.unshift(newPost);
     return res.status(201).json({ post: newPost });
 });
+
+// POST /api/feed/:id/like - toggle like
+router.post('/:id/like', (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { increment } = req.body; // true = +1, false = -1
+
+    const found = feedPostsStore.find((p) => p.id === id);
+    if (!found) {
+        return res.status(404).json({ error: 'Post not found' });
+    }
+
+    if (increment === false) {
+        found.likesCount = Math.max(0, found.likesCount - 1);
+    } else {
+        found.likesCount += 1;
+    }
+
+    return res.json({ post: found });
+});
