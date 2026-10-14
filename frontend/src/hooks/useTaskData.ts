@@ -135,3 +135,20 @@ export function useTaskData() {
                     setPrivateTasks([]);
                     setStats(null);
                 }
+            } else {
+                // Unauthenticated visitor
+                setUser(null);
+                setTasks([]);
+                setPrivateTasks([]);
+                setStats(null);
+            }
+        } catch (err: any) {
+            console.warn('Initial data load notice:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        loadInitialData();
+    }, []);
