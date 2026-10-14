@@ -1,4 +1,4 @@
-export type ActiveView = 'home' | 'feed' | 'visible' | 'private' | 'stats' | 'auth' | 'task-detail' | 'landing' | 'task-map' | 'challenges' | 'challenge-detail';
+export type ActiveView = 'home' | 'feed' | 'feed-post' | 'visible' | 'private' | 'stats' | 'auth' | 'task-detail' | 'landing' | 'task-map' | 'challenges' | 'challenge-detail';
 
 export interface ChallengeLog {
   id: string;
