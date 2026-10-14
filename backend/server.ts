@@ -33,3 +33,30 @@ app.use('/api/feed', feedRoutes);
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', app: 'Vow', time: new Date().toISOString() });
 });
+
+async function startServer() {
+    try {
+        await connectDB();
+    } catch (err) {
+        console.warn('Database initialization warning (server will continue with fallback):', err);
+    }
+
+    if (process.env.NODE_ENV !== 'production') {
+        const vite = await createViteServer({
+            server: { middlewareMode: true },
+            appType: 'spa',
+            configFile: path.resolve(process.cwd(), 'frontend/vite.config.ts'),
+            root: path.resolve(process.cwd(), 'frontend'),
+        });
+        app.use(vite.middlewares);
+        app.use('*', async (req, res, next) => {
+            const url = req.originalUrl;
+            try {
+                let template = fs.readFileSync(path.resolve(process.cwd(), 'frontend/index.html'), 'utf-8');
+                template = await vite.transformIndexHtml(url, template);
+                res.status(200).set({ 'Content-Type': 'text/html' }).end(template);
+            } catch (e) {
+                vite.ssrFixStacktrace(e as Error);
+                next(e);
+            }
+        });
