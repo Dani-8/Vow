@@ -99,3 +99,31 @@ export const Header: React.FC<HeaderProps> = ({
                         <span>Dev Bypass</span>
                     </button>
                 )}
+
+                {user ? (
+                    <div className="flex items-center space-x-2">
+                        <div className="neu-badge px-3 py-1.5 rounded-xl flex items-center space-x-2">
+                            <UserIcon className="w-4 h-4 text-[#549acb]" />
+                            <span className="text-xs font-bold text-[#44476A] max-w-[120px] truncate">{user.name}</span>
+                        </div>
+                        <button
+                            onClick={onLogout}
+                            className="neu-button p-2.5 rounded-xl text-[#717699] hover:text-rose-600"
+                            title="Sign Out"
+                        >
+                            <LogOut className="w-4 h-4" />
+                        </button>
+                    </div>
+                ) : (
+                    <button
+                        onClick={onOpenAuthModal}
+                        className="neu-button-primary px-4 py-2 rounded-xl text-xs font-extrabold flex items-center space-x-2"
+                    >
+                        <LogIn className="w-3.5 h-3.5" />
+                        <span>Sign In</span>
+                    </button>
+                )}
+            </div>
+        </header>
+    );
+};
