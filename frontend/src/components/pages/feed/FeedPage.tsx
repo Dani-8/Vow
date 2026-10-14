@@ -274,3 +274,42 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                         </p>
                     </div>
                 </div>
+
+                <div className="flex items-center space-x-2 shrink-0 self-end md:self-center">
+                    <button
+                        onClick={() => setIsCreateOpen(true)}
+                        className="neu-button-primary px-4 py-2.5 rounded-xl text-xs font-black flex items-center space-x-1.5 text-white shadow-md hover:scale-105 active:scale-95 transition-all"
+                    >
+                        <Plus className="w-4 h-4 stroke-[3]" />
+                        <span>Share Formula / Goal</span>
+                    </button>
+                </div>
+            </div>
+
+            {/* Navigation Switcher: [ All Feed ] vs [ Saved Vault ] & Live Search */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center space-x-1 neu-inset p-1.5 rounded-2xl bg-[#E0E5EC]/90 border border-white/60 w-fit">
+                    <button
+                        onClick={() => setFeedTab('all')}
+                        className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${
+                            feedTab === 'all'
+                                ? 'neu-button text-[#549acb] bg-[#E0E5EC] shadow-sm'
+                                : 'text-[#717699] hover:text-[#1a1c35]'
+                        }`}
+                    >
+                        <TrendingUp className="w-4 h-4" />
+                        <span>All Motivation ({posts.length})</span>
+                    </button>
+
+                    <button
+                        onClick={() => setFeedTab('saved')}
+                        className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${
+                            feedTab === 'saved'
+                                ? 'neu-button text-amber-600 bg-[#E0E5EC] shadow-sm'
+                                : 'text-[#717699] hover:text-[#1a1c35]'
+                        }`}
+                    >
+                        <BookmarkCheck className="w-4 h-4 text-amber-500" />
+                        <span>Saved in Vault ({savedIds.length})</span>
+                    </button>
+                </div>
