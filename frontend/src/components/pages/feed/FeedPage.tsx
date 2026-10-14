@@ -78,3 +78,37 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
             return [];
         }
     });
+
+    // Feed Navigation Sub-Tab: "All Posts" vs "Saved Vault"
+    const [feedTab, setFeedTab] = useState<'all' | 'saved'>('all');
+    const [selectedCategory, setSelectedCategory] = useState<FeedCategory | 'all'>('all');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [isCreateOpen, setIsCreateOpen] = useState(false);
+    const [copiedId, setCopiedId] = useState<string | null>(null);
+
+    // Sync saved & liked to storage
+    useEffect(() => {
+        try {
+            localStorage.setItem(STORAGE_SAVED_IDS_KEY, JSON.stringify(savedIds));
+        } catch (e) {
+            console.error('Failed to sync saved posts', e);
+        }
+    }, [savedIds]);
+
+    useEffect(() => {
+        try {
+            localStorage.setItem(STORAGE_LIKED_IDS_KEY, JSON.stringify(likedIds));
+        } catch (e) {
+            console.error('Failed to sync liked posts', e);
+        }
+    }, [likedIds]);
+
+    // Handle Like Toggle
+    const handleToggleLike = async (postId: string) => {
+        const isCurrentlyLiked = likedIds.includes(postId);
+        const newLiked = isCurrentlyLiked
+            ? likedIds.filter((id) => id !== postId)
+            : [...likedIds, postId];
+        setLikedIds(newLiked);
+
+        // Optimistic UI update
