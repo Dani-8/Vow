@@ -297,3 +297,31 @@ export function useTaskData() {
         if (onOptimisticUpdate) {
             onOptimisticUpdate(task, newStatus);
         }
+
+        try {
+            await api.toggleTaskComplete(task._id);
+            refreshData();
+        } catch (err: any) {
+            const revertTaskList = (list: Task[]) =>
+                list.map((t) => (t._id === task._id ? { ...t, status: task.status } : t));
+            setTasks(revertTaskList);
+            setPrivateTasks(revertTaskList);
+            if (onOptimisticUpdate) {
+                onOptimisticUpdate(task, task.status);
+            }
+            alert(err.message || 'Failed to update completion');
+        }
+    };
+
+    const handleTogglePrivate = async (task: Task, onOpenPinModal?: () => void) => {
+        if (!user?.hasPinSet || !isPrivateUnlocked) {
+            onOpenPinModal?.();
+            return;
+        }
+        try {
+            await api.toggleTaskPrivate(task._id);
+            await refreshData();
+        } catch (err: any) {
+            alert(err.message || 'Failed to move task');
+        }
+    };
