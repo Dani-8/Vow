@@ -19,3 +19,17 @@ dotenv.config();
 
 const app = express();
 const PORT = 3000;
+
+app.use(express.json());
+
+// API Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/tasks', taskRoutes);
+app.use('/api/task-maps', taskMapRoutes);
+app.use('/api/challenges', challengeRoutes);
+app.use('/api/ai', aiRoutes);
+app.use('/api/feed', feedRoutes);
+
+app.get('/api/health', (req, res) => {
+    res.json({ status: 'ok', app: 'Vow', time: new Date().toISOString() });
+});
