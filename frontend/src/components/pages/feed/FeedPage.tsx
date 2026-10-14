@@ -249,3 +249,28 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                 };
         }
     };
+
+    return (
+        /* Root container matches the exact layout of HomeView and TasksPage (space-y-6 pb-8, no artificial max-w) */
+        <div className="space-y-6 pb-8 animate-in fade-in duration-300">
+            {/* Purpose & Community Guidelines Strip (Clear reminder this is purely for motivation & goals, not standard social media) */}
+            <div className="neu-card p-4 sm:p-5 bg-[#E0E5EC] rounded-2xl border border-white/60 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="flex items-start sm:items-center space-x-3.5 min-w-0">
+                    <div className="w-10 h-10 rounded-2xl neu-inset flex items-center justify-center text-[#549acb] bg-sky-50/40 shrink-0">
+                        <HeartHandshake className="w-5 h-5 text-[#549acb]" />
+                    </div>
+                    <div className="space-y-0.5 min-w-0">
+                        <div className="flex items-center space-x-2">
+                            <span className="text-[10px] font-black uppercase tracking-wider text-[#549acb]">
+                                Purpose & Community Pact
+                            </span>
+                            <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-100 text-amber-800 border border-amber-300/60">
+                                100% Motivation Only
+                            </span>
+                        </div>
+                        <p className="text-xs font-semibold text-[#515777] leading-relaxed">
+                            This feed is built strictly to inspire and elevate. Share your real <strong>goals, milestones, and discipline formulas</strong>. 
+                            No social media noise or distractions—pure focus, grit, and mutual growth.
+                        </p>
+                    </div>
+                </div>
