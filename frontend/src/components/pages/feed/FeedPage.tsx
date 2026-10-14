@@ -6,19 +6,19 @@ import {
     BookmarkCheck,
     Share2,
     Plus,
-    Filter,
     Search,
     Lightbulb,
     Trophy,
     Compass,
     Shield,
-    CheckCircle2,
-    MessageSquare,
     TrendingUp,
+    Info,
+    HeartHandshake,
 } from 'lucide-react';
 import { FeedPost, FeedCategory, INITIAL_FEED_POSTS } from './types';
 import { CreatePostModal } from './CreatePostModal';
 import { User } from '../../../types';
+import { api } from '../../../api';
 
 interface FeedPageProps {
     currentUser: User | null;
@@ -30,7 +30,7 @@ const STORAGE_SAVED_IDS_KEY = 'app_community_saved_post_ids';
 const STORAGE_LIKED_IDS_KEY = 'app_community_liked_post_ids';
 
 export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToView }) => {
-    // 1. Posts list
+    // 1. Posts list (synced with backend / fallback to initial)
     const [posts, setPosts] = useState<FeedPost[]>(() => {
         try {
             const raw = localStorage.getItem(STORAGE_POSTS_KEY);
@@ -41,11 +41,29 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
         }
     });
 
-    // 2. Saved post IDs (The user's Saved Vault)
+    // Fetch live posts from backend on mount
+    useEffect(() => {
+        let isMounted = true;
+        api.getFeedPosts()
+            .then((res) => {
+                if (isMounted && res.posts && Array.isArray(res.posts) && res.posts.length > 0) {
+                    setPosts(res.posts);
+                    localStorage.setItem(STORAGE_POSTS_KEY, JSON.stringify(res.posts));
+                }
+            })
+            .catch((err) => {
+                console.warn('Backend feed fetch warning (using cache):', err);
+            });
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
+    // 2. Saved post IDs (User's Vault)
     const [savedIds, setSavedIds] = useState<string[]>(() => {
         try {
             const raw = localStorage.getItem(STORAGE_SAVED_IDS_KEY);
-            return raw ? JSON.parse(raw) : ['post_reel_formula']; // default save the popular formula
+            return raw ? JSON.parse(raw) : ['post_reel_formula'];
         } catch {
             return ['post_reel_formula'];
         }
@@ -68,15 +86,7 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
     const [isCreateOpen, setIsCreateOpen] = useState(false);
     const [copiedId, setCopiedId] = useState<string | null>(null);
 
-    // Sync to storage
-    useEffect(() => {
-        try {
-            localStorage.setItem(STORAGE_POSTS_KEY, JSON.stringify(posts));
-        } catch (e) {
-            console.error('Failed to sync posts', e);
-        }
-    }, [posts]);
-
+    // Sync saved & liked to storage
     useEffect(() => {
         try {
             localStorage.setItem(STORAGE_SAVED_IDS_KEY, JSON.stringify(savedIds));
@@ -94,13 +104,14 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
     }, [likedIds]);
 
     // Handle Like Toggle
-    const handleToggleLike = (postId: string) => {
+    const handleToggleLike = async (postId: string) => {
         const isCurrentlyLiked = likedIds.includes(postId);
         const newLiked = isCurrentlyLiked
             ? likedIds.filter((id) => id !== postId)
             : [...likedIds, postId];
         setLikedIds(newLiked);
 
+        // Optimistic UI update
         setPosts((prev) =>
             prev.map((p) => {
                 if (p.id === postId) {
@@ -112,16 +123,24 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                 return p;
             })
         );
+
+        // Sync with backend API
+        try {
+            await api.likeFeedPost(postId, !isCurrentlyLiked);
+        } catch (e) {
+            console.warn('Could not sync like with backend:', e);
+        }
     };
 
     // Handle Save to Vault Toggle
-    const handleToggleSave = (postId: string) => {
+    const handleToggleSave = async (postId: string) => {
         const isCurrentlySaved = savedIds.includes(postId);
         const newSaved = isCurrentlySaved
             ? savedIds.filter((id) => id !== postId)
             : [...savedIds, postId];
         setSavedIds(newSaved);
 
+        // Optimistic UI update
         setPosts((prev) =>
             prev.map((p) => {
                 if (p.id === postId) {
@@ -133,12 +152,19 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                 return p;
             })
         );
+
+        // Sync with backend API
+        try {
+            await api.saveFeedPost(postId, !isCurrentlySaved);
+        } catch (e) {
+            console.warn('Could not sync save with backend:', e);
+        }
     };
 
     // Handle Share / Copy link
     const handleShare = (postId: string, title: string) => {
         try {
-            navigator.clipboard.writeText(`${title} - Shared from Mindset Feed`);
+            navigator.clipboard.writeText(`${title} - Shared from Vow Mindset Feed`);
             setCopiedId(postId);
             setTimeout(() => setCopiedId(null), 2500);
         } catch {
@@ -147,31 +173,40 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
     };
 
     // Handle New Post Creation
-    const handleCreatePost = (newPostData: Omit<FeedPost, 'id' | 'likesCount' | 'savesCount' | 'createdAt' | 'isLiked' | 'isSaved'>) => {
+    const handleCreatePost = async (newPostData: Omit<FeedPost, 'id' | 'likesCount' | 'savesCount' | 'createdAt' | 'isLiked' | 'isSaved'>) => {
+        const localId = `post_${Date.now()}`;
         const newPost: FeedPost = {
             ...newPostData,
-            id: `post_${Date.now()}`,
+            id: localId,
             likesCount: 1,
             savesCount: 0,
             createdAt: new Date().toISOString(),
         };
-        // Auto-like author's own post
-        setLikedIds((prev) => [...prev, newPost.id]);
+
+        // Optimistic update
+        setLikedIds((prev) => [...prev, localId]);
         setPosts((prev) => [newPost, ...prev]);
+
+        // Sync with backend
+        try {
+            const res = await api.createFeedPost(newPostData);
+            if (res.post) {
+                setPosts((prev) => [res.post, ...prev.filter((p) => p.id !== localId)]);
+            }
+        } catch (e) {
+            console.warn('Could not sync post with backend:', e);
+        }
     };
 
     // Filtered Posts
     const displayedPosts = useMemo(() => {
         return posts.filter((post) => {
-            // Tab filter (All vs Saved)
             if (feedTab === 'saved' && !savedIds.includes(post.id)) {
                 return false;
             }
-            // Category filter
             if (selectedCategory !== 'all' && post.category !== selectedCategory) {
                 return false;
             }
-            // Search query
             if (searchQuery.trim()) {
                 const q = searchQuery.toLowerCase();
                 const matchesTitle = post.title.toLowerCase().includes(q);
@@ -216,38 +251,42 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
     };
 
     return (
-        <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-6 space-y-6 animate-in fade-in duration-300">
-            {/* Header Hero Banner */}
-            <div className="neu-card p-6 sm:p-8 bg-[#E0E5EC] rounded-3xl border border-white/60 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6">
-                <div className="space-y-1.5">
-                    <div className="flex items-center space-x-2">
-                        <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-sky-100 text-[#549acb] border border-sky-300">
-                            Community & Mindset
-                        </span>
-                        <span className="text-xs font-bold text-[#717699]">
-                            {posts.length} Shared Wisdom Blocks
-                        </span>
+        /* Root container matches the exact layout of HomeView and TasksPage (space-y-6 pb-8, no artificial max-w) */
+        <div className="space-y-6 pb-8 animate-in fade-in duration-300">
+            {/* Purpose & Community Guidelines Strip (Clear reminder this is purely for motivation & goals, not standard social media) */}
+            <div className="neu-card p-4 sm:p-5 bg-[#E0E5EC] rounded-2xl border border-white/60 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="flex items-start sm:items-center space-x-3.5 min-w-0">
+                    <div className="w-10 h-10 rounded-2xl neu-inset flex items-center justify-center text-[#549acb] bg-sky-50/40 shrink-0">
+                        <HeartHandshake className="w-5 h-5 text-[#549acb]" />
                     </div>
-                    <h1 className="text-2xl sm:text-3xl font-black text-[#1a1c35] tracking-tight">
-                        Discipline & Strategy Feed
-                    </h1>
-                    <p className="text-xs sm:text-sm font-semibold text-[#717699] max-w-xl">
-                        Formulas, rules, and milestone breakthroughs from disciplined builders. Save the best frameworks to your personal vault.
-                    </p>
+                    <div className="space-y-0.5 min-w-0">
+                        <div className="flex items-center space-x-2">
+                            <span className="text-[10px] font-black uppercase tracking-wider text-[#549acb]">
+                                Purpose & Community Pact
+                            </span>
+                            <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-100 text-amber-800 border border-amber-300/60">
+                                100% Motivation Only
+                            </span>
+                        </div>
+                        <p className="text-xs font-semibold text-[#515777] leading-relaxed">
+                            This feed is built strictly to inspire and elevate. Share your real <strong>goals, milestones, and discipline formulas</strong>.
+                            No social media noise or distractions—pure focus, grit, and mutual growth.
+                        </p>
+                    </div>
                 </div>
 
-                <div className="flex items-center space-x-3 shrink-0">
+                <div className="flex items-center space-x-2 shrink-0 self-end md:self-center">
                     <button
                         onClick={() => setIsCreateOpen(true)}
-                        className="neu-button-primary px-5 py-3 rounded-2xl text-xs sm:text-sm font-black flex items-center space-x-2 text-white shadow-lg hover:scale-105 active:scale-95 transition-all"
+                        className="neu-button-primary px-4 py-2.5 rounded-xl text-xs font-black flex items-center space-x-1.5 text-white shadow-md hover:scale-105 active:scale-95 transition-all"
                     >
                         <Plus className="w-4 h-4 stroke-[3]" />
-                        <span>Post Framework</span>
+                        <span>Share Formula / Goal</span>
                     </button>
                 </div>
             </div>
 
-            {/* Navigation Switcher: [ All Feed ] vs [ Saved Vault ] */}
+            {/* Navigation Switcher: [ All Feed ] vs [ Saved Vault ] & Live Search */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-center space-x-1 neu-inset p-1.5 rounded-2xl bg-[#E0E5EC]/90 border border-white/60 w-fit">
                     <button
@@ -258,7 +297,7 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                             }`}
                     >
                         <TrendingUp className="w-4 h-4" />
-                        <span>All Posts</span>
+                        <span>All Motivation ({posts.length})</span>
                     </button>
 
                     <button
@@ -269,16 +308,16 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                             }`}
                     >
                         <BookmarkCheck className="w-4 h-4 text-amber-500" />
-                        <span>Saved Vault ({savedIds.length})</span>
+                        <span>Saved in Vault ({savedIds.length})</span>
                     </button>
                 </div>
 
                 {/* Search Bar */}
-                <div className="relative max-w-xs w-full">
+                <div className="relative max-w-sm w-full">
                     <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#717699]" />
                     <input
                         type="text"
-                        placeholder="Search formulas, tags, mindset..."
+                        placeholder="Search formulas, goals, tags..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="w-full neu-inset pl-9 pr-4 py-2 rounded-xl text-xs font-bold text-[#1a1c35] placeholder:text-[#94a3b8] focus:outline-none focus:ring-2 focus:ring-[#549acb]"
@@ -325,7 +364,7 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                         <Bookmark className="w-6 h-6" />
                     </div>
                     <h3 className="text-base font-black text-[#1a1c35]">
-                        {feedTab === 'saved' ? 'No Saved Posts in Your Vault Yet' : 'No Posts Found'}
+                        {feedTab === 'saved' ? 'No Saved Posts in Your Vault Yet' : 'No Motivation Posts Found'}
                     </h3>
                     <p className="text-xs font-semibold text-[#717699] max-w-sm mx-auto">
                         {feedTab === 'saved'
@@ -344,7 +383,7 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                         return (
                             <article
                                 key={post.id}
-                                className="neu-card p-6 bg-[#E0E5EC] rounded-3xl border border-white/60 shadow-lg hover:shadow-xl transition-all space-y-4 text-left"
+                                className="neu-card p-5 sm:p-6 bg-[#E0E5EC] rounded-3xl border border-white/60 shadow-lg hover:shadow-xl transition-all space-y-4 text-left"
                             >
                                 {/* Post Top: Author Info & Category Badge */}
                                 <div className="flex items-center justify-between">
