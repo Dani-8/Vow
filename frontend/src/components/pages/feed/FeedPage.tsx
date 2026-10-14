@@ -269,7 +269,7 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                             </span>
                         </div>
                         <p className="text-xs font-semibold text-[#515777] leading-relaxed">
-                            This feed is built strictly to inspire and elevate. Share your real <strong>goals, milestones, and discipline formulas</strong>. 
+                            This feed is built strictly to inspire and elevate. Share your real <strong>goals, milestones, and discipline formulas</strong>.
                             No social media noise or distractions—pure focus, grit, and mutual growth.
                         </p>
                     </div>
@@ -291,11 +291,10 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                 <div className="flex items-center space-x-1 neu-inset p-1.5 rounded-2xl bg-[#E0E5EC]/90 border border-white/60 w-fit">
                     <button
                         onClick={() => setFeedTab('all')}
-                        className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${
-                            feedTab === 'all'
+                        className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${feedTab === 'all'
                                 ? 'neu-button text-[#549acb] bg-[#E0E5EC] shadow-sm'
                                 : 'text-[#717699] hover:text-[#1a1c35]'
-                        }`}
+                            }`}
                     >
                         <TrendingUp className="w-4 h-4" />
                         <span>All Motivation ({posts.length})</span>
@@ -303,11 +302,10 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
 
                     <button
                         onClick={() => setFeedTab('saved')}
-                        className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${
-                            feedTab === 'saved'
+                        className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${feedTab === 'saved'
                                 ? 'neu-button text-amber-600 bg-[#E0E5EC] shadow-sm'
                                 : 'text-[#717699] hover:text-[#1a1c35]'
-                        }`}
+                            }`}
                     >
                         <BookmarkCheck className="w-4 h-4 text-amber-500" />
                         <span>Saved in Vault ({savedIds.length})</span>
