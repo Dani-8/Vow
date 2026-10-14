@@ -131,3 +131,43 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
             console.warn('Could not sync like with backend:', e);
         }
     };
+
+    // Handle Save to Vault Toggle
+    const handleToggleSave = async (postId: string) => {
+        const isCurrentlySaved = savedIds.includes(postId);
+        const newSaved = isCurrentlySaved
+            ? savedIds.filter((id) => id !== postId)
+            : [...savedIds, postId];
+        setSavedIds(newSaved);
+
+        // Optimistic UI update
+        setPosts((prev) =>
+            prev.map((p) => {
+                if (p.id === postId) {
+                    return {
+                        ...p,
+                        savesCount: isCurrentlySaved ? Math.max(0, p.savesCount - 1) : p.savesCount + 1,
+                    };
+                }
+                return p;
+            })
+        );
+
+        // Sync with backend API
+        try {
+            await api.saveFeedPost(postId, !isCurrentlySaved);
+        } catch (e) {
+            console.warn('Could not sync save with backend:', e);
+        }
+    };
+
+    // Handle Share / Copy link
+    const handleShare = (postId: string, title: string) => {
+        try {
+            navigator.clipboard.writeText(`${title} - Shared from Vow Mindset Feed`);
+            setCopiedId(postId);
+            setTimeout(() => setCopiedId(null), 2500);
+        } catch {
+            // fallback
+        }
+    };
