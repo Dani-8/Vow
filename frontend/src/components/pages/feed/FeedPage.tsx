@@ -444,3 +444,37 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                                         ))}
                                     </div>
                                 )}
+
+                                {/* Bottom Action Bar: Like, Save to Vault, Share */}
+                                <div className="flex items-center justify-between pt-3 border-t border-slate-200/60">
+                                    <div className="flex items-center space-x-2">
+                                        {/* Like / Flame Reaction */}
+                                        <button
+                                            type="button"
+                                            onClick={() => handleToggleLike(post.id)}
+                                            className={`neu-button px-3 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all ${
+                                                isLiked
+                                                    ? 'text-rose-600 bg-rose-50/80 border-rose-300 font-black shadow-inner'
+                                                    : 'text-[#717699] hover:text-[#1a1c35]'
+                                            }`}
+                                            title={isLiked ? 'Unlike' : 'Give Respect'}
+                                        >
+                                            <Flame className={`w-3.5 h-3.5 ${isLiked ? 'fill-rose-500 text-rose-500' : ''}`} />
+                                            <span>{post.likesCount}</span>
+                                        </button>
+
+                                        {/* Save to Vault */}
+                                        <button
+                                            type="button"
+                                            onClick={() => handleToggleSave(post.id)}
+                                            className={`neu-button px-3 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all ${
+                                                isSaved
+                                                    ? 'text-amber-600 bg-amber-50/80 border-amber-300 font-black shadow-inner'
+                                                    : 'text-[#717699] hover:text-[#1a1c35]'
+                                            }`}
+                                            title={isSaved ? 'Saved in Vault' : 'Save to Vault'}
+                                        >
+                                            <Bookmark className={`w-3.5 h-3.5 ${isSaved ? 'fill-amber-500 text-amber-500' : ''}`} />
+                                            <span>{isSaved ? 'Saved in Vault' : 'Save'}</span>
+                                        </button>
+                                    </div>
