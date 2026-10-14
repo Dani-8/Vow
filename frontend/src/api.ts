@@ -122,3 +122,33 @@ export const api = {
   async getTasks() {
     return fetchAPI<{ tasks: Task[] }>('/api/tasks');
   },
+
+  async getPrivateTasks(pinInput?: string) {
+    const pinToUse = pinInput || getStoredPin();
+    if (!pinToUse) {
+      throw new Error('PIN authentication required');
+    }
+    return fetchAPI<{ tasks: Task[] }>('/api/tasks/private-list', {
+      method: 'POST',
+      headers: {
+        'x-private-pin': pinToUse,
+      },
+    });
+  },
+
+  async createTask(taskData: {
+    title: string;
+    description?: string;
+    consequenceOfSkipping?: string;
+    consequencesOfSkipping?: string[];
+    tags?: string[];
+    startTime?: string | null;
+    endTime?: string | null;
+    isPrivate?: boolean;
+    isHabit?: boolean;
+  }) {
+    return fetchAPI<{ task: Task }>('/api/tasks', {
+      method: 'POST',
+      body: JSON.stringify(taskData),
+    });
+  },
