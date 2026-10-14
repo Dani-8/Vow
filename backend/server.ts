@@ -13,6 +13,7 @@ import taskRoutes from './routes/taskRoutes.js';
 import taskMapRoutes from './routes/taskMapRoutes.js';
 import challengeRoutes from './routes/challengeRoutes.js';
 import aiRoutes from './routes/aiRoutes.js';
+import feedRoutes from './routes/feedRoutes.js';
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.use('/api/tasks', taskRoutes);
 app.use('/api/task-maps', taskMapRoutes);
 app.use('/api/challenges', challengeRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/feed', feedRoutes);
 
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', app: 'Vow', time: new Date().toISOString() });
@@ -43,14 +45,14 @@ async function startServer() {
         const vite = await createViteServer({
             server: { middlewareMode: true },
             appType: 'spa',
-            configFile: path.resolve(process.cwd(), '../frontend/vite.config.ts'),
-            root: path.resolve(process.cwd(), '../frontend'),
+            configFile: path.resolve(process.cwd(), 'frontend/vite.config.ts'),
+            root: path.resolve(process.cwd(), 'frontend'),
         });
         app.use(vite.middlewares);
         app.use('*', async (req, res, next) => {
             const url = req.originalUrl;
             try {
-                let template = fs.readFileSync(path.resolve(process.cwd(), '../frontend/index.html'), 'utf-8');
+                let template = fs.readFileSync(path.resolve(process.cwd(), 'frontend/index.html'), 'utf-8');
                 template = await vite.transformIndexHtml(url, template);
                 res.status(200).set({ 'Content-Type': 'text/html' }).end(template);
             } catch (e) {

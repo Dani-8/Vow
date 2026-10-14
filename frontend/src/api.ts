@@ -290,4 +290,30 @@ export const api = {
       method: 'DELETE',
     });
   },
+
+  // Mindset & Motivation Feed APIs
+  async getFeedPosts() {
+    return fetchAPI<{ posts: any[] }>('/api/feed');
+  },
+
+  async createFeedPost(data: any) {
+    return fetchAPI<{ post: any }>('/api/feed', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async likeFeedPost(id: string, increment: boolean) {
+    return fetchAPI<{ post: any }>(`/api/feed/${id}/like`, {
+      method: 'POST',
+      body: JSON.stringify({ increment }),
+    });
+  },
+
+  async saveFeedPost(id: string, increment: boolean) {
+    return fetchAPI<{ post: any }>(`/api/feed/${id}/save`, {
+      method: 'POST',
+      body: JSON.stringify({ increment }),
+    });
+  },
 };
