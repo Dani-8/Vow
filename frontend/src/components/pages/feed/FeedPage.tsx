@@ -269,7 +269,7 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                             </span>
                         </div>
                         <p className="text-xs font-semibold text-[#515777] leading-relaxed">
-                            This feed is built strictly to inspire and elevate. Share your real <strong>goals, milestones, and discipline formulas</strong>. 
+                            This feed is built strictly to inspire and elevate. Share your real <strong>goals, milestones, and discipline formulas</strong>.
                             No social media noise or distractions—pure focus, grit, and mutual growth.
                         </p>
                     </div>
@@ -291,11 +291,10 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                 <div className="flex items-center space-x-1 neu-inset p-1.5 rounded-2xl bg-[#E0E5EC]/90 border border-white/60 w-fit">
                     <button
                         onClick={() => setFeedTab('all')}
-                        className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${
-                            feedTab === 'all'
+                        className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${feedTab === 'all'
                                 ? 'neu-button text-[#549acb] bg-[#E0E5EC] shadow-sm'
                                 : 'text-[#717699] hover:text-[#1a1c35]'
-                        }`}
+                            }`}
                     >
                         <TrendingUp className="w-4 h-4" />
                         <span>All Motivation ({posts.length})</span>
@@ -303,11 +302,10 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
 
                     <button
                         onClick={() => setFeedTab('saved')}
-                        className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${
-                            feedTab === 'saved'
+                        className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${feedTab === 'saved'
                                 ? 'neu-button text-amber-600 bg-[#E0E5EC] shadow-sm'
                                 : 'text-[#717699] hover:text-[#1a1c35]'
-                        }`}
+                            }`}
                     >
                         <BookmarkCheck className="w-4 h-4 text-amber-500" />
                         <span>Saved in Vault ({savedIds.length})</span>
@@ -331,11 +329,10 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
             <div className="flex items-center space-x-2 overflow-x-auto pb-1 scrollbar-none">
                 <button
                     onClick={() => setSelectedCategory('all')}
-                    className={`px-3.5 py-1.5 rounded-xl text-xs font-black whitespace-nowrap transition-all ${
-                        selectedCategory === 'all'
+                    className={`px-3.5 py-1.5 rounded-xl text-xs font-black whitespace-nowrap transition-all ${selectedCategory === 'all'
                             ? 'neu-button-primary text-white shadow-sm'
                             : 'neu-button text-[#717699] hover:text-[#1a1c35]'
-                    }`}
+                        }`}
                 >
                     All Categories
                 </button>
@@ -348,11 +345,10 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                         <button
                             key={cat}
                             onClick={() => setSelectedCategory(cat)}
-                            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 whitespace-nowrap transition-all ${
-                                isSelected
+                            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 whitespace-nowrap transition-all ${isSelected
                                     ? 'neu-button text-[#549acb] bg-[#E0E5EC] border-2 border-[#549acb] font-black'
                                     : 'neu-card bg-[#E0E5EC] hover:bg-[#D8DEE8] text-[#515777]'
-                            }`}
+                                }`}
                         >
                             <Icon className="w-3.5 h-3.5" />
                             <span>{badge.label}</span>
@@ -456,11 +452,10 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                                         <button
                                             type="button"
                                             onClick={() => handleToggleLike(post.id)}
-                                            className={`neu-button px-3 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all ${
-                                                isLiked
+                                            className={`neu-button px-3 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all ${isLiked
                                                     ? 'text-rose-600 bg-rose-50/80 border-rose-300 font-black shadow-inner'
                                                     : 'text-[#717699] hover:text-[#1a1c35]'
-                                            }`}
+                                                }`}
                                             title={isLiked ? 'Unlike' : 'Give Respect'}
                                         >
                                             <Flame className={`w-3.5 h-3.5 ${isLiked ? 'fill-rose-500 text-rose-500' : ''}`} />
@@ -471,11 +466,10 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                                         <button
                                             type="button"
                                             onClick={() => handleToggleSave(post.id)}
-                                            className={`neu-button px-3 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all ${
-                                                isSaved
+                                            className={`neu-button px-3 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all ${isSaved
                                                     ? 'text-amber-600 bg-amber-50/80 border-amber-300 font-black shadow-inner'
                                                     : 'text-[#717699] hover:text-[#1a1c35]'
-                                            }`}
+                                                }`}
                                             title={isSaved ? 'Saved in Vault' : 'Save to Vault'}
                                         >
                                             <Bookmark className={`w-3.5 h-3.5 ${isSaved ? 'fill-amber-500 text-amber-500' : ''}`} />
