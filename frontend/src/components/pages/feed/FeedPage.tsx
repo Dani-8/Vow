@@ -112,3 +112,22 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
         setLikedIds(newLiked);
 
         // Optimistic UI update
+        setPosts((prev) =>
+            prev.map((p) => {
+                if (p.id === postId) {
+                    return {
+                        ...p,
+                        likesCount: isCurrentlyLiked ? Math.max(0, p.likesCount - 1) : p.likesCount + 1,
+                    };
+                }
+                return p;
+            })
+        );
+
+        // Sync with backend API
+        try {
+            await api.likeFeedPost(postId, !isCurrentlyLiked);
+        } catch (e) {
+            console.warn('Could not sync like with backend:', e);
+        }
+    };
