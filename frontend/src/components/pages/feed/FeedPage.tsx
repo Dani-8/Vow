@@ -292,8 +292,8 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                     <button
                         onClick={() => setFeedTab('all')}
                         className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${feedTab === 'all'
-                                ? 'neu-button text-[#549acb] bg-[#E0E5EC] shadow-sm'
-                                : 'text-[#717699] hover:text-[#1a1c35]'
+                            ? 'neu-button text-[#549acb] bg-[#E0E5EC] shadow-sm'
+                            : 'text-[#717699] hover:text-[#1a1c35]'
                             }`}
                     >
                         <TrendingUp className="w-4 h-4" />
@@ -303,8 +303,8 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                     <button
                         onClick={() => setFeedTab('saved')}
                         className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${feedTab === 'saved'
-                                ? 'neu-button text-amber-600 bg-[#E0E5EC] shadow-sm'
-                                : 'text-[#717699] hover:text-[#1a1c35]'
+                            ? 'neu-button text-amber-600 bg-[#E0E5EC] shadow-sm'
+                            : 'text-[#717699] hover:text-[#1a1c35]'
                             }`}
                     >
                         <BookmarkCheck className="w-4 h-4 text-amber-500" />
