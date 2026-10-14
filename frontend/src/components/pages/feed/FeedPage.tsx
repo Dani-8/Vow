@@ -220,3 +220,32 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
             return true;
         });
     }, [posts, feedTab, savedIds, selectedCategory, searchQuery]);
+
+    const getCategoryBadge = (cat: FeedCategory) => {
+        switch (cat) {
+            case 'formula':
+                return {
+                    label: 'Formula',
+                    icon: Lightbulb,
+                    color: 'text-amber-600 bg-amber-50/80 border-amber-200',
+                };
+            case 'win':
+                return {
+                    label: 'Milestone Win',
+                    icon: Trophy,
+                    color: 'text-emerald-600 bg-emerald-50/80 border-emerald-200',
+                };
+            case 'insight':
+                return {
+                    label: 'Focus Insight',
+                    icon: Compass,
+                    color: 'text-sky-600 bg-sky-50/80 border-sky-200',
+                };
+            case 'discipline':
+                return {
+                    label: 'Discipline Rule',
+                    icon: Shield,
+                    color: 'text-purple-600 bg-purple-50/80 border-purple-200',
+                };
+        }
+    };
