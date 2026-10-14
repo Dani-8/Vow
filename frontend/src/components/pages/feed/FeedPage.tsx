@@ -28,3 +28,33 @@ interface FeedPageProps {
 const STORAGE_POSTS_KEY = 'app_community_feed_posts';
 const STORAGE_SAVED_IDS_KEY = 'app_community_saved_post_ids';
 const STORAGE_LIKED_IDS_KEY = 'app_community_liked_post_ids';
+
+export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToView }) => {
+    // 1. Posts list (synced with backend / fallback to initial)
+    const [posts, setPosts] = useState<FeedPost[]>(() => {
+        try {
+            const raw = localStorage.getItem(STORAGE_POSTS_KEY);
+            if (raw) return JSON.parse(raw);
+            return INITIAL_FEED_POSTS;
+        } catch {
+            return INITIAL_FEED_POSTS;
+        }
+    });
+
+    // Fetch live posts from backend on mount
+    useEffect(() => {
+        let isMounted = true;
+        api.getFeedPosts()
+            .then((res) => {
+                if (isMounted && res.posts && Array.isArray(res.posts) && res.posts.length > 0) {
+                    setPosts(res.posts);
+                    localStorage.setItem(STORAGE_POSTS_KEY, JSON.stringify(res.posts));
+                }
+            })
+            .catch((err) => {
+                console.warn('Backend feed fetch warning (using cache):', err);
+            });
+        return () => {
+            isMounted = false;
+        };
+    }, []);
