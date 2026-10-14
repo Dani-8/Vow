@@ -346,3 +346,11 @@ export function useTaskData() {
             const matchTag = task.tags?.some((t) => t.toLowerCase().includes(q));
             if (!matchTitle && !matchDesc && !matchTag) return false;
         }
+
+        if (filter === 'habits') return task.isHabit;
+        if (filter === 'tasks') return !task.isHabit;
+        if (filter === 'todo') return task.status !== 'completed';
+        if (filter === 'completed') return task.status === 'completed';
+
+        return true;
+    });
