@@ -65,3 +65,46 @@ export interface User {
   name: string;
   hasPinSet: boolean;
 }
+
+export interface SubTask {
+  id: string;
+  taskId: string;
+  title: string;
+  description?: string;
+  dateLabel: string; // e.g. "Aug 14", "Aug 15"
+  dueDate?: string; // e.g. "Aug 17, 2026"
+  timeLeft?: string; // e.g. "Today", "2 days", "1h 34m"
+  status: 'completed' | 'in_progress' | 'pending';
+  priority?: 'High' | 'Medium' | 'Low';
+  assignee?: {
+    name: string;
+    avatar?: string;
+    email?: string;
+  };
+  masterStreak?: string;
+  attachments?: {
+    name: string;
+    size: string;
+    type?: string;
+    url?: string;
+  }[];
+}
+
+export interface TaskAttachment {
+  id: string;
+  name: string;
+  type: 'file' | 'image' | 'link' | 'pdf' | 'doc';
+  size?: string;
+  url: string;
+  uploadedAt: string;
+  previewUrl?: string;
+}
+
+export interface TaskActivityItem {
+  id: string;
+  type: 'created' | 'status_change' | 'subtask_add' | 'subtask_complete' | 'attachment_add' | 'note_update' | 'comment' | 'priority_change';
+  message: string;
+  user?: string;
+  timestamp: string;
+  meta?: Record<string, any>;
+}
