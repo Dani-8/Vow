@@ -21,11 +21,12 @@ export function useTaskData() {
     const [stats, setStats] = useState<MasterStreakStats | null>(null);
 
     // Map URL pathname to active view
-    const getActiveViewFromPath = (path: string): 'home' | 'feed' | 'landing' | 'visible' | 'private' | 'stats' | 'auth' | 'task-detail' | 'task-map' | 'challenges' | 'challenge-detail' => {
+    const getActiveViewFromPath = (path: string): 'home' | 'feed' | 'feed-post' | 'landing' | 'visible' | 'private' | 'stats' | 'auth' | 'task-detail' | 'task-map' | 'challenges' | 'challenge-detail' => {
         if (path === '/auth') return 'auth';
         if (path === '/app/vault') return 'private';
         if (path === '/app/stats') return 'stats';
-        if (path === '/app/feed') return 'feed';
+        if (path.startsWith('/app/feed/') && path !== '/app/feed') return 'feed-post';
+        if (path === '/app/feed' || path.startsWith('/app/feed')) return 'feed';
         if (path === '/app/tasks') return 'visible';
         if (path.startsWith('/app/map')) return 'task-map';
         if (path.startsWith('/app/challenges/') && path !== '/app/challenges') return 'challenge-detail';
@@ -37,13 +38,20 @@ export function useTaskData() {
 
     const activeView = getActiveViewFromPath(location.pathname);
 
-    const navigateToView = (view: 'home' | 'feed' | 'landing' | 'visible' | 'private' | 'stats' | 'auth' | 'task-map' | 'challenges' | 'challenge-detail', param?: string) => {
+    const navigateToView = (view: 'home' | 'feed' | 'feed-post' | 'landing' | 'visible' | 'private' | 'stats' | 'auth' | 'task-map' | 'challenges' | 'challenge-detail', param?: string) => {
         switch (view) {
             case 'home':
                 navigate('/app');
                 break;
             case 'feed':
                 navigate('/app/feed');
+                break;
+            case 'feed-post':
+                if (param) {
+                    navigate(`/app/feed/${param}`);
+                } else {
+                    navigate('/app/feed');
+                }
                 break;
             case 'landing':
                 navigate('/');
@@ -273,3 +281,110 @@ export function useTaskData() {
         }
         await refreshData();
     };
+
+    const handleToggleComplete = async (
+        task: Task,
+        onOptimisticUpdate?: (task: Task, newStatus: string) => void
+    ) => {
+        const isComp = task.status === 'completed';
+        const newStatus = isComp ? 'in_progress' : 'completed';
+
+        const updateTaskList = (list: Task[]) =>
+            list.map((t) => (t._id === task._id ? { ...t, status: newStatus } : t));
+
+        setTasks(updateTaskList);
+        setPrivateTasks(updateTaskList);
+        if (onOptimisticUpdate) {
+            onOptimisticUpdate(task, newStatus);
+        }
+
+        try {
+            await api.toggleTaskComplete(task._id);
+            refreshData();
+        } catch (err: any) {
+            const revertTaskList = (list: Task[]) =>
+                list.map((t) => (t._id === task._id ? { ...t, status: task.status } : t));
+            setTasks(revertTaskList);
+            setPrivateTasks(revertTaskList);
+            if (onOptimisticUpdate) {
+                onOptimisticUpdate(task, task.status);
+            }
+            alert(err.message || 'Failed to update completion');
+        }
+    };
+
+    const handleTogglePrivate = async (task: Task, onOpenPinModal?: () => void) => {
+        if (!user?.hasPinSet || !isPrivateUnlocked) {
+            onOpenPinModal?.();
+            return;
+        }
+        try {
+            await api.toggleTaskPrivate(task._id);
+            await refreshData();
+        } catch (err: any) {
+            alert(err.message || 'Failed to move task');
+        }
+    };
+
+    const handleDeleteTask = async (task: Task) => {
+        if (!window.confirm(`Are you sure you want to delete "${task.title}"?`)) return;
+        try {
+            await api.deleteTask(task._id);
+            await refreshData();
+        } catch (err: any) {
+            alert(err.message || 'Failed to delete task');
+        }
+    };
+
+    const rawList = activeView === 'private' ? privateTasks : tasks;
+
+    const filteredTasks = rawList.filter((task) => {
+        if (searchQuery.trim()) {
+            const q = searchQuery.toLowerCase();
+            const matchTitle = task.title.toLowerCase().includes(q);
+            const matchDesc = task.description?.toLowerCase().includes(q);
+            const matchTag = task.tags?.some((t) => t.toLowerCase().includes(q));
+            if (!matchTitle && !matchDesc && !matchTag) return false;
+        }
+
+        if (filter === 'habits') return task.isHabit;
+        if (filter === 'tasks') return !task.isHabit;
+        if (filter === 'todo') return task.status !== 'completed';
+        if (filter === 'completed') return task.status === 'completed';
+
+        return true;
+    });
+
+    return {
+        navigate,
+        location,
+        user,
+        setUser,
+        tasks,
+        setTasks,
+        privateTasks,
+        setPrivateTasks,
+        stats,
+        activeView,
+        navigateToView,
+        filter,
+        setFilter,
+        searchQuery,
+        setSearchQuery,
+        sidebarCollapsed,
+        setSidebarCollapsed,
+        isPrivateUnlocked,
+        setIsPrivateUnlocked,
+        loading,
+        errorMsg,
+        refreshData,
+        handleBypassAuth,
+        handleDirectCheckIn,
+        handleLogout,
+        handleCreateOrUpdateTask,
+        handleToggleComplete,
+        handleTogglePrivate,
+        handleDeleteTask,
+        filteredTasks,
+    };
+}
