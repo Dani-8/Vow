@@ -152,3 +152,28 @@ export const api = {
       body: JSON.stringify(taskData),
     });
   },
+
+  async updateTask(id: string, updates: Partial<Task>) {
+    return fetchAPI<{ task: Task }>(`/api/tasks/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+    });
+  },
+
+  async toggleTaskComplete(id: string) {
+    return fetchAPI<{ task: Task }>(`/api/tasks/${id}/complete`, {
+      method: 'POST',
+    });
+  },
+
+  async toggleTaskPrivate(id: string) {
+    return fetchAPI<{ message: string; task: Task }>(`/api/tasks/${id}/toggle-private`, {
+      method: 'POST',
+    });
+  },
+
+  async deleteTask(id: string) {
+    return fetchAPI<{ message: string }>(`/api/tasks/${id}`, {
+      method: 'DELETE',
+    });
+  },
