@@ -87,3 +87,51 @@ export function useTaskData() {
                 break;
         }
     };
+
+    const [filter, setFilter] = useState<'all' | 'habits' | 'tasks' | 'todo' | 'completed'>('all');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+    const [isPrivateUnlocked, setIsPrivateUnlocked] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+    const loadInitialData = async () => {
+        try {
+            setLoading(true);
+            setErrorMsg(null);
+
+            const token = getToken();
+            if (token) {
+                try {
+                    const res = await api.getMe();
+                    setUser(res.user);
+
+                    const tasksRes = await api.getTasks();
+                    setTasks(tasksRes?.tasks || []);
+
+                    const statsRes = await api.getMasterStats();
+                    if (statsRes) setStats(statsRes);
+
+                    const storedPin = getStoredPin();
+                    if (storedPin) {
+                        try {
+                            const privRes = await api.getPrivateTasks(storedPin);
+                            setPrivateTasks(privRes?.tasks || []);
+                            setIsPrivateUnlocked(true);
+                        } catch (err) {
+                            clearStoredPin();
+                            setIsPrivateUnlocked(false);
+                        }
+                    }
+
+                    if (location.pathname === '/' || location.pathname === '') {
+                        navigate('/app', { replace: true });
+                    }
+                } catch (err) {
+                    removeToken();
+                    // User session expired or invalid
+                    setUser(null);
+                    setTasks([]);
+                    setPrivateTasks([]);
+                    setStats(null);
+                }
