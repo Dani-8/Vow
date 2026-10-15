@@ -27,3 +27,36 @@ export function useTaskData() {
     const [isPrivateUnlocked, setIsPrivateUnlocked] = useState(false);
     const [loading, setLoading] = useState(true);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+    const loadInitialData = async () => {
+        try {
+            setLoading(true);
+            setErrorMsg(null);
+
+            const token = getToken();
+            if (token) {
+                try {
+                    const res = await api.getMe();
+                    setUser(res.user);
+
+                    const tasksRes = await api.getTasks();
+                    setTasks(tasksRes?.tasks || []);
+
+                    const statsRes = await api.getMasterStats();
+                    if (statsRes) setStats(statsRes);
+
+                    const storedPin = getStoredPin();
+                    if (storedPin) {
+                        try {
+                            const privRes = await api.getPrivateTasks(storedPin);
+                            setPrivateTasks(privRes?.tasks || []);
+                            setIsPrivateUnlocked(true);
+                        } catch (err) {
+                            clearStoredPin();
+                            setIsPrivateUnlocked(false);
+                        }
+                    }
+
+                    if (location.pathname === '/' || location.pathname === '') {
+                        navigate('/app', { replace: true });
+                    }
