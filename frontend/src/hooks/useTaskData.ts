@@ -187,3 +187,30 @@ export function useTaskData() {
         setIsPrivateUnlocked(false);
         navigateToView('landing');
     };
+
+    const handleCreateOrUpdateTask = async (
+        taskData: {
+            title: string;
+            description?: string;
+            consequenceOfSkipping?: string;
+            consequencesOfSkipping?: string[];
+            tags?: string[];
+            startTime?: string | null;
+            endTime?: string | null;
+            isPrivate?: boolean;
+            isHabit?: boolean;
+        },
+        editingTaskId?: string | null
+    ) => {
+        if (!user) {
+            navigateToView('auth');
+            return;
+        }
+
+        if (editingTaskId) {
+            await api.updateTask(editingTaskId, taskData);
+        } else {
+            await api.createTask(taskData);
+        }
+        await refreshData();
+    };
