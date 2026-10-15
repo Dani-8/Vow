@@ -128,3 +128,41 @@ export function useTaskData() {
             window.removeEventListener(SUBTASKS_UPDATED_EVENT, handleSubTasksUpdated);
         };
     }, []);
+
+    const refreshData = async () => {
+        if (!user) return;
+        try {
+            const tasksRes = await api.getTasks();
+            setTasks(tasksRes.tasks || []);
+
+            const statsRes = await api.getMasterStats();
+            setStats(statsRes);
+
+            if (isPrivateUnlocked) {
+                const privRes = await api.getPrivateTasks();
+                setPrivateTasks(privRes.tasks || []);
+            }
+        } catch (err) {
+            console.error('Refresh failed:', err);
+        }
+    };
+
+    const handleBypassAuth = async () => {
+        try {
+            setLoading(true);
+            const res = await api.demoBypass();
+            setUser(res.user);
+
+            const tasksRes = await api.getTasks();
+            setTasks(tasksRes.tasks || []);
+
+            const statsRes = await api.getMasterStats();
+            setStats(statsRes);
+
+            navigateToView('visible');
+        } catch (err: any) {
+            alert(err.message || 'Bypass login failed');
+        } finally {
+            setLoading(false);
+        }
+    };
