@@ -119,3 +119,73 @@ If life gets in the way today, do at least the micro-version (even 5 minutes). K
         tags: ['discipline', 'momentum', 'resilience'],
     },
 ];
+
+// GET /api/feed - get all posts
+router.get('/', (req: Request, res: Response) => {
+    return res.json({ posts: feedPostsStore });
+});
+
+// POST /api/feed - create a new post
+router.post('/', (req: Request, res: Response) => {
+    const { authorName, authorBadge, category, title, content, tags } = req.body;
+
+    if (!title || !content) {
+        return res.status(400).json({ error: 'Title and content are required' });
+    }
+
+    const newPost: BackendFeedPost = {
+        id: `post_${Date.now()}`,
+        authorName: authorName || 'Anonymous Builder',
+        authorBadge: authorBadge || 'Community Member',
+        category: category || 'formula',
+        title: title.trim(),
+        content: content.trim(),
+        likesCount: 1,
+        savesCount: 0,
+        createdAt: new Date().toISOString(),
+        tags: Array.isArray(tags) && tags.length > 0 ? tags : ['mindset', category || 'formula'],
+    };
+
+    feedPostsStore.unshift(newPost);
+    return res.status(201).json({ post: newPost });
+});
+
+// POST /api/feed/:id/like - toggle like
+router.post('/:id/like', (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { increment } = req.body; // true = +1, false = -1
+
+    const found = feedPostsStore.find((p) => p.id === id);
+    if (!found) {
+        return res.status(404).json({ error: 'Post not found' });
+    }
+
+    if (increment === false) {
+        found.likesCount = Math.max(0, found.likesCount - 1);
+    } else {
+        found.likesCount += 1;
+    }
+
+    return res.json({ post: found });
+});
+
+// POST /api/feed/:id/save - toggle save counter
+router.post('/:id/save', (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { increment } = req.body;
+
+    const found = feedPostsStore.find((p) => p.id === id);
+    if (!found) {
+        return res.status(404).json({ error: 'Post not found' });
+    }
+
+    if (increment === false) {
+        found.savesCount = Math.max(0, found.savesCount - 1);
+    } else {
+        found.savesCount += 1;
+    }
+
+    return res.json({ post: found });
+});
+
+export default router;
