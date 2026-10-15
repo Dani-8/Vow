@@ -23,3 +23,60 @@ export function useAppNavigation() {
     }, []);
 
     const activeView = getActiveViewFromPath(location.pathname);
+
+    const navigateToView = useCallback((view: ActiveView, param?: string) => {
+        switch (view) {
+            case 'home':
+                navigate('/app');
+                break;
+            case 'feed':
+                navigate('/app/feed');
+                break;
+            case 'feed-post':
+                if (param) {
+                    navigate(`/app/feed/${param}`);
+                } else {
+                    navigate('/app/feed');
+                }
+                break;
+            case 'landing':
+                navigate('/');
+                break;
+            case 'auth':
+                navigate('/auth');
+                break;
+            case 'visible':
+                navigate('/app/tasks');
+                break;
+            case 'private':
+                navigate('/app/vault');
+                break;
+            case 'stats':
+                navigate('/app/stats');
+                break;
+            case 'task-map':
+                if (param) {
+                    navigate(`/app/map/${param}`);
+                } else {
+                    navigate('/app/map');
+                }
+                break;
+            case 'challenges':
+                navigate('/app/challenges');
+                break;
+            case 'challenge-detail':
+                if (param) {
+                    navigate(`/app/challenges/${param}`);
+                } else {
+                    navigate('/app/challenges');
+                }
+                break;
+            case 'task-detail':
+                if (param) {
+                    navigate(`/app/task/${param}`);
+                } else {
+                    navigate('/app/tasks');
+                }
+                break;
+        }
+    }, [navigate]);
