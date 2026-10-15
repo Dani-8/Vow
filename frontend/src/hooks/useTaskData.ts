@@ -268,3 +268,22 @@ export function useTaskData() {
             alert(err.message || 'Failed to delete task');
         }
     };
+
+    const rawList = activeView === 'private' ? privateTasks : tasks;
+
+    const filteredTasks = rawList.filter((task) => {
+        if (searchQuery.trim()) {
+            const q = searchQuery.toLowerCase();
+            const matchTitle = task.title.toLowerCase().includes(q);
+            const matchDesc = task.description?.toLowerCase().includes(q);
+            const matchTag = task.tags?.some((t) => t.toLowerCase().includes(q));
+            if (!matchTitle && !matchDesc && !matchTag) return false;
+        }
+
+        if (filter === 'habits') return task.isHabit;
+        if (filter === 'tasks') return !task.isHabit;
+        if (filter === 'todo') return task.status !== 'completed';
+        if (filter === 'completed') return task.status === 'completed';
+
+        return true;
+    });
