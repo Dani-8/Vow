@@ -168,3 +168,24 @@ router.post('/:id/like', (req: Request, res: Response) => {
 
     return res.json({ post: found });
 });
+
+// POST /api/feed/:id/save - toggle save counter
+router.post('/:id/save', (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { increment } = req.body;
+
+    const found = feedPostsStore.find((p) => p.id === id);
+    if (!found) {
+        return res.status(404).json({ error: 'Post not found' });
+    }
+
+    if (increment === false) {
+        found.savesCount = Math.max(0, found.savesCount - 1);
+    } else {
+        found.savesCount += 1;
+    }
+
+    return res.json({ post: found });
+});
+
+export default router;
