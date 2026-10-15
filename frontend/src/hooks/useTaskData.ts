@@ -81,3 +81,28 @@ export function useTaskData() {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        loadInitialData();
+    }, []);
+
+    // Listen to live subtasks updates to keep tasks state in sync everywhere
+    useEffect(() => {
+        const handleSubTasksUpdated = (e: Event) => {
+            const customEvent = e as CustomEvent<{ taskId: string; subTasks: SubTask[] }>;
+            if (customEvent.detail && customEvent.detail.taskId) {
+                const { taskId, subTasks } = customEvent.detail;
+                setTasks((prevTasks) =>
+                    prevTasks.map((t) => {
+                        if (t._id === taskId) {
+                            const allDone = subTasks.length > 0 && subTasks.every((s) => s.status === 'completed');
+                            const anyActive = subTasks.some((s) => s.status === 'in_progress' || s.status === 'completed');
+                            return {
+                                ...t,
+                                subTasks,
+                                status: allDone ? 'completed' : anyActive ? 'in_progress' : t.status,
+                            };
+                        }
+                        return t;
+                    })
+                );
