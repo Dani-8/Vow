@@ -57,3 +57,22 @@ The lesson that saved my life: You do not rise to the level of your goals. You f
         createdAt: '2026-10-10T08:30:00Z',
         tags: ['story', 'bootstrapping', 'grit', 'mindset', 'success'],
     },
+    {
+        id: 'post_reel_formula',
+        authorName: 'Alex Mercer',
+        authorBadge: 'Discipline Strategist',
+        category: 'formula',
+        title: 'The Formula that Changed Everything',
+        content: `Here's the exact framework that finally shifted my output:
+
+• Goal + no deadline = fantasy
+• Goal + deadline = objective
+• Goal + deadline + plan = strategy
+• Goal + deadline + plan + consistent action = success
+
+Don't let your aspirations stay at stage one. Commit a date, map the roadmap, and execute daily.`,
+        likesCount: 143,
+        savesCount: 69,
+        createdAt: '2026-10-09T18:20:00Z',
+        tags: ['strategy', 'execution', 'mindset'],
+    },
