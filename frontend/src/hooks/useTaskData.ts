@@ -214,3 +214,34 @@ export function useTaskData() {
         }
         await refreshData();
     };
+
+    const handleToggleComplete = async (
+        task: Task,
+        onOptimisticUpdate?: (task: Task, newStatus: string) => void
+    ) => {
+        const isComp = task.status === 'completed';
+        const newStatus = isComp ? 'in_progress' : 'completed';
+
+        const updateTaskList = (list: Task[]) =>
+            list.map((t) => (t._id === task._id ? { ...t, status: newStatus } : t));
+
+        setTasks(updateTaskList);
+        setPrivateTasks(updateTaskList);
+        if (onOptimisticUpdate) {
+            onOptimisticUpdate(task, newStatus);
+        }
+
+        try {
+            await api.toggleTaskComplete(task._id);
+            refreshData();
+        } catch (err: any) {
+            const revertTaskList = (list: Task[]) =>
+                list.map((t) => (t._id === task._id ? { ...t, status: task.status } : t));
+            setTasks(revertTaskList);
+            setPrivateTasks(revertTaskList);
+            if (onOptimisticUpdate) {
+                onOptimisticUpdate(task, task.status);
+            }
+            alert(err.message || 'Failed to update completion');
+        }
+    };
