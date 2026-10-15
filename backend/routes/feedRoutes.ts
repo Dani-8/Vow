@@ -119,3 +119,29 @@ If life gets in the way today, do at least the micro-version (even 5 minutes). K
         tags: ['discipline', 'momentum', 'resilience'],
     },
 ];
+
+// GET /api/feed - get all posts
+router.get('/', (req: Request, res: Response) => {
+    return res.json({ posts: feedPostsStore });
+});
+
+// POST /api/feed - create a new post
+router.post('/', (req: Request, res: Response) => {
+    const { authorName, authorBadge, category, title, content, tags } = req.body;
+
+    if (!title || !content) {
+        return res.status(400).json({ error: 'Title and content are required' });
+    }
+
+    const newPost: BackendFeedPost = {
+        id: `post_${Date.now()}`,
+        authorName: authorName || 'Anonymous Builder',
+        authorBadge: authorBadge || 'Community Member',
+        category: category || 'formula',
+        title: title.trim(),
+        content: content.trim(),
+        likesCount: 1,
+        savesCount: 0,
+        createdAt: new Date().toISOString(),
+        tags: Array.isArray(tags) && tags.length > 0 ? tags : ['mindset', category || 'formula'],
+    };
