@@ -166,3 +166,24 @@ export function useTaskData() {
             setLoading(false);
         }
     };
+
+    const handleDirectCheckIn = async () => {
+        try {
+            const res = await api.checkInToday();
+            setStats(res.stats);
+            await refreshData();
+        } catch (err: any) {
+            console.error('Check-in failed:', err);
+        }
+    };
+
+    const handleLogout = () => {
+        removeToken();
+        clearStoredPin();
+        setUser(null);
+        setTasks([]);
+        setPrivateTasks([]);
+        setStats(null);
+        setIsPrivateUnlocked(false);
+        navigateToView('landing');
+    };
