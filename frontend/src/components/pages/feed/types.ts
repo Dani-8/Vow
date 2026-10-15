@@ -35,3 +35,26 @@ Never underestimate what consistent, daily micro-actions can do over 180 days. I
         createdAt: '2026-10-09T12:00:00Z',
         tags: ['story', 'transformation', 'discipline', 'journey'],
     },
+    {
+        id: 'post_founder_survival_story',
+        authorName: 'Maya Thorne',
+        authorBadge: 'Solo Bootstrapper',
+        category: 'story',
+        title: 'Zero Customers to $8k MRR: The Brutal 300-Day Discipline Journey',
+        content: `In January, I quit my comfortable corporate engineering job to go all-in on my dream of building an independent software studio. Everyone warned me it was risky, but I thought pure passion would carry me through.
+
+By month three, reality slapped me in the face. My savings were draining fast, my launch generated exactly zero paying customers, and imposter syndrome paralyzed me from writing even a single line of code for two straight weeks. I spent entire days refreshing Twitter and feeling like a complete failure.
+
+One night, looking at my empty bank account, I made a strict vow: no more daydreaming, no more relying on fleeting "motivation". I created a 90-day sprint with two rigid non-negotiable rules:
+1. 90 minutes of uninterrupted deep code before noon every single day.
+2. Direct personal outreach to 5 potential users every afternoon without exception.
+
+I logged every focus sprint, recorded my lessons, and refused to let skipped days compound. Month 5 brought our first $500. Month 8 hit $3,000. Yesterday, we crossed $8,200 MRR with 120 happy customers.
+
+The lesson that saved my life: You do not rise to the level of your goals. You fall to the level of your daily discipline. If you have a dream that keeps you up at night, protect your focus hours with fierce boundaries. Nobody is coming to build it for you.`,
+        likesCount: 289,
+        savesCount: 156,
+        createdAt: '2026-10-10T08:30:00Z',
+        tags: ['story', 'bootstrapping', 'grit', 'mindset', 'success'],
+    },
+    {
