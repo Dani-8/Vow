@@ -80,3 +80,11 @@ export function useAppNavigation() {
                 break;
         }
     }, [navigate]);
+
+    return {
+        activeView,
+        navigateToView,
+        location,
+        navigate,
+    };
+}
