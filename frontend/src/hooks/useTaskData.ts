@@ -106,3 +106,25 @@ export function useTaskData() {
                         return t;
                     })
                 );
+                setPrivateTasks((prevPrivate) =>
+                    prevPrivate.map((t) => {
+                        if (t._id === taskId) {
+                            const allDone = subTasks.length > 0 && subTasks.every((s) => s.status === 'completed');
+                            const anyActive = subTasks.some((s) => s.status === 'in_progress' || s.status === 'completed');
+                            return {
+                                ...t,
+                                subTasks,
+                                status: allDone ? 'completed' : anyActive ? 'in_progress' : t.status,
+                            };
+                        }
+                        return t;
+                    })
+                );
+            }
+        };
+
+        window.addEventListener(SUBTASKS_UPDATED_EVENT, handleSubTasksUpdated);
+        return () => {
+            window.removeEventListener(SUBTASKS_UPDATED_EVENT, handleSubTasksUpdated);
+        };
+    }, []);
