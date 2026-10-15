@@ -60,3 +60,24 @@ export function useTaskData() {
                     if (location.pathname === '/' || location.pathname === '') {
                         navigate('/app', { replace: true });
                     }
+                } catch (err) {
+                    removeToken();
+                    // User session expired or invalid
+                    setUser(null);
+                    setTasks([]);
+                    setPrivateTasks([]);
+                    setStats(null);
+                }
+            } else {
+                // Unauthenticated visitor
+                setUser(null);
+                setTasks([]);
+                setPrivateTasks([]);
+                setStats(null);
+            }
+        } catch (err: any) {
+            console.warn('Initial data load notice:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
