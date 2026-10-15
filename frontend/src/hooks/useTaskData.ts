@@ -245,3 +245,26 @@ export function useTaskData() {
             alert(err.message || 'Failed to update completion');
         }
     };
+
+    const handleTogglePrivate = async (task: Task, onOpenPinModal?: () => void) => {
+        if (!user?.hasPinSet || !isPrivateUnlocked) {
+            onOpenPinModal?.();
+            return;
+        }
+        try {
+            await api.toggleTaskPrivate(task._id);
+            await refreshData();
+        } catch (err: any) {
+            alert(err.message || 'Failed to move task');
+        }
+    };
+
+    const handleDeleteTask = async (task: Task) => {
+        if (!window.confirm(`Are you sure you want to delete "${task.title}"?`)) return;
+        try {
+            await api.deleteTask(task._id);
+            await refreshData();
+        } catch (err: any) {
+            alert(err.message || 'Failed to delete task');
+        }
+    };
