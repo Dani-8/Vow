@@ -70,3 +70,29 @@ export const FeedCard: React.FC<FeedCardProps> = ({
                     <span>{config.label}</span>
                 </span>
             </div>
+
+            {/* Post Title - Clickable */}
+            <h3
+                onClick={() => onViewDetail(post)}
+                className="text-base sm:text-lg font-black text-[#1a1c35] cursor-pointer hover:text-[#549acb] transition-colors"
+            >
+                {post.title}
+            </h3>
+
+            {/* Post Content Box */}
+            <div
+                onClick={() => (isLongContent ? onViewDetail(post) : undefined)}
+                className={`neu-inset p-4 rounded-2xl bg-white/40 border border-white/60 relative ${
+                    isLongContent ? 'cursor-pointer group' : ''
+                }`}
+            >
+                {isLongContent ? (
+                    <>
+                        <div className="max-h-36 overflow-hidden relative">
+                            <p className="text-xs sm:text-sm font-medium text-[#29335a] leading-relaxed whitespace-pre-line">
+                                {post.content}
+                            </p>
+
+                            {/* Gradient fade overlay ONLY when content exceeds fixed height */}
+                            <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#E0E5EC] via-[#E0E5EC]/85 to-transparent pointer-events-none" />
+                        </div>
