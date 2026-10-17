@@ -159,8 +159,8 @@ export const FeedCard: React.FC<FeedCardProps> = ({
                             onToggleSave(post.id);
                         }}
                         className={`neu-button px-3 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all ${isSaved
-                                ? 'text-amber-600 bg-amber-50/80 border-amber-300 font-black shadow-inner'
-                                : 'text-[#717699] hover:text-[#1a1c35]'
+                            ? 'text-amber-600 bg-amber-50/80 border-amber-300 font-black shadow-inner'
+                            : 'text-[#717699] hover:text-[#1a1c35]'
                             }`}
                         title={isSaved ? 'Saved in Vault' : 'Save to Vault'}
                     >
