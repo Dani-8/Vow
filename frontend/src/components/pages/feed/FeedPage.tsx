@@ -311,16 +311,3 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                         <span>Saved in Vault ({savedIds.length})</span>
                     </button>
                 </div>
-
-                {/* Search Bar */}
-                <div className="relative max-w-sm w-full">
-                    <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#717699]" />
-                    <input
-                        type="text"
-                        placeholder="Search formulas, goals, tags..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full neu-inset pl-9 pr-4 py-2 rounded-xl text-xs font-bold text-[#1a1c35] placeholder:text-[#94a3b8] focus:outline-none focus:ring-2 focus:ring-[#549acb]"
-                    />
-                </div>
-            </div>
