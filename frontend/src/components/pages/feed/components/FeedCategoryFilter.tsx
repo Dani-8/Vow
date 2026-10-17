@@ -30,3 +30,21 @@ export const getCategoryBadgeConfig = (cat: FeedCategory) => {
                 badgeBg: 'text-emerald-700 bg-emerald-100/90 border-emerald-300',
                 activeBtn: '!bg-gradient-to-r !from-emerald-500 !to-emerald-600 !text-white !border-transparent shadow-[0_4px_14px_rgba(16,185,129,0.45)]',
             };
+        case 'insight':
+            return {
+                label: 'Focus Insight',
+                icon: Compass,
+                badgeBg: 'text-sky-700 bg-sky-100/90 border-sky-300',
+                activeBtn: '!bg-gradient-to-r !from-sky-500 !to-sky-600 !text-white !border-transparent shadow-[0_4px_14px_rgba(14,165,233,0.45)]',
+            };
+        case 'discipline':
+            return {
+                label: 'Discipline Rule',
+                icon: Shield,
+                badgeBg: 'text-purple-700 bg-purple-100/90 border-purple-300',
+                activeBtn: '!bg-gradient-to-r !from-purple-500 !to-purple-600 !text-white !border-transparent shadow-[0_4px_14px_rgba(168,85,247,0.45)]',
+            };
+    }
+};
+
+const CATEGORIES: FeedCategory[] = ['formula', 'story', 'win', 'insight', 'discipline'];
