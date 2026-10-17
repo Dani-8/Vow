@@ -19,24 +19,3 @@ import { FeedPost, FeedCategory, INITIAL_FEED_POSTS } from './types';
 import { CreatePostModal } from './CreatePostModal';
 import { User } from '../../../types';
 import { api } from '../../../api';
-
-interface FeedPageProps {
-    currentUser: User | null;
-    onNavigateToView?: (view: any, param?: string) => void;
-}
-
-const STORAGE_POSTS_KEY = 'app_community_feed_posts';
-const STORAGE_SAVED_IDS_KEY = 'app_community_saved_post_ids';
-const STORAGE_LIKED_IDS_KEY = 'app_community_liked_post_ids';
-
-export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToView }) => {
-    // 1. Posts list (synced with backend / fallback to initial)
-    const [posts, setPosts] = useState<FeedPost[]>(() => {
-        try {
-            const raw = localStorage.getItem(STORAGE_POSTS_KEY);
-            if (raw) return JSON.parse(raw);
-            return INITIAL_FEED_POSTS;
-        } catch {
-            return INITIAL_FEED_POSTS;
-        }
-    });
