@@ -55,3 +55,18 @@ export const FeedCard: React.FC<FeedCardProps> = ({
                                 </span>
                             )}
                         </div>
+                        <span className="text-[10px] font-semibold text-[#717699] block mt-0.5">
+                            {new Date(post.createdAt).toLocaleDateString('en-US', {
+                                month: 'short',
+                                day: 'numeric',
+                            })}
+                        </span>
+                    </div>
+                </div>
+
+                {/* Category Pill */}
+                <span className={`px-2.5 py-1 rounded-xl text-[10px] font-black uppercase tracking-wider flex items-center space-x-1.5 border ${config.badgeBg}`}>
+                    <BadgeIcon className="w-3.5 h-3.5" />
+                    <span>{config.label}</span>
+                </span>
+            </div>
