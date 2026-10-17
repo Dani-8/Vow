@@ -116,3 +116,29 @@ export const FeedPostPage: React.FC<FeedPostPageProps> = ({
                         </span>
                     </div>
                 </div>
+
+                {/* Title */}
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#1a1c35] tracking-tight leading-tight">
+                    {currentPost.title}
+                </h1>
+
+                {/* Deep Full-Story Content Container */}
+                <div className="neu-inset p-6 sm:p-8 rounded-3xl bg-white/50 border border-white/70 shadow-inner">
+                    <p className="text-sm sm:text-base font-medium text-[#24294a] leading-loose whitespace-pre-line select-text">
+                        {currentPost.content}
+                    </p>
+                </div>
+
+                {/* Tags */}
+                {currentPost.tags && currentPost.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2 pt-1">
+                        {currentPost.tags.map((tag) => (
+                            <span
+                                key={tag}
+                                className="text-xs font-bold text-[#549acb] bg-sky-50/80 px-3 py-1 rounded-xl border border-sky-200/60 shadow-xs"
+                            >
+                                #{tag}
+                            </span>
+                        ))}
+                    </div>
+                )}
