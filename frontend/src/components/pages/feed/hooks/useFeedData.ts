@@ -140,3 +140,26 @@ export function useFeedData() {
             // fallback
         }
     }, []);
+
+    const handleCreatePost = useCallback(async (newPostData: Omit<FeedPost, 'id' | 'likesCount' | 'savesCount' | 'createdAt' | 'isLiked' | 'isSaved'>) => {
+        const localId = `post_${Date.now()}`;
+        const newPost: FeedPost = {
+            ...newPostData,
+            id: localId,
+            likesCount: 1,
+            savesCount: 0,
+            createdAt: new Date().toISOString(),
+        };
+
+        setLikedIds((prev) => [...prev, localId]);
+        setPosts((prev) => [newPost, ...prev]);
+
+        try {
+            const res = await api.createFeedPost(newPostData);
+            if (res.post) {
+                setPosts((prev) => [res.post, ...prev.filter((p) => p.id !== localId)]);
+            }
+        } catch (e) {
+            console.warn('Could not sync post with backend:', e);
+        }
+    }, []);
