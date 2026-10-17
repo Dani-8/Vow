@@ -410,37 +410,3 @@ export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToVie
                                             </span>
                                         </div>
                                     </div>
-
-                                    {/* Category Pill */}
-                                    <span className={`px-2.5 py-1 rounded-xl text-[10px] font-black uppercase tracking-wider flex items-center space-x-1.5 border ${badge.color}`}>
-                                        <BadgeIcon className="w-3.5 h-3.5" />
-                                        <span>{badge.label}</span>
-                                    </span>
-                                </div>
-
-                                {/* Post Title & Content */}
-                                <div className="space-y-2">
-                                    <h3 className="text-base sm:text-lg font-black text-[#1a1c35]">
-                                        {post.title}
-                                    </h3>
-                                    <div className="neu-inset p-4 rounded-2xl bg-white/40 border border-white/60">
-                                        <p className="text-xs sm:text-sm font-medium text-[#29335a] leading-relaxed whitespace-pre-line">
-                                            {post.content}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                {/* Tags */}
-                                {post.tags && post.tags.length > 0 && (
-                                    <div className="flex flex-wrap gap-1.5">
-                                        {post.tags.map((tag) => (
-                                            <span
-                                                key={tag}
-                                                onClick={() => setSearchQuery(tag)}
-                                                className="cursor-pointer text-[10px] font-bold text-[#549acb] hover:text-[#3d84b5] bg-sky-50/60 px-2 py-0.5 rounded-lg border border-sky-200/50"
-                                            >
-                                                #{tag}
-                                            </span>
-                                        ))}
-                                    </div>
-                                )}
