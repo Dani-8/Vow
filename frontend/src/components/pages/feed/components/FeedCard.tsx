@@ -186,4 +186,3 @@ export const FeedCard: React.FC<FeedCardProps> = ({
         </article>
     );
 };
-F
