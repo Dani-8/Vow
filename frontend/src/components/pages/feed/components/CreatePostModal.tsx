@@ -94,8 +94,8 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
                                         type="button"
                                         onClick={() => setCategory(cat.id)}
                                         className={`p-2 rounded-xl text-left transition-all flex items-center space-x-1.5 ${isSelected
-                                                ? 'neu-button border-2 border-[#549acb] bg-sky-50/80 text-[#549acb]'
-                                                : 'neu-card bg-[#E0E5EC] hover:bg-[#D8DEE8] text-[#515777]'
+                                            ? 'neu-button border-2 border-[#549acb] bg-sky-50/80 text-[#549acb]'
+                                            : 'neu-card bg-[#E0E5EC] hover:bg-[#D8DEE8] text-[#515777]'
                                             }`}
                                     >
                                         <Icon className={`w-3.5 h-3.5 shrink-0 ${isSelected ? 'text-[#549acb]' : 'text-[#717699]'}`} />
