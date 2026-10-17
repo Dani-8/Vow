@@ -95,3 +95,22 @@ export const FeedCard: React.FC<FeedCardProps> = ({
                             {/* Gradient fade overlay ONLY when content exceeds fixed height */}
                             <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#E0E5EC] via-[#E0E5EC]/85 to-transparent pointer-events-none" />
                         </div>
+
+                        {/* Read More bar ONLY when post is actually long */}
+                        <div className="flex items-center justify-between pt-2.5 border-t border-slate-200/50 mt-2">
+                            <span className="text-[11px] font-black text-[#549acb] group-hover:text-[#3d84b5] flex items-center space-x-1">
+                                <span>Read full story...</span>
+                                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                            </span>
+                            <span className="text-[10px] font-bold text-[#717699] bg-white/70 px-2 py-0.5 rounded-lg neu-inset">
+                                {Math.max(1, Math.ceil(post.content.split(' ').length / 180))} min read
+                            </span>
+                        </div>
+                    </>
+                ) : (
+                    /* Clean full display for normal-length posts - no read more clutter */
+                    <p className="text-xs sm:text-sm font-medium text-[#29335a] leading-relaxed whitespace-pre-line select-text">
+                        {post.content}
+                    </p>
+                )}
+            </div>
