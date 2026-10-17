@@ -186,3 +186,22 @@ export function useFeedData() {
             return true;
         });
     }, [posts, feedTab, savedIds, selectedCategory, searchQuery]);
+
+    return {
+        posts,
+        displayedPosts,
+        savedIds,
+        likedIds,
+        feedTab,
+        setFeedTab,
+        selectedCategory,
+        setSelectedCategory,
+        searchQuery,
+        setSearchQuery,
+        copiedId,
+        handleToggleLike,
+        handleToggleSave,
+        handleShare,
+        handleCreatePost,
+    };
+}
