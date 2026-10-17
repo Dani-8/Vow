@@ -114,3 +114,19 @@ export const FeedCard: React.FC<FeedCardProps> = ({
                     </p>
                 )}
             </div>
+
+            {/* Tags */}
+            {post.tags && post.tags.length > 0 && (
+                <div className="flex flex-wrap gap-1.5">
+                    {post.tags.map((tag) => (
+                        <button
+                            key={tag}
+                            type="button"
+                            onClick={() => onTagClick?.(tag)}
+                            className="cursor-pointer text-[10px] font-bold text-[#549acb] hover:text-[#3d84b5] bg-sky-50/60 px-2 py-0.5 rounded-lg border border-sky-200/50 transition-colors"
+                        >
+                            #{tag}
+                        </button>
+                    ))}
+                </div>
+            )}
