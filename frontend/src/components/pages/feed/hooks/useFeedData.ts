@@ -61,3 +61,20 @@ export function useFeedData() {
             isMounted = false;
         };
     }, []);
+
+    // Sync saved & liked
+    useEffect(() => {
+        try {
+            localStorage.setItem(STORAGE_SAVED_IDS_KEY, JSON.stringify(savedIds));
+        } catch (e) {
+            console.error('Failed to sync saved posts', e);
+        }
+    }, [savedIds]);
+
+    useEffect(() => {
+        try {
+            localStorage.setItem(STORAGE_LIKED_IDS_KEY, JSON.stringify(likedIds));
+        } catch (e) {
+            console.error('Failed to sync liked posts', e);
+        }
+    }, [likedIds]);
