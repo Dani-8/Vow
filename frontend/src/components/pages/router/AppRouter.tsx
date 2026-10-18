@@ -24,6 +24,8 @@ import { TaskMapPage } from '../task-map/TaskMapPage';
 import { ChallengesPage } from '../challenges/ChallengesPage';
 import { ChallengeDetailPage } from '../challenges/ChallengeDetailPage';
 import { FeedPage } from '../feed/FeedPage';
+import { FeedPostPage } from '../feed/FeedPostPage';
+import { useFeedData } from '../feed/hooks/useFeedData';
 
 import { FilterCategory } from '../tasks/components/main/TaskControlsBar';
 import { Challenge } from '../../../types';
@@ -212,7 +214,24 @@ export const AppRouter: React.FC<AppRouterProps> = ({
   }
 
   if (activeView === 'feed') {
-    return <FeedPage currentUser={user} onNavigateToView={navigateToView} />;
+    return (
+      <FeedPage
+        currentUser={user}
+        onNavigateToView={navigateToView}
+        onViewPostPage={(post) => navigateToView('feed-post', post.id)}
+      />
+    );
+  }
+
+  if (activeView === 'feed-post' || location.pathname.startsWith('/app/feed/')) {
+    const postIdParam = decodeURIComponent(location.pathname.replace('/app/feed/', ''));
+    return (
+      <FeedPostPageWrapper
+        postId={postIdParam}
+        onBack={() => navigateToView('feed')}
+        onNavigateToView={navigateToView}
+      />
+    );
   }
 
   if (activeView === 'stats') {
@@ -303,6 +322,45 @@ export const AppRouter: React.FC<AppRouterProps> = ({
         setIsPrivateUnlocked(false);
         navigateToView('visible');
       }}
+    />
+  );
+}
+
+// Clean internal wrapper connecting FeedPostPage with useFeedData
+function FeedPostPageWrapper({
+  postId,
+  onBack,
+  onNavigateToView,
+}: {
+  postId: string;
+  onBack: () => void;
+  onNavigateToView: (view: any, param?: string) => void;
+}) {
+  const {
+    posts,
+    savedIds,
+    likedIds,
+    copiedId,
+    handleToggleLike,
+    handleToggleSave,
+    handleShare,
+  } = useFeedData();
+
+  const currentPost = posts.find((p) => p.id === postId) || null;
+
+  return (
+    <FeedPostPage
+      post={currentPost}
+      postId={postId}
+      allPosts={posts}
+      onBack={onBack}
+      isLiked={currentPost ? likedIds.includes(currentPost.id) : false}
+      isSaved={currentPost ? savedIds.includes(currentPost.id) : false}
+      isCopied={currentPost ? copiedId === currentPost.id : false}
+      onToggleLike={handleToggleLike}
+      onToggleSave={handleToggleSave}
+      onShare={handleShare}
+      onSelectPost={(p) => onNavigateToView('feed-post', p.id)}
     />
   );
 };

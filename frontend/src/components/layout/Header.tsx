@@ -29,6 +29,8 @@ export const Header: React.FC<HeaderProps> = ({
                 return 'Home';
             case 'feed':
                 return 'Mindset & Motivation Feed';
+            case 'feed-post':
+                return 'Community Post & Story';
             case 'visible':
                 return 'Tasks & Habits';
             case 'private':
@@ -67,6 +69,10 @@ export const Header: React.FC<HeaderProps> = ({
                     {activeView === 'feed' ? (
                         <p className="text-xs text-[#717699] font-medium truncate">
                             Community Motivation Vault • <span className="text-[#549acb] font-bold">Goal & Discipline Formulas</span> (No noise, pure drive)
+                        </p>
+                    ) : activeView === 'feed-post' ? (
+                        <p className="text-xs text-[#717699] font-medium truncate">
+                            Dedicated Story Workspace • <span className="text-[#549acb] font-bold">In-Depth Framework Breakdown</span>
                         </p>
                     ) : user ? (
                         <p className="text-xs text-[#717699] font-medium truncate">
