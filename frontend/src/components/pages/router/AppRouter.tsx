@@ -347,3 +347,20 @@ function FeedPostPageWrapper({
   } = useFeedData();
 
   const currentPost = posts.find((p) => p.id === postId) || null;
+
+  return (
+    <FeedPostPage
+      post={currentPost}
+      postId={postId}
+      allPosts={posts}
+      onBack={onBack}
+      isLiked={currentPost ? likedIds.includes(currentPost.id) : false}
+      isSaved={currentPost ? savedIds.includes(currentPost.id) : false}
+      isCopied={currentPost ? copiedId === currentPost.id : false}
+      onToggleLike={handleToggleLike}
+      onToggleSave={handleToggleSave}
+      onShare={handleShare}
+      onSelectPost={(p) => onNavigateToView('feed-post', p.id)}
+    />
+  );
+};
