@@ -15,3 +15,17 @@ export const getTaskSlug = (task: Task): string => {
     .replace(/^-+|-+$/g, '');
   return slug ? (shortId ? `${slug}-${shortId}` : slug) : task._id;
 };
+
+import { TaskDetailPage } from '../tasks/TaskDetailPage';
+import { TasksPage } from '../tasks/TasksPage';
+import { StatsView } from '../stats/StatsView';
+import { HomeView } from '../home/HomeView';
+import { TaskMapPage } from '../task-map/TaskMapPage';
+import { ChallengesPage } from '../challenges/ChallengesPage';
+import { ChallengeDetailPage } from '../challenges/ChallengeDetailPage';
+import { FeedPage } from '../feed/FeedPage';
+import { FeedPostPage } from '../feed/FeedPostPage';
+import { useFeedData } from '../feed/hooks/useFeedData';
+
+import { FilterCategory } from '../tasks/components/main/TaskControlsBar';
+import { Challenge } from '../../../types';
