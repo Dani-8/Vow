@@ -281,3 +281,18 @@ export const AppRouter: React.FC<AppRouterProps> = ({
       );
     }
   }
+
+  if (activeView === 'challenges') {
+    return (
+      <ChallengesPage
+        challenges={challenges}
+        onSelectChallenge={(ch) => {
+          setSelectedChallenge(ch);
+          navigateToView('challenge-detail', ch.id || ch._id);
+        }}
+        onCreateChallenge={onCreateChallenge}
+        onUpdateChallenge={onUpdateChallenge}
+        onDeleteChallenge={onDeleteChallenge}
+      />
+    );
+  }
