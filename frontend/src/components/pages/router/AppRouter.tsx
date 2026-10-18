@@ -62,3 +62,37 @@ interface AppRouterProps {
   onCreateChallenge: (data: Partial<Challenge>) => Promise<void>;
   onUpdateChallenge: (id: string, updates: Partial<Challenge>) => Promise<void>;
   onDeleteChallenge: (id: string) => Promise<void>;
+  onLogChallengeDay: (
+    id: string,
+    logData: {
+      dayNumber: number;
+      date?: string;
+      status?: 'completed' | 'rest' | 'missed';
+      note?: string;
+      timeSpent?: string;
+    }
+  ) => Promise<void>;
+  onDeleteChallengeLog: (challengeId: string, logId: string) => Promise<void>;
+  onStartNextSprint?: (
+    challengeId: string,
+    sprintData: {
+      title: string;
+      targetDays: number;
+      startDate: string;
+      targetEndDate?: string;
+      rule?: string;
+    }
+  ) => Promise<void>;
+  onCompleteSprint?: (
+    challengeId: string,
+    sprintId: string,
+    retrospective: {
+      completedAt: string;
+      summary: string;
+      score?: number;
+      keyLearnings?: string;
+    },
+    markChallengeCompleted?: boolean
+  ) => Promise<void>;
+  onUpdateSprintRule?: (challengeId: string, sprintId: string, rule: string) => Promise<void>;
+}
