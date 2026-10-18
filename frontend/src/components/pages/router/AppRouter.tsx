@@ -325,3 +325,25 @@ export const AppRouter: React.FC<AppRouterProps> = ({
     />
   );
 }
+
+// Clean internal wrapper connecting FeedPostPage with useFeedData
+function FeedPostPageWrapper({
+  postId,
+  onBack,
+  onNavigateToView,
+}: {
+  postId: string;
+  onBack: () => void;
+  onNavigateToView: (view: any, param?: string) => void;
+}) {
+  const {
+    posts,
+    savedIds,
+    likedIds,
+    copiedId,
+    handleToggleLike,
+    handleToggleSave,
+    handleShare,
+  } = useFeedData();
+
+  const currentPost = posts.find((p) => p.id === postId) || null;
