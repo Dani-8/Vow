@@ -222,3 +222,30 @@ export const AppRouter: React.FC<AppRouterProps> = ({
       />
     );
   }
+
+  if (activeView === 'feed-post' || location.pathname.startsWith('/app/feed/')) {
+    const postIdParam = decodeURIComponent(location.pathname.replace('/app/feed/', ''));
+    return (
+      <FeedPostPageWrapper
+        postId={postIdParam}
+        onBack={() => navigateToView('feed')}
+        onNavigateToView={navigateToView}
+      />
+    );
+  }
+
+  if (activeView === 'stats') {
+    return (
+      <StatsView
+        stats={stats}
+        tasks={tasks}
+        privateTasks={privateTasks}
+        challenges={challenges}
+        onNavigateToView={navigateToView}
+      />
+    );
+  }
+
+  if (activeView === 'task-map') {
+    return <TaskMapPage tasks={[...tasks, ...privateTasks]} onBackToHome={() => navigateToView('home')} />;
+  }
