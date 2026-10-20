@@ -27,3 +27,14 @@ export const FeedCommunityBanner: React.FC<FeedCommunityBannerProps> = ({ onOpen
                         </h2>
                     </div>
                 </div>
+
+                <div className="flex items-center space-x-2 shrink-0 self-start md:self-center">
+                    <button
+                        onClick={onOpenCreateModal}
+                        className="neu-button-primary px-5 py-2.5 rounded-xl text-xs font-black flex items-center space-x-2 text-white shadow-md hover:scale-105 active:scale-95 transition-all"
+                    >
+                        <Plus className="w-4 h-4 stroke-[3]" />
+                        <span>Share Story / Formula</span>
+                    </button>
+                </div>
+            </div>
