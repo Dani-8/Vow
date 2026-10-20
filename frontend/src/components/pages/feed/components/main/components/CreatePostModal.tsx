@@ -105,3 +105,18 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
                             })}
                         </div>
                     </div>
+
+                    {/* Title */}
+                    <div>
+                        <label className="text-[11px] font-bold text-[#515777] block mb-1 uppercase tracking-wider">
+                            Headline / Goal
+                        </label>
+                        <input
+                            type="text"
+                            required
+                            placeholder={category === 'story' ? 'e.g. How I Rebuilt My Focus From Scratch in 6 Months' : 'e.g. Goal + Deadline + Plan = Strategy'}
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            className="w-full neu-inset px-4 py-2.5 rounded-xl text-xs font-bold text-[#1a1c35] placeholder:text-[#94a3b8] focus:outline-none focus:ring-2 focus:ring-[#549acb]"
+                        />
+                    </div>
