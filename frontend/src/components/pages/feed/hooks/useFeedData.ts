@@ -1,23 +1,4 @@
 
-    // 2. Saved IDs
-    const [savedIds, setSavedIds] = useState<string[]>(() => {
-        try {
-            const raw = localStorage.getItem(STORAGE_SAVED_IDS_KEY);
-            return raw ? JSON.parse(raw) : ['post_reel_formula'];
-        } catch {
-            return ['post_reel_formula'];
-        }
-    });
-
-    // 3. Liked IDs
-    const [likedIds, setLikedIds] = useState<string[]>(() => {
-        try {
-            const raw = localStorage.getItem(STORAGE_LIKED_IDS_KEY);
-            return raw ? JSON.parse(raw) : [];
-        } catch {
-            return [];
-        }
-    });
 
     // UI filters
     const [feedTab, setFeedTab] = useState<'all' | 'saved'>('all');
