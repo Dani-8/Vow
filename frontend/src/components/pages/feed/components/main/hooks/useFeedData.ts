@@ -131,3 +131,13 @@ export function useFeedData() {
             console.warn('Could not sync save with backend:', e);
         }
     }, [savedIds]);
+
+    const handleShare = useCallback((postId: string, title: string) => {
+        try {
+            navigator.clipboard.writeText(`${title} - Shared from Vow Mindset Feed`);
+            setCopiedId(postId);
+            setTimeout(() => setCopiedId(null), 2500);
+        } catch {
+            // fallback
+        }
+    }, []);
