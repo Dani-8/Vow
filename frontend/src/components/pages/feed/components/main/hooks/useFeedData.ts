@@ -154,3 +154,13 @@ export function useFeedData() {
 
         setLikedIds((prev) => [...prev, localId]);
         setPosts((prev) => [newPost, ...prev]);
+
+        try {
+            const res = await api.createFeedPost(newPostData);
+            if (res.post) {
+                setPosts((prev) => [res.post, ...prev.filter((p) => p.id !== localId)]);
+            }
+        } catch (e) {
+            console.warn('Could not sync post with backend:', e);
+        }
+    }, []);
