@@ -82,9 +82,8 @@ export const FeedCard: React.FC<FeedCardProps> = ({
             {/* Post Content Box */}
             <div
                 onClick={() => (isLongContent ? onViewDetail(post) : undefined)}
-                className={`neu-inset p-4 rounded-2xl bg-white/40 border border-white/60 relative ${
-                    isLongContent ? 'cursor-pointer group' : ''
-                }`}
+                className={`neu-inset p-4 rounded-2xl bg-white/40 border border-white/60 relative ${isLongContent ? 'cursor-pointer group' : ''
+                    }`}
             >
                 {isLongContent ? (
                     <>
