@@ -22,6 +22,8 @@ const PORT = 3000;
 
 app.use(express.json());
 
+const frontendPath = path.resolve(process.cwd(), '../frontend');
+
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
@@ -45,14 +47,14 @@ async function startServer() {
         const vite = await createViteServer({
             server: { middlewareMode: true },
             appType: 'spa',
-            configFile: path.resolve(process.cwd(), 'frontend/vite.config.ts'),
-            root: path.resolve(process.cwd(), 'frontend'),
+            configFile: path.resolve(frontendPath, 'vite.config.ts'),
+            root: frontendPath,
         });
         app.use(vite.middlewares);
         app.use('*', async (req, res, next) => {
             const url = req.originalUrl;
             try {
-                let template = fs.readFileSync(path.resolve(process.cwd(), 'frontend/index.html'), 'utf-8');
+                let template = fs.readFileSync(path.join(frontendPath, 'index.html'), 'utf-8');
                 template = await vite.transformIndexHtml(url, template);
                 res.status(200).set({ 'Content-Type': 'text/html' }).end(template);
             } catch (e) {
@@ -61,7 +63,7 @@ async function startServer() {
             }
         });
     } else {
-        const distPath = path.resolve(process.cwd(), 'frontend/dist');
+        const distPath = path.join(frontendPath, 'dist');
         app.use(express.static(distPath));
         app.get('*', (req, res) => {
             res.sendFile(path.join(distPath, 'index.html'));
