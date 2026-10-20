@@ -46,3 +46,23 @@ export const getCategoryBadgeConfig = (cat: FeedCategory) => {
             };
     }
 };
+
+const CATEGORIES: FeedCategory[] = ['formula', 'story', 'win', 'insight', 'discipline'];
+
+export const FeedCategoryFilter: React.FC<FeedCategoryFilterProps> = ({
+    selectedCategory,
+    onSelectCategory,
+}) => {
+    return (
+        <div className="flex items-center space-x-2.5 overflow-x-auto pb-1 scrollbar-none">
+            {/* All Categories Button */}
+            <button
+                onClick={() => onSelectCategory('all')}
+                className={`px-4 py-2 rounded-xl text-xs font-black whitespace-nowrap transition-all ${
+                    selectedCategory === 'all'
+                        ? 'neu-button-primary !text-white shadow-[0_4px_14px_rgba(84,154,203,0.45)] scale-102'
+                        : 'neu-button text-[#717699] hover:text-[#1a1c35] bg-[#E0E5EC]'
+                }`}
+            >
+                All Categories
+            </button>
