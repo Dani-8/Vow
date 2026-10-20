@@ -38,3 +38,27 @@ export function useFeedData() {
             return [];
         }
     });
+
+    // UI filters
+    const [feedTab, setFeedTab] = useState<'all' | 'saved'>('all');
+    const [selectedCategory, setSelectedCategory] = useState<FeedCategory | 'all'>('all');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [copiedId, setCopiedId] = useState<string | null>(null);
+
+    // Fetch live posts from backend
+    useEffect(() => {
+        let isMounted = true;
+        api.getFeedPosts()
+            .then((res) => {
+                if (isMounted && res.posts && Array.isArray(res.posts) && res.posts.length > 0) {
+                    setPosts(res.posts);
+                    localStorage.setItem(STORAGE_POSTS_KEY, JSON.stringify(res.posts));
+                }
+            })
+            .catch((err) => {
+                console.warn('Backend feed fetch warning (using cache):', err);
+            });
+        return () => {
+            isMounted = false;
+        };
+    }, []);
