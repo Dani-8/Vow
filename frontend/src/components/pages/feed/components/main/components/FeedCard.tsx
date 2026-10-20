@@ -82,9 +82,8 @@ export const FeedCard: React.FC<FeedCardProps> = ({
             {/* Post Content Box */}
             <div
                 onClick={() => (isLongContent ? onViewDetail(post) : undefined)}
-                className={`neu-inset p-4 rounded-2xl bg-white/40 border border-white/60 relative ${
-                    isLongContent ? 'cursor-pointer group' : ''
-                }`}
+                className={`neu-inset p-4 rounded-2xl bg-white/40 border border-white/60 relative ${isLongContent ? 'cursor-pointer group' : ''
+                    }`}
             >
                 {isLongContent ? (
                     <>
@@ -142,11 +141,10 @@ export const FeedCard: React.FC<FeedCardProps> = ({
                             e.stopPropagation();
                             onToggleLike(post.id);
                         }}
-                        className={`neu-button px-3 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all ${
-                            isLiked
+                        className={`neu-button px-3 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all ${isLiked
                                 ? 'text-rose-600 bg-rose-50/80 border-rose-300 font-black shadow-inner'
                                 : 'text-[#717699] hover:text-[#1a1c35]'
-                        }`}
+                            }`}
                         title={isLiked ? 'Unlike' : 'Give Respect'}
                     >
                         <Flame className={`w-3.5 h-3.5 ${isLiked ? 'fill-rose-500 text-rose-500' : ''}`} />
@@ -160,11 +158,10 @@ export const FeedCard: React.FC<FeedCardProps> = ({
                             e.stopPropagation();
                             onToggleSave(post.id);
                         }}
-                        className={`neu-button px-3 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all ${
-                            isSaved
+                        className={`neu-button px-3 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all ${isSaved
                                 ? 'text-amber-600 bg-amber-50/80 border-amber-300 font-black shadow-inner'
                                 : 'text-[#717699] hover:text-[#1a1c35]'
-                        }`}
+                            }`}
                         title={isSaved ? 'Saved in Vault' : 'Save to Vault'}
                     >
                         <Bookmark className={`w-3.5 h-3.5 ${isSaved ? 'fill-amber-500 text-amber-500' : ''}`} />
