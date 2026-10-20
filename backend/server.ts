@@ -65,3 +65,17 @@ async function startServer() {
                 next(e);
             }
         });
+    } else {
+        const distPath = path.join(frontendPath, 'dist');
+        app.use(express.static(distPath));
+        app.get('*', (req, res) => {
+            res.sendFile(path.join(distPath, 'index.html'));
+        });
+    }
+
+    app.listen(PORT, '0.0.0.0', () => {
+        console.log(`Vow server running at http://0.0.0.0:${PORT}`);
+    });
+}
+
+startServer();
