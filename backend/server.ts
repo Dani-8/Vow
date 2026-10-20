@@ -41,18 +41,23 @@ async function startServer() {
         console.warn('Database initialization warning (server will continue with fallback):', err);
     }
 
+    // Detect frontend path: works whether run from root or from inside backend/
+    const frontendPath = fs.existsSync(path.resolve(process.cwd(), 'frontend'))
+        ? path.resolve(process.cwd(), 'frontend')
+        : path.resolve(process.cwd(), '../frontend');
+
     if (process.env.NODE_ENV !== 'production') {
         const vite = await createViteServer({
             server: { middlewareMode: true },
             appType: 'spa',
-            configFile: path.resolve(process.cwd(), 'frontend/vite.config.ts'),
-            root: path.resolve(process.cwd(), 'frontend'),
+            configFile: path.resolve(frontendPath, 'vite.config.ts'),
+            root: frontendPath,
         });
         app.use(vite.middlewares);
         app.use('*', async (req, res, next) => {
             const url = req.originalUrl;
             try {
-                let template = fs.readFileSync(path.resolve(process.cwd(), 'frontend/index.html'), 'utf-8');
+                let template = fs.readFileSync(path.join(frontendPath, 'index.html'), 'utf-8');
                 template = await vite.transformIndexHtml(url, template);
                 res.status(200).set({ 'Content-Type': 'text/html' }).end(template);
             } catch (e) {
@@ -61,7 +66,7 @@ async function startServer() {
             }
         });
     } else {
-        const distPath = path.resolve(process.cwd(), 'frontend/dist');
+        const distPath = path.join(frontendPath, 'dist');
         app.use(express.static(distPath));
         app.get('*', (req, res) => {
             res.sendFile(path.join(distPath, 'index.html'));
