@@ -105,3 +105,29 @@ export function useFeedData() {
             console.warn('Could not sync like with backend:', e);
         }
     }, [likedIds]);
+
+    const handleToggleSave = useCallback(async (postId: string) => {
+        const isCurrentlySaved = savedIds.includes(postId);
+        const newSaved = isCurrentlySaved
+            ? savedIds.filter((id) => id !== postId)
+            : [...savedIds, postId];
+        setSavedIds(newSaved);
+
+        setPosts((prev) =>
+            prev.map((p) => {
+                if (p.id === postId) {
+                    return {
+                        ...p,
+                        savesCount: isCurrentlySaved ? Math.max(0, p.savesCount - 1) : p.savesCount + 1,
+                    };
+                }
+                return p;
+            })
+        );
+
+        try {
+            await api.saveFeedPost(postId, !isCurrentlySaved);
+        } catch (e) {
+            console.warn('Could not sync save with backend:', e);
+        }
+    }, [savedIds]);
