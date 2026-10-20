@@ -28,3 +28,13 @@ export function useFeedData() {
             return ['post_reel_formula'];
         }
     });
+
+    // 3. Liked IDs
+    const [likedIds, setLikedIds] = useState<string[]>(() => {
+        try {
+            const raw = localStorage.getItem(STORAGE_LIKED_IDS_KEY);
+            return raw ? JSON.parse(raw) : [];
+        } catch {
+            return [];
+        }
+    });
