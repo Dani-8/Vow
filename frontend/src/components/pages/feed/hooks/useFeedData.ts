@@ -1,18 +1,3 @@
-eedPost(postId, !isCurrentlySaved);
-        } catch (e) {
-            console.warn('Could not sync save with backend:', e);
-        }
-    }, [savedIds]);
-
-    const handleShare = useCallback((postId: string, title: string) => {
-        try {
-            navigator.clipboard.writeText(`${title} - Shared from Vow Mindset Feed`);
-            setCopiedId(postId);
-            setTimeout(() => setCopiedId(null), 2500);
-        } catch {
-            // fallback
-        }
-    }, []);
 
     const handleCreatePost = useCallback(async (newPostData: Omit<FeedPost, 'id' | 'likesCount' | 'savesCount' | 'createdAt' | 'isLiked' | 'isSaved'>) => {
         const localId = `post_${Date.now()}`;
