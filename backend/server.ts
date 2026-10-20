@@ -33,3 +33,35 @@ app.use('/api/feed', feedRoutes);
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', app: 'Vow', time: new Date().toISOString() });
 });
+
+async function startServer() {
+    try {
+        await connectDB();
+    } catch (err) {
+        console.warn('Database initialization warning (server will continue with fallback):', err);
+    }
+
+    // Detect frontend path: works whether run from root or from inside backend/
+    const frontendPath = fs.existsSync(path.resolve(process.cwd(), 'frontend'))
+        ? path.resolve(process.cwd(), 'frontend')
+        : path.resolve(process.cwd(), '../frontend');
+
+    if (process.env.NODE_ENV !== 'production') {
+        const vite = await createViteServer({
+            server: { middlewareMode: true },
+            appType: 'spa',
+            configFile: path.resolve(frontendPath, 'vite.config.ts'),
+            root: frontendPath,
+        });
+        app.use(vite.middlewares);
+        app.use('*', async (req, res, next) => {
+            const url = req.originalUrl;
+            try {
+                let template = fs.readFileSync(path.join(frontendPath, 'index.html'), 'utf-8');
+                template = await vite.transformIndexHtml(url, template);
+                res.status(200).set({ 'Content-Type': 'text/html' }).end(template);
+            } catch (e) {
+                vite.ssrFixStacktrace(e as Error);
+                next(e);
+            }
+        });
