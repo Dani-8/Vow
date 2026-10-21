@@ -35,3 +35,17 @@ export const PostActionBar: React.FC<PostActionBarProps> = ({
                     <Flame className={`w-4 h-4 ${isLiked ? 'fill-rose-500 text-rose-500' : ''}`} />
                     <span>{post.likesCount} Respect</span>
                 </button>
+
+                <button
+                    type="button"
+                    onClick={() => onToggleSave(post.id)}
+                    className={`neu-button px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-black flex items-center space-x-2 transition-all hover:scale-105 active:scale-95 ${
+                        isSaved
+                            ? 'text-amber-600 bg-amber-50 border-amber-300 shadow-inner'
+                            : 'text-[#717699] hover:text-[#1a1c35]'
+                    }`}
+                >
+                    <Bookmark className={`w-4 h-4 ${isSaved ? 'fill-amber-500 text-amber-500' : ''}`} />
+                    <span>{isSaved ? 'Saved in Vault' : 'Save to Vault'}</span>
+                </button>
+            </div>
