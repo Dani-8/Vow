@@ -1,41 +1,4 @@
 
-export const CreatePostModal: React.FC<CreatePostModalProps> = ({
-    isOpen,
-    onClose,
-    onSubmit,
-    currentUser,
-}) => {
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
-    const [category, setCategory] = useState<FeedCategory>('formula');
-    const [tagsInput, setTagsInput] = useState('');
-
-    if (!isOpen) return null;
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!title.trim() || !content.trim()) return;
-
-        const tags = tagsInput
-            .split(',')
-            .map((t) => t.trim().toLowerCase().replace(/^#/, ''))
-            .filter((t) => t.length > 0);
-
-        onSubmit({
-            authorName: currentUser?.username || 'Fellow Strategist',
-            authorBadge: category === 'story' ? 'Storyteller' : 'Community Builder',
-            category,
-            title: title.trim(),
-            content: content.trim(),
-            tags: tags.length > 0 ? tags : ['mindset', category],
-        });
-
-        setTitle('');
-        setContent('');
-        setTagsInput('');
-        onClose();
-    };
-
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200">
             <div className="w-full max-w-lg neu-card p-6 bg-[#E0E5EC] rounded-3xl border border-white/60 shadow-2xl relative max-h-[90vh] overflow-y-auto">
