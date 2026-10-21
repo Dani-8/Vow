@@ -24,4 +24,25 @@ export const RelatedPostsSection: React.FC<RelatedPostsSectionProps> = ({
                     More in {categoryLabel}
                 </h4>
             </div>
-            <div classN
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                {relatedPosts.map((rel) => (
+                    <div
+                        key={rel.id}
+                        onClick={() => onSelectPost?.(rel)}
+                        className="neu-card p-4 rounded-2xl bg-[#E0E5EC] hover:bg-[#D8DEE8] border border-white/60 cursor-pointer space-y-2 transition-all hover:scale-102 text-left"
+                    >
+                        <span className="text-[10px] font-bold text-[#717699] block">
+                            By {rel.authorName}
+                        </span>
+                        <h5 className="text-xs font-black text-[#1a1c35] line-clamp-2">
+                            {rel.title}
+                        </h5>
+                        <p className="text-[11px] text-[#647196] line-clamp-2">
+                            {rel.content}
+                        </p>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
