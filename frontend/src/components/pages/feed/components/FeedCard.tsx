@@ -14,21 +14,3 @@ interface FeedCardProps {
     onViewDetail: (post: FeedPost) => void;
     onTagClick?: (tag: string) => void;
 }
-
-export const FeedCard: React.FC<FeedCardProps> = ({
-    post,
-    isLiked,
-    isSaved,
-    isCopied,
-    onToggleLike,
-    onToggleSave,
-    onShare,
-    onViewDetail,
-    onTagClick,
-}) => {
-    const config = getCategoryBadgeConfig(post.category);
-    const BadgeIcon = config.icon;
-
-    // Threshold for true long content: 300 characters OR more than 4 newlines
-    const lineCount = (post.content.match(/\n/g) || []).length;
-    const isLongContent = post.content.length > 300 || lineCount >= 5;
