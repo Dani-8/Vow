@@ -28,3 +28,20 @@ export const PostHeroCard: React.FC<PostHeroCardProps> = ({ post }) => {
                             </span>
                         )}
                     </div>
+                    <span className="text-xs font-semibold text-[#717699] flex items-center space-x-1.5 mt-0.5">
+                        <Calendar className="w-3.5 h-3.5" />
+                        <span>
+                            {new Date(post.createdAt).toLocaleDateString('en-US', {
+                                month: 'long',
+                                day: 'numeric',
+                                year: 'numeric',
+                            })}
+                        </span>
+                    </span>
+                </div>
+            </div>
+
+            {/* Title */}
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#1a1c35] tracking-tight leading-tight">
+                {post.title}
+            </h1>
