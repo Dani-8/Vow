@@ -130,23 +130,3 @@ export const FeedCard: React.FC<FeedCardProps> = ({
                     ))}
                 </div>
             )}
-
-            {/* Bottom Actions: Respect, Save to Vault, Share */}
-            <div className="flex items-center justify-between pt-2.5 border-t border-slate-200/60">
-                <div className="flex items-center space-x-2">
-                    {/* Flame Reaction */}
-                    <button
-                        type="button"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            onToggleLike(post.id);
-                        }}
-                        className={`neu-button px-3 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all ${isLiked
-                            ? 'text-rose-600 bg-rose-50/80 border-rose-300 font-black shadow-inner'
-                            : 'text-[#717699] hover:text-[#1a1c35]'
-                            }`}
-                        title={isLiked ? 'Unlike' : 'Give Respect'}
-                    >
-                        <Flame className={`w-3.5 h-3.5 ${isLiked ? 'fill-rose-500 text-rose-500' : ''}`} />
-                        <span>{post.likesCount}</span>
-                    </button>
