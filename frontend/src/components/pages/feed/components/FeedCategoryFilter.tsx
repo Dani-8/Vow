@@ -65,25 +65,3 @@ export const FeedCategoryFilter: React.FC<FeedCategoryFilterProps> = ({
             >
                 All Categories
             </button>
-
-            {CATEGORIES.map((cat) => {
-                const config = getCategoryBadgeConfig(cat);
-                const Icon = config.icon;
-                const isSelected = selectedCategory === cat;
-                return (
-                    <button
-                        key={cat}
-                        onClick={() => onSelectCategory(cat)}
-                        className={`px-4 py-2 rounded-xl text-xs flex items-center space-x-2 whitespace-nowrap transition-all font-bold ${isSelected
-                            ? `${config.activeBtn} font-black scale-102`
-                            : 'neu-button text-[#515777] hover:text-[#1a1c35] bg-[#E0E5EC]'
-                            }`}
-                    >
-                        <Icon className={`w-3.5 h-3.5 ${isSelected ? 'stroke-[2.5]' : ''}`} />
-                        <span>{config.label}</span>
-                    </button>
-                );
-            })}
-        </div>
-    );
-};
