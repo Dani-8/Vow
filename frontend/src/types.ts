@@ -49,4 +49,34 @@ export interface Challenge {
   targetEndDate: string;
   rule?: string;
   consequenceOfSkipping?: string;
-  consequencesOfSkipping?: string
+  consequencesOfSkipping?: string[];
+  tags: string[];
+  status: 'active' | 'completed' | 'paused';
+  logs: ChallengeLog[];
+  sprints?: ChallengeSprint[];
+  currentSprintId?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  hasPinSet: boolean;
+}
+
+export interface SubTask {
+  id: string;
+  taskId: string;
+  title: string;
+  description?: string;
+  dateLabel: string; // e.g. "Aug 14", "Aug 15"
+  dueDate?: string; // e.g. "Aug 17, 2026"
+  timeLeft?: string; // e.g. "Today", "2 days", "1h 34m"
+  status: 'completed' | 'in_progress' | 'pending';
+  priority?: 'High' | 'Medium' | 'Low';
+  assignee?: {
+    name: string;
+    avatar?: string;
+    email?: string;
