@@ -80,3 +80,22 @@ export interface SubTask {
     name: string;
     avatar?: string;
     email?: string;
+  };
+  masterStreak?: string;
+  attachments?: {
+    name: string;
+    size: string;
+    type?: string;
+    url?: string;
+  }[];
+}
+
+export interface TaskAttachment {
+  id: string;
+  name: string;
+  type: 'file' | 'image' | 'link' | 'pdf' | 'doc';
+  size?: string;
+  url: string;
+  uploadedAt: string;
+  previewUrl?: string;
+}
