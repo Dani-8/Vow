@@ -1,13 +1,4 @@
 
-
-    const config = getCategoryBadgeConfig(currentPost.category);
-    const BadgeIcon = config.icon;
-
-    // Related posts in same category
-    const relatedPosts = allPosts
-        .filter((p) => p.id !== currentPost.id && p.category === currentPost.category)
-        .slice(0, 3);
-
     return (
         <div className="w-full space-y-6 pb-8 animate-in fade-in duration-300">
             {/* Top Navigation Bar */}
