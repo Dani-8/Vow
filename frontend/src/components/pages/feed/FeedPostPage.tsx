@@ -64,3 +64,27 @@ export const FeedPostPage: React.FC<FeedPostPageProps> = ({
 
     const config = getCategoryBadgeConfig(currentPost.category);
     const BadgeIcon = config.icon;
+
+    // Related posts in same category
+    const relatedPosts = allPosts
+        .filter((p) => p.id !== currentPost.id && p.category === currentPost.category)
+        .slice(0, 3);
+
+    return (
+        <div className="w-full space-y-6 pb-8 animate-in fade-in duration-300">
+            {/* Top Navigation Bar */}
+            <div className="flex items-center justify-between">
+                <button
+                    onClick={onBack}
+                    className="neu-button px-4 py-2.5 rounded-2xl text-xs font-black text-[#515777] hover:text-[#1a1c35] flex items-center space-x-2 transition-all hover:scale-102"
+                >
+                    <ArrowLeft className="w-4 h-4 text-[#549acb]" />
+                    <span>Back to Feed Stream</span>
+                </button>
+
+                {/* Category Pill */}
+                <span className={`px-3.5 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider flex items-center space-x-2 border shadow-xs ${config.badgeBg}`}>
+                    <BadgeIcon className="w-4 h-4" />
+                    <span>{config.label}</span>
+                </span>
+            </div>
