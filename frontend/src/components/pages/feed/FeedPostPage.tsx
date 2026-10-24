@@ -88,3 +88,20 @@ export const FeedPostPage: React.FC<FeedPostPageProps> = ({
                     <span>{config.label}</span>
                 </span>
             </div>
+
+            {/* Main Post Card Hero */}
+            <div className="neu-card p-6 sm:p-10 bg-[#E0E5EC] rounded-3xl border border-white/70 shadow-xl space-y-6 text-left">
+                {/* Hero Content (Author info, date, title, formatted story/content, tags) */}
+                <PostHeroCard post={currentPost} />
+
+                {/* Bottom Action Bar (Respect/Flame, Save to Vault, Share) */}
+                <PostActionBar
+                    post={currentPost}
+                    isLiked={isLiked}
+                    isSaved={isSaved}
+                    isCopied={isCopied}
+                    onToggleLike={onToggleLike}
+                    onToggleSave={onToggleSave}
+                    onShare={onShare}
+                />
+            </div>
