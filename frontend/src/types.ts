@@ -99,3 +99,27 @@ export interface TaskAttachment {
   uploadedAt: string;
   previewUrl?: string;
 }
+
+export interface TaskActivityItem {
+  id: string;
+  type: 'created' | 'status_change' | 'subtask_add' | 'subtask_complete' | 'attachment_add' | 'note_update' | 'comment' | 'priority_change';
+  message: string;
+  user?: string;
+  timestamp: string;
+  meta?: Record<string, any>;
+}
+
+export interface TaskStickyNote {
+  id: string;
+  title?: string;
+  content: string;
+  color: 'yellow' | 'green' | 'blue' | 'purple' | 'rose' | 'gray';
+  isPinned?: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface TaskNote {
+  content: string;
+  lastSavedAt: string;
+}
