@@ -105,3 +105,13 @@ export const FeedPostPage: React.FC<FeedPostPageProps> = ({
                     onShare={onShare}
                 />
             </div>
+
+            {/* Related Community Posts in Same Category */}
+            <RelatedPostsSection
+                relatedPosts={relatedPosts}
+                categoryLabel={config.label}
+                onSelectPost={onSelectPost}
+            />
+        </div>
+    );
+};
