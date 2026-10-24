@@ -195,3 +195,30 @@ export const AppRouter: React.FC<AppRouterProps> = ({
       />
     );
   }
+
+  if (activeView === 'home') {
+    return (
+      <HomeView
+        tasks={tasks}
+        stats={stats}
+        onToggleComplete={onToggleComplete}
+        onCheckInToday={onCheckInToday}
+        onOpenCreateModal={onOpenCreateModal}
+        onOpenAIAssist={onOpenAIAssist}
+        onViewTaskDetail={(t) => {
+          setSelectedTaskForDetail(t);
+          navigate(`/app/task/${getTaskSlug(t)}`);
+        }}
+      />
+    );
+  }
+
+  if (activeView === 'feed') {
+    return (
+      <FeedPage
+        currentUser={user}
+        onNavigateToView={navigateToView}
+        onViewPostPage={(post) => navigateToView('feed-post', post.id)}
+      />
+    );
+  }
