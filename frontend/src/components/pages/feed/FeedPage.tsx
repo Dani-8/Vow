@@ -1,34 +1,3 @@
-
-
-export const FeedPage: React.FC<FeedPageProps> = ({ currentUser, onNavigateToView, onViewPostPage }) => {
-    const {
-        posts,
-        displayedPosts,
-        savedIds,
-        likedIds,
-        feedTab,
-        setFeedTab,
-        selectedCategory,
-        setSelectedCategory,
-        searchQuery,
-        setSearchQuery,
-        copiedId,
-        handleToggleLike,
-        handleToggleSave,
-        handleShare,
-        handleCreatePost,
-    } = useFeedData();
-
-    const [isCreateOpen, setIsCreateOpen] = useState(false);
-
-    const handleOpenPost = (post: FeedPost) => {
-        if (onViewPostPage) {
-            onViewPostPage(post);
-        } else if (onNavigateToView) {
-            onNavigateToView('feed-post', post.id);
-        }
-    };
-
     return (
         <div className="w-full space-y-6 pb-8 animate-in fade-in duration-300">
             {/* Purpose & Community Guidelines Banner */}
