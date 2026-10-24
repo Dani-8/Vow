@@ -6,3 +6,16 @@ import { PostHeroCard } from './components/post/components/PostHeroCard';
 import { PostActionBar } from './components/post/components/PostActionBar';
 import { RelatedPostsSection } from './components/post/components/RelatedPostsSection';
 
+interface FeedPostPageProps {
+    post: FeedPost | null;
+    postId?: string;
+    allPosts?: FeedPost[];
+    onBack: () => void;
+    isLiked: boolean;
+    isSaved: boolean;
+    isCopied: boolean;
+    onToggleLike: (postId: string) => void;
+    onToggleSave: (postId: string) => void;
+    onShare: (postId: string, title: string) => void;
+    onSelectPost?: (post: FeedPost) => void;
+}
