@@ -1,23 +1,3 @@
-    return (
-        <div className="w-full space-y-6 pb-8 animate-in fade-in duration-300">
-            {/* Purpose & Community Guidelines Banner */}
-            <FeedCommunityBanner onOpenCreateModal={() => setIsCreateOpen(true)} />
-
-            {/* Sub-tab Navigation (All vs Saved Vault) and Search */}
-            <FeedControlsBar
-                feedTab={feedTab}
-                onSelectTab={setFeedTab}
-                totalPostsCount={posts.length}
-                savedPostsCount={savedIds.length}
-                searchQuery={searchQuery}
-                onSearchChange={setSearchQuery}
-            />
-
-            {/* Category Filter Pills (Includes Formula, Story & Journey, Win, Insight, Discipline) */}
-            <FeedCategoryFilter
-                selectedCategory={selectedCategory}
-                onSelectCategory={setSelectedCategory}
-            />
 
             {/* Posts Stream */}
             {displayedPosts.length === 0 ? (
