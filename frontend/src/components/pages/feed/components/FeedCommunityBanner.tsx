@@ -27,28 +27,3 @@ export const FeedCommunityBanner: React.FC<FeedCommunityBannerProps> = ({ onOpen
                         </h2>
                     </div>
                 </div>
-
-                <div className="flex items-center space-x-2 shrink-0 self-start md:self-center">
-                    <button
-                        onClick={onOpenCreateModal}
-                        className="neu-button-primary px-5 py-2.5 rounded-xl text-xs font-black flex items-center space-x-2 text-white shadow-md hover:scale-105 active:scale-95 transition-all"
-                    >
-                        <Plus className="w-4 h-4 stroke-[3]" />
-                        <span>Share Story / Formula</span>
-                    </button>
-                </div>
-            </div>
-
-            {/* Direct Motivational Message to Everyone */}
-            <div className="neu-inset p-4 rounded-2xl bg-white/45 border border-white/70 text-xs text-[#29335a] leading-relaxed font-medium space-y-1.5">
-                <p>
-                    A feed for motivation from one person to another: <strong>share your goals, share your dreams, share your achievements</strong>, and share what this app is capable of helping you achieve.
-                </p>
-                <p className="text-[#647196]">
-                    This is <strong>not</strong> Instagram, Facebook, Snapchat, or Twitter(X)—this space is exclusively for pure motivational and discipline purposes.
-                    <strong className="text-[#1a1c35]"> Your small achievement post can be life-changing motivation for someone else.</strong> Push yourself, and push others forward as well.
-                </p>
-            </div>
-        </div>
-    );
-};
