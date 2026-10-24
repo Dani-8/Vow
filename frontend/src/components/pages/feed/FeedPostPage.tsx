@@ -1,16 +1,5 @@
 
 
-                    <button
-                        type="button"
-                        onClick={() => onShare(currentPost.id, currentPost.title)}
-                        className="neu-button px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-black text-[#717699] hover:text-[#1a1c35] flex items-center space-x-2 hover:scale-105 transition-all"
-                    >
-                        <Share2 className="w-4 h-4" />
-                        <span>{isCopied ? 'Link Copied!' : 'Share Quote'}</span>
-                    </button>
-                </div>
-            </div>
-
             {/* Related Community Posts in Same Category */}
             {relatedPosts.length > 0 && (
                 <div className="space-y-3 pt-4">
