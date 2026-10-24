@@ -1,21 +1,3 @@
-import React, { useMemo } from 'react';
-import { ArrowLeft, Flame, Bookmark, Share2, Calendar, Sparkles, MessageSquare, ShieldCheck, HeartHandshake } from 'lucide-react';
-import { FeedPost } from './types';
-import { getCategoryBadgeConfig } from './components/FeedCategoryFilter';
-
-interface FeedPostPageProps {
-    post: FeedPost | null;
-    postId?: string;
-    allPosts?: FeedPost[];
-    onBack: () => void;
-    isLiked: boolean;
-    isSaved: boolean;
-    isCopied: boolean;
-    onToggleLike: (postId: string) => void;
-    onToggleSave: (postId: string) => void;
-    onShare: (postId: string, title: string) => void;
-    onSelectPost?: (post: FeedPost) => void;
-}
 
 export const FeedPostPage: React.FC<FeedPostPageProps> = ({
     post,
