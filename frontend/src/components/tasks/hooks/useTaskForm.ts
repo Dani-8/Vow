@@ -1,3 +1,21 @@
+import React, { useState, useEffect, FormEvent } from 'react';
+import { Task } from '../../../types';
+
+interface UseTaskFormProps {
+    editingTask?: Task | null;
+    isOpen: boolean;
+    defaultIsPrivate?: boolean;
+    onSubmit: (taskData: {
+        title: string;
+        description?: string;
+        tags?: string[];
+        startTime?: string | null;
+        endTime?: string | null;
+        isPrivate?: boolean;
+        isHabit?: boolean;
+    }) => Promise<void>;
+    onClose: () => void;
+}
 
 export function useTaskForm({
     editingTask,
