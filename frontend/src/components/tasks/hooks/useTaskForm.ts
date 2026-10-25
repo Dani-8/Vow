@@ -1,4 +1,20 @@
 
+export function useTaskForm({
+    editingTask,
+    isOpen,
+    defaultIsPrivate = false,
+    onSubmit,
+    onClose,
+}: UseTaskFormProps) {
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [tagsInput, setTagsInput] = useState('');
+    const [endTime, setEndTime] = useState('');
+    const [isHabit, setIsHabit] = useState(false);
+    const [isPrivate, setIsPrivate] = useState(defaultIsPrivate);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
     useEffect(() => {
         if (editingTask) {
             setTitle(editingTask.title);
