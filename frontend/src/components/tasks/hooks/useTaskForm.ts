@@ -1,10 +1,5 @@
 
 
-            const tags = tagsInput
-                .split(',')
-                .map((t) => t.trim())
-                .filter(Boolean);
-
             await onSubmit({
                 title: title.trim(),
                 description: description.trim(),
