@@ -1,4 +1,17 @@
 
+            } else {
+                setEndTime('');
+            }
+        } else {
+            setTitle('');
+            setDescription('');
+            setTagsInput('');
+            setEndTime('');
+            setIsHabit(false);
+            setIsPrivate(defaultIsPrivate);
+        }
+        setError(null);
+    }, [editingTask, isOpen, defaultIsPrivate]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
