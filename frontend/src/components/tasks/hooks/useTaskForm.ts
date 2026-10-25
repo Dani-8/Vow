@@ -1,13 +1,4 @@
 
-
-            onClose();
-        } catch (err: any) {
-            setError(err.message || 'Failed to save task');
-        } finally {
-            setLoading(false);
-        }
-    };
-
     return {
         title,
         setTitle,
