@@ -1,7 +1,4 @@
 
-        try {
-            setLoading(true);
-            setError(null);
 
             const tags = tagsInput
                 .split(',')
