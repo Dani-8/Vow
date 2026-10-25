@@ -1,20 +1,4 @@
 
-    useEffect(() => {
-        if (editingTask) {
-            setTitle(editingTask.title);
-            setDescription(editingTask.description || '');
-            setTagsInput(editingTask.tags ? editingTask.tags.join(', ') : '');
-            setIsHabit(editingTask.isHabit);
-            setIsPrivate(editingTask.isPrivate);
-            if (editingTask.endTime) {
-                const d = new Date(editingTask.endTime);
-                const isoStr = new Date(d.getTime() - d.getTimezoneOffset() * 60000)
-                    .toISOString()
-                    .slice(0, 16);
-                setEndTime(isoStr);
-            } else {
-                setEndTime('');
-            }
         } else {
             setTitle('');
             setDescription('');
