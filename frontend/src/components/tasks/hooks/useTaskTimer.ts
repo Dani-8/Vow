@@ -5,5 +5,3 @@ useEffect(() => {
     if (!task.endTime) {
         setTimeLeftStr(null);
         setIsStruggling(false);
-        return;
-    }
