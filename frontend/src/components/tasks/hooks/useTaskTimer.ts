@@ -25,4 +25,3 @@
                     setTimeLeftStr(`${days}d ${hours % 24}h left`);
                 } else if (hours > 0) {
                     setTimeLeftStr(`${hours}h ${minutes}m left`);
-                } else {
