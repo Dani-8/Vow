@@ -9,4 +9,3 @@ useEffect(() => {
     }
 
     const updateTimer = () => {
-        const now = new Date().getTime();
