@@ -7,5 +7,3 @@ useEffect(() => {
         setIsStruggling(false);
         return;
     }
-
-    const updateTimer = () => {
