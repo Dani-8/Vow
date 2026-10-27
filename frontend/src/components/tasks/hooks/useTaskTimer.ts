@@ -1,1 +1,0 @@
-const [timeLeftStr, setTimeLeftStr] = useState<string | null>(null);
