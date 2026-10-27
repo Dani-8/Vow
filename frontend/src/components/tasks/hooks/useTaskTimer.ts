@@ -14,4 +14,3 @@
             const diff = end - now;
 
             if (diff <= 0) {
-                setTimeLeftStr('Overdue');
