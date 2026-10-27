@@ -16,4 +16,3 @@
             if (diff <= 0) {
                 setTimeLeftStr('Overdue');
                 setIsStruggling(task.status !== 'completed');
-            } else {
