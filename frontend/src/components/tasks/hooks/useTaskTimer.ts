@@ -34,4 +34,3 @@
         };
 
         updateTimer();
-        const interval = setInterval(updateTimer, 30000);
