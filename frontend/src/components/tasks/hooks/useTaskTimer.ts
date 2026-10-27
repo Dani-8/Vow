@@ -39,4 +39,3 @@
     }, [task.endTime, task.status]);
 
     return { timeLeftStr, isStruggling };
-}
