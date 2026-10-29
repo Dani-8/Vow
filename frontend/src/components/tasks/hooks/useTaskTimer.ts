@@ -23,3 +23,11 @@ export function useTaskTimer(task: Task) {
             } else {
                 const hours = Math.floor(diff / (1000 * 60 * 60));
                 const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const days = Math.floor(hours / 24);
+
+                if (days > 0) {
+                    setTimeLeftStr(`${days}d ${hours % 24}h left`);
+                } else if (hours > 0) {
+                    setTimeLeftStr(`${hours}h ${minutes}m left`);
+                } else {
+                    setTimeLeftStr(`${minutes}m left`);
