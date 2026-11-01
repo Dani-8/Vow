@@ -29,3 +29,9 @@ export function useTaskTimer(task: Task) {
                     setTimeLeftStr(`${days}d ${hours % 24}h left`);
                 } else if (hours > 0) {
                     setTimeLeftStr(`${hours}h ${minutes}m left`);
+                } else {
+                    setTimeLeftStr(`${minutes}m left`);
+                }
+
+                setIsStruggling(diff < 4 * 60 * 60 * 1000 && task.status !== 'completed');
+            }
