@@ -36,3 +36,8 @@ export function useTaskTimer(task: Task) {
                 setIsStruggling(diff < 4 * 60 * 60 * 1000 && task.status !== 'completed');
             }
         };
+
+        updateTimer();
+        const interval = setInterval(updateTimer, 30000);
+        return () => clearInterval(interval);
+    }, [task.endTime, task.status]);
