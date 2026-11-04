@@ -18,3 +18,7 @@ export function useTaskTimer(task: Task) {
             const diff = end - now;
 
             if (diff <= 0) {
+                setTimeLeftStr('Overdue');
+                setIsStruggling(task.status !== 'completed');
+            } else {
+                const hours = Math.floor(diff / (1000 * 60 * 60));
