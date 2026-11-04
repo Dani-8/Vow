@@ -11,3 +11,8 @@ export function useTaskTimer(task: Task) {
             setIsStruggling(false);
             return;
         }
+
+        const updateTimer = () => {
+            const now = new Date().getTime();
+            const end = new Date(task.endTime!).getTime();
+            const diff = end - now;
