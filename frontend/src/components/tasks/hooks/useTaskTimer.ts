@@ -38,3 +38,6 @@ export function useTaskTimer(task: Task) {
         };
 
         updateTimer();
+        const interval = setInterval(updateTimer, 30000);
+        return () => clearInterval(interval);
+    }, [task.endTime, task.status]);
