@@ -6,3 +6,6 @@ export function useTaskTimer(task: Task) {
     const [isStruggling, setIsStruggling] = useState<boolean>(false);
 
     useEffect(() => {
+        if (!task.endTime) {
+            setTimeLeftStr(null);
+            setIsStruggling(false);
