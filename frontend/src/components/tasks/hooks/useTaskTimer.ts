@@ -19,3 +19,4 @@ export function useTaskTimer(task: Task) {
 
             if (diff <= 0) {
                 setTimeLeftStr('Overdue');
+                setIsStruggling(task.status !== 'completed');
