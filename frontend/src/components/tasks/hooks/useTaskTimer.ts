@@ -7,3 +7,5 @@ export function useTaskTimer(task: Task) {
 
     useEffect(() => {
         if (!task.endTime) {
+            setTimeLeftStr(null);
+            setIsStruggling(false);
