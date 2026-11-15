@@ -18,3 +18,5 @@ export function useTaskTimer(task: Task) {
             const diff = end - now;
 
             if (diff <= 0) {
+                setTimeLeftStr('Overdue');
+                setIsStruggling(task.status !== 'completed');
