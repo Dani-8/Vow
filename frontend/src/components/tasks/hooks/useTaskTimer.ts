@@ -26,3 +26,5 @@ export function useTaskTimer(task: Task) {
                 const days = Math.floor(hours / 24);
 
                 if (days > 0) {
+                    setTimeLeftStr(`${days}d ${hours % 24}h left`);
+                } else if (hours > 0) {
