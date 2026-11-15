@@ -30,4 +30,3 @@ export function useTaskTimer(task: Task) {
                 } else if (hours > 0) {
                     setTimeLeftStr(`${hours}h ${minutes}m left`);
                 } else {
-                    setTimeLeftStr(`${minutes}m left`);
