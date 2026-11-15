@@ -34,3 +34,5 @@ export function useTaskTimer(task: Task) {
                 }
 
                 setIsStruggling(diff < 4 * 60 * 60 * 1000 && task.status !== 'completed');
+            }
+        };
