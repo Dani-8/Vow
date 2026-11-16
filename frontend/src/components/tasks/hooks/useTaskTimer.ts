@@ -43,4 +43,3 @@ export function useTaskTimer(task: Task) {
     }, [task.endTime, task.status]);
 
     return { timeLeftStr, isStruggling };
-}
