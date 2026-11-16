@@ -9,3 +9,4 @@ export function useTaskTimer(task: Task) {
         if (!task.endTime) {
             setTimeLeftStr(null);
             setIsStruggling(false);
+            return;
