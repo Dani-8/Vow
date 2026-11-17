@@ -10,4 +10,3 @@ export function useTaskTimer(task: Task) {
             setTimeLeftStr(null);
             setIsStruggling(false);
             return;
-        }
