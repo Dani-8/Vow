@@ -27,3 +27,4 @@ export function useTaskTimer(task: Task) {
 
                 if (days > 0) {
                     setTimeLeftStr(`${days}d ${hours % 24}h left`);
+                } else if (hours > 0) {
