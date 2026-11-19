@@ -11,5 +11,3 @@ export function useTaskTimer(task: Task) {
             setIsStruggling(false);
             return;
         }
-
-        const updateTimer = () => {
