@@ -229,3 +229,17 @@ export const api = {
       body: JSON.stringify(mapData),
     });
   },
+
+  async updateTaskMap(id: string, updates: any) {
+    return fetchAPI<{ map: any }>(`/api/task-maps/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+    });
+  },
+
+  async bulkSyncTaskMaps(maps: any[]) {
+    return fetchAPI<{ maps: any[]; success: boolean }>('/api/task-maps/bulk-sync', {
+      method: 'POST',
+      body: JSON.stringify({ maps }),
+    });
+  },
