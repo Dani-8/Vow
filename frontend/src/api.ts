@@ -132,3 +132,15 @@ export const api = {
     return fetchAPI<{ tasks: Task[] }>('/api/tasks');
   },
 
+  async getPrivateTasks(pinInput?: string) {
+    const pinToUse = pinInput || getStoredPin();
+    if (!pinToUse) {
+      throw new Error('PIN authentication required');
+    }
+    return fetchAPI<{ tasks: Task[] }>('/api/tasks/private-list', {
+      method: 'POST',
+      headers: {
+        'x-private-pin': pinToUse,
+      },
+    });
+  },
