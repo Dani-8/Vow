@@ -197,3 +197,19 @@ export const api = {
       method: 'POST',
     });
   },
+
+  // AI Assist
+  async requestAIAssist(payload: {
+    taskTitle: string;
+    description?: string;
+    tags?: string[];
+    endTime?: string | null;
+    status?: string;
+    userMessage?: string;
+    chatHistory?: { role: 'user' | 'assistant'; text: string }[];
+  }) {
+    return fetchAPI<{ reply: string }>('/api/ai/task-assist', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+  },
