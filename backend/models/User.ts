@@ -221,3 +221,5 @@ export const User = {
             }
         }
         return inMemoryUsers.size;
+    },
+};
