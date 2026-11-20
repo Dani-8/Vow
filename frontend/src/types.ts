@@ -141,3 +141,17 @@ export interface Task {
   priority?: 'High' | 'Medium' | 'Low';
   isPrivate: boolean;
   isHabit: boolean;
+  currentStreak: number;
+  bestStreak: number;
+  effectiveCurrentStreak?: number;
+  effectiveBestStreak?: number;
+  completedToday?: boolean;
+  missedPreviousDays?: boolean;
+  lastCompletedDate?: string | null;
+  completionHistory?: string[];
+  createdAt: string;
+  updatedAt: string;
+  subTasks?: SubTask[];
+  category?: string;
+  icon?: string;
+}
