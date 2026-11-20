@@ -243,3 +243,18 @@ export const api = {
       body: JSON.stringify({ maps }),
     });
   },
+
+  async deleteTaskMap(id: string) {
+    return fetchAPI<{ success: boolean; message: string }>(`/api/task-maps/${id}`, {
+      method: 'DELETE',
+    });
+  },
+
+  // Challenges (N-day Target Challenges & Habits)
+  async getChallenges() {
+    return fetchAPI<{ challenges: any[] }>('/api/challenges');
+  },
+
+  async getChallenge(id: string) {
+    return fetchAPI<{ challenge: any }>(`/api/challenges/${id}`);
+  },
