@@ -191,4 +191,15 @@ export const User = {
             createdAt: now,
             updatedAt: now,
         };
-      
+        let newId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+        if (isFirestoreActive()) {
+            try {
+                const db = getFirebaseDb();
+                if (db) {
+                    const usersRef = collection(db, 'users');
+                    const docRef = await addDoc(usersRef, payload);
+                    newId = docRef.id;
+                }
+            } catch (e) {
+                // Memory store fallback
+            }
