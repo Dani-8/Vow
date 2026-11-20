@@ -180,3 +180,20 @@ export const api = {
       method: 'POST',
     });
   },
+
+  async deleteTask(id: string) {
+    return fetchAPI<{ message: string }>(`/api/tasks/${id}`, {
+      method: 'DELETE',
+    });
+  },
+
+  // Stats
+  async getMasterStats() {
+    return fetchAPI<MasterStreakStats>('/api/tasks/stats/master');
+  },
+
+  async checkInToday() {
+    return fetchAPI<{ message: string; stats: MasterStreakStats }>('/api/tasks/checkin-today', {
+      method: 'POST',
+    });
+  },
