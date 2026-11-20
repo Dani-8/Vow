@@ -272,3 +272,18 @@ export const api = {
       body: JSON.stringify(updates),
     });
   },
+
+  async logChallengeDay(id: string, logData: {
+    dayNumber: number;
+    date?: string;
+    status?: 'completed' | 'rest' | 'missed';
+    note?: string;
+    timeSpent?: string;
+    imageUrl?: string;
+    sprintId?: string;
+  }) {
+    return fetchAPI<{ challenge: any; log: any }>(`/api/challenges/${id}/log`, {
+      method: 'POST',
+      body: JSON.stringify(logData),
+    });
+  },
