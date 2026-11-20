@@ -121,3 +121,14 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ pin }),
     });
+    if (data.success) {
+      storePin(pin);
+    }
+    return data;
+  },
+
+  // Tasks
+  async getTasks() {
+    return fetchAPI<{ tasks: Task[] }>('/api/tasks');
+  },
+
