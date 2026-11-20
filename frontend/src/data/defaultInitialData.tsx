@@ -42,3 +42,26 @@ export const DEFAULT_INITIAL_TASKS: Task[] = [
         updatedAt: new Date().toISOString(),
         subTasks: [
             {
+                id: 'sub_ru_1',
+                taskId: 'task_russian_mastery_r7u2k',
+                title: 'Cyrillic Alphabet & Phonetic Pronunciation Drills',
+                dateLabel: 'Completed',
+                status: 'completed',
+                priority: 'High',
+            },
+            {
+                id: 'sub_ru_2',
+                taskId: 'task_russian_mastery_r7u2k',
+                title: 'Top 500 High-Frequency Russian Vocabulary & Spaced Repetition',
+                dateLabel: 'Today',
+                status: 'in_progress',
+                priority: 'High',
+            },
+            {
+                id: 'sub_ru_3',
+                taskId: 'task_russian_mastery_r7u2k',
+                title: 'Russian Noun Cases & 1st/2nd Verb Conjugations',
+                dateLabel: 'Today',
+                status: 'in_progress',
+                priority: 'Medium',
+            }
