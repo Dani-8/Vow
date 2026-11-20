@@ -65,3 +65,23 @@ async function fetchAPI<T>(endpoint: string, options: RequestInit = {}): Promise
 
   return data as T;
 }
+
+export const api = {
+  // Auth
+  async signup(username: string, password: string, name?: string) {
+    const data = await fetchAPI<{ token: string; user: User; recoveryKey: string }>('/api/auth/signup', {
+      method: 'POST',
+      body: JSON.stringify({ username, password, name }),
+    });
+    setToken(data.token);
+    return data;
+  },
+
+  async login(usernameOrEmail: string, password: string) {
+    const data = await fetchAPI<{ token: string; user: User }>('/api/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ username: usernameOrEmail, password }),
+    });
+    setToken(data.token);
+    return data;
+  },
