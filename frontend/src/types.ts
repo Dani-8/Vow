@@ -111,3 +111,13 @@ export interface TaskActivityItem {
   timestamp: string;
   meta?: Record<string, any>;
 }
+
+export interface TaskStickyNote {
+  id: string;
+  title?: string;
+  content: string;
+  color: 'yellow' | 'green' | 'blue' | 'purple' | 'rose' | 'gray';
+  isPinned?: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
