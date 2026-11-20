@@ -85,3 +85,20 @@ export const api = {
     setToken(data.token);
     return data;
   },
+
+  async resetPassword(username: string, recoveryKey: string, newPassword: string) {
+    const data = await fetchAPI<{ message: string; token: string; user: User }>('/api/auth/reset-password', {
+      method: 'POST',
+      body: JSON.stringify({ username, recoveryKey, newPassword }),
+    });
+    setToken(data.token);
+    return data;
+  },
+
+  async demoBypass() {
+    const data = await fetchAPI<{ token: string; user: User }>('/api/auth/demo-bypass', {
+      method: 'POST',
+    });
+    setToken(data.token);
+    return data;
+  },
