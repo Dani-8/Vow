@@ -68,3 +68,20 @@ export interface User {
   createdAt?: string;
   hasPinSet: boolean;
 }
+
+export interface SubTask {
+  id: string;
+  taskId: string;
+  title: string;
+  description?: string;
+  dateLabel: string; // e.g. "Aug 14", "Aug 15"
+  dueDate?: string; // e.g. "Aug 17, 2026"
+  timeLeft?: string; // e.g. "Today", "2 days", "1h 34m"
+  status: 'completed' | 'in_progress' | 'pending';
+  priority?: 'High' | 'Medium' | 'Low';
+  assignee?: {
+    name: string;
+    avatar?: string;
+    email?: string;
+  };
+  masterStreak?: string;
