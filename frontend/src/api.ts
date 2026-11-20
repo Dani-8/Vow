@@ -314,3 +314,15 @@ export const api = {
 
   async likeFeedPost(id: string, increment: boolean) {
     return fetchAPI<{ post: any }>(`/api/feed/${id}/like`, {
+      method: 'POST',
+      body: JSON.stringify({ increment }),
+    });
+  },
+
+  async saveFeedPost(id: string, increment: boolean) {
+    return fetchAPI<{ post: any }>(`/api/feed/${id}/save`, {
+      method: 'POST',
+      body: JSON.stringify({ increment }),
+    });
+  },
+};
