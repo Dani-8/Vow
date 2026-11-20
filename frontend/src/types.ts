@@ -51,3 +51,17 @@ export interface Challenge {
   consequenceOfSkipping?: string;
   consequencesOfSkipping?: string[];
   tags: string[];
+  status: 'active' | 'completed' | 'paused';
+  logs: ChallengeLog[];
+  sprints?: ChallengeSprint[];
+  currentSprintId?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface User {
+  id: string;
+  username: string;
+  name: string;
+  email?: string;
+  recoveryKey?: string;
