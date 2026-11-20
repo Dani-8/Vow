@@ -12,8 +12,11 @@ import { getFirebaseDb, isFirestoreActive } from '../db.js';
 
 export interface IUser {
     _id: string;
-    email: string;
+    username: string;
+    email?: string;
     passwordHash: string;
+    recoveryKeyHash?: string;
+    plainRecoveryKey?: string; // Stored securely so the user can reveal/download it in their profile
     name: string;
     pinHash?: string | null;
     createdAt?: string;
@@ -24,8 +27,11 @@ const inMemoryUsers: Map<string, any> = new Map();
 
 export class UserInstance implements IUser {
     _id: string;
-    email: string;
+    username: string;
+    email?: string;
     passwordHash: string;
+    recoveryKeyHash?: string;
+    plainRecoveryKey?: string;
     name: string;
     pinHash?: string | null;
     createdAt?: string;
@@ -33,9 +39,12 @@ export class UserInstance implements IUser {
 
     constructor(data: any) {
         this._id = data._id || data.id || '';
+        this.username = (data.username || data.email?.split('@')[0] || 'user').toLowerCase().trim();
         this.email = data.email || '';
         this.passwordHash = data.passwordHash || '';
-        this.name = data.name || '';
+        this.recoveryKeyHash = data.recoveryKeyHash || '';
+        this.plainRecoveryKey = data.plainRecoveryKey || data.recoveryKey || '';
+        this.name = data.name || this.username;
         this.pinHash = data.pinHash || null;
         this.createdAt = data.createdAt || new Date().toISOString();
         this.updatedAt = data.updatedAt || new Date().toISOString();
@@ -52,8 +61,11 @@ export class UserInstance implements IUser {
                 if (db) {
                     const userRef = doc(db, 'users', this._id);
                     await updateDoc(userRef, {
+                        username: this.username,
                         email: this.email,
                         passwordHash: this.passwordHash,
+                        recoveryKeyHash: this.recoveryKeyHash || null,
+                        plainRecoveryKey: this.plainRecoveryKey || null,
                         name: this.name,
                         pinHash: this.pinHash || null,
                         updatedAt: this.updatedAt,
@@ -70,8 +82,11 @@ export class UserInstance implements IUser {
     toObject() {
         return {
             _id: this._id,
+            username: this.username,
             email: this.email,
             passwordHash: this.passwordHash,
+            recoveryKeyHash: this.recoveryKeyHash,
+            plainRecoveryKey: this.plainRecoveryKey,
             name: this.name,
             pinHash: this.pinHash,
             createdAt: this.createdAt,
@@ -81,16 +96,21 @@ export class UserInstance implements IUser {
 }
 
 export const User = {
-    async findOne(filter: { email?: string; _id?: string }) {
+    async findOne(filter: { username?: string; email?: string; _id?: string }) {
         if (filter._id) {
             return this.findById(filter._id);
         }
-        if (filter.email) {
+
+        const usernameTarget = filter.username?.toLowerCase().trim();
+        const emailTarget = filter.email?.toLowerCase().trim();
+
+        // 1. Search by username
+        if (usernameTarget) {
             if (isFirestoreActive()) {
                 try {
                     const db = getFirebaseDb();
                     if (db) {
-                        const q = query(collection(db, 'users'), where('email', '==', filter.email.toLowerCase()));
+                        const q = query(collection(db, 'users'), where('username', '==', usernameTarget));
                         const snap = await getDocs(q);
                         if (!snap.empty) {
                             const docData = snap.docs[0].data();
@@ -104,11 +124,38 @@ export const User = {
                 }
             }
             for (const u of inMemoryUsers.values()) {
-                if (u.email && u.email.toLowerCase() === filter.email.toLowerCase()) {
+                if (u.username && u.username.toLowerCase() === usernameTarget) {
                     return new UserInstance(u);
                 }
             }
         }
+
+        // 2. Search by email (fallback for older accounts)
+        if (emailTarget) {
+            if (isFirestoreActive()) {
+                try {
+                    const db = getFirebaseDb();
+                    if (db) {
+                        const q = query(collection(db, 'users'), where('email', '==', emailTarget));
+                        const snap = await getDocs(q);
+                        if (!snap.empty) {
+                            const docData = snap.docs[0].data();
+                            const obj = new UserInstance({ ...docData, _id: snap.docs[0].id });
+                            inMemoryUsers.set(obj._id, obj.toObject());
+                            return obj;
+                        }
+                    }
+                } catch (e) {
+                    // Fall back to memory
+                }
+            }
+            for (const u of inMemoryUsers.values()) {
+                if (u.email && u.email.toLowerCase() === emailTarget) {
+                    return new UserInstance(u);
+                }
+            }
+        }
+
         return null;
     },
 
@@ -136,10 +183,14 @@ export const User = {
 
     async create(data: Partial<IUser>) {
         const now = new Date().toISOString();
+        const username = (data.username || data.email?.split('@')[0] || 'user').toLowerCase().trim();
         const payload = {
+            username,
             email: data.email?.toLowerCase() || '',
             passwordHash: data.passwordHash || '',
-            name: data.name || 'Growth Seeker',
+            recoveryKeyHash: data.recoveryKeyHash || '',
+            plainRecoveryKey: data.plainRecoveryKey || '',
+            name: data.name || username,
             pinHash: data.pinHash || null,
             createdAt: now,
             updatedAt: now,
@@ -177,4 +228,3 @@ export const User = {
         return inMemoryUsers.size;
     },
 };
-
