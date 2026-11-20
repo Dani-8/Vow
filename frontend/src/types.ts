@@ -126,3 +126,18 @@ export interface TaskNote {
   content: string;
   lastSavedAt: string;
 }
+
+export interface Task {
+  _id: string;
+  userId: string;
+  title: string;
+  description?: string;
+  consequenceOfSkipping?: string;
+  consequencesOfSkipping?: string[];
+  tags: string[];
+  startTime?: string | null;
+  endTime?: string | null;
+  status: 'todo' | 'in_progress' | 'completed';
+  priority?: 'High' | 'Medium' | 'Low';
+  isPrivate: boolean;
+  isHabit: boolean;
