@@ -65,3 +65,6 @@ export interface User {
   name: string;
   email?: string;
   recoveryKey?: string;
+  createdAt?: string;
+  hasPinSet: boolean;
+}
