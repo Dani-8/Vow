@@ -10,64 +10,35 @@ import { authenticateToken, generateToken, AuthenticatedRequest } from '../middl
 
 const router = Router();
 
-// Utility to generate formatted Recovery Key (e.g. VOW-8K9P-4X2M-7Z1Q)
-function generateRecoveryKey(): string {
-    const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
-    const segment = (len: number) => {
-        let res = '';
-        for (let i = 0; i < len; i++) {
-            res += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return res;
-    };
-    return `VOW-${segment(4)}-${segment(4)}-${segment(4)}`;
-}
-
-// Signup (Pure Username + Password + Recovery Key)
+// Signup
 router.post('/signup', async (req: AuthenticatedRequest, res: Response) => {
     try {
-        const { username, password, name } = req.body;
+        const { email, password, name } = req.body;
 
-        const cleanUsername = (username || '').toLowerCase().trim();
-        if (!cleanUsername || cleanUsername.length < 3) {
-            return res.status(400).json({ error: 'Username must be at least 3 characters' });
+        if (!email || !password) {
+            return res.status(400).json({ error: 'Email and password are required' });
         }
 
-        if (!password || password.length < 6) {
-            return res.status(400).json({ error: 'Password must be at least 6 characters' });
-        }
-
-        const existing = await User.findOne({ username: cleanUsername });
+        const existing = await User.findOne({ email: email.toLowerCase() });
         if (existing) {
-            return res.status(400).json({ error: 'This username is already taken. Please choose another.' });
+            return res.status(400).json({ error: 'Email is already registered' });
         }
 
-        // Generate private recovery key
-        const recoveryKey = generateRecoveryKey();
         const passwordHash = await bcrypt.hash(password, 10);
-        const recoveryKeyHash = await bcrypt.hash(recoveryKey, 10);
-
         const user = await User.create({
-            username: cleanUsername,
-            email: `${cleanUsername}@vow.user`,
+            email: email.toLowerCase(),
             passwordHash,
-            recoveryKeyHash,
-            plainRecoveryKey: recoveryKey,
-            name: name?.trim() || cleanUsername,
+            name: name || email.split('@')[0],
         });
 
         const token = generateToken(user._id.toString());
 
         return res.status(201).json({
             token,
-            recoveryKey, // Returned once on signup for the "Save Your Private Key" modal
             user: {
                 id: user._id,
-                username: user.username,
                 email: user.email,
                 name: user.name,
-                recoveryKey: user.plainRecoveryKey,
-                createdAt: user.createdAt,
                 hasPinSet: !!user.pinHash,
             },
         });
@@ -77,37 +48,23 @@ router.post('/signup', async (req: AuthenticatedRequest, res: Response) => {
     }
 });
 
-// Login (Username + Password)
+// Login
 router.post('/login', async (req: AuthenticatedRequest, res: Response) => {
     try {
-        const { username, email, password } = req.body;
-        const identifier = (username || email || '').toLowerCase().trim();
+        const { email, password } = req.body;
 
-        if (!identifier || !password) {
-            return res.status(400).json({ error: 'Username and password are required' });
+        if (!email || !password) {
+            return res.status(400).json({ error: 'Email and password are required' });
         }
 
-        // Search by username, fallback to email for backwards compatibility
-        let user = await User.findOne({ username: identifier });
-        if (!user && identifier.includes('@')) {
-            user = await User.findOne({ email: identifier });
-        }
-
+        const user = await User.findOne({ email: email.toLowerCase() });
         if (!user) {
-            return res.status(401).json({ error: 'Invalid username or password' });
+            return res.status(401).json({ error: 'Invalid email or password' });
         }
 
         const isMatch = await bcrypt.compare(password, user.passwordHash);
         if (!isMatch) {
-            return res.status(401).json({ error: 'Invalid username or password' });
-        }
-
-        // If older account had no recovery key, provision one now
-        if (!user.plainRecoveryKey) {
-            const newKey = generateRecoveryKey();
-            user.plainRecoveryKey = newKey;
-            user.recoveryKeyHash = await bcrypt.hash(newKey, 10);
-            await user.save();
+            return res.status(401).json({ error: 'Invalid email or password' });
         }
 
         const token = generateToken(user._id.toString());
@@ -116,75 +73,14 @@ router.post('/login', async (req: AuthenticatedRequest, res: Response) => {
             token,
             user: {
                 id: user._id,
-                username: user.username,
                 email: user.email,
                 name: user.name,
-                recoveryKey: user.plainRecoveryKey,
-                createdAt: user.createdAt,
                 hasPinSet: !!user.pinHash,
             },
         });
     } catch (err: any) {
         console.error('Login error:', err);
         return res.status(500).json({ error: 'Failed to log in' });
-    }
-});
-
-// Reset Password via Recovery Key
-router.post('/reset-password', async (req: AuthenticatedRequest, res: Response) => {
-    try {
-        const { username, recoveryKey, newPassword } = req.body;
-        const cleanUsername = (username || '').toLowerCase().trim();
-        const cleanKey = (recoveryKey || '').trim().toUpperCase();
-
-        if (!cleanUsername || !cleanKey || !newPassword) {
-            return res.status(400).json({ error: 'Username, recovery key, and new password are required' });
-        }
-
-        if (newPassword.length < 6) {
-            return res.status(400).json({ error: 'New password must be at least 6 characters' });
-        }
-
-        const user = await User.findOne({ username: cleanUsername });
-        if (!user) {
-            return res.status(404).json({ error: 'Account not found with this username' });
-        }
-
-        // Validate recovery key (check hash or direct key match)
-        let keyValid = false;
-        if (user.recoveryKeyHash) {
-            keyValid = await bcrypt.compare(cleanKey, user.recoveryKeyHash);
-        }
-        if (!keyValid && user.plainRecoveryKey) {
-            keyValid = user.plainRecoveryKey.toUpperCase() === cleanKey;
-        }
-
-        if (!keyValid) {
-            return res.status(401).json({ error: 'Invalid recovery key for this username' });
-        }
-
-        // Update password
-        user.passwordHash = await bcrypt.hash(newPassword, 10);
-        await user.save();
-
-        const token = generateToken(user._id.toString());
-
-        return res.json({
-            message: 'Password successfully reset',
-            token,
-            user: {
-                id: user._id,
-                username: user.username,
-                email: user.email,
-                name: user.name,
-                recoveryKey: user.plainRecoveryKey,
-                createdAt: user.createdAt,
-                hasPinSet: !!user.pinHash,
-            },
-        });
-    } catch (err: any) {
-        console.error('Password reset error:', err);
-        return res.status(500).json({ error: 'Failed to reset password' });
     }
 });
 
@@ -438,11 +334,8 @@ router.post('/demo-bypass', async (req: AuthenticatedRequest, res: Response) => 
             token,
             user: {
                 id: user._id,
-                username: user.username || 'alex_rivera',
                 email: user.email,
                 name: user.name,
-                recoveryKey: user.plainRecoveryKey || 'VOW-9X4A-88KP-2Z1Q',
-                createdAt: user.createdAt,
                 hasPinSet: !!user.pinHash,
             },
         });
@@ -463,11 +356,8 @@ router.get('/me', authenticateToken, async (req: AuthenticatedRequest, res: Resp
         return res.json({
             user: {
                 id: user._id,
-                username: user.username,
                 email: user.email,
                 name: user.name,
-                recoveryKey: user.plainRecoveryKey,
-                createdAt: user.createdAt,
                 hasPinSet: !!user.pinHash,
             },
         });
