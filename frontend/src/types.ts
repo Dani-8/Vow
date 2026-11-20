@@ -121,3 +121,8 @@ export interface TaskStickyNote {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface TaskNote {
+  content: string;
+  lastSavedAt: string;
+}
