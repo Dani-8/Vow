@@ -63,3 +63,5 @@ async function fetchAPI<T>(endpoint: string, options: RequestInit = {}): Promise
     throw new Error(data.error || `API Request failed with status ${response.status}`);
   }
 
+  return data as T;
+}
