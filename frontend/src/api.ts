@@ -161,3 +161,16 @@ export const api = {
       body: JSON.stringify(taskData),
     });
   },
+
+  async updateTask(id: string, updates: Partial<Task>) {
+    return fetchAPI<{ task: Task }>(`/api/tasks/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+    });
+  },
+
+  async toggleTaskComplete(id: string) {
+    return fetchAPI<{ task: Task }>(`/api/tasks/${id}/complete`, {
+      method: 'POST',
+    });
+  },
