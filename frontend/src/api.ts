@@ -258,3 +258,17 @@ export const api = {
   async getChallenge(id: string) {
     return fetchAPI<{ challenge: any }>(`/api/challenges/${id}`);
   },
+
+  async createChallenge(challengeData: any) {
+    return fetchAPI<{ challenge: any }>('/api/challenges', {
+      method: 'POST',
+      body: JSON.stringify(challengeData),
+    });
+  },
+
+  async updateChallenge(id: string, updates: any) {
+    return fetchAPI<{ challenge: any }>(`/api/challenges/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+    });
+  },
