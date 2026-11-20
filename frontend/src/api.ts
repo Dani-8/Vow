@@ -213,3 +213,19 @@ export const api = {
       body: JSON.stringify(payload),
     });
   },
+
+  // Task Maps (Firestore cloud persistence)
+  async getTaskMaps() {
+    return fetchAPI<{ maps: any[] }>('/api/task-maps');
+  },
+
+  async getTaskMap(id: string) {
+    return fetchAPI<{ map: any }>(`/api/task-maps/${id}`);
+  },
+
+  async createTaskMap(mapData: any) {
+    return fetchAPI<{ map: any }>('/api/task-maps', {
+      method: 'POST',
+      body: JSON.stringify(mapData),
+    });
+  },
