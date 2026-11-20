@@ -178,4 +178,21 @@ export const DEFAULT_INITIAL_TASKS: Task[] = [
                 status: 'completed',
                 priority: 'High',
             },
-      
+            {
+                id: 'sub_mern_3',
+                taskId: 'task_mern_project_m3k9p',
+                title: 'React 18 Modular Components, Tailwind CSS & Motion',
+                dateLabel: 'Today',
+                status: 'in_progress',
+                priority: 'High',
+            },
+            {
+                id: 'sub_mern_4',
+                taskId: 'task_mern_project_m3k9p',
+                title: 'Global State Management & Optimistic CRUD Updates',
+                dateLabel: 'Tomorrow',
+                status: 'in_progress',
+                priority: 'Medium',
+            },
+            {
+        
