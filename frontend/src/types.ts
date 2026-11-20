@@ -85,3 +85,10 @@ export interface SubTask {
     email?: string;
   };
   masterStreak?: string;
+  attachments?: {
+    name: string;
+    size: string;
+    type?: string;
+    url?: string;
+  }[];
+}
