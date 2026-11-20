@@ -118,3 +118,16 @@ export const User = {
                 } catch (e) {
                     // Fall back to memory
                 }
+            }
+            for (const u of inMemoryUsers.values()) {
+                if (u.username && u.username.toLowerCase() === usernameTarget) {
+                    return new UserInstance(u);
+                }
+            }
+        }
+
+        // 2. Search by email (fallback for older accounts)
+        if (emailTarget) {
+            if (isFirestoreActive()) {
+                try {
+                
