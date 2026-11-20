@@ -9,17 +9,21 @@ import {
     where,
 } from 'firebase/firestore';
 import { getFirebaseDb, isFirestoreActive } from '../db.js';
-import {
-    collection,
-    doc,
-    getDoc,
-    getDocs,
-    addDoc,
-    updateDoc,
-    query,
-    where,
-} from 'firebase/firestore';
-import { getFirebaseDb, isFirestoreActive } from '../db.js';
+
+export interface IUser {
+    _id: string;
+    username: string;
+    email?: string;
+    passwordHash: string;
+    recoveryKeyHash?: string;
+    plainRecoveryKey?: string; // Stored securely so the user can reveal/download it in their profile
+    name: string;
+    pinHash?: string | null;
+    createdAt?: string;
+    updatedAt?: string;
+}
+
+const inMemoryUsers: Map<string, any> = new Map();
 
 export class UserInstance implements IUser {
     _id: string;
@@ -203,6 +207,7 @@ export const User = {
             } catch (e) {
                 // Memory store fallback
             }
+        }
         const userObj = { ...payload, _id: newId };
         inMemoryUsers.set(newId, userObj);
         return new UserInstance(userObj);
