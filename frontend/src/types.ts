@@ -34,3 +34,20 @@ export interface ChallengeSprint {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export interface Challenge {
+  _id: string;
+  id?: string;
+  userId: string;
+  title: string;
+  description: string;
+  category: string;
+  color: string;
+  icon?: string;
+  targetDays: number;
+  startDate: string;
+  targetEndDate: string;
+  rule?: string;
+  consequenceOfSkipping?: string;
+  consequencesOfSkipping?: string[];
+  tags: string[];
