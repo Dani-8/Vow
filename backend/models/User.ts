@@ -207,3 +207,17 @@ export const User = {
         inMemoryUsers.set(newId, userObj);
         return new UserInstance(userObj);
     },
+
+    async countDocuments() {
+        if (isFirestoreActive()) {
+            try {
+                const db = getFirebaseDb();
+                if (db) {
+                    const snap = await getDocs(collection(db, 'users'));
+                    return snap.size;
+                }
+            } catch (e) {
+                // Fallback
+            }
+        }
+        return inMemoryUsers.size;
