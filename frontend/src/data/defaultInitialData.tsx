@@ -159,4 +159,23 @@ export const DEFAULT_INITIAL_TASKS: Task[] = [
             new Date(Date.now() - 86400000 * 2).toISOString(),
             new Date(Date.now() - 86400000).toISOString(),
         ],
+        createdAt: new Date(Date.now() - 86400000 * 8).toISOString(),
+        updatedAt: new Date().toISOString(),
+        subTasks: [
+            {
+                id: 'sub_mern_1',
+                taskId: 'task_mern_project_m3k9p',
+                title: 'Express RESTful API Architecture & JWT Auth Middleware',
+                dateLabel: 'Completed',
+                status: 'completed',
+                priority: 'High',
+            },
+            {
+                id: 'sub_mern_2',
+                taskId: 'task_mern_project_m3k9p',
+                title: 'Database Schema Models, Indexing & Validation',
+                dateLabel: 'Completed',
+                status: 'completed',
+                priority: 'High',
+            },
       
