@@ -102,3 +102,22 @@ export const api = {
     setToken(data.token);
     return data;
   },
+
+  async getMe() {
+    return fetchAPI<{ user: User }>('/api/auth/me');
+  },
+
+  async setPin(pin: string) {
+    const data = await fetchAPI<{ message: string; hasPinSet: boolean }>('/api/auth/set-pin', {
+      method: 'POST',
+      body: JSON.stringify({ pin }),
+    });
+    storePin(pin);
+    return data;
+  },
+
+  async verifyPin(pin: string) {
+    const data = await fetchAPI<{ success: boolean; message: string }>('/api/auth/verify-pin', {
+      method: 'POST',
+      body: JSON.stringify({ pin }),
+    });
