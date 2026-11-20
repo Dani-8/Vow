@@ -99,3 +99,22 @@ export const User = {
 
         const usernameTarget = filter.username?.toLowerCase().trim();
         const emailTarget = filter.email?.toLowerCase().trim();
+
+        // 1. Search by username
+        if (usernameTarget) {
+            if (isFirestoreActive()) {
+                try {
+                    const db = getFirebaseDb();
+                    if (db) {
+                        const q = query(collection(db, 'users'), where('username', '==', usernameTarget));
+                        const snap = await getDocs(q);
+                        if (!snap.empty) {
+                            const docData = snap.docs[0].data();
+                            const obj = new UserInstance({ ...docData, _id: snap.docs[0].id });
+                            inMemoryUsers.set(obj._id, obj.toObject());
+                            return obj;
+                        }
+                    }
+                } catch (e) {
+                    // Fall back to memory
+                }
