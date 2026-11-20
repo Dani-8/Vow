@@ -176,3 +176,19 @@ export const User = {
         const mem = inMemoryUsers.get(id);
         return mem ? new UserInstance(mem) : null;
     },
+
+    async create(data: Partial<IUser>) {
+        const now = new Date().toISOString();
+        const username = (data.username || data.email?.split('@')[0] || 'user').toLowerCase().trim();
+        const payload = {
+            username,
+            email: data.email?.toLowerCase() || '',
+            passwordHash: data.passwordHash || '',
+            recoveryKeyHash: data.recoveryKeyHash || '',
+            plainRecoveryKey: data.plainRecoveryKey || '',
+            name: data.name || username,
+            pinHash: data.pinHash || null,
+            createdAt: now,
+            updatedAt: now,
+        };
+      
