@@ -154,3 +154,25 @@ export const User = {
 
         return null;
     },
+
+    async findById(id: string) {
+        if (!id) return null;
+        if (isFirestoreActive()) {
+            try {
+                const db = getFirebaseDb();
+                if (db) {
+                    const docRef = doc(db, 'users', id);
+                    const snap = await getDoc(docRef);
+                    if (snap.exists()) {
+                        const obj = new UserInstance({ ...snap.data(), _id: snap.id });
+                        inMemoryUsers.set(obj._id, obj.toObject());
+                        return obj;
+                    }
+                }
+            } catch (e) {
+                // Fall back to memory
+            }
+        }
+        const mem = inMemoryUsers.get(id);
+        return mem ? new UserInstance(mem) : null;
+    },
