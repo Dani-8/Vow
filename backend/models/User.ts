@@ -99,12 +99,3 @@ export const User = {
 
         const usernameTarget = filter.username?.toLowerCase().trim();
         const emailTarget = filter.email?.toLowerCase().trim();
-
-export const User = {
-    async findOne(filter: { username?: string; email?: string; _id?: string }) {
-        if (filter._id) {
-            return this.findById(filter._id);
-        }
-
-        const usernameTarget = filter.username?.toLowerCase().trim();
-        const emailTarget = filter.email?.toLowerCase().trim();
