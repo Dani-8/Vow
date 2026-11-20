@@ -172,3 +172,5 @@ export interface AIChatMessage {
   text: string;
   timestamp: string;
 }
+
+export type FeedCategory = 'formula' | 'win' | 'insight' | 'discipline' | 'story';
