@@ -26,3 +26,20 @@ export function storePin(pin: string) {
 export function clearStoredPin() {
   sessionStorage.removeItem(PRIVATE_PIN_KEY);
 }
+
+async function fetchAPI<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+  const token = getToken();
+  const pin = getStoredPin();
+
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...(options.headers as Record<string, string>),
+  };
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
+  if (pin) {
+    headers['x-private-pin'] = pin;
+  }
