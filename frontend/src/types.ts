@@ -165,3 +165,10 @@ export interface MasterStreakStats {
   totalTasks: number;
   totalHabits: number;
 }
+
+export interface AIChatMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  text: string;
+  timestamp: string;
+}
