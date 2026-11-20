@@ -49,3 +49,28 @@ export class UserInstance implements IUser {
     async save() {
         if (!this._id) {
             throw new Error('User ID missing for save');
+        }
+        this.updatedAt = new Date().toISOString();
+        if (isFirestoreActive()) {
+            try {
+                const db = getFirebaseDb();
+                if (db) {
+                    const userRef = doc(db, 'users', this._id);
+                    await updateDoc(userRef, {
+                        username: this.username,
+                        email: this.email,
+                        passwordHash: this.passwordHash,
+                        recoveryKeyHash: this.recoveryKeyHash || null,
+                        plainRecoveryKey: this.plainRecoveryKey || null,
+                        name: this.name,
+                        pinHash: this.pinHash || null,
+                        updatedAt: this.updatedAt,
+                    });
+                }
+            } catch (e) {
+                console.warn('Firestore User.save fallback to in-memory store');
+            }
+        }
+        inMemoryUsers.set(this._id, this.toObject());
+        return this;
+    }
