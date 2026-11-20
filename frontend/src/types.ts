@@ -61,8 +61,11 @@ export interface Challenge {
 
 export interface User {
   id: string;
-  email: string;
+  username: string;
   name: string;
+  email?: string;
+  recoveryKey?: string;
+  createdAt?: string;
   hasPinSet: boolean;
 }
 
