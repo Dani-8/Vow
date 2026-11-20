@@ -174,3 +174,9 @@ export const api = {
       method: 'POST',
     });
   },
+
+  async toggleTaskPrivate(id: string) {
+    return fetchAPI<{ message: string; task: Task }>(`/api/tasks/${id}/toggle-private`, {
+      method: 'POST',
+    });
+  },
