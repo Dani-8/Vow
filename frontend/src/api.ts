@@ -144,3 +144,20 @@ export const api = {
       },
     });
   },
+
+  async createTask(taskData: {
+    title: string;
+    description?: string;
+    consequenceOfSkipping?: string;
+    consequencesOfSkipping?: string[];
+    tags?: string[];
+    startTime?: string | null;
+    endTime?: string | null;
+    isPrivate?: boolean;
+    isHabit?: boolean;
+  }) {
+    return fetchAPI<{ task: Task }>('/api/tasks', {
+      method: 'POST',
+      body: JSON.stringify(taskData),
+    });
+  },
