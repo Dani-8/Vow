@@ -74,3 +74,19 @@ export class UserInstance implements IUser {
         inMemoryUsers.set(this._id, this.toObject());
         return this;
     }
+
+    toObject() {
+        return {
+            _id: this._id,
+            username: this.username,
+            email: this.email,
+            passwordHash: this.passwordHash,
+            recoveryKeyHash: this.recoveryKeyHash,
+            plainRecoveryKey: this.plainRecoveryKey,
+            name: this.name,
+            pinHash: this.pinHash,
+            createdAt: this.createdAt,
+            updatedAt: this.updatedAt,
+        };
+    }
+}
