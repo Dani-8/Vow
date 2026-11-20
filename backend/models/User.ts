@@ -203,3 +203,7 @@ export const User = {
             } catch (e) {
                 // Memory store fallback
             }
+        const userObj = { ...payload, _id: newId };
+        inMemoryUsers.set(newId, userObj);
+        return new UserInstance(userObj);
+    },
