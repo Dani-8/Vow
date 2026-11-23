@@ -129,3 +129,13 @@ export default function App() {
           navigateToView(view);
         }
       }}
+      onOpenCreateModal={modalState.openCreateTaskModal}
+      onOpenAuthModal={() => navigateToView('auth')}
+      onOpenProfileModal={() => setIsProfileModalOpen(true)}
+      onOpenPinModal={() => {
+        modalState.setIsPinModalOpen(true);
+        navigateToView('private');
+      }}
+      onLogout={taskData.handleLogout}
+      onBypassAuth={handleBypassAuth}
+    ></MainLayout>
