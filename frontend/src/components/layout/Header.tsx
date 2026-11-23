@@ -130,3 +130,15 @@ export const Header: React.FC<HeaderProps> = ({
                         </button>
                     </div>
                 ) : (
+                    <button
+                        onClick={onOpenAuthModal}
+                        className="neu-button-primary px-4 py-2 rounded-xl text-xs font-extrabold flex items-center space-x-2"
+                    >
+                        <LogIn className="w-3.5 h-3.5" />
+                        <span>Sign In</span>
+                    </button>
+                )}
+            </div>
+        </header>
+    );
+};
