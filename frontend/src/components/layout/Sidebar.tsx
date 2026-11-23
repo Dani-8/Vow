@@ -141,3 +141,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                 <p className="text-[9px] font-bold text-[#717699] uppercase tracking-wider">Workspace</p>
                             </div>
                         </div>
+
+                        <button
+                            onClick={onToggleCollapse}
+                            className="w-8 h-8 rounded-xl neu-button flex items-center justify-center text-[#717699] hover:text-[#549acb]"
+                            title="Collapse sidebar"
+                        >
+                            <ChevronLeft className="w-4 h-4" />
+                        </button>
+                    </div>
+                )}
