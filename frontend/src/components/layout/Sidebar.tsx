@@ -184,4 +184,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                     ? item.activeClass
                                     : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
                                     }`}
-                            ></button>
+                            >
+                                <Icon className="w-4 h-4 shrink-0" />
+                                <span
+                                    className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${
+                                        collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
+                                    }`}
+                                >
+                                    {item.label}
+                                </span>
+                            </button>
+                        );
+                    })}</button>
