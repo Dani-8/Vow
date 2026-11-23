@@ -85,3 +85,13 @@ IMPORTANT PRIVACY & SECURITY NOTICE:
                         100% Private
                     </span>
                 </div>
+
+                {/* Key Box with Copy Button */}
+                <div className="space-y-2">
+                    <label className="text-[11px] font-extrabold uppercase tracking-wider text-[#515777] block">
+                        Master Recovery Key
+                    </label>
+                    <div className="neu-inset p-3.5 sm:p-4 rounded-2xl bg-white/70 border border-white/80 flex items-center justify-between gap-3 shadow-inner">
+                        <code className="text-sm sm:text-base font-black tracking-widest text-[#1a1c35] select-all font-mono break-all">
+                            {recoveryKey}
+                        </code>
