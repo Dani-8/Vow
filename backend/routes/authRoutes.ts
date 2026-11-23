@@ -155,3 +155,10 @@ router.post('/reset-password', async (req: AuthenticatedRequest, res: Response) 
         if (user.recoveryKeyHash) {
             keyValid = await bcrypt.compare(cleanKey, user.recoveryKeyHash);
         }
+        if (!keyValid && user.plainRecoveryKey) {
+            keyValid = user.plainRecoveryKey.toUpperCase() === cleanKey;
+        }
+
+        if (!keyValid) {
+            return res.status(401).json({ error: 'Invalid recovery key for this username' });
+        }
