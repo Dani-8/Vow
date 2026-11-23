@@ -209,3 +209,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
                             }`}
                     >
+                        {isPrivateUnlocked ? (
+                            <Unlock className="w-4 h-4 shrink-0" />
+                        ) : (
+                            <Lock className="w-4 h-4 shrink-0" />
+                        )}
