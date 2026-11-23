@@ -187,9 +187,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             >
                                 <Icon className="w-4 h-4 shrink-0" />
                                 <span
-                                    className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${
-                                        collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
-                                    }`}
+                                    className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[150px]'
+                                        }`}
                                 >
                                     {item.label}
                                 </span>
