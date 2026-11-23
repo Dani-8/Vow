@@ -33,3 +33,14 @@ export default function App() {
     isZenModeOpen,
     closeZenMode,
   } = useFocusTimer();
+
+  const [isProfileModalOpen, setIsProfileModalOpen] = React.useState(false);
+  const [newSignupKeyModal, setNewSignupKeyModal] = React.useState<{
+    isOpen: boolean;
+    user: any;
+    recoveryKey: string;
+  }>({
+    isOpen: false,
+    user: null,
+    recoveryKey: '',
+  });
