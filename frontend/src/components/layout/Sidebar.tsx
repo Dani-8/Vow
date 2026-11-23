@@ -117,4 +117,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             className="w-10 h-10 rounded-2xl neu-button flex items-center justify-center bg-[#549acb] text-white shadow-md hover:scale-105 transition-transform cursor-pointer shrink-0"
                         >
                             <span className="font-black text-lg italic">V</span>
-                        </div></aside>
+                        </div>
+
+                        <button
+                            onClick={onToggleCollapse}
+                            className="absolute -right-7 top-7 w-7 h-7 rounded-xl neu-button flex items-center justify-center text-[#717699] hover:text-[#549acb] bg-[#E0E5EC] z-10 shadow-md transition-all"
+                            title="Expand sidebar"
+                        >
+                            <ChevronRight className="w-4 h-4" />
+                        </button>
+                    </div>
+                ) : (</aside>
