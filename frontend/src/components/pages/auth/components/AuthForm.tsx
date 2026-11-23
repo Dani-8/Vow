@@ -12,3 +12,8 @@ import {
 } from 'lucide-react';
 import { api } from '../../../../api';
 import { User } from '../../../../types';
+
+interface AuthFormProps {
+    onSuccess: (user: User, token: string, recoveryKey?: string) => void;
+    onBypass: () => void;
+}
