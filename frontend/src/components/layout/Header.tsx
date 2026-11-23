@@ -68,3 +68,22 @@ export const Header: React.FC<HeaderProps> = ({
                             Vow Workspace
                         </span>
                     </div>
+                    {activeView === 'feed' ? (
+                        <p className="text-xs text-[#717699] font-medium truncate">
+                            Community Motivation Vault • <span className="text-[#549acb] font-bold">Goal & Discipline Formulas</span> (No noise, pure drive)
+                        </p>
+                    ) : activeView === 'feed-post' ? (
+                        <p className="text-xs text-[#717699] font-medium truncate">
+                            Dedicated Story Workspace • <span className="text-[#549acb] font-bold">In-Depth Framework Breakdown</span>
+                        </p>
+                    ) : user ? (
+                        <p className="text-xs text-[#717699] font-medium truncate">
+                            Welcome back, <strong className="text-[#1a1c35] font-bold">{user.name}</strong> • Active Session
+                        </p>
+                    ) : (
+                        <p className="text-xs text-[#717699] font-medium truncate">
+                            Preview Mode • Public & Industry Workspace
+                        </p>
+                    )}
+                </div>
+            </div>
