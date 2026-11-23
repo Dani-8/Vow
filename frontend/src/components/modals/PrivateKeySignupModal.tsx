@@ -53,3 +53,12 @@ IMPORTANT PRIVACY & SECURITY NOTICE:
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
     };
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-200">
+            <div className="w-full max-w-lg neu-card p-6 sm:p-8 bg-[#E0E5EC] rounded-3xl border border-white/70 shadow-2xl relative space-y-6 text-left">
+                {/* Header Icon + Title */}
+                <div className="flex items-center space-x-3.5 pb-2">
+                    <div className="w-12 h-12 rounded-2xl neu-button-primary flex items-center justify-center text-white shrink-0 shadow-md">
+                        <ShieldCheck className="w-6 h-6" />
+                    </div>
