@@ -282,3 +282,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             </button>
                         </div>
                     ) : (
+                        <div className="space-y-2">
+                            <button
+                                onClick={onOpenAuthModal}
+                                className={`w-full py-2.5 rounded-xl neu-button text-[#549acb] font-bold text-xs flex items-center justify-center space-x-2 transition-all duration-300 ${
+                                    collapsed ? 'px-0' : 'px-3'
+                                }`}
+                            >
+                                <LogIn className="w-4 h-4 shrink-0" />
+                                <span
+                                    className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${
+                                        collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[120px]'
+                                    }`}
+                                >
+                                    Sign In / Demo
+                                </span>
+                            </button>
