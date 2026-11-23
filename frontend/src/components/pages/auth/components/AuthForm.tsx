@@ -85,3 +85,24 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess, onBypass }) => {
                         : 'Zero email trackers. Private unique username + password with client-side recovery keys.'}
                 </p>
             </div>
+
+            {/* Instant Dev Testing Bypass */}
+            <div className="neu-inset p-4 rounded-2xl border border-emerald-400/50 bg-emerald-50/40 flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                    <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold shrink-0">
+                        <ShieldCheck className="w-5 h-5" />
+                    </div>
+                    <div>
+                        <p className="text-xs font-extrabold text-[#1a1c35]">Instant Testing Mode</p>
+                        <p className="text-[10px] text-[#717699]">1-click login with demo account</p>
+                    </div>
+                </div>
+                <button
+                    type="button"
+                    onClick={onBypass}
+                    className="px-4 py-2 rounded-xl bg-emerald-600 text-white font-extrabold text-xs shadow-md hover:bg-emerald-700 transition-colors flex items-center space-x-1"
+                >
+                    <span>Instant Bypass</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+            </div>
