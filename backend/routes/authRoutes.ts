@@ -219,3 +219,20 @@ router.post('/demo-bypass', async (req: AuthenticatedRequest, res: Response) => 
             const now = new Date();
             const inTwoHours = new Date(now.getTime() + 2 * 60 * 60 * 1000);
 
+            await Task.create([
+                {
+                    _id: 'task_russian_mastery_r7u2k',
+                    userId: user._id,
+                    title: 'Russian Language Learning: Daily Fluency & Grammar Path',
+                    description: 'Master Cyrillic script, top 1,000 core vocabulary words, noun cases (Accusative/Genitive/Prepositional), and daily conversational shadowing.',
+                    tags: ['Russian', 'Language', 'Daily'],
+                    startTime: now,
+                    endTime: inTwoHours,
+                    status: 'in_progress',
+                    isPrivate: false,
+                    isHabit: true,
+                    currentStreak: 6,
+                    bestStreak: 14,
+                    lastCompletedDate: yesterday,
+                    completionHistory: [fiveDaysAgo, fourDaysAgo, threeDaysAgo, twoDaysAgo, yesterday],
+                    subTasks: [
