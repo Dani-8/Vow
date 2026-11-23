@@ -514,3 +514,15 @@ router.post('/verify-pin', authenticateToken, async (req: AuthenticatedRequest, 
         if (!user.pinHash) {
             return res.status(400).json({ error: 'No PIN has been configured yet' });
         }
+
+        const isMatch = await bcrypt.compare(pin, user.pinHash);
+        if (!isMatch) {
+            return res.status(401).json({ error: 'Incorrect PIN' });
+        }
+
+        return res.json({ success: true, message: 'Private area unlocked' });
+    } catch (err: any) {
+        console.error('Verify PIN error:', err);
+        return res.status(500).json({ error: 'Failed to verify PIN' });
+    }
+});
