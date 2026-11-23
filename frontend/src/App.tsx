@@ -304,3 +304,15 @@ export default function App() {
           }
         }}
       />
+
+      {/* Account Profile & Credentials Vault Modal */}
+      <AccountProfileModal
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+        user={user}
+        stats={taskData.stats}
+        onLogout={taskData.handleLogout}
+      />
+    </MainLayout>
+  );
+}
