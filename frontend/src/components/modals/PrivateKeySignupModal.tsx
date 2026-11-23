@@ -62,3 +62,12 @@ IMPORTANT PRIVACY & SECURITY NOTICE:
                     <div className="w-12 h-12 rounded-2xl neu-button-primary flex items-center justify-center text-white shrink-0 shadow-md">
                         <ShieldCheck className="w-6 h-6" />
                     </div>
+                    <div>
+                        <span className="text-[10px] font-black uppercase tracking-wider text-[#549acb] block">
+                            Security Vault Created
+                        </span>
+                        <h2 className="text-xl sm:text-2xl font-black text-[#1a1c35] tracking-tight">
+                            Your Private Account Key
+                        </h2>
+                    </div>
+                </div>
