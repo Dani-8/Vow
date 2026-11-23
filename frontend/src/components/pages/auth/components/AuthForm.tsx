@@ -256,3 +256,35 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess, onBypass }) => {
                         </div>
                     </>
                 )}
+
+                {/* Submit Button */}
+                <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full py-3.5 rounded-2xl neu-button-primary font-black text-xs shadow-lg mt-2 flex items-center justify-center space-x-2 text-white hover:scale-102 active:scale-98 transition-all"
+                >
+                    <span>
+                        {loading
+                            ? 'Processing...'
+                            : authMode === 'login'
+                            ? 'Sign In to Workspace'
+                            : authMode === 'signup'
+                            ? 'Create Account & Get Recovery Key'
+                            : 'Verify Key & Reset Password'}
+                    </span>
+                    <ArrowRight className="w-4 h-4" />
+                </button>
+
+                {authMode === 'forgot' && (
+                    <button
+                        type="button"
+                        onClick={() => {
+                            setAuthMode('login');
+                            setError('');
+                        }}
+                        className="w-full text-center text-xs font-bold text-[#717699] hover:text-[#1a1c35] transition-colors pt-1 block"
+                    >
+                        ← Back to Sign In
+                    </button>
+                )}
+            </form>
