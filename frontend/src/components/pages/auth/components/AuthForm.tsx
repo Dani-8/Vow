@@ -1,114 +1,92 @@
 import React, { useState } from 'react';
 import {
-    Mail,
     Lock,
     User as UserIcon,
     AlertCircle,
     Sparkles,
     ShieldCheck,
     ArrowRight,
-    LucideIcon,
+    KeyRound,
+    CheckCircle2,
+    AtSign,
 } from 'lucide-react';
 import { api } from '../../../../api';
 import { User } from '../../../../types';
 
 interface AuthFormProps {
-    onSuccess: (user: User, token: string) => void;
+    onSuccess: (user: User, token: string, recoveryKey?: string) => void;
     onBypass: () => void;
 }
 
-interface FieldConfig {
-    id: string;
-    label: string;
-    type: string;
-    placeholder: string;
-    icon: LucideIcon;
-    value: string;
-    onChange: (val: string) => void;
-    show: boolean;
-}
-
 export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess, onBypass }) => {
-    const [isLogin, setIsLogin] = useState(true);
-    const [email, setEmail] = useState('');
+    // Modes: 'login' | 'signup' | 'forgot'
+    const [authMode, setAuthMode] = useState<'login' | 'signup' | 'forgot'>('login');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
+    const [recoveryKeyInput, setRecoveryKeyInput] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [resetSuccessMsg, setResetSuccessMsg] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
+        setResetSuccessMsg('');
         setLoading(true);
 
         try {
-            if (isLogin) {
-                const res = await api.login(email, password);
+            if (authMode === 'login') {
+                const res = await api.login(username.trim(), password);
                 onSuccess(res.user, res.token);
-            } else {
-                const res = await api.signup(email, password, name);
-                onSuccess(res.user, res.token);
+            } else if (authMode === 'signup') {
+                const res = await api.signup(username.trim(), password, name.trim());
+                // Pass recoveryKey back so the PrivateKeySignupModal can open
+                onSuccess(res.user, res.token, res.recoveryKey);
+            } else if (authMode === 'forgot') {
+                const res = await api.resetPassword(username.trim(), recoveryKeyInput.trim(), newPassword);
+                setResetSuccessMsg('Password reset successfully! Logging you in...');
+                setTimeout(() => {
+                    onSuccess(res.user, res.token);
+                }, 1000);
             }
         } catch (err: any) {
-            setError(err.message || 'Authentication failed');
+            setError(err.message || 'Authentication request failed');
         } finally {
             setLoading(false);
         }
     };
 
-    const fields: FieldConfig[] = [
-        {
-            id: 'name',
-            label: 'Full Name',
-            type: 'text',
-            placeholder: 'Alex Rivera',
-            icon: UserIcon,
-            value: name,
-            onChange: setName,
-            show: !isLogin,
-        },
-        {
-            id: 'email',
-            label: 'Email Address',
-            type: 'email',
-            placeholder: 'alex@workplace.com',
-            icon: Mail,
-            value: email,
-            onChange: setEmail,
-            show: true,
-        },
-        {
-            id: 'password',
-            label: 'Password',
-            type: 'password',
-            placeholder: '••••••••',
-            icon: Lock,
-            value: password,
-            onChange: setPassword,
-            show: true,
-        },
-    ];
-
-    const authModes = [
-        { key: true, label: 'Sign In' },
-        { key: false, label: 'Create Account' },
-    ];
-
     return (
-        <div className="lg:col-span-6 w-full neu-card p-6 sm:p-8 md:p-10 backdrop-blur-2xl bg-white/60 border border-white/80 shadow-2xl rounded-3xl space-y-6">
+        <div className="lg:col-span-6 w-full neu-card p-6 sm:p-8 md:p-10 backdrop-blur-2xl bg-white/60 border border-white/80 shadow-2xl rounded-3xl space-y-6 text-left">
+            {/* Header Titles */}
             <div>
                 <div className="inline-flex items-center space-x-2 neu-inset px-3 py-1 rounded-full text-[11px] font-extrabold text-[#549acb] uppercase tracking-wider mb-3">
                     <Sparkles className="w-3.5 h-3.5 text-[#549acb]" />
-                    <span>{isLogin ? 'Welcome Back' : 'Create Free Account'}</span>
+                    <span>
+                        {authMode === 'login'
+                            ? 'Welcome Back'
+                            : authMode === 'signup'
+                                ? 'Private Account Creation'
+                                : 'Recovery Key Reset'}
+                    </span>
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-black text-[#1a1c35] tracking-tight">
-                    {isLogin ? 'Access Your Workspace' : 'Start Building Habits'}
+                    {authMode === 'login'
+                        ? 'Access Your Workspace'
+                        : authMode === 'signup'
+                            ? 'Create Your Account'
+                            : 'Forgot Password'}
                 </h2>
                 <p className="text-xs text-[#717699] font-medium mt-1 leading-relaxed">
-                    Achieve daily operational momentum with non-punitive streaks and protected growth vaults.
+                    {authMode === 'forgot'
+                        ? 'Enter your unique username and private recovery key to set a new password.'
+                        : 'Zero email trackers. Private unique username + password with client-side recovery keys.'}
                 </p>
             </div>
 
+            {/* Instant Dev Testing Bypass */}
             <div className="neu-inset p-4 rounded-2xl border border-emerald-400/50 bg-emerald-50/40 flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                     <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold shrink-0">
@@ -116,7 +94,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess, onBypass }) => {
                     </div>
                     <div>
                         <p className="text-xs font-extrabold text-[#1a1c35]">Instant Testing Mode</p>
-                        <p className="text-[10px] text-[#717699]">One-click login with demo account</p>
+                        <p className="text-[10px] text-[#717699]">1-click login with demo account</p>
                     </div>
                 </div>
                 <button
@@ -129,65 +107,190 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess, onBypass }) => {
                 </button>
             </div>
 
+            {/* Auth Switcher Pills */}
             <div className="flex neu-inset p-1.5 rounded-2xl">
-                {authModes.map((mode) => (
-                    <button
-                        key={String(mode.key)}
-                        type="button"
-                        onClick={() => {
-                            setIsLogin(mode.key);
-                            setError('');
-                        }}
-                        className={`flex-1 py-2.5 text-xs font-bold rounded-xl transition-all ${isLogin === mode.key ? 'neu-button text-[#549acb] bg-[#E0E5EC]' : 'text-[#717699]'
-                            }`}
-                    >
-                        {mode.label}
-                    </button>
-                ))}
+                <button
+                    type="button"
+                    onClick={() => {
+                        setAuthMode('login');
+                        setError('');
+                        setResetSuccessMsg('');
+                    }}
+                    className={`flex-1 py-2.5 text-xs font-black rounded-xl transition-all ${authMode === 'login' ? 'neu-button text-[#549acb] bg-[#E0E5EC] shadow-sm' : 'text-[#717699]'
+                        }`}
+                >
+                    Sign In
+                </button>
+                <button
+                    type="button"
+                    onClick={() => {
+                        setAuthMode('signup');
+                        setError('');
+                        setResetSuccessMsg('');
+                    }}
+                    className={`flex-1 py-2.5 text-xs font-black rounded-xl transition-all ${authMode === 'signup' ? 'neu-button text-[#549acb] bg-[#E0E5EC] shadow-sm' : 'text-[#717699]'
+                        }`}
+                >
+                    Create Account
+                </button>
             </div>
 
+            {/* Error & Success Messages */}
             {error && (
-                <div className="neu-inset p-3 rounded-xl border border-rose-300 bg-rose-50/50 flex items-center space-x-2 text-rose-700 text-xs font-medium">
+                <div className="neu-inset p-3.5 rounded-xl border border-rose-300 bg-rose-50/70 flex items-center space-x-2 text-rose-700 text-xs font-bold">
                     <AlertCircle className="w-4 h-4 shrink-0" />
                     <span>{error}</span>
                 </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-                {fields
-                    .filter((f) => f.show)
-                    .map((field) => {
-                        const Icon = field.icon;
-                        return (
-                            <div key={field.id} className="space-y-1">
-                                <label className="text-xs font-bold text-[#717699] block">{field.label}</label>
-                                <div className="relative">
-                                    <Icon className="w-4 h-4 text-[#717699] absolute left-3.5 top-3.5" />
-                                    <input
-                                        type={field.type}
-                                        required
-                                        value={field.value}
-                                        onChange={(e) => field.onChange(e.target.value)}
-                                        placeholder={field.placeholder}
-                                        className="w-full pl-10 pr-4 py-3 rounded-2xl neu-input text-xs font-medium"
-                                    />
-                                </div>
-                            </div>
-                        );
-                    })}
+            {resetSuccessMsg && (
+                <div className="neu-inset p-3.5 rounded-xl border border-emerald-300 bg-emerald-50/70 flex items-center space-x-2 text-emerald-800 text-xs font-bold">
+                    <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
+                    <span>{resetSuccessMsg}</span>
+                </div>
+            )}
 
+            {/* Form Fields */}
+            <form onSubmit={handleSubmit} className="space-y-4">
+                {/* 1. Sign Up Full Name */}
+                {authMode === 'signup' && (
+                    <div className="space-y-1">
+                        <label className="text-xs font-bold text-[#515777] block">Display Name</label>
+                        <div className="relative">
+                            <UserIcon className="w-4 h-4 text-[#717699] absolute left-3.5 top-3.5" />
+                            <input
+                                type="text"
+                                required
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                placeholder="Alex Rivera"
+                                className="w-full pl-10 pr-4 py-3 rounded-2xl neu-input text-xs font-semibold text-[#1a1c35]"
+                            />
+                        </div>
+                    </div>
+                )}
+
+                {/* 2. Username (Required for all modes) */}
+                <div className="space-y-1">
+                    <label className="text-xs font-bold text-[#515777] block">
+                        Username
+                    </label>
+                    <div className="relative">
+                        <AtSign className="w-4 h-4 text-[#717699] absolute left-3.5 top-3.5" />
+                        <input
+                            type="text"
+                            required
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/\s+/g, ''))}
+                            placeholder="alex_rivera"
+                            className="w-full pl-10 pr-4 py-3 rounded-2xl neu-input text-xs font-semibold text-[#1a1c35]"
+                        />
+                    </div>
+                </div>
+
+                {/* 3. Password (for login and signup) */}
+                {authMode !== 'forgot' && (
+                    <div className="space-y-1">
+                        <div className="flex items-center justify-between">
+                            <label className="text-xs font-bold text-[#515777] block">Password</label>
+                            {authMode === 'login' && (
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setAuthMode('forgot');
+                                        setError('');
+                                    }}
+                                    className="text-[11px] font-black text-[#549acb] hover:text-[#3d84b5] transition-colors"
+                                >
+                                    Forgot Password?
+                                </button>
+                            )}
+                        </div>
+                        <div className="relative">
+                            <Lock className="w-4 h-4 text-[#717699] absolute left-3.5 top-3.5" />
+                            <input
+                                type="password"
+                                required
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder="••••••••"
+                                className="w-full pl-10 pr-4 py-3 rounded-2xl neu-input text-xs font-semibold text-[#1a1c35]"
+                            />
+                        </div>
+                    </div>
+                )}
+
+                {/* 4. Forgot Password Inputs (Recovery Key + New Password) */}
+                {authMode === 'forgot' && (
+                    <>
+                        <div className="space-y-1">
+                            <label className="text-xs font-bold text-[#515777] block">
+                                Private Recovery Key
+                            </label>
+                            <div className="relative">
+                                <KeyRound className="w-4 h-4 text-[#717699] absolute left-3.5 top-3.5" />
+                                <input
+                                    type="text"
+                                    required
+                                    value={recoveryKeyInput}
+                                    onChange={(e) => setRecoveryKeyInput(e.target.value.toUpperCase())}
+                                    placeholder="VOW-XXXX-XXXX-XXXX"
+                                    className="w-full pl-10 pr-4 py-3 rounded-2xl neu-input text-xs font-mono font-bold text-[#1a1c35] uppercase"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="space-y-1">
+                            <label className="text-xs font-bold text-[#515777] block">New Password</label>
+                            <div className="relative">
+                                <Lock className="w-4 h-4 text-[#717699] absolute left-3.5 top-3.5" />
+                                <input
+                                    type="password"
+                                    required
+                                    value={newPassword}
+                                    onChange={(e) => setNewPassword(e.target.value)}
+                                    placeholder="At least 6 characters"
+                                    className="w-full pl-10 pr-4 py-3 rounded-2xl neu-input text-xs font-semibold text-[#1a1c35]"
+                                />
+                            </div>
+                        </div>
+                    </>
+                )}
+
+                {/* Submit Button */}
                 <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-3.5 rounded-2xl neu-button-primary font-extrabold text-xs shadow-lg mt-2 flex items-center justify-center space-x-2"
+                    className="w-full py-3.5 rounded-2xl neu-button-primary font-black text-xs shadow-lg mt-2 flex items-center justify-center space-x-2 text-white hover:scale-102 active:scale-98 transition-all"
                 >
-                    <span>{loading ? 'Processing...' : isLogin ? 'Sign In to Vow' : 'Register Account'}</span>
+                    <span>
+                        {loading
+                            ? 'Processing...'
+                            : authMode === 'login'
+                                ? 'Sign In to Workspace'
+                                : authMode === 'signup'
+                                    ? 'Create Account & Get Recovery Key'
+                                    : 'Verify Key & Reset Password'}
+                    </span>
                     <ArrowRight className="w-4 h-4" />
                 </button>
+
+                {authMode === 'forgot' && (
+                    <button
+                        type="button"
+                        onClick={() => {
+                            setAuthMode('login');
+                            setError('');
+                        }}
+                        className="w-full text-center text-xs font-bold text-[#717699] hover:text-[#1a1c35] transition-colors pt-1 block"
+                    >
+                        ← Back to Sign In
+                    </button>
+                )}
             </form>
 
             <p className="text-[11px] text-center text-[#717699] font-medium pt-2">
-                By continuing, you agree to Vow's Terms of Service & Privacy Policy.
+                Pure anonymity. Your data stays tied strictly to your private credentials.
             </p>
         </div>
     );
