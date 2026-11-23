@@ -116,9 +116,8 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess, onBypass }) => {
                         setError('');
                         setResetSuccessMsg('');
                     }}
-                    className={`flex-1 py-2.5 text-xs font-black rounded-xl transition-all ${
-                        authMode === 'login' ? 'neu-button text-[#549acb] bg-[#E0E5EC] shadow-sm' : 'text-[#717699]'
-                    }`}
+                    className={`flex-1 py-2.5 text-xs font-black rounded-xl transition-all ${authMode === 'login' ? 'neu-button text-[#549acb] bg-[#E0E5EC] shadow-sm' : 'text-[#717699]'
+                        }`}
                 >
                     Sign In
                 </button>
@@ -129,9 +128,8 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess, onBypass }) => {
                         setError('');
                         setResetSuccessMsg('');
                     }}
-                    className={`flex-1 py-2.5 text-xs font-black rounded-xl transition-all ${
-                        authMode === 'signup' ? 'neu-button text-[#549acb] bg-[#E0E5EC] shadow-sm' : 'text-[#717699]'
-                    }`}
+                    className={`flex-1 py-2.5 text-xs font-black rounded-xl transition-all ${authMode === 'signup' ? 'neu-button text-[#549acb] bg-[#E0E5EC] shadow-sm' : 'text-[#717699]'
+                        }`}
                 >
                     Create Account
                 </button>
