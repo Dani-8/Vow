@@ -127,4 +127,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             <ChevronRight className="w-4 h-4" />
                         </button>
                     </div>
-                ) : (</aside>
+                ) : (
+                    <div className="flex items-center justify-between">
+                        <div
+                            onClick={() => onNavigate('home')}
+                            className="flex items-center space-x-3 cursor-pointer group"
+                        >
+                            <div className="w-10 h-10 rounded-2xl neu-button flex items-center justify-center bg-[#549acb] text-white shadow-md group-hover:scale-105 transition-transform shrink-0">
+                                <span className="font-black text-lg italic">V</span>
+                            </div>
+                            <div className="whitespace-nowrap overflow-hidden">
+                                <h1 className="text-lg font-black text-[#1a1c35] tracking-tight">Vow App</h1>
+                                <p className="text-[9px] font-bold text-[#717699] uppercase tracking-wider">Workspace</p>
+                            </div>
+                        </div>
