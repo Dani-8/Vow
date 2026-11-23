@@ -34,3 +34,11 @@ interface SidebarProps {
     onLogout: () => void;
     onBypassAuth?: () => void;
 }
+
+interface NavItemConfig {
+    id: 'home' | 'feed' | 'visible' | 'challenges' | 'task-map' | 'stats';
+    label: string;
+    icon: React.ComponentType<{ className?: string }>;
+    activeViews: ActiveView[];
+    activeClass: string;
+}
