@@ -234,9 +234,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 {stats && (
                     <div
                         onClick={() => onNavigate('stats')}
-                        className={`neu-inset rounded-2xl cursor-pointer hover:border-[#549acb] transition-all duration-300 overflow-hidden ${
-                            collapsed ? 'opacity-0 max-h-0 p-0 m-0 pointer-events-none' : 'opacity-100 p-3 max-h-24'
-                        }`}
+                        className={`neu-inset rounded-2xl cursor-pointer hover:border-[#549acb] transition-all duration-300 overflow-hidden ${collapsed ? 'opacity-0 max-h-0 p-0 m-0 pointer-events-none' : 'opacity-100 p-3 max-h-24'
+                            }`}
                     >
                         <div className="flex items-center justify-between whitespace-nowrap">
                             <div className="min-w-0">
