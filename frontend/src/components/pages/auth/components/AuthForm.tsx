@@ -68,16 +68,16 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess, onBypass }) => {
                         {authMode === 'login'
                             ? 'Welcome Back'
                             : authMode === 'signup'
-                                ? 'Private Account Creation'
-                                : 'Recovery Key Reset'}
+                            ? 'Private Account Creation'
+                            : 'Recovery Key Reset'}
                     </span>
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-black text-[#1a1c35] tracking-tight">
                     {authMode === 'login'
                         ? 'Access Your Workspace'
                         : authMode === 'signup'
-                            ? 'Create Your Account'
-                            : 'Forgot Password'}
+                        ? 'Create Your Account'
+                        : 'Forgot Password'}
                 </h2>
                 <p className="text-xs text-[#717699] font-medium mt-1 leading-relaxed">
                     {authMode === 'forgot'
@@ -116,8 +116,9 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess, onBypass }) => {
                         setError('');
                         setResetSuccessMsg('');
                     }}
-                    className={`flex-1 py-2.5 text-xs font-black rounded-xl transition-all ${authMode === 'login' ? 'neu-button text-[#549acb] bg-[#E0E5EC] shadow-sm' : 'text-[#717699]'
-                        }`}
+                    className={`flex-1 py-2.5 text-xs font-black rounded-xl transition-all ${
+                        authMode === 'login' ? 'neu-button text-[#549acb] bg-[#E0E5EC] shadow-sm' : 'text-[#717699]'
+                    }`}
                 >
                     Sign In
                 </button>
@@ -128,8 +129,9 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess, onBypass }) => {
                         setError('');
                         setResetSuccessMsg('');
                     }}
-                    className={`flex-1 py-2.5 text-xs font-black rounded-xl transition-all ${authMode === 'signup' ? 'neu-button text-[#549acb] bg-[#E0E5EC] shadow-sm' : 'text-[#717699]'
-                        }`}
+                    className={`flex-1 py-2.5 text-xs font-black rounded-xl transition-all ${
+                        authMode === 'signup' ? 'neu-button text-[#549acb] bg-[#E0E5EC] shadow-sm' : 'text-[#717699]'
+                    }`}
                 >
                     Create Account
                 </button>
@@ -288,3 +290,10 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess, onBypass }) => {
                     </button>
                 )}
             </form>
+
+            <p className="text-[11px] text-center text-[#717699] font-medium pt-2">
+                Pure anonymity. Your data stays tied strictly to your private credentials.
+            </p>
+        </div>
+    );
+};
