@@ -13,3 +13,14 @@ interface HeaderProps {
     onLogout: () => void;
     onBypassAuth?: () => void;
 }
+
+export const Header: React.FC<HeaderProps> = ({
+    user,
+    activeView,
+    onNavigateLanding,
+    onOpenAuthModal,
+    onOpenProfileModal,
+    onLogout,
+    onBypassAuth,
+}) => {
+    const location = useLocation();
