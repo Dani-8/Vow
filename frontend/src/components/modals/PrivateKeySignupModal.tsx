@@ -8,3 +8,14 @@ interface PrivateKeySignupModalProps {
     recoveryKey: string;
     onCloseAndEnterApp: () => void;
 }
+
+export const PrivateKeySignupModal: React.FC<PrivateKeySignupModalProps> = ({
+    isOpen,
+    user,
+    recoveryKey,
+    onCloseAndEnterApp,
+}) => {
+    const [copied, setCopied] = useState(false);
+
+    if (!isOpen || !user) return null;
+
