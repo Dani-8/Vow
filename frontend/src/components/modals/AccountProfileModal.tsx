@@ -46,3 +46,14 @@ IMPORTANT PRIVACY & SECURITY NOTICE:
 4. You can also view or re-download this file anytime inside the app by 
    clicking your user profile avatar in the sidebar or navbar.
 =====================================================`;
+
+        const blob = new Blob([fileContent], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `vow-account-${user.username}-recovery.txt`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    };
