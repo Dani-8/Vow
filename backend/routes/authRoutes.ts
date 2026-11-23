@@ -187,3 +187,18 @@ router.post('/reset-password', async (req: AuthenticatedRequest, res: Response) 
         return res.status(500).json({ error: 'Failed to reset password' });
     }
 });
+
+// Demo Bypass for Testing
+router.post('/demo-bypass', async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        let user = await User.findOne({ email: 'demo@vow.app' });
+        if (!user) {
+            const passwordHash = await bcrypt.hash('demopass', 10);
+            const pinHash = await bcrypt.hash('1234', 10);
+            user = await User.create({
+                email: 'demo@vow.app',
+                passwordHash,
+                pinHash,
+                name: 'Alex Rivera',
+            });
+        }
