@@ -432,3 +432,17 @@ router.post('/demo-bypass', async (req: AuthenticatedRequest, res: Response) => 
                 });
             }
         }
+
+        const token = generateToken(user._id.toString());
+        return res.json({
+            token,
+            user: {
+                id: user._id,
+                username: user.username || 'alex_rivera',
+                email: user.email,
+                name: user.name,
+                recoveryKey: user.plainRecoveryKey || 'VOW-9X4A-88KP-2Z1Q',
+                createdAt: user.createdAt,
+                hasPinSet: !!user.pinHash,
+            },
+        });
