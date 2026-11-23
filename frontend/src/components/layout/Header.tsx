@@ -87,3 +87,13 @@ export const Header: React.FC<HeaderProps> = ({
                     )}
                 </div>
             </div>
+
+            <div className="flex items-center space-x-3 shrink-0">
+                {onNavigateLanding && (
+                    <button
+                        onClick={onNavigateLanding}
+                        className="hidden sm:flex items-center space-x-1 px-3 py-1.5 rounded-xl neu-button text-xs font-bold text-[#717699] hover:text-[#549acb]"
+                    >
+                        <span>Public Site</span>
+                    </button>
+                )}
