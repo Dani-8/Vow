@@ -264,9 +264,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                     {user.name.slice(0, 2).toUpperCase()}
                                 </div>
                                 <div
-                                    className={`min-w-0 whitespace-nowrap overflow-hidden transition-all duration-300 ${
-                                        collapsed ? 'opacity-0 max-w-0 pointer-events-none' : 'opacity-100 max-w-[110px]'
-                                    }`}
+                                    className={`min-w-0 whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0 pointer-events-none' : 'opacity-100 max-w-[110px]'
+                                        }`}
                                 >
                                     <p className="text-xs font-black text-[#1a1c35] truncate group-hover:text-[#549acb] transition-colors">{user.name}</p>
                                     <p className="text-[10px] font-bold text-[#717699] truncate">@{user.username}</p>
