@@ -422,3 +422,13 @@ router.post('/demo-bypass', async (req: AuthenticatedRequest, res: Response) => 
             }
         }
 
+        // Ensure demo challenges exist for demo user
+        const existingChallenges = await Challenge.find({ userId: user._id });
+        if (existingChallenges.length === 0) {
+            for (const chData of INITIAL_DEMO_CHALLENGES_SERVER) {
+                await Challenge.create({
+                    ...chData,
+                    userId: user._id,
+                });
+            }
+        }
