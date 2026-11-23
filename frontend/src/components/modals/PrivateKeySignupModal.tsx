@@ -71,3 +71,17 @@ IMPORTANT PRIVACY & SECURITY NOTICE:
                         </h2>
                     </div>
                 </div>
+
+                {/* Account Details Capsule */}
+                <div className="neu-inset p-3.5 rounded-2xl bg-white/40 border border-white/60 flex items-center space-x-3">
+                    <div className="w-9 h-9 rounded-xl neu-button flex items-center justify-center text-[#549acb] bg-[#E0E5EC] shrink-0 font-black text-xs">
+                        {user.name.slice(0, 2).toUpperCase()}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                        <p className="text-xs font-black text-[#1a1c35] truncate">{user.name}</p>
+                        <p className="text-[11px] font-bold text-[#717699] truncate">@{user.username}</p>
+                    </div>
+                    <span className="text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300/60 shrink-0">
+                        100% Private
+                    </span>
+                </div>
