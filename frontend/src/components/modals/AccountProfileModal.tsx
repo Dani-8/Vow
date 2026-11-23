@@ -141,3 +141,8 @@ IMPORTANT PRIVACY & SECURITY NOTICE:
                             </button>
                         )}
                     </div>
+                    <p className="text-[11px] font-medium text-[#717699] flex items-center space-x-1.5 pt-0.5">
+                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                        <span>Use this master key with your username to reset your password if you ever forget it.</span>
+                    </p>
+                </div>
