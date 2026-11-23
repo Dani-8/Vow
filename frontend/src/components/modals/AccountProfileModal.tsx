@@ -70,3 +70,17 @@ IMPORTANT PRIVACY & SECURITY NOTICE:
                     <X className="w-4 h-4" />
                 </button>
 
+                {/* Header Title */}
+                <div className="flex items-center space-x-3.5 pr-8">
+                    <div className="w-12 h-12 rounded-2xl neu-button-primary flex items-center justify-center text-white shrink-0 shadow-md">
+                        <UserIcon className="w-6 h-6" />
+                    </div>
+                    <div>
+                        <span className="text-[10px] font-black uppercase tracking-wider text-[#549acb] block">
+                            Account & Privacy Vault
+                        </span>
+                        <h2 className="text-xl sm:text-2xl font-black text-[#1a1c35] tracking-tight">
+                            User Profile & Credentials
+                        </h2>
+                    </div>
+                </div>
