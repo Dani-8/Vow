@@ -134,3 +134,18 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess, onBypass }) => {
                     Create Account
                 </button>
             </div>
+
+            {/* Error & Success Messages */}
+            {error && (
+                <div className="neu-inset p-3.5 rounded-xl border border-rose-300 bg-rose-50/70 flex items-center space-x-2 text-rose-700 text-xs font-bold">
+                    <AlertCircle className="w-4 h-4 shrink-0" />
+                    <span>{error}</span>
+                </div>
+            )}
+
+            {resetSuccessMsg && (
+                <div className="neu-inset p-3.5 rounded-xl border border-emerald-300 bg-emerald-50/70 flex items-center space-x-2 text-emerald-800 text-xs font-bold">
+                    <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
+                    <span>{resetSuccessMsg}</span>
+                </div>
+            )}
