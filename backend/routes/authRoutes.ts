@@ -476,3 +476,16 @@ router.get('/me', authenticateToken, async (req: AuthenticatedRequest, res: Resp
     }
 });
 
+// Set or Update Personal Growth Section PIN
+router.post('/set-pin', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        const { pin } = req.body;
+
+        if (!pin || typeof pin !== 'string' || pin.length < 4) {
+            return res.status(400).json({ error: 'PIN must be at least 4 digits' });
+        }
+
+        const user = await User.findById(req.userId);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
