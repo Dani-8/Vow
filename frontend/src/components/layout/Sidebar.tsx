@@ -194,4 +194,4 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                 </span>
                             </button>
                         );
-                    })}</button>
+                    })}
