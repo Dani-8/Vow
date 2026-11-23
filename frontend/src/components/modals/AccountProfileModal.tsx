@@ -120,3 +120,24 @@ IMPORTANT PRIVACY & SECURITY NOTICE:
                             <span>{isKeyRevealed ? 'Hide' : 'Reveal Key'}</span>
                         </button>
                     </div>
+
+                    <div className="neu-inset p-3.5 sm:p-4 rounded-2xl bg-white/70 border border-white/80 flex items-center justify-between gap-3 shadow-inner">
+                        <code className="text-sm sm:text-base font-black tracking-widest text-[#1a1c35] font-mono break-all select-all">
+                            {isKeyRevealed ? recoveryKey : '•••• •••• •••• ••••'}
+                        </code>
+                        {isKeyRevealed && (
+                            <button
+                                type="button"
+                                onClick={handleCopy}
+                                className={`neu-button px-3 py-1.5 rounded-xl text-xs font-black flex items-center space-x-1 transition-all shrink-0 ${
+                                    copied
+                                        ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                                        : 'text-[#549acb] hover:text-[#3d84b5]'
+                                }`}
+                                title="Copy Key"
+                            >
+                                {copied ? <Check className="w-3.5 h-3.5 text-emerald-700" /> : <Copy className="w-3.5 h-3.5" />}
+                                <span>{copied ? 'Copied' : 'Copy'}</span>
+                            </button>
+                        )}
+                    </div>
