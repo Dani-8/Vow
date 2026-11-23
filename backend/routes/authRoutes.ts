@@ -76,3 +76,13 @@ router.post('/signup', async (req: AuthenticatedRequest, res: Response) => {
         return res.status(500).json({ error: 'Failed to create account' });
     }
 });
+
+// Login (Username + Password)
+router.post('/login', async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        const { username, email, password } = req.body;
+        const identifier = (username || email || '').toLowerCase().trim();
+
+        if (!identifier || !password) {
+            return res.status(400).json({ error: 'Username and password are required' });
+        }
