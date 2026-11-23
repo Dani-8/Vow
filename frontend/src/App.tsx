@@ -139,3 +139,23 @@ export default function App() {
       onLogout={taskData.handleLogout}
       onBypassAuth={handleBypassAuth}
     >
+      <AppRouter
+        activeView={activeView}
+        location={taskData.location}
+        user={user}
+        tasks={taskData.tasks}
+        privateTasks={privateTasks}
+        filteredTasks={taskData.filteredTasks}
+        stats={taskData.stats}
+        isPrivateUnlocked={taskData.isPrivateUnlocked}
+        selectedTaskForDetail={modalState.selectedTaskForDetail}
+        setSelectedTaskForDetail={modalState.setSelectedTaskForDetail}
+        searchQuery={taskData.searchQuery}
+        setSearchQuery={taskData.setSearchQuery}
+        filter={taskData.filter}
+        setFilter={taskData.setFilter}
+        navigate={taskData.navigate}
+        navigateToView={navigateToView}
+        setIsPrivateUnlocked={setIsPrivateUnlocked}
+        onCheckInToday={taskData.handleDirectCheckIn}
+        onToggleComplete={(task) =>
