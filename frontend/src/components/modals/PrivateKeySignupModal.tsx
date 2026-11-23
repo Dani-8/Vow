@@ -109,3 +109,19 @@ IMPORTANT PRIVACY & SECURITY NOTICE:
                         </button>
                     </div>
                 </div>
+
+                {/* Explanation Note */}
+                <div className="neu-inset p-4 rounded-2xl bg-sky-50/50 border border-sky-200/60 text-xs text-[#24294a] leading-relaxed font-medium space-y-2">
+                    <p className="flex items-start space-x-2">
+                        <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                        <span>
+                            <strong>Store this key safely offline.</strong> If you ever forget your password, this key is the only way to recover your account.
+                        </span>
+                    </p>
+                    <p className="text-[11px] text-[#616c8c] border-t border-sky-200/50 pt-2 flex items-start space-x-2">
+                        <UserIcon className="w-4 h-4 text-[#549acb] shrink-0 mt-0.5" />
+                        <span>
+                            <strong>Where to find it later:</strong> If you are logged in, click your <strong>user profile icon on the sidebar or navbar</strong> anytime to copy this key or re-download your backup file.
+                        </span>
+                    </p>
+                </div>
