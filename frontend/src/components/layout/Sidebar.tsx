@@ -65,3 +65,17 @@ const NAV_ITEMS: NavItemConfig[] = [
         activeViews: ['visible', 'task-detail'],
         activeClass: 'neu-inset text-[#549acb]',
     },
+    {
+        id: 'challenges',
+        label: 'Challenges',
+        icon: Target,
+        activeViews: ['challenges', 'challenge-detail'],
+        activeClass: 'neu-inset text-[#549acb]',
+    },
+    {
+        id: 'task-map',
+        label: 'Task Map',
+        icon: Network,
+        activeViews: ['task-map'],
+        activeClass: 'neu-inset text-[#549acb]',
+    },
