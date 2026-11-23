@@ -68,16 +68,16 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess, onBypass }) => {
                         {authMode === 'login'
                             ? 'Welcome Back'
                             : authMode === 'signup'
-                            ? 'Private Account Creation'
-                            : 'Recovery Key Reset'}
+                                ? 'Private Account Creation'
+                                : 'Recovery Key Reset'}
                     </span>
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-black text-[#1a1c35] tracking-tight">
                     {authMode === 'login'
                         ? 'Access Your Workspace'
                         : authMode === 'signup'
-                        ? 'Create Your Account'
-                        : 'Forgot Password'}
+                            ? 'Create Your Account'
+                            : 'Forgot Password'}
                 </h2>
                 <p className="text-xs text-[#717699] font-medium mt-1 leading-relaxed">
                     {authMode === 'forgot'
