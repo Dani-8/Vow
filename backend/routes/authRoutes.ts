@@ -101,3 +101,13 @@ router.post('/login', async (req: AuthenticatedRequest, res: Response) => {
         if (!isMatch) {
             return res.status(401).json({ error: 'Invalid username or password' });
         }
+
+        // If older account had no recovery key, provision one now
+        if (!user.plainRecoveryKey) {
+            const newKey = generateRecoveryKey();
+            user.plainRecoveryKey = newKey;
+            user.recoveryKeyHash = await bcrypt.hash(newKey, 10);
+            await user.save();
+        }
+
+        const token = generateToken(user._id.toString());
