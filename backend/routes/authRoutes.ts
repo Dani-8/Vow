@@ -352,3 +352,19 @@ router.post('/demo-bypass', async (req: AuthenticatedRequest, res: Response) => 
                     lastCompletedDate: yesterday,
                     completionHistory: [fourDaysAgo, threeDaysAgo, twoDaysAgo, yesterday],
                     subTasks: [
+                        {
+                            id: 'sub_mern_1',
+                            taskId: 'task_mern_project_m3k9p',
+                            title: 'Express RESTful API Architecture & JWT Auth Middleware',
+                            dateLabel: 'Completed',
+                            status: 'completed',
+                            priority: 'High',
+                        },
+                        {
+                            id: 'sub_mern_2',
+                            taskId: 'task_mern_project_m3k9p',
+                            title: 'Database Schema Models, Indexing & Validation',
+                            dateLabel: 'Completed',
+                            status: 'completed',
+                            priority: 'High',
+                        },
