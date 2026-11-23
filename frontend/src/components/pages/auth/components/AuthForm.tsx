@@ -149,3 +149,23 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess, onBypass }) => {
                     <span>{resetSuccessMsg}</span>
                 </div>
             )}
+
+            {/* Form Fields */}
+            <form onSubmit={handleSubmit} className="space-y-4">
+                {/* 1. Sign Up Full Name */}
+                {authMode === 'signup' && (
+                    <div className="space-y-1">
+                        <label className="text-xs font-bold text-[#515777] block">Display Name</label>
+                        <div className="relative">
+                            <UserIcon className="w-4 h-4 text-[#717699] absolute left-3.5 top-3.5" />
+                            <input
+                                type="text"
+                                required
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                placeholder="Alex Rivera"
+                                className="w-full pl-10 pr-4 py-3 rounded-2xl neu-input text-xs font-semibold text-[#1a1c35]"
+                            />
+                        </div>
+                    </div>
+                )}
