@@ -73,3 +73,26 @@ export default function App() {
       />
     );
   }
+
+  // Standalone Auth View
+  if (activeView === 'auth') {
+    return (
+      <>
+        <AuthPage
+          onSuccess={async (loggedUser, token, recoveryKey) => {
+            setUser(loggedUser);
+            await refreshData();
+            if (recoveryKey) {
+              // Newly registered account: show the "Save Your Private Key" modal first
+              setNewSignupKeyModal({
+                isOpen: true,
+                user: loggedUser,
+                recoveryKey,
+              });
+            } else {
+              navigateToView('home');
+            }
+          }}
+          onBypass={handleBypassAuth}
+          onBackToHome={() => navigateToView('landing')}
+        />
