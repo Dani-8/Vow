@@ -111,3 +111,22 @@ router.post('/login', async (req: AuthenticatedRequest, res: Response) => {
         }
 
         const token = generateToken(user._id.toString());
+
+        return res.json({
+            token,
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                name: user.name,
+                recoveryKey: user.plainRecoveryKey,
+                createdAt: user.createdAt,
+                hasPinSet: !!user.pinHash,
+            },
+        });
+    } catch (err: any) {
+        console.error('Login error:', err);
+        return res.status(500).json({ error: 'Failed to log in' });
+    }
+});
+
