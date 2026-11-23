@@ -22,3 +22,22 @@ function generateRecoveryKey(): string {
     };
     return `VOW-${segment(4)}-${segment(4)}-${segment(4)}`;
 }
+
+// Signup (Pure Username + Password + Recovery Key)
+router.post('/signup', async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        const { username, password, name } = req.body;
+
+        const cleanUsername = (username || '').toLowerCase().trim();
+        if (!cleanUsername || cleanUsername.length < 3) {
+            return res.status(400).json({ error: 'Username must be at least 3 characters' });
+        }
+
+        if (!password || password.length < 6) {
+            return res.status(400).json({ error: 'Password must be at least 6 characters' });
+        }
+
+        const existing = await User.findOne({ username: cleanUsername });
+        if (existing) {
+            return res.status(400).json({ error: 'This username is already taken. Please choose another.' });
+        }
