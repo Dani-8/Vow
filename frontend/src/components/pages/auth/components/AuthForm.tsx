@@ -57,3 +57,31 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess, onBypass }) => {
             setLoading(false);
         }
     };
+
+    return (
+        <div className="lg:col-span-6 w-full neu-card p-6 sm:p-8 md:p-10 backdrop-blur-2xl bg-white/60 border border-white/80 shadow-2xl rounded-3xl space-y-6 text-left">
+            {/* Header Titles */}
+            <div>
+                <div className="inline-flex items-center space-x-2 neu-inset px-3 py-1 rounded-full text-[11px] font-extrabold text-[#549acb] uppercase tracking-wider mb-3">
+                    <Sparkles className="w-3.5 h-3.5 text-[#549acb]" />
+                    <span>
+                        {authMode === 'login'
+                            ? 'Welcome Back'
+                            : authMode === 'signup'
+                            ? 'Private Account Creation'
+                            : 'Recovery Key Reset'}
+                    </span>
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-black text-[#1a1c35] tracking-tight">
+                    {authMode === 'login'
+                        ? 'Access Your Workspace'
+                        : authMode === 'signup'
+                        ? 'Create Your Account'
+                        : 'Forgot Password'}
+                </h2>
+                <p className="text-xs text-[#717699] font-medium mt-1 leading-relaxed">
+                    {authMode === 'forgot'
+                        ? 'Enter your unique username and private recovery key to set a new password.'
+                        : 'Zero email trackers. Private unique username + password with client-side recovery keys.'}
+                </p>
+            </div>
