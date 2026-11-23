@@ -260,3 +260,22 @@ router.post('/demo-bypass', async (req: AuthenticatedRequest, res: Response) => 
                             status: 'in_progress',
                             priority: 'Medium',
                         },
+                        {
+                            id: 'sub_ru_4',
+                            taskId: 'task_russian_mastery_r7u2k',
+                            title: '20-Minute Daily Russian Podcast Listening (Slow Russian)',
+                            dateLabel: 'Tomorrow',
+                            status: 'pending',
+                            priority: 'Medium',
+                        },
+                        {
+                            id: 'sub_ru_5',
+                            taskId: 'task_russian_mastery_r7u2k',
+                            title: 'Conversational Dialogue Shadowing & Voice Journaling',
+                            dateLabel: 'This Week',
+                            status: 'pending',
+                            priority: 'Low',
+                        },
+                    ],
+                },
+                {
