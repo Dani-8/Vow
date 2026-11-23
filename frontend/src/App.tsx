@@ -110,3 +110,22 @@ export default function App() {
       </>
     );
   }
+
+  return (
+    <MainLayout
+      user={user}
+      stats={taskData.stats}
+      activeView={activeView}
+      sidebarCollapsed={taskData.sidebarCollapsed}
+      onToggleSidebarCollapse={() =>
+        taskData.setSidebarCollapsed(!taskData.sidebarCollapsed)
+      }
+      isPrivateUnlocked={taskData.isPrivateUnlocked}
+      onNavigate={(view) => {
+        if (view === 'private' && !taskData.isPrivateUnlocked) {
+          modalState.setIsPinModalOpen(true);
+          navigateToView('private');
+        } else {
+          navigateToView(view);
+        }
+      }}
