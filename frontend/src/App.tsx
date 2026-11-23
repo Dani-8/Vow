@@ -181,3 +181,15 @@ export default function App() {
           modalState.setIsPinModalOpen(true);
           navigateToView('private');
         }}
+        challenges={challengeState.challenges}
+        selectedChallenge={challengeState.selectedChallenge}
+        setSelectedChallenge={challengeState.setSelectedChallenge}
+        onCreateChallenge={challengeState.createChallenge}
+        onUpdateChallenge={challengeState.updateChallenge}
+        onDeleteChallenge={challengeState.deleteChallenge}
+        onLogChallengeDay={challengeState.logDay}
+        onDeleteChallengeLog={challengeState.deleteLog}
+        onStartNextSprint={challengeState.startNextSprint}
+        onCompleteSprint={challengeState.completeSprint}
+        onUpdateSprintRule={challengeState.updateSprintRule}
+      />
