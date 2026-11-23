@@ -27,3 +27,18 @@ export const PrivateKeySignupModal: React.FC<PrivateKeySignupModalProps> = ({
     };
 
     const handleDownloadFile = () => {
+        const fileContent = `=====================================================
+VOW WORKSPACE - PRIVATE ACCOUNT RECOVERY CREDENTIALS
+=====================================================
+Username:     ${user.username}
+Display Name: ${user.name}
+Recovery Key: ${recoveryKey}
+Created At:   ${new Date().toLocaleString()}
+
+IMPORTANT PRIVACY & SECURITY NOTICE:
+1. This Recovery Key is your master key to reset your password if forgotten.
+2. Vow does not store plain emails or send recovery emails to protect your privacy.
+3. Keep this file offline and safe (in your notes or password manager).
+4. You can also view or re-download this file anytime inside the app by 
+   clicking your user profile avatar in the sidebar or navbar.
+=====================================================`;
