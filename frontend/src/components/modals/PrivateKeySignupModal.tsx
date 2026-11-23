@@ -125,3 +125,14 @@ IMPORTANT PRIVACY & SECURITY NOTICE:
                         </span>
                     </p>
                 </div>
+
+                {/* The 2 Action Buttons */}
+                <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
+                    <button
+                        type="button"
+                        onClick={handleDownloadFile}
+                        className="w-full sm:flex-1 neu-button py-3 px-4 rounded-2xl text-xs font-black text-[#515777] hover:text-[#1a1c35] flex items-center justify-center space-x-2 transition-all hover:scale-102 active:scale-98"
+                    >
+                        <Download className="w-4 h-4 text-[#549acb]" />
+                        <span>Download Key File (.txt)</span>
+                    </button>
