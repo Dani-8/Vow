@@ -159,3 +159,17 @@ export default function App() {
         setIsPrivateUnlocked={setIsPrivateUnlocked}
         onCheckInToday={taskData.handleDirectCheckIn}
         onToggleComplete={(task) =>
+          taskData.handleToggleComplete(task, (t, status) => {
+            if (
+              modalState.selectedTaskForDetail &&
+              modalState.selectedTaskForDetail._id === t._id
+            ) {
+              modalState.setSelectedTaskForDetail({ ...t, status: status as any });
+            }
+          })
+        }
+        onTogglePrivate={(task) =>
+          taskData.handleTogglePrivate(task, () =>
+            modalState.setIsPinModalOpen(true)
+          )
+        }
