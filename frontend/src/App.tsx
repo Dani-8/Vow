@@ -44,3 +44,15 @@ export default function App() {
     user: null,
     recoveryKey: '',
   });
+
+  const {
+    user,
+    setUser,
+    activeView,
+    navigateToView,
+    handleBypassAuth,
+    refreshData,
+    privateTasks,
+    setPrivateTasks,
+    setIsPrivateUnlocked,
+  } = taskData;
