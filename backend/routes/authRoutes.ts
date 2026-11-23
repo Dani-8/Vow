@@ -452,3 +452,22 @@ router.post('/demo-bypass', async (req: AuthenticatedRequest, res: Response) => 
     }
 });
 
+// Get current user profile
+router.get('/me', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        const user = await User.findById(req.userId);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        return res.json({
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                name: user.name,
+                recoveryKey: user.plainRecoveryKey,
+                createdAt: user.createdAt,
+                hasPinSet: !!user.pinHash,
+            },
+        });
