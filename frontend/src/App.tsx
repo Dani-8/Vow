@@ -193,3 +193,20 @@ export default function App() {
         onCompleteSprint={challengeState.completeSprint}
         onUpdateSprintRule={challengeState.updateSprintRule}
       />
+
+      <GlobalModals
+        user={user}
+        activeView={activeView}
+        isTaskModalOpen={modalState.isTaskModalOpen}
+        onCloseTaskModal={() => modalState.setIsTaskModalOpen(false)}
+        onSubmitTask={async (data) => {
+          await taskData.handleCreateOrUpdateTask(
+            data,
+            modalState.editingTask?._id
+          );
+          modalState.setIsTaskModalOpen(false);
+        }}
+        editingTask={modalState.editingTask}
+        isPinModalOpen={modalState.isPinModalOpen}
+        onClosePinModal={() => modalState.setIsPinModalOpen(false)}
+        onSuccessPinUnlocked={async () => {
