@@ -86,3 +86,18 @@ router.post('/login', async (req: AuthenticatedRequest, res: Response) => {
         if (!identifier || !password) {
             return res.status(400).json({ error: 'Username and password are required' });
         }
+
+        // Search by username, fallback to email for backwards compatibility
+        let user = await User.findOne({ username: identifier });
+        if (!user && identifier.includes('@')) {
+            user = await User.findOne({ email: identifier });
+        }
+
+        if (!user) {
+            return res.status(401).json({ error: 'Invalid username or password' });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.passwordHash);
+        if (!isMatch) {
+            return res.status(401).json({ error: 'Invalid username or password' });
+        }
