@@ -130,3 +130,13 @@ router.post('/login', async (req: AuthenticatedRequest, res: Response) => {
     }
 });
 
+// Reset Password via Recovery Key
+router.post('/reset-password', async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        const { username, recoveryKey, newPassword } = req.body;
+        const cleanUsername = (username || '').toLowerCase().trim();
+        const cleanKey = (recoveryKey || '').trim().toUpperCase();
+
+        if (!cleanUsername || !cleanKey || !newPassword) {
+            return res.status(400).json({ error: 'Username, recovery key, and new password are required' });
+        }
