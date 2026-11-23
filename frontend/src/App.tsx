@@ -219,3 +219,14 @@ export default function App() {
             console.error('Failed to load private tasks:', err);
           }
         }}
+        isAIAssistOpen={modalState.isAIAssistOpen}
+        onCloseAIAssist={() => modalState.setIsAIAssistOpen(false)}
+        selectedTaskForAI={modalState.selectedTaskForAI}
+        isAuthModalOpen={modalState.isAuthModalOpen}
+        onCloseAuthModal={() => modalState.setIsAuthModalOpen(false)}
+        onSuccessAuth={async (loggedUser) => {
+          setUser(loggedUser);
+          await refreshData();
+          navigateToView('visible');
+        }}
+      />
