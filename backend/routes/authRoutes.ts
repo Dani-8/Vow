@@ -500,3 +500,17 @@ router.post('/set-pin', authenticateToken, async (req: AuthenticatedRequest, res
         return res.status(500).json({ error: 'Failed to set PIN' });
     }
 });
+
+// Verify Personal Growth Section PIN
+router.post('/verify-pin', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        const { pin } = req.body;
+
+        const user = await User.findById(req.userId);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        if (!user.pinHash) {
+            return res.status(400).json({ error: 'No PIN has been configured yet' });
+        }
