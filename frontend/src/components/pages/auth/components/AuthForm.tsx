@@ -169,3 +169,21 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess, onBypass }) => {
                         </div>
                     </div>
                 )}
+
+                {/* 2. Username (Required for all modes) */}
+                <div className="space-y-1">
+                    <label className="text-xs font-bold text-[#515777] block">
+                        Username
+                    </label>
+                    <div className="relative">
+                        <AtSign className="w-4 h-4 text-[#717699] absolute left-3.5 top-3.5" />
+                        <input
+                            type="text"
+                            required
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/\s+/g, ''))}
+                            placeholder="alex_rivera"
+                            className="w-full pl-10 pr-4 py-3 rounded-2xl neu-input text-xs font-semibold text-[#1a1c35]"
+                        />
+                    </div>
+                </div>
