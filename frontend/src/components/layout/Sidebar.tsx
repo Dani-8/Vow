@@ -42,3 +42,26 @@ interface NavItemConfig {
     activeViews: ActiveView[];
     activeClass: string;
 }
+
+const NAV_ITEMS: NavItemConfig[] = [
+    {
+        id: 'home',
+        label: 'Home',
+        icon: Home,
+        activeViews: ['home'],
+        activeClass: 'neu-inset text-[#549acb]',
+    },
+    {
+        id: 'feed',
+        label: 'Mindset Feed',
+        icon: Sparkles,
+        activeViews: ['feed'],
+        activeClass: 'neu-inset text-[#549acb]',
+    },
+    {
+        id: 'visible',
+        label: 'Tasks & Habits',
+        icon: CheckSquare,
+        activeViews: ['visible', 'task-detail'],
+        activeClass: 'neu-inset text-[#549acb]',
+    },
