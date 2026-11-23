@@ -14,6 +14,8 @@ import { ActiveTimerConflictModal } from './components/modals/ActiveTimerConflic
 import { FocusZenModeModal } from './components/pages/home/components/FocusZenModeModal';
 import { useFocusTimer } from './context/FocusTimerContext';
 import { getTaskSlug } from './components/pages/router/AppRouter';
+import { PrivateKeySignupModal } from './components/modals/PrivateKeySignupModal';
+import { AccountProfileModal } from './components/modals/AccountProfileModal';
 
 export default function App() {
   const taskData = useTaskData();
@@ -31,6 +33,17 @@ export default function App() {
     isZenModeOpen,
     closeZenMode,
   } = useFocusTimer();
+
+  const [isProfileModalOpen, setIsProfileModalOpen] = React.useState(false);
+  const [newSignupKeyModal, setNewSignupKeyModal] = React.useState<{
+    isOpen: boolean;
+    user: any;
+    recoveryKey: string;
+  }>({
+    isOpen: false,
+    user: null,
+    recoveryKey: '',
+  });
 
   const {
     user,
@@ -64,15 +77,37 @@ export default function App() {
   // Standalone Auth View
   if (activeView === 'auth') {
     return (
-      <AuthPage
-        onSuccess={async (loggedUser) => {
-          setUser(loggedUser);
-          await refreshData();
-          navigateToView('home');
-        }}
-        onBypass={handleBypassAuth}
-        onBackToHome={() => navigateToView('landing')}
-      />
+      <>
+        <AuthPage
+          onSuccess={async (loggedUser, token, recoveryKey) => {
+            setUser(loggedUser);
+            await refreshData();
+            if (recoveryKey) {
+              // Newly registered account: show the "Save Your Private Key" modal first
+              setNewSignupKeyModal({
+                isOpen: true,
+                user: loggedUser,
+                recoveryKey,
+              });
+            } else {
+              navigateToView('home');
+            }
+          }}
+          onBypass={handleBypassAuth}
+          onBackToHome={() => navigateToView('landing')}
+        />
+
+        {/* Modal shown immediately on registration */}
+        <PrivateKeySignupModal
+          isOpen={newSignupKeyModal.isOpen}
+          user={newSignupKeyModal.user}
+          recoveryKey={newSignupKeyModal.recoveryKey}
+          onCloseAndEnterApp={() => {
+            setNewSignupKeyModal({ isOpen: false, user: null, recoveryKey: '' });
+            navigateToView('home');
+          }}
+        />
+      </>
     );
   }
 
@@ -96,6 +131,7 @@ export default function App() {
       }}
       onOpenCreateModal={modalState.openCreateTaskModal}
       onOpenAuthModal={() => navigateToView('auth')}
+      onOpenProfileModal={() => setIsProfileModalOpen(true)}
       onOpenPinModal={() => {
         modalState.setIsPinModalOpen(true);
         navigateToView('private');
@@ -267,6 +303,15 @@ export default function App() {
             });
           }
         }}
+      />
+
+      {/* Account Profile & Credentials Vault Modal */}
+      <AccountProfileModal
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+        user={user}
+        stats={taskData.stats}
+        onLogout={taskData.handleLogout}
       />
     </MainLayout>
   );
