@@ -271,3 +271,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                     <p className="text-[10px] font-bold text-[#717699] truncate">@{user.username}</p>
                                 </div>
                             </button>
+                            <button
+                                onClick={onLogout}
+                                className={`p-1.5 rounded-xl neu-button text-[#717699] hover:text-rose-600 transition-all duration-300 shrink-0 ${
+                                    collapsed ? 'hidden opacity-0 max-w-0' : 'opacity-100'
+                                }`}
+                                title="Sign Out"
+                            >
+                                <LogOut className="w-3.5 h-3.5" />
+                            </button>
+                        </div>
+                    ) : (
