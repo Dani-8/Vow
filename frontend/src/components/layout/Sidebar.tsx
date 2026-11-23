@@ -250,3 +250,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         </div>
                     </div>
                 )}
+
+                <div className="pt-2 border-t border-white/40">
+                    {user ? (
+                        <div className={`flex items-center ${collapsed ? 'justify-center' : 'justify-between'} neu-inset p-2 rounded-2xl transition-all duration-300`}>
+                            <button
+                                type="button"
+                                onClick={onOpenProfileModal}
+                                className="flex items-center space-x-2 min-w-0 text-left hover:opacity-80 transition-opacity cursor-pointer group"
+                                title="View Profile & Recovery Key"
+                            >
+                                <div className="w-8 h-8 rounded-xl neu-button flex items-center justify-center text-[#549acb] font-black text-xs shrink-0 group-hover:scale-105 transition-transform">
+                                    {user.name.slice(0, 2).toUpperCase()}
+                                </div>
