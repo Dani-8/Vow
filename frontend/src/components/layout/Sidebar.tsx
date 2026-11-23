@@ -87,3 +87,19 @@ const NAV_ITEMS: NavItemConfig[] = [
         activeClass: 'neu-inset text-[#549acb]',
     },
 ];
+
+export const Sidebar: React.FC<SidebarProps> = ({
+    collapsed,
+    onToggleCollapse,
+    activeView,
+    onNavigate,
+    user,
+    isPrivateUnlocked,
+    stats,
+    onOpenCreateModal,
+    onOpenAuthModal,
+    onOpenProfileModal,
+    onOpenPinModal,
+    onLogout,
+    onBypassAuth,
+}) => {
