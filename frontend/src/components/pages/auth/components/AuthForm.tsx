@@ -239,3 +239,20 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess, onBypass }) => {
                                 />
                             </div>
                         </div>
+
+                        <div className="space-y-1">
+                            <label className="text-xs font-bold text-[#515777] block">New Password</label>
+                            <div className="relative">
+                                <Lock className="w-4 h-4 text-[#717699] absolute left-3.5 top-3.5" />
+                                <input
+                                    type="password"
+                                    required
+                                    value={newPassword}
+                                    onChange={(e) => setNewPassword(e.target.value)}
+                                    placeholder="At least 6 characters"
+                                    className="w-full pl-10 pr-4 py-3 rounded-2xl neu-input text-xs font-semibold text-[#1a1c35]"
+                                />
+                            </div>
+                        </div>
+                    </>
+                )}
