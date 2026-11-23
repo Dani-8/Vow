@@ -24,3 +24,24 @@ export const Header: React.FC<HeaderProps> = ({
     onBypassAuth,
 }) => {
     const location = useLocation();
+
+    const getViewTitle = () => {
+        switch (activeView) {
+            case 'home':
+                return 'Home';
+            case 'feed':
+                return 'Mindset & Motivation Feed';
+            case 'feed-post':
+                return 'Community Post & Story';
+            case 'visible':
+                return 'Tasks & Habits';
+            case 'private':
+                return 'Growth Vault (PIN Safeguarded)';
+            case 'stats':
+                return 'Progress & Insights';
+            case 'task-detail':
+                return 'Task Workspace & Sub-Task Timeline';
+            case 'task-map':
+                if (location.pathname.startsWith('/app/map/') && location.pathname.length > '/app/map/'.length) {
+                    return 'Task Map Canvas';
+                }
