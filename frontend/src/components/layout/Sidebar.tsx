@@ -103,3 +103,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
     onLogout,
     onBypassAuth,
 }) => {
+    return (
+        <aside
+            className={`neu-card flex flex-col justify-between py-6 transition-all duration-300 z-30 shrink-0 sticky top-4 h-[calc(100vh-2rem)] ${
+                collapsed ? 'w-20 px-3' : 'w-64 px-5'
+            }`}
+        ></aside>
