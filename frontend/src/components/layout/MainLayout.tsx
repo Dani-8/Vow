@@ -19,3 +19,20 @@ interface MainLayoutProps {
     onBypassAuth: () => void;
     children: React.ReactNode;
 }
+
+export const MainLayout: React.FC<MainLayoutProps> = ({
+    user,
+    stats,
+    activeView,
+    sidebarCollapsed,
+    onToggleSidebarCollapse,
+    isPrivateUnlocked,
+    onNavigate,
+    onOpenCreateModal,
+    onOpenAuthModal,
+    onOpenProfileModal,
+    onOpenPinModal,
+    onLogout,
+    onBypassAuth,
+    children,
+}) => {
