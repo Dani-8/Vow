@@ -41,3 +41,17 @@ router.post('/signup', async (req: AuthenticatedRequest, res: Response) => {
         if (existing) {
             return res.status(400).json({ error: 'This username is already taken. Please choose another.' });
         }
+
+        // Generate private recovery key
+        const recoveryKey = generateRecoveryKey();
+        const passwordHash = await bcrypt.hash(password, 10);
+        const recoveryKeyHash = await bcrypt.hash(recoveryKey, 10);
+
+        const user = await User.create({
+            username: cleanUsername,
+            email: `${cleanUsername}@vow.user`,
+            passwordHash,
+            recoveryKeyHash,
+            plainRecoveryKey: recoveryKey,
+            name: name?.trim() || cleanUsername,
+        });
