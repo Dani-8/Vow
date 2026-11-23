@@ -202,3 +202,20 @@ router.post('/demo-bypass', async (req: AuthenticatedRequest, res: Response) => 
                 name: 'Alex Rivera',
             });
         }
+
+        // Ensure demo tasks exist for demo user
+        const existingTasks = await Task.find({ userId: user._id });
+        if (existingTasks.length === 0) {
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const twoDaysAgo = new Date();
+            twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+            const threeDaysAgo = new Date();
+            threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+            const fourDaysAgo = new Date();
+            fourDaysAgo.setDate(fourDaysAgo.getDate() - 4);
+            const fiveDaysAgo = new Date();
+            fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
+            const now = new Date();
+            const inTwoHours = new Date(now.getTime() + 2 * 60 * 60 * 1000);
+
