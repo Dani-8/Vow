@@ -141,25 +141,3 @@ IMPORTANT PRIVACY & SECURITY NOTICE:
                             </button>
                         )}
                     </div>
-                    <p className="text-[11px] font-medium text-[#717699] flex items-center space-x-1.5 pt-0.5">
-                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                        <span>Use this master key with your username to reset your password if you ever forget it.</span>
-                    </p>
-                </div>
-
-                {/* Action Footer: Only Download Credentials Button */}
-                <div className="pt-3 border-t border-slate-200/60">
-                    <button
-                        type="button"
-                        onClick={handleDownloadFile}
-                        className="w-full neu-button py-3 px-4 rounded-2xl text-xs font-black text-[#515777] hover:text-[#1a1c35] flex items-center justify-center space-x-2 transition-all hover:scale-101 active:scale-99"
-                        title="Download credentials as txt file"
-                    >
-                        <Download className="w-4 h-4 text-[#549acb]" />
-                        <span>Download Account Credentials (.txt)</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    );
-};
