@@ -219,3 +219,23 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess, onBypass }) => {
                         </div>
                     </div>
                 )}
+
+                {/* 4. Forgot Password Inputs (Recovery Key + New Password) */}
+                {authMode === 'forgot' && (
+                    <>
+                        <div className="space-y-1">
+                            <label className="text-xs font-bold text-[#515777] block">
+                                Private Recovery Key
+                            </label>
+                            <div className="relative">
+                                <KeyRound className="w-4 h-4 text-[#717699] absolute left-3.5 top-3.5" />
+                                <input
+                                    type="text"
+                                    required
+                                    value={recoveryKeyInput}
+                                    onChange={(e) => setRecoveryKeyInput(e.target.value.toUpperCase())}
+                                    placeholder="VOW-XXXX-XXXX-XXXX"
+                                    className="w-full pl-10 pr-4 py-3 rounded-2xl neu-input text-xs font-mono font-bold text-[#1a1c35] uppercase"
+                                />
+                            </div>
+                        </div>
