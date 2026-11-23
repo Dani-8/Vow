@@ -6,7 +6,7 @@ import { AuthFooter } from './components/AuthFooter';
 import { User } from '../../../types';
 
 interface AuthPageProps {
-    onSuccess: (user: User, token: string) => void;
+    onSuccess: (user: User, token: string, recoveryKey?: string) => void;
     onBypass: () => void;
     onBackToHome: () => void;
 }
