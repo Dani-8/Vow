@@ -68,3 +68,10 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
                     onLogout={onLogout}
                     onBypassAuth={onBypassAuth}
                 />
+
+                {/* View Router Workspace Content */}
+                <main className="flex-1">{children}</main>
+            </div>
+        </div>
+    );
+};
