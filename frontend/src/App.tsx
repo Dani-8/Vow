@@ -16,3 +16,20 @@ import { useFocusTimer } from './context/FocusTimerContext';
 import { getTaskSlug } from './components/pages/router/AppRouter';
 import { PrivateKeySignupModal } from './components/modals/PrivateKeySignupModal';
 import { AccountProfileModal } from './components/modals/AccountProfileModal';
+
+export default function App() {
+  const taskData = useTaskData();
+  const modalState = useModalState();
+  const challengeState = useChallenges(taskData.user);
+  const {
+    isFinishedModalOpen,
+    closeFinishedModal,
+    justFinishedSession,
+    activeSession,
+    isConflictModalOpen,
+    conflictPendingSession,
+    closeConflictModal,
+    confirmConflictSwitch,
+    isZenModeOpen,
+    closeZenMode,
+  } = useFocusTimer();
