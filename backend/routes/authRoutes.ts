@@ -526,3 +526,5 @@ router.post('/verify-pin', authenticateToken, async (req: AuthenticatedRequest, 
         return res.status(500).json({ error: 'Failed to verify PIN' });
     }
 });
+
+export default router;
