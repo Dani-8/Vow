@@ -104,3 +104,19 @@ IMPORTANT PRIVACY & SECURITY NOTICE:
                     </div>
                 </div>
 
+                {/* Private Security & Key Vault Section */}
+                <div className="space-y-2.5">
+                    <div className="flex items-center justify-between">
+                        <label className="text-[11px] font-extrabold uppercase tracking-wider text-[#515777] flex items-center space-x-1.5">
+                            <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                            <span>Private Recovery Key</span>
+                        </label>
+                        <button
+                            type="button"
+                            onClick={() => setIsKeyRevealed(!isKeyRevealed)}
+                            className="text-[11px] font-black text-[#549acb] hover:text-[#3d84b5] flex items-center space-x-1 transition-colors"
+                        >
+                            {isKeyRevealed ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                            <span>{isKeyRevealed ? 'Hide' : 'Reveal Key'}</span>
+                        </button>
+                    </div>
