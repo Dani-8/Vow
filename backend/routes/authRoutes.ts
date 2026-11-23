@@ -385,3 +385,28 @@ router.post('/demo-bypass', async (req: AuthenticatedRequest, res: Response) => 
                             priority: 'Medium',
                         },
                         {
+                            id: 'sub_mern_5',
+                            taskId: 'task_mern_project_m3k9p',
+                            title: 'Docker Containerization & Production Cloud Run Deploy',
+                            dateLabel: 'Next Week',
+                            status: 'pending',
+                            priority: 'High',
+                        },
+                    ],
+                },
+                {
+                    _id: 'task_private_clarity_9vbt1',
+                    userId: user._id,
+                    title: 'Personal High-Performance Vow & Growth Tracker',
+                    description: 'Long-range personal milestones, deep work discipline, and private reflections on focus.',
+                    tags: ['Discipline', 'Private', 'Focus'],
+                    status: 'in_progress',
+                    isPrivate: true,
+                    isHabit: false,
+                    currentStreak: 5,
+                    bestStreak: 12,
+                    lastCompletedDate: yesterday,
+                    completionHistory: [threeDaysAgo, twoDaysAgo, yesterday],
+                },
+            ]);
+        }
