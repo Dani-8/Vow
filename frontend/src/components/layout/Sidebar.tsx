@@ -209,4 +209,4 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                 ? 'neu-inset text-purple-600'
                                 : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
                         }`}
-                    ></button>
+                    >
