@@ -210,3 +210,12 @@ export default function App() {
         isPinModalOpen={modalState.isPinModalOpen}
         onClosePinModal={() => modalState.setIsPinModalOpen(false)}
         onSuccessPinUnlocked={async () => {
+          setIsPrivateUnlocked(true);
+          navigateToView('private');
+          try {
+            const privRes = await (await import('./api')).api.getPrivateTasks();
+            setPrivateTasks(privRes.tasks);
+          } catch (err) {
+            console.error('Failed to load private tasks:', err);
+          }
+        }}
