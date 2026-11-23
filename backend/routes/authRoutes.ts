@@ -71,3 +71,8 @@ router.post('/signup', async (req: AuthenticatedRequest, res: Response) => {
                 hasPinSet: !!user.pinHash,
             },
         });
+    } catch (err: any) {
+        console.error('Signup error:', err);
+        return res.status(500).json({ error: 'Failed to create account' });
+    }
+});
