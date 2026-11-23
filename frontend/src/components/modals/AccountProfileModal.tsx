@@ -57,3 +57,16 @@ IMPORTANT PRIVACY & SECURITY NOTICE:
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
     };
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-200">
+            <div className="w-full max-w-lg neu-card p-6 sm:p-8 bg-[#E0E5EC] rounded-3xl border border-white/70 shadow-2xl relative space-y-6 text-left">
+                {/* Close Cross Button on Top Right */}
+                <button
+                    onClick={onClose}
+                    className="absolute top-5 right-5 w-8 h-8 rounded-full neu-button flex items-center justify-center text-[#717699] hover:text-[#1a1c35] transition-all"
+                    title="Close"
+                >
+                    <X className="w-4 h-4" />
+                </button>
+
