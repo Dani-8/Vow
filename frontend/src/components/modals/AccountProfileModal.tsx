@@ -84,3 +84,23 @@ IMPORTANT PRIVACY & SECURITY NOTICE:
                         </h2>
                     </div>
                 </div>
+
+                {/* User Identity Card */}
+                <div className="neu-inset p-4 rounded-2xl bg-white/45 border border-white/60">
+                    <div className="flex items-center space-x-3.5">
+                        <div className="w-12 h-12 rounded-2xl neu-inset bg-gradient-to-tr from-sky-500/25 to-purple-500/25 flex items-center justify-center font-black text-base text-[#1a1c35] border border-white/70 shrink-0">
+                            {user.name.slice(0, 2).toUpperCase()}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                            <h3 className="text-base font-black text-[#1a1c35] truncate">{user.name}</h3>
+                            <p className="text-xs font-bold text-[#549acb] truncate">@{user.username}</p>
+                            <span className="text-[10px] font-semibold text-[#717699] flex items-center space-x-1 mt-0.5">
+                                <Calendar className="w-3 h-3" />
+                                <span>
+                                    Member since {user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '2026'}
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
