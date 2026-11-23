@@ -98,11 +98,10 @@ IMPORTANT PRIVACY & SECURITY NOTICE:
                         <button
                             type="button"
                             onClick={handleCopy}
-                            className={`neu-button px-3.5 py-2 rounded-xl text-xs font-black flex items-center space-x-1.5 transition-all shrink-0 ${
-                                copied
-                                    ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
-                                    : 'text-[#549acb] hover:text-[#3d84b5]'
-                            }`}
+                            className={`neu-button px-3.5 py-2 rounded-xl text-xs font-black flex items-center space-x-1.5 transition-all shrink-0 ${copied
+                                ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                                : 'text-[#549acb] hover:text-[#3d84b5]'
+                                }`}
                             title="Copy Key to Clipboard"
                         >
                             {copied ? <Check className="w-3.5 h-3.5 text-emerald-700" /> : <Copy className="w-3.5 h-3.5" />}
