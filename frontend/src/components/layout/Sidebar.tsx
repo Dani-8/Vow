@@ -181,7 +181,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                 key={item.id}
                                 onClick={() => onNavigate(item.id)}
                                 className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${isActive
-                                        ? item.activeClass
-                                        : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
+                                    ? item.activeClass
+                                    : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
                                     }`}
                             ></button>
