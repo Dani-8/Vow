@@ -55,3 +55,19 @@ router.post('/signup', async (req: AuthenticatedRequest, res: Response) => {
             plainRecoveryKey: recoveryKey,
             name: name?.trim() || cleanUsername,
         });
+
+        const token = generateToken(user._id.toString());
+
+        return res.status(201).json({
+            token,
+            recoveryKey, // Returned once on signup for the "Save Your Private Key" modal
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                name: user.name,
+                recoveryKey: user.plainRecoveryKey,
+                createdAt: user.createdAt,
+                hasPinSet: !!user.pinHash,
+            },
+        });
