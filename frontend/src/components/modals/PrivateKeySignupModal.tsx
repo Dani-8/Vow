@@ -19,3 +19,11 @@ export const PrivateKeySignupModal: React.FC<PrivateKeySignupModalProps> = ({
 
     if (!isOpen || !user) return null;
 
+    const handleCopy = () => {
+        if (!recoveryKey) return;
+        navigator.clipboard.writeText(recoveryKey);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2500);
+    };
+
+    const handleDownloadFile = () => {
