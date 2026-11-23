@@ -266,3 +266,8 @@ export default function App() {
         newSessionTarget={conflictPendingSession}
         onConfirmSwitch={confirmConflictSwitch}
       />
+
+      <FocusZenModeModal
+        isOpen={isZenModeOpen}
+        onClose={closeZenMode}
+      />
