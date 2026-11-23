@@ -163,4 +163,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         collapsed ? 'px-0' : 'px-4'
                     }`}
                     title="Create New Goal / Habit"
-                ></button>
+                >
+                    <Plus className="w-4 h-4 shrink-0" />
+                    <span
+                        className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${
+                            collapsed ? 'opacity-0 max-w-0' : 'opacity-100 max-w-[120px]'
+                        }`}
+                    >
+                        New Goal
+                    </span>
+                </button>
+</button>
