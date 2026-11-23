@@ -162,3 +162,10 @@ router.post('/reset-password', async (req: AuthenticatedRequest, res: Response) 
         if (!keyValid) {
             return res.status(401).json({ error: 'Invalid recovery key for this username' });
         }
+
+        // Update password
+        user.passwordHash = await bcrypt.hash(newPassword, 10);
+        await user.save();
+
+        const token = generateToken(user._id.toString());
+
