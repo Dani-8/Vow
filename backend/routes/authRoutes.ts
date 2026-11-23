@@ -410,3 +410,15 @@ router.post('/demo-bypass', async (req: AuthenticatedRequest, res: Response) => 
                 },
             ]);
         }
+
+        // Ensure demo task maps exist for demo user
+        const existingMaps = await TaskMap.find({ userId: user._id });
+        if (existingMaps.length === 0) {
+            for (const mapData of INITIAL_DEMO_TASK_MAPS_SERVER) {
+                await TaskMap.create({
+                    ...mapData,
+                    userId: user._id,
+                });
+            }
+        }
+
