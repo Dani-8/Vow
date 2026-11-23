@@ -96,3 +96,17 @@ export default function App() {
           onBypass={handleBypassAuth}
           onBackToHome={() => navigateToView('landing')}
         />
+
+        {/* Modal shown immediately on registration */}
+        <PrivateKeySignupModal
+          isOpen={newSignupKeyModal.isOpen}
+          user={newSignupKeyModal.user}
+          recoveryKey={newSignupKeyModal.recoveryKey}
+          onCloseAndEnterApp={() => {
+            setNewSignupKeyModal({ isOpen: false, user: null, recoveryKey: '' });
+            navigateToView('home');
+          }}
+        />
+      </>
+    );
+  }
