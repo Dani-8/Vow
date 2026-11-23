@@ -195,3 +195,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             </button>
                         );
                     })}
+
+                    <button
+                        onClick={() => {
+                            if (!isPrivateUnlocked) {
+                                onOpenPinModal();
+                            } else {
+                                onNavigate('private');
+                            }
+                        }}
+                        className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${
+                            activeView === 'private'
+                                ? 'neu-inset text-purple-600'
+                                : 'text-[#717699] hover:text-[#1a1c35] neu-button border-none bg-transparent shadow-none'
+                        }`}
+                    ></button>
