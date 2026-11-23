@@ -187,3 +187,22 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess, onBypass }) => {
                         />
                     </div>
                 </div>
+
+                {/* 3. Password (for login and signup) */}
+                {authMode !== 'forgot' && (
+                    <div className="space-y-1">
+                        <div className="flex items-center justify-between">
+                            <label className="text-xs font-bold text-[#515777] block">Password</label>
+                            {authMode === 'login' && (
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setAuthMode('forgot');
+                                        setError('');
+                                    }}
+                                    className="text-[11px] font-black text-[#549acb] hover:text-[#3d84b5] transition-colors"
+                                >
+                                    Forgot Password?
+                                </button>
+                            )}
+                        </div>
