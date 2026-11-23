@@ -271,3 +271,22 @@ export default function App() {
         isOpen={isZenModeOpen}
         onClose={closeZenMode}
       />
+
+      <FocusFinishedModal
+        isOpen={isFinishedModalOpen}
+        onClose={closeFinishedModal}
+        session={justFinishedSession}
+        onCompleteTask={(taskId) => {
+          const allTasks = [...taskData.tasks, ...privateTasks];
+          const found = allTasks.find((t) => t._id === taskId);
+          if (found && found.status !== 'completed') {
+            taskData.handleToggleComplete(found, (t, status) => {
+              if (
+                modalState.selectedTaskForDetail &&
+                modalState.selectedTaskForDetail._id === t._id
+              ) {
+                modalState.setSelectedTaskForDetail({ ...t, status: status as any });
+              }
+            });
+          }
+        }}
