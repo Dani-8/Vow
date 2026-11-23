@@ -97,3 +97,13 @@ export const Header: React.FC<HeaderProps> = ({
                         <span>Public Site</span>
                     </button>
                 )}
+                {onBypassAuth && !user && (
+                    <button
+                        onClick={onBypassAuth}
+                        className="hidden sm:flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-emerald-100 text-emerald-800 font-extrabold text-xs border border-emerald-300/60 hover:bg-emerald-200"
+                        title="Instant Dev Bypass for testing"
+                    >
+                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>Dev Bypass</span>
+                    </button>
+                )}
