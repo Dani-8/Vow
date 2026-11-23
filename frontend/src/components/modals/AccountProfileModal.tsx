@@ -10,3 +10,16 @@ interface AccountProfileModalProps {
     onLogout: () => void;
 }
 
+export const AccountProfileModal: React.FC<AccountProfileModalProps> = ({
+    isOpen,
+    onClose,
+    user,
+    stats,
+    onLogout,
+}) => {
+    const [isKeyRevealed, setIsKeyRevealed] = useState(false);
+    const [copied, setCopied] = useState(false);
+
+    if (!isOpen || !user) return null;
+
+    const recoveryKey = user.recoveryKey || 'VOW-9X4A-88KP-2Z1Q';
