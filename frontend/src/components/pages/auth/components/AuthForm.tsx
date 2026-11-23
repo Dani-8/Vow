@@ -35,3 +35,25 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess, onBypass }) => {
         setError('');
         setResetSuccessMsg('');
         setLoading(true);
+
+        try {
+            if (authMode === 'login') {
+                const res = await api.login(username.trim(), password);
+                onSuccess(res.user, res.token);
+            } else if (authMode === 'signup') {
+                const res = await api.signup(username.trim(), password, name.trim());
+                // Pass recoveryKey back so the PrivateKeySignupModal can open
+                onSuccess(res.user, res.token, res.recoveryKey);
+            } else if (authMode === 'forgot') {
+                const res = await api.resetPassword(username.trim(), recoveryKeyInput.trim(), newPassword);
+                setResetSuccessMsg('Password reset successfully! Logging you in...');
+                setTimeout(() => {
+                    onSuccess(res.user, res.token);
+                }, 1000);
+            }
+        } catch (err: any) {
+            setError(err.message || 'Authentication request failed');
+        } finally {
+            setLoading(false);
+        }
+    };
