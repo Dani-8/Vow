@@ -290,3 +290,17 @@ export default function App() {
             });
           }
         }}
+        onLogChallenge={async (challengeId, minutes, dayNumber, dateStr) => {
+          const currentCh = challengeState.challenges.find((c) => c._id === challengeId || c.id === challengeId);
+          if (currentCh) {
+            const calculatedDay = dayNumber || (currentCh.logs ? currentCh.logs.length + 1 : 1);
+            await challengeState.logDay(currentCh._id, {
+              dayNumber: calculatedDay,
+              date: dateStr || new Date().toISOString().split('T')[0],
+              status: 'completed',
+              note: `Completed ${minutes}m deep focus session.`,
+              timeSpent: `${minutes}m`,
+            });
+          }
+        }}
+      />
