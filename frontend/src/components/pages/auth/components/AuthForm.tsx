@@ -106,3 +106,33 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess, onBypass }) => {
                     <ArrowRight className="w-3.5 h-3.5" />
                 </button>
             </div>
+
+            {/* Auth Switcher Pills */}
+            <div className="flex neu-inset p-1.5 rounded-2xl">
+                <button
+                    type="button"
+                    onClick={() => {
+                        setAuthMode('login');
+                        setError('');
+                        setResetSuccessMsg('');
+                    }}
+                    className={`flex-1 py-2.5 text-xs font-black rounded-xl transition-all ${
+                        authMode === 'login' ? 'neu-button text-[#549acb] bg-[#E0E5EC] shadow-sm' : 'text-[#717699]'
+                    }`}
+                >
+                    Sign In
+                </button>
+                <button
+                    type="button"
+                    onClick={() => {
+                        setAuthMode('signup');
+                        setError('');
+                        setResetSuccessMsg('');
+                    }}
+                    className={`flex-1 py-2.5 text-xs font-black rounded-xl transition-all ${
+                        authMode === 'signup' ? 'neu-button text-[#549acb] bg-[#E0E5EC] shadow-sm' : 'text-[#717699]'
+                    }`}
+                >
+                    Create Account
+                </button>
+            </div>
