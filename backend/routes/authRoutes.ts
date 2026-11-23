@@ -471,3 +471,8 @@ router.get('/me', authenticateToken, async (req: AuthenticatedRequest, res: Resp
                 hasPinSet: !!user.pinHash,
             },
         });
+    } catch (err: any) {
+        return res.status(500).json({ error: 'Server error' });
+    }
+});
+
