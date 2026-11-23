@@ -23,3 +23,9 @@ export const AccountProfileModal: React.FC<AccountProfileModalProps> = ({
     if (!isOpen || !user) return null;
 
     const recoveryKey = user.recoveryKey || 'VOW-9X4A-88KP-2Z1Q';
+
+    const handleCopy = () => {
+        navigator.clipboard.writeText(recoveryKey);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2500);
+    };
