@@ -173,4 +173,3 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         New Goal
                     </span>
                 </button>
-</button>
