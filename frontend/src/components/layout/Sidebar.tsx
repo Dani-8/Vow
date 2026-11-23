@@ -108,4 +108,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
             className={`neu-card flex flex-col justify-between py-6 transition-all duration-300 z-30 shrink-0 sticky top-4 h-[calc(100vh-2rem)] ${
                 collapsed ? 'w-20 px-3' : 'w-64 px-5'
             }`}
-        ></aside>
+        >
+            <div className="space-y-6">
+                {collapsed ? (
+                    <div className="relative flex flex-col items-center py-1">
+                        <div
+                            onClick={() => onNavigate('home')}
+                            className="w-10 h-10 rounded-2xl neu-button flex items-center justify-center bg-[#549acb] text-white shadow-md hover:scale-105 transition-transform cursor-pointer shrink-0"
+                        >
+                            <span className="font-black text-lg italic">V</span>
+                        </div></aside>
