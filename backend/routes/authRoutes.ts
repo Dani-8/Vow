@@ -446,3 +446,9 @@ router.post('/demo-bypass', async (req: AuthenticatedRequest, res: Response) => 
                 hasPinSet: !!user.pinHash,
             },
         });
+    } catch (err: any) {
+        console.error('Demo bypass error:', err);
+        return res.status(500).json({ error: 'Demo bypass failed' });
+    }
+});
+
