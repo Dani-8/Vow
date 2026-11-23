@@ -173,3 +173,11 @@ export default function App() {
             modalState.setIsPinModalOpen(true)
           )
         }
+        onEditTask={modalState.openEditTaskModal}
+        onDeleteTask={taskData.handleDeleteTask}
+        onOpenAIAssist={modalState.openAIAssistModal}
+        onOpenCreateModal={modalState.openCreateTaskModal}
+        onOpenPinModal={() => {
+          modalState.setIsPinModalOpen(true);
+          navigateToView('private');
+        }}
