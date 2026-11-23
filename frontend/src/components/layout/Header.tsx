@@ -9,6 +9,7 @@ interface HeaderProps {
     activeView: ActiveView;
     onNavigateLanding?: () => void;
     onOpenAuthModal: () => void;
+    onOpenProfileModal?: () => void;
     onLogout: () => void;
     onBypassAuth?: () => void;
 }
@@ -18,6 +19,7 @@ export const Header: React.FC<HeaderProps> = ({
     activeView,
     onNavigateLanding,
     onOpenAuthModal,
+    onOpenProfileModal,
     onLogout,
     onBypassAuth,
 }) => {
@@ -108,13 +110,20 @@ export const Header: React.FC<HeaderProps> = ({
 
                 {user ? (
                     <div className="flex items-center space-x-2">
-                        <div className="neu-badge px-3 py-1.5 rounded-xl flex items-center space-x-2">
-                            <UserIcon className="w-4 h-4 text-[#549acb]" />
-                            <span className="text-xs font-bold text-[#44476A] max-w-[120px] truncate">{user.name}</span>
-                        </div>
+                        <button
+                            type="button"
+                            onClick={onOpenProfileModal}
+                            className="neu-badge px-3 py-1.5 rounded-xl flex items-center space-x-2 hover:bg-white/60 transition-all cursor-pointer group"
+                            title="Open Profile & Private Security Vault"
+                        >
+                            <div className="w-5 h-5 rounded-lg neu-inset flex items-center justify-center text-[#549acb] group-hover:scale-105 transition-transform">
+                                <UserIcon className="w-3.5 h-3.5" />
+                            </div>
+                            <span className="text-xs font-bold text-[#44476A] max-w-[120px] truncate group-hover:text-[#549acb] transition-colors">{user.name}</span>
+                        </button>
                         <button
                             onClick={onLogout}
-                            className="neu-button p-2.5 rounded-xl text-[#717699] hover:text-rose-600"
+                            className="neu-button p-2.5 rounded-xl text-[#717699] hover:text-rose-600 transition-colors"
                             title="Sign Out"
                         >
                             <LogOut className="w-4 h-4" />

@@ -29,6 +29,7 @@ interface SidebarProps {
     stats: MasterStreakStats | null;
     onOpenCreateModal: () => void;
     onOpenAuthModal: () => void;
+    onOpenProfileModal?: () => void;
     onOpenPinModal: () => void;
     onLogout: () => void;
     onBypassAuth?: () => void;
@@ -97,6 +98,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     stats,
     onOpenCreateModal,
     onOpenAuthModal,
+    onOpenProfileModal,
     onOpenPinModal,
     onLogout,
     onBypassAuth,
@@ -252,18 +254,23 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <div className="pt-2 border-t border-white/40">
                     {user ? (
                         <div className={`flex items-center ${collapsed ? 'justify-center' : 'justify-between'} neu-inset p-2 rounded-2xl transition-all duration-300`}>
-                            <div className="flex items-center space-x-2 min-w-0">
-                                <div className="w-8 h-8 rounded-xl neu-button flex items-center justify-center text-[#549acb] font-bold shrink-0">
-                                    <UserIcon className="w-4 h-4" />
+                            <button
+                                type="button"
+                                onClick={onOpenProfileModal}
+                                className="flex items-center space-x-2 min-w-0 text-left hover:opacity-80 transition-opacity cursor-pointer group"
+                                title="View Profile & Recovery Key"
+                            >
+                                <div className="w-8 h-8 rounded-xl neu-button flex items-center justify-center text-[#549acb] font-black text-xs shrink-0 group-hover:scale-105 transition-transform">
+                                    {user.name.slice(0, 2).toUpperCase()}
                                 </div>
                                 <div
                                     className={`min-w-0 whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'opacity-0 max-w-0 pointer-events-none' : 'opacity-100 max-w-[110px]'
                                         }`}
                                 >
-                                    <p className="text-xs font-bold text-[#1a1c35] truncate">{user.name}</p>
-                                    <p className="text-[10px] text-[#717699] truncate">{user.email}</p>
+                                    <p className="text-xs font-black text-[#1a1c35] truncate group-hover:text-[#549acb] transition-colors">{user.name}</p>
+                                    <p className="text-[10px] font-bold text-[#717699] truncate">@{user.username}</p>
                                 </div>
-                            </div>
+                            </button>
                             <button
                                 onClick={onLogout}
                                 className={`p-1.5 rounded-xl neu-button text-[#717699] hover:text-rose-600 transition-all duration-300 shrink-0 ${collapsed ? 'hidden opacity-0 max-w-0' : 'opacity-100'
