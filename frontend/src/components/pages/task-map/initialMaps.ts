@@ -1,15 +1,3 @@
-    {
-        id: 'map-r7u2k',
-        name: 'Russian Fluency & Conversational Mastery',
-        description:
-            'A structured visual progression from phonetic alphabets to conversational shadowing and natural Russian dialogue mastery.',
-        category: 'Language',
-        icon: 'BookOpen',
-        color: 'emerald',
-        isPrimary: false,
-        updatedAt: 'Yesterday',
-        nodes: [
-            {
                 id: 'node-ru-sub-1',
                 taskId: 'task_russian_mastery_r7u2k',
                 subTaskId: 'sub_ru_1',
