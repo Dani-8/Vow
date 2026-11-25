@@ -1,12 +1,4 @@
             {
-                id: 'sub_ai_3',
-                taskId: 'task_ai_engineer_a8x4m',
-                title: 'Hybrid RAG Pipeline with Embeddings & Vector Search',
-                dateLabel: 'Tomorrow',
-                status: 'in_progress',
-                priority: 'High',
-            },
-            {
                 id: 'sub_ai_4',
                 taskId: 'task_ai_engineer_a8x4m',
                 title: 'Multi-Turn Context Management & Token Cost Optimization',
