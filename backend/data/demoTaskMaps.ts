@@ -1,9 +1,3 @@
-                relationship: 'Enables',
-                isCritical: true,
-            },
-            {
-                id: 'conn-mern-2',
-                fromNodeId: 'node-mern-sub-2',
                 toNodeId: 'node-mern-sub-3',
                 relationship: 'Supports',
                 isCritical: false,
