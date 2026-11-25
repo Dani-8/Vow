@@ -1,14 +1,4 @@
             {
-                id: 'node-ai-2',
-                taskId: 'task_ai_engineer_a8x4m',
-                subTaskId: 'sub_ai_2',
-                customTitle: 'Tool Calling & Agent Loop',
-                customStatus: 'in_progress',
-                customProgress: 50,
-                x: 360,
-                y: 300,
-            },
-            {
                 id: 'node-ai-3',
                 taskId: 'task_ai_engineer_a8x4m',
                 subTaskId: 'sub_ai_3',
