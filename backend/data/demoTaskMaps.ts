@@ -1,14 +1,3 @@
-        nodes: [
-            {
-                id: 'node-ru-1',
-                taskId: 'task_russian_mastery_r7u2k',
-                subTaskId: 'sub_ru_1',
-                customTitle: 'Cyrillic Alphabet & Phonetic Drills',
-                customStatus: 'completed',
-                customProgress: 100,
-                x: 100,
-                y: 120,
-            },
             {
                 id: 'node-ru-2',
                 taskId: 'task_russian_mastery_r7u2k',
