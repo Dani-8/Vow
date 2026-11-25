@@ -1,14 +1,4 @@
             {
-                id: 'node-ru-3',
-                taskId: 'task_russian_mastery_r7u2k',
-                subTaskId: 'sub_ru_3',
-                customTitle: 'Russian Cases & Verb Conjugations',
-                customStatus: 'in_progress',
-                customProgress: 50,
-                x: 620,
-                y: 120,
-            },
-            {
                 id: 'node-ai-1',
                 taskId: 'task_ai_engineer_a8x4m',
                 subTaskId: 'sub_ai_1',
