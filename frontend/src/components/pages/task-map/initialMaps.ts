@@ -1,12 +1,3 @@
-                id: 'node-ru-sub-1',
-                taskId: 'task_russian_mastery_r7u2k',
-                subTaskId: 'sub_ru_1',
-                customTitle: 'Cyrillic Alphabet & Phonetics',
-                customStatus: 'completed',
-                customProgress: 100,
-                x: 120,
-                y: 180,
-            },
             {
                 id: 'node-ru-sub-2',
                 taskId: 'task_russian_mastery_r7u2k',
