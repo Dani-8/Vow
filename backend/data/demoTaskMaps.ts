@@ -1,10 +1,3 @@
-            },
-        ],
-        connections: [
-            {
-                id: 'conn-mern-1',
-                fromNodeId: 'node-mern-sub-1',
-                toNodeId: 'node-mern-sub-2',
                 relationship: 'Enables',
                 isCritical: true,
             },
