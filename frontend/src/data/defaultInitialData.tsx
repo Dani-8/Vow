@@ -1,13 +1,3 @@
-            {
-                id: 'sub_ai_5',
-                taskId: 'task_ai_engineer_a8x4m',
-                title: 'End-to-End Autonomous Agent Architecture Benchmark',
-                dateLabel: 'Next Week',
-                status: 'pending',
-                priority: 'High',
-            },
-        ],
-    },
     {
         _id: 'task_mern_project_m3k9p',
         userId: 'demo_user_default',
