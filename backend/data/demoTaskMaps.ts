@@ -1,12 +1,3 @@
-            {
-                id: 'conn-ru-5',
-                fromNodeId: 'node-ru-sub-4',
-                toNodeId: 'node-ru-sub-5',
-                relationship: 'Supports',
-                isCritical: false,
-            },
-        ],
-    },
     {
         id: 'map-a8x4m',
         name: 'AI Engineering & Autonomous Agents Path',
