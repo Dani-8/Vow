@@ -1,13 +1,3 @@
-        completedToday: false,
-        missedPreviousDays: false,
-        lastCompletedDate: new Date(Date.now() - 86400000).toISOString(),
-        completionHistory: [
-            new Date(Date.now() - 86400000 * 5).toISOString(),
-            new Date(Date.now() - 86400000 * 4).toISOString(),
-            new Date(Date.now() - 86400000 * 3).toISOString(),
-            new Date(Date.now() - 86400000 * 2).toISOString(),
-            new Date(Date.now() - 86400000).toISOString(),
-        ],
         createdAt: new Date(Date.now() - 86400000 * 8).toISOString(),
         updatedAt: new Date().toISOString(),
         subTasks: [
