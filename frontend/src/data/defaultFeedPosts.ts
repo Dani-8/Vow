@@ -1,18 +1,4 @@
     {
-        id: 'post_streak_win',
-        authorName: 'Marcus Sterling',
-        authorBadge: '30-Day Finisher',
-        category: 'win',
-        title: 'Completed My 30-Day TypeScript Mastery Sprint! 🏆',
-        content: `Just logged Day 30 without a single skipped day. Started from feeling intimidated by advanced generics and utility types to building a full enterprise compiler plugin. 
-
-The secret wasn't willpower—it was locking down 30 minutes every morning right after coffee before touching any emails. Onward to the next challenge!`,
-        likesCount: 175,
-        savesCount: 41,
-        createdAt: '2026-10-07T09:30:00Z',
-        tags: ['challenge', 'coding', 'consistency'],
-    },
-    {
         id: 'post_daily_discipline',
         authorName: 'Sarah Jenkins',
         authorBadge: 'Habit Architect',
