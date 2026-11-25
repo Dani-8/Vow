@@ -1,10 +1,3 @@
-                id: 'conn-4',
-                fromNodeId: 'node-ai-2',
-                toNodeId: 'node-ai-3',
-                relationship: 'Leads To',
-                isCritical: true,
-            },
-            {
                 id: 'conn-5',
                 fromNodeId: 'node-mern-1',
                 toNodeId: 'node-mern-2',
