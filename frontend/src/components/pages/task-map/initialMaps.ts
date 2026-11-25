@@ -1,11 +1,4 @@
             {
-                id: 'conn-mern-3',
-                fromNodeId: 'node-mern-sub-2',
-                toNodeId: 'node-mern-sub-4',
-                relationship: 'Enables',
-                isCritical: true,
-            },
-            {
                 id: 'conn-mern-4',
                 fromNodeId: 'node-mern-sub-3',
                 toNodeId: 'node-mern-sub-5',
