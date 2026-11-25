@@ -1,19 +1,3 @@
-        effectiveCurrentStreak: 6,
-        effectiveBestStreak: 14,
-        completedToday: false,
-        missedPreviousDays: false,
-        lastCompletedDate: new Date(Date.now() - 86400000).toISOString(),
-        completionHistory: [
-            new Date(Date.now() - 86400000 * 6).toISOString(),
-            new Date(Date.now() - 86400000 * 5).toISOString(),
-            new Date(Date.now() - 86400000 * 4).toISOString(),
-            new Date(Date.now() - 86400000 * 3).toISOString(),
-            new Date(Date.now() - 86400000 * 2).toISOString(),
-            new Date(Date.now() - 86400000).toISOString(),
-        ],
-        createdAt: new Date(Date.now() - 86400000 * 10).toISOString(),
-        updatedAt: new Date().toISOString(),
-        subTasks: [
             {
                 id: 'sub_ru_1',
                 taskId: 'task_russian_mastery_r7u2k',
