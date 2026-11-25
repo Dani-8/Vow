@@ -1,14 +1,4 @@
             {
-                id: 'node-mern-sub-2',
-                taskId: 'task_mern_project_m3k9p',
-                subTaskId: 'sub_mern_2',
-                customTitle: 'Database Schemas & Validation',
-                customStatus: 'completed',
-                customProgress: 100,
-                x: 400,
-                y: 180,
-            },
-            {
                 id: 'node-mern-sub-3',
                 taskId: 'task_mern_project_m3k9p',
                 subTaskId: 'sub_mern_3',
