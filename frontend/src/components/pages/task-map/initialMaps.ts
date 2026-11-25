@@ -1,8 +1,3 @@
-                fromNodeId: 'node-ai-3',
-                toNodeId: 'node-mern-5',
-                relationship: 'Depends On',
-                isCritical: true,
-            },
             {
                 id: 'conn-8',
                 fromNodeId: 'node-mern-3',
