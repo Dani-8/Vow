@@ -1,14 +1,4 @@
             {
-                id: 'node-ru-sub-3',
-                taskId: 'task_russian_mastery_r7u2k',
-                subTaskId: 'sub_ru_3',
-                customTitle: 'Noun Cases & Conjugation Rules',
-                customStatus: 'in_progress',
-                customProgress: 50,
-                x: 680,
-                y: 180,
-            },
-            {
                 id: 'node-ru-sub-4',
                 taskId: 'task_russian_mastery_r7u2k',
                 subTaskId: 'sub_ru_4',
