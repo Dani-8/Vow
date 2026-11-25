@@ -1,11 +1,3 @@
-    {
-        id: 'map-a8x4m',
-        name: 'AI Engineering & Autonomous Agents Path',
-        description:
-            'Step-by-step technical dependency roadmap covering Gemini SDK orchestration, tools calling, RAG knowledge retrieval, and agent evaluation.',
-        color: 'sky',
-        isPrimary: false,
-        nodes: [
             {
                 id: 'node-ai-sub-1',
                 taskId: 'task_ai_engineer_a8x4m',
