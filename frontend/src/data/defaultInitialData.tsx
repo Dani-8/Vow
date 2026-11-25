@@ -1,12 +1,4 @@
             {
-                id: 'sub_mern_2',
-                taskId: 'task_mern_project_m3k9p',
-                title: 'Database Schema Models, Indexing & Validation',
-                dateLabel: 'Completed',
-                status: 'completed',
-                priority: 'High',
-            },
-            {
                 id: 'sub_mern_3',
                 taskId: 'task_mern_project_m3k9p',
                 title: 'React 18 Modular Components, Tailwind CSS & Motion',
