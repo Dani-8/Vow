@@ -1,12 +1,3 @@
-            {
-                id: 'conn-6',
-                fromNodeId: 'node-mern-2',
-                toNodeId: 'node-mern-3',
-                relationship: 'Supports',
-                isCritical: false,
-            },
-            {
-                id: 'conn-7',
                 fromNodeId: 'node-ai-3',
                 toNodeId: 'node-mern-5',
                 relationship: 'Depends On',
