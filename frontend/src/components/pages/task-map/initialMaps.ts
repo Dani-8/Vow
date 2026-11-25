@@ -1,14 +1,4 @@
             {
-                id: 'node-ai-1',
-                taskId: 'task_ai_engineer_a8x4m',
-                subTaskId: 'sub_ai_1',
-                customTitle: 'Gemini 2.5 API Integration',
-                customStatus: 'completed',
-                customProgress: 100,
-                x: 100,
-                y: 300,
-            },
-            {
                 id: 'node-ai-2',
                 taskId: 'task_ai_engineer_a8x4m',
                 subTaskId: 'sub_ai_2',
