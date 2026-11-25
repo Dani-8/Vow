@@ -1,17 +1,3 @@
-import { TaskMap } from './types';
-
-export const INITIAL_DEMO_TASK_MAPS: TaskMap[] = [
-    {
-        id: 'map-trin9',
-        name: 'Master Milestone Roadmap (Russian + AI Eng + MERN)',
-        description:
-            'End-to-end multi-disciplinary mastery roadmap interconnecting Russian language immersion, autonomous AI systems engineering, and scalable MERN full-stack cloud deployment.',
-        category: 'Mastery Path',
-        icon: 'Network',
-        color: 'purple',
-        isPrimary: true,
-        updatedAt: 'Today',
-        nodes: [
             {
                 id: 'node-ru-1',
                 taskId: 'task_russian_mastery_r7u2k',
