@@ -1,8 +1,3 @@
-                customStatus: 'completed',
-                customProgress: 100,
-                x: 100,
-                y: 480,
-            },
             {
                 id: 'node-mern-2',
                 taskId: 'task_mern_project_m3k9p',
