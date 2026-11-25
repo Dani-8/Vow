@@ -1,13 +1,3 @@
-import { ITaskMap } from './models/TaskMap.js';
-
-export const INITIAL_DEMO_TASK_MAPS_SERVER: Partial<ITaskMap>[] = [
-    {
-        id: 'map-trin9',
-        name: 'Master Milestone Roadmap (Russian + AI Eng + MERN)',
-        description:
-            'End-to-end multi-disciplinary mastery roadmap interconnecting Russian language immersion, autonomous AI systems engineering, and scalable MERN full-stack cloud deployment.',
-        color: 'purple',
-        isPrimary: true,
         nodes: [
             {
                 id: 'node-ru-1',
