@@ -1,14 +1,4 @@
             {
-                id: 'node-ai-sub-1',
-                taskId: 'task_ai_engineer_a8x4m',
-                subTaskId: 'sub_ai_1',
-                customTitle: 'Gemini 2.5 Structured Outputs',
-                customStatus: 'completed',
-                customProgress: 100,
-                x: 120,
-                y: 180,
-            },
-            {
                 id: 'node-ai-sub-2',
                 taskId: 'task_ai_engineer_a8x4m',
                 subTaskId: 'sub_ai_2',
