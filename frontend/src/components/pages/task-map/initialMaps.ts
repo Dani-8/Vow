@@ -1,14 +1,4 @@
             {
-                id: 'node-ru-2',
-                taskId: 'task_russian_mastery_r7u2k',
-                subTaskId: 'sub_ru_2',
-                customTitle: 'Top 500 Core Russian Vocabulary',
-                customStatus: 'in_progress',
-                customProgress: 50,
-                x: 360,
-                y: 120,
-            },
-            {
                 id: 'node-ru-3',
                 taskId: 'task_russian_mastery_r7u2k',
                 subTaskId: 'sub_ru_3',
