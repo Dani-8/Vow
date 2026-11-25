@@ -1,12 +1,3 @@
-            {
-                id: 'node-mern-sub-5',
-                taskId: 'task_mern_project_m3k9p',
-                subTaskId: 'sub_mern_5',
-                customTitle: 'Docker & Cloud Run Deployment',
-                customStatus: 'todo',
-                customProgress: 0,
-                x: 680,
-                y: 360,
             },
         ],
         connections: [
