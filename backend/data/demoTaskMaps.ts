@@ -1,10 +1,3 @@
-                subTaskId: 'sub_mern_4',
-                customTitle: 'Optimistic CRUD & Global State',
-                customStatus: 'in_progress',
-                customProgress: 50,
-                x: 400,
-                y: 360,
-            },
             {
                 id: 'node-mern-sub-5',
                 taskId: 'task_mern_project_m3k9p',
