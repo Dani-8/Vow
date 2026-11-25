@@ -1,12 +1,3 @@
-                id: 'node-ai-3',
-                taskId: 'task_ai_engineer_a8x4m',
-                subTaskId: 'sub_ai_3',
-                customTitle: 'Hybrid Vector Search & RAG',
-                customStatus: 'in_progress',
-                customProgress: 50,
-                x: 620,
-                y: 300,
-            },
             {
                 id: 'node-mern-1',
                 taskId: 'task_mern_project_m3k9p',
