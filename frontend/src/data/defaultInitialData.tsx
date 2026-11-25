@@ -1,12 +1,4 @@
             {
-                id: 'sub_ai_2',
-                taskId: 'task_ai_engineer_a8x4m',
-                title: 'Tool Calling & Autonomous Agent Execution Loop',
-                dateLabel: 'Today',
-                status: 'in_progress',
-                priority: 'High',
-            },
-            {
                 id: 'sub_ai_3',
                 taskId: 'task_ai_engineer_a8x4m',
                 title: 'Hybrid RAG Pipeline with Embeddings & Vector Search',
