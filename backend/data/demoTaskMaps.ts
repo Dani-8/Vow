@@ -1,9 +1,3 @@
-                id: 'conn-3',
-                fromNodeId: 'node-ai-1',
-                toNodeId: 'node-ai-2',
-                relationship: 'Enables',
-                isCritical: true,
-            },
             {
                 id: 'conn-4',
                 fromNodeId: 'node-ai-2',
