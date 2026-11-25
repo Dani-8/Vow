@@ -1,14 +1,3 @@
-            {
-                id: 'node-ru-sub-5',
-                taskId: 'task_russian_mastery_r7u2k',
-                subTaskId: 'sub_ru_5',
-                customTitle: 'Dialogue Shadowing & Voice Log',
-                customStatus: 'todo',
-                customProgress: 0,
-                x: 680,
-                y: 360,
-            },
-        ],
         connections: [
             {
                 id: 'conn-ru-1',
