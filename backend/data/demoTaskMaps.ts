@@ -1,10 +1,3 @@
-                x: 400,
-                y: 180,
-            },
-            {
-                id: 'node-ai-sub-3',
-                taskId: 'task_ai_engineer_a8x4m',
-                subTaskId: 'sub_ai_3',
                 customTitle: 'Hybrid Embeddings & RAG Search',
                 customStatus: 'in_progress',
                 customProgress: 50,
