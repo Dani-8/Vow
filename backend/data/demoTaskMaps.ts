@@ -1,10 +1,3 @@
-            {
-                id: 'node-ai-sub-2',
-                taskId: 'task_ai_engineer_a8x4m',
-                subTaskId: 'sub_ai_2',
-                customTitle: 'Autonomous Tool Calling Loops',
-                customStatus: 'in_progress',
-                customProgress: 50,
                 x: 400,
                 y: 180,
             },
