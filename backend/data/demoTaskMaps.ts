@@ -1,8 +1,3 @@
-                customProgress: 0,
-                x: 900,
-                y: 300,
-            },
-        ],
         connections: [
             {
                 id: 'conn-1',
