@@ -1,12 +1,3 @@
-            {
-                id: 'conn-ai-5',
-                fromNodeId: 'node-ai-sub-4',
-                toNodeId: 'node-ai-sub-5',
-                relationship: 'Supports',
-                isCritical: false,
-            },
-        ],
-    },
     {
         id: 'map-m3k9p',
         name: 'MERN Full-Stack Delivery Pipeline',
