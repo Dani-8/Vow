@@ -1,11 +1,4 @@
             {
-                id: 'conn-2',
-                fromNodeId: 'node-ru-2',
-                toNodeId: 'node-ru-3',
-                relationship: 'Supports',
-                isCritical: false,
-            },
-            {
                 id: 'conn-3',
                 fromNodeId: 'node-ai-1',
                 toNodeId: 'node-ai-2',
