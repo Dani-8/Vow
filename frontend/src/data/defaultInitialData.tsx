@@ -1,12 +1,4 @@
             {
-                id: 'sub_ru_1',
-                taskId: 'task_russian_mastery_r7u2k',
-                title: 'Cyrillic Alphabet & Phonetic Pronunciation Drills',
-                dateLabel: 'Completed',
-                status: 'completed',
-                priority: 'High',
-            },
-            {
                 id: 'sub_ru_2',
                 taskId: 'task_russian_mastery_r7u2k',
                 title: 'Top 500 High-Frequency Russian Vocabulary & Spaced Repetition',
