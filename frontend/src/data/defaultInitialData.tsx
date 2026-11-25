@@ -1,12 +1,4 @@
             {
-                id: 'sub_ai_4',
-                taskId: 'task_ai_engineer_a8x4m',
-                title: 'Multi-Turn Context Management & Token Cost Optimization',
-                dateLabel: 'This Week',
-                status: 'pending',
-                priority: 'Medium',
-            },
-            {
                 id: 'sub_ai_5',
                 taskId: 'task_ai_engineer_a8x4m',
                 title: 'End-to-End Autonomous Agent Architecture Benchmark',
