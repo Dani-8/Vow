@@ -1,12 +1,3 @@
-        completionHistory: [
-            new Date(Date.now() - 86400000 * 4).toISOString(),
-            new Date(Date.now() - 86400000 * 3).toISOString(),
-            new Date(Date.now() - 86400000 * 2).toISOString(),
-            new Date(Date.now() - 86400000).toISOString(),
-        ],
-        createdAt: new Date(Date.now() - 86400000 * 6).toISOString(),
-        updatedAt: new Date().toISOString(),
-        subTasks: [
             {
                 id: 'sub_ai_1',
                 taskId: 'task_ai_engineer_a8x4m',
