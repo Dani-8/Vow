@@ -1,13 +1,3 @@
-            {
-                id: 'conn-ai-3',
-                fromNodeId: 'node-ai-sub-2',
-                toNodeId: 'node-ai-sub-4',
-                relationship: 'Supports',
-                isCritical: false,
-            },
-            {
-                id: 'conn-ai-4',
-                fromNodeId: 'node-ai-sub-3',
                 toNodeId: 'node-ai-sub-5',
                 relationship: 'Depends On',
                 isCritical: true,
