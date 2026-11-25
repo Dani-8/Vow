@@ -1,14 +1,3 @@
-                id: 'sub_mern_5',
-                taskId: 'task_mern_project_m3k9p',
-                title: 'Docker Containerization & Production Cloud Run Deploy',
-                dateLabel: 'Next Week',
-                status: 'pending',
-                priority: 'High',
-            },
-        ],
-    },
-];
-
 export const DEFAULT_INITIAL_PRIVATE_TASKS: Task[] = [
     {
         _id: 'task_private_clarity_9vbt1',
