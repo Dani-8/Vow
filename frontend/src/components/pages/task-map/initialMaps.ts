@@ -1,14 +1,4 @@
             {
-                id: 'node-mern-sub-1',
-                taskId: 'task_mern_project_m3k9p',
-                subTaskId: 'sub_mern_1',
-                customTitle: 'Express Architecture & JWT Auth',
-                customStatus: 'completed',
-                customProgress: 100,
-                x: 120,
-                y: 180,
-            },
-            {
                 id: 'node-mern-sub-2',
                 taskId: 'task_mern_project_m3k9p',
                 subTaskId: 'sub_mern_2',
