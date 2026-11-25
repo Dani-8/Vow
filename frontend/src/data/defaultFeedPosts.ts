@@ -1,12 +1,4 @@
-import { FeedPost } from '../types';
 
-export const INITIAL_FEED_POSTS: FeedPost[] = [
-    {
-        id: 'post_transformation_story',
-        authorName: 'David K.',
-        authorBadge: 'From Burnout to Mastery',
-        category: 'story',
-        title: 'How I Rebuilt My Career and Focus from Complete Scratch in 6 Months',
         content: `Six months ago, I was completely overwhelmed. I had 15 different unfinished side projects, zero daily routine, and felt guilty every evening looking at my untouched todo lists. I would open social media to numb the anxiety, which only made it worse.
 
 The turning point was realizing that motivation is a myth—systems are everything. I started using Vow to lock in just ONE non-negotiable 45-minute focus block per day before checking any messages. 
