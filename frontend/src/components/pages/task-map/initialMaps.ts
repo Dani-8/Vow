@@ -1,14 +1,4 @@
             {
-                id: 'node-ru-sub-4',
-                taskId: 'task_russian_mastery_r7u2k',
-                subTaskId: 'sub_ru_4',
-                customTitle: 'Daily Slow Russian Podcasts',
-                customStatus: 'todo',
-                customProgress: 0,
-                x: 400,
-                y: 360,
-            },
-            {
                 id: 'node-ru-sub-5',
                 taskId: 'task_russian_mastery_r7u2k',
                 subTaskId: 'sub_ru_5',
