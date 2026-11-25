@@ -1,11 +1,3 @@
-        connections: [
-            {
-                id: 'conn-1',
-                fromNodeId: 'node-ru-1',
-                toNodeId: 'node-ru-2',
-                relationship: 'Enables',
-                isCritical: true,
-            },
             {
                 id: 'conn-2',
                 fromNodeId: 'node-ru-2',
