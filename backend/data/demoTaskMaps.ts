@@ -1,12 +1,3 @@
-            {
-                id: 'conn-8',
-                fromNodeId: 'node-mern-3',
-                toNodeId: 'node-mern-5',
-                relationship: 'Leads To',
-                isCritical: true,
-            },
-        ],
-    },
     {
         id: 'map-r7u2k',
         name: 'Russian Fluency & Conversational Mastery',
