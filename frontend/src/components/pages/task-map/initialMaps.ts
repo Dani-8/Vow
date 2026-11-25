@@ -1,14 +1,4 @@
             {
-                id: 'node-ru-sub-2',
-                taskId: 'task_russian_mastery_r7u2k',
-                subTaskId: 'sub_ru_2',
-                customTitle: 'Top 500 Vocabulary Words',
-                customStatus: 'in_progress',
-                customProgress: 50,
-                x: 400,
-                y: 180,
-            },
-            {
                 id: 'node-ru-sub-3',
                 taskId: 'task_russian_mastery_r7u2k',
                 subTaskId: 'sub_ru_3',
