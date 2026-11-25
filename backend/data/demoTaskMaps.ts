@@ -1,9 +1,3 @@
-            {
-                id: 'node-mern-sub-3',
-                taskId: 'task_mern_project_m3k9p',
-                subTaskId: 'sub_mern_3',
-                customTitle: 'React 18 & Tailwind Styling',
-                customStatus: 'in_progress',
                 customProgress: 50,
                 x: 680,
                 y: 180,
