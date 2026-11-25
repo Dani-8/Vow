@@ -1,12 +1,4 @@
             {
-                id: 'sub_ai_1',
-                taskId: 'task_ai_engineer_a8x4m',
-                title: 'Gemini 2.5 API Integration & Structured Schema Outputs',
-                dateLabel: 'Completed',
-                status: 'completed',
-                priority: 'High',
-            },
-            {
                 id: 'sub_ai_2',
                 taskId: 'task_ai_engineer_a8x4m',
                 title: 'Tool Calling & Autonomous Agent Execution Loop',
