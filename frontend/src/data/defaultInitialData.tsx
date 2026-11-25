@@ -1,13 +1,3 @@
-            {
-                id: 'sub_ru_5',
-                taskId: 'task_russian_mastery_r7u2k',
-                title: 'Conversational Dialogue Shadowing & Voice Journaling',
-                dateLabel: 'This Week',
-                status: 'pending',
-                priority: 'Low',
-            },
-        ],
-    },
     {
         _id: 'task_ai_engineer_a8x4m',
         userId: 'demo_user_default',
