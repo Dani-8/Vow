@@ -1,14 +1,3 @@
-    {
-        id: 'map-m3k9p',
-        name: 'MERN Full-Stack Delivery Pipeline',
-        description:
-            'Complete end-to-end architecture pipeline spanning backend APIs, database persistence, modern React frontend, and production Cloud Run deployment.',
-        category: 'Full Stack',
-        icon: 'Layers',
-        color: 'amber',
-        isPrimary: false,
-        updatedAt: '3 days ago',
-        nodes: [
             {
                 id: 'node-mern-sub-1',
                 taskId: 'task_mern_project_m3k9p',
