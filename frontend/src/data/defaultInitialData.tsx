@@ -1,12 +1,4 @@
             {
-                id: 'sub_ru_3',
-                taskId: 'task_russian_mastery_r7u2k',
-                title: 'Russian Noun Cases & 1st/2nd Verb Conjugations',
-                dateLabel: 'Today',
-                status: 'in_progress',
-                priority: 'Medium',
-            },
-            {
                 id: 'sub_ru_4',
                 taskId: 'task_russian_mastery_r7u2k',
                 title: '20-Minute Daily Russian Podcast Listening (Slow Russian)',
