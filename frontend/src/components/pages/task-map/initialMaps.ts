@@ -1,14 +1,3 @@
-            {
-                id: 'node-ai-sub-5',
-                taskId: 'task_ai_engineer_a8x4m',
-                subTaskId: 'sub_ai_5',
-                customTitle: 'Agent Benchmark & Eval Suite',
-                customStatus: 'todo',
-                customProgress: 0,
-                x: 680,
-                y: 360,
-            },
-        ],
         connections: [
             {
                 id: 'conn-ai-1',
