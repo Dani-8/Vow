@@ -1,10 +1,3 @@
-            {
-                id: 'node-ai-sub-4',
-                taskId: 'task_ai_engineer_a8x4m',
-                subTaskId: 'sub_ai_4',
-                customTitle: 'Context & Token Budget Optimization',
-                customStatus: 'todo',
-                customProgress: 0,
                 x: 400,
                 y: 360,
             },
