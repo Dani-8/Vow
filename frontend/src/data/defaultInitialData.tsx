@@ -1,12 +1,3 @@
-            {
-                id: 'sub_mern_4',
-                taskId: 'task_mern_project_m3k9p',
-                title: 'Global State Management & Optimistic CRUD Updates',
-                dateLabel: 'Tomorrow',
-                status: 'in_progress',
-                priority: 'Medium',
-            },
-            {
                 id: 'sub_mern_5',
                 taskId: 'task_mern_project_m3k9p',
                 title: 'Docker Containerization & Production Cloud Run Deploy',
