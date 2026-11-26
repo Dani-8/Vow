@@ -1,11 +1,3 @@
-            date: new Date(Date.now() - (32 - i) * 86400000).toISOString().split('T')[0],
-            status: 'completed' as const,
-            note: `Day ${i + 1}: Deep reading session completed (${i < 14 ? 'Phase 1' : 'Phase 2'}).`,
-            timeSpent: '45m',
-            createdAt: new Date(Date.now() - (32 - i) * 86400000).toISOString(),
-        })),
-    },
-    {
         id: 'ch-russian-phases',
         title: 'Learn Conversational Russian',
         description: 'Master Cyrillic, 100 core verbs, and hold a 5-minute conversation in sequential phases.',
