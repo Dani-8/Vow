@@ -1,10 +1,3 @@
-                status: 'completed',
-                note: 'Learned first 10 letters and basic vowels.',
-                timeSpent: '35m',
-                createdAt: new Date(Date.now() - 14 * 86400000).toISOString(),
-            },
-            {
-                id: 'ru-main-2',
                 dayNumber: 2,
                 date: new Date(Date.now() - 13 * 86400000).toISOString().split('T')[0],
                 status: 'completed',
