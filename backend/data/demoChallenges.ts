@@ -1,9 +1,3 @@
-                        date: new Date(Date.now() - 13 * 86400000).toISOString().split('T')[0],
-                        status: 'completed',
-                        note: 'Practiced soft and hard signs (ь, ъ) & voiced/voiceless consonants.',
-                        timeSpent: '40m',
-                        createdAt: new Date(Date.now() - 13 * 86400000).toISOString(),
-                    },
                     {
                         id: 'ru-log-3',
                         dayNumber: 3,
