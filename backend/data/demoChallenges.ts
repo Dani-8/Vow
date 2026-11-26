@@ -1,12 +1,3 @@
-            {
-                id: 'sprint-reading-phase2',
-                phaseNumber: 2,
-                title: 'Phase 2: Architecture & Distributed Systems',
-                targetDays: 16,
-                startDate: new Date(Date.now() - 17 * 86400000).toISOString(),
-                targetEndDate: new Date(Date.now() - 2 * 86400000).toISOString(),
-                rule: 'Read 30 pages of technical architecture texts + write 1 summary paragraph.',
-                status: 'completed',
                 logs: Array.from({ length: 16 }).map((_, i) => ({
                     id: `read-p2-log-${i + 1}`,
                     dayNumber: i + 15,
