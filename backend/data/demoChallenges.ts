@@ -1,10 +1,3 @@
-                logs: [
-                    {
-                        id: 'ru-p2-log-1',
-                        dayNumber: 1,
-                        date: new Date(Date.now() - 3 * 86400000).toISOString().split('T')[0],
-                        status: 'completed',
-                        note: 'First group: знать, понимать, делать, говорить, читать.',
                         timeSpent: '30m',
                         createdAt: new Date(Date.now() - 3 * 86400000).toISOString(),
                     },
