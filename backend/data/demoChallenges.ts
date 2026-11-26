@@ -1,18 +1,3 @@
-                        timeSpent: '30m',
-                        createdAt: new Date(Date.now() - 7 * 86400000).toISOString(),
-                    },
-                    {
-                        id: 'ru-log-9',
-                        dayNumber: 9,
-                        date: new Date(Date.now() - 6 * 86400000).toISOString().split('T')[0],
-                        status: 'completed',
-                        note: 'Numbers 1–100 pronunciation and counting drills.',
-                        timeSpent: '45m',
-                        createdAt: new Date(Date.now() - 6 * 86400000).toISOString(),
-                    },
-                    {
-                        id: 'ru-log-10',
-                        dayNumber: 10,
                         date: new Date(Date.now() - 5 * 86400000).toISOString().split('T')[0],
                         status: 'completed',
                         note: 'Phase 1 Final Test: 100% accuracy on 50 unseen Cyrillic words!',
