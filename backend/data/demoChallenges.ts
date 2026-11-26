@@ -1,13 +1,4 @@
             {
-                id: 'log-27',
-                dayNumber: 27,
-                date: new Date(Date.now() - 7 * 86400000).toISOString().split('T')[0],
-                status: 'completed',
-                note: 'Refactored React state architecture with modular custom hooks.',
-                timeSpent: '1h 35m',
-                createdAt: new Date(Date.now() - 7 * 86400000).toISOString(),
-            },
-            {
                 id: 'log-26',
                 dayNumber: 26,
                 date: new Date(Date.now() - 8 * 86400000).toISOString().split('T')[0],
