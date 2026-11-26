@@ -1,9 +1,3 @@
-            {
-                id: 'fit-log-16',
-                dayNumber: 16,
-                date: new Date(Date.now() - 2 * 86400000).toISOString().split('T')[0],
-                status: 'completed',
-                note: 'High intensity interval sprint session + core stability.',
                 timeSpent: '45m',
                 createdAt: new Date(Date.now() - 2 * 86400000).toISOString(),
             },
