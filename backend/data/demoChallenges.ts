@@ -1,10 +1,3 @@
-            },
-        ],
-        logs: [
-            {
-                id: 'ru-main-1',
-                dayNumber: 1,
-                date: new Date(Date.now() - 14 * 86400000).toISOString().split('T')[0],
                 status: 'completed',
                 note: 'Learned first 10 letters and basic vowels.',
                 timeSpent: '35m',
