@@ -1,5 +1,3 @@
-                        dayNumber: 3,
-                        date: new Date(Date.now() - 1 * 86400000).toISOString().split('T')[0],
                         status: 'completed',
                         note: 'Accusative case with verbs of motion & direct action.',
                         timeSpent: '40m',
