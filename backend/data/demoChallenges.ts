@@ -1,11 +1,3 @@
-        startDate: new Date(Date.now() - 14 * 86400000).toISOString(),
-        targetEndDate: new Date(Date.now() + 31 * 86400000).toISOString(),
-        rule: 'Practice Russian listening and active recall for 30 minutes daily.',
-        tags: ['Russian', 'Language', 'Polyglot', 'MilestoneSprints'],
-        status: 'active',
-        currentSprintId: 'sprint-ru-phase2',
-        sprints: [
-            {
                 id: 'sprint-ru-phase1',
                 phaseNumber: 1,
                 title: 'Phase 1: Cyrillic Alphabet & Phonetics Mastery',
