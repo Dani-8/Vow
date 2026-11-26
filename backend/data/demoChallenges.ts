@@ -1,11 +1,3 @@
-                    id: `read-p1-log-${i + 1}`,
-                    dayNumber: i + 1,
-                    date: new Date(Date.now() - (32 - i) * 86400000).toISOString().split('T')[0],
-                    status: 'completed' as const,
-                    note: `Day ${i + 1}: Deep reading on attention economics & cognitive stamina. Note-taking session completed.`,
-                    timeSpent: '45m',
-                    createdAt: new Date(Date.now() - (32 - i) * 86400000).toISOString(),
-                })),
                 retrospective: {
                     completedAt: new Date(Date.now() - 18 * 86400000).toISOString().split('T')[0],
                     summary: 'Finished Deep Work by Cal Newport and Thinking in Systems by Donella Meadows. Built an uninterrupted 45-minute morning reading routine!',
