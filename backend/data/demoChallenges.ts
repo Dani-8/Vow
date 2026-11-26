@@ -1,11 +1,3 @@
-                id: 'sprint-ru-phase2',
-                phaseNumber: 2,
-                title: 'Phase 2: 100 Core Verbs & Essential Cases',
-                targetDays: 15,
-                startDate: new Date(Date.now() - 3 * 86400000).toISOString(),
-                targetEndDate: new Date(Date.now() + 12 * 86400000).toISOString(),
-                rule: 'Learn 7 new verbs daily and construct 3 full conversational sentences.',
-                status: 'active',
                 logs: [
                     {
                         id: 'ru-p2-log-1',
