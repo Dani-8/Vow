@@ -1,11 +1,3 @@
-    {
-        id: 'ch-code-ai-100',
-        title: '100 Days of Code & AI Engineering',
-        description: 'Ship code. Learn AI. Build in public.',
-        category: 'engineering',
-        color: 'purple',
-        icon: 'code',
-        targetDays: 100,
         startDate: new Date(Date.now() - 34 * 86400000).toISOString(),
         targetEndDate: new Date(Date.now() + 66 * 86400000).toISOString(),
             {
