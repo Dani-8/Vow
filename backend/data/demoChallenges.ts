@@ -1,10 +1,3 @@
-                retrospective: {
-                    completedAt: new Date(Date.now() - 18 * 86400000).toISOString().split('T')[0],
-                    summary: 'Finished Deep Work by Cal Newport and Thinking in Systems by Donella Meadows. Built an uninterrupted 45-minute morning reading routine!',
-                    score: 5,
-                    keyLearnings: 'Morning reading before touching phone increases comprehension by 3x. Taking margin notes keeps focus razor sharp.',
-                },
-            },
             {
                 id: 'sprint-reading-phase2',
                 phaseNumber: 2,
