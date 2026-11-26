@@ -1,13 +1,3 @@
-        icon: 'dumbbell',
-        targetDays: 60,
-        startDate: new Date(Date.now() - 18 * 86400000).toISOString(),
-        targetEndDate: new Date(Date.now() + 42 * 86400000).toISOString(),
-        rule: 'Minimum 45 minutes of workout, 10k steps, and clean nutrition tracking.',
-        tags: ['Fitness', 'Health', 'Strength', 'Cardio'],
-        status: 'active',
-        logs: [
-            {
-                id: 'fit-log-17',
                 dayNumber: 17,
                 date: new Date(Date.now() - 1 * 86400000).toISOString().split('T')[0],
                 status: 'completed',
