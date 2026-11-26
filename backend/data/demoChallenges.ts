@@ -1,10 +1,3 @@
-            {
-                id: 'log-31',
-                dayNumber: 31,
-                date: new Date(Date.now() - 3 * 86400000).toISOString().split('T')[0],
-                status: 'completed',
-                note: 'Implemented auth middleware and unit tests.',
-                timeSpent: '1h 20m',
                 createdAt: new Date(Date.now() - 3 * 86400000).toISOString(),
             },
             {
