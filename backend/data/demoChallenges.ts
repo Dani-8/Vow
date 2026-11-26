@@ -1,10 +1,3 @@
-                        timeSpent: '30m',
-                        createdAt: new Date(Date.now() - 11 * 86400000).toISOString(),
-                    },
-                    {
-                        id: 'ru-log-5',
-                        dayNumber: 5,
-                        date: new Date(Date.now() - 10 * 86400000).toISOString().split('T')[0],
                         status: 'completed',
                         note: 'Mid-sprint pronunciation review with native speech recordings.',
                         timeSpent: '50m',
