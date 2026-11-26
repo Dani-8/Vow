@@ -1,9 +1,3 @@
-                        status: 'completed',
-                        note: 'Mid-sprint pronunciation review with native speech recordings.',
-                        timeSpent: '50m',
-                        createdAt: new Date(Date.now() - 10 * 86400000).toISOString(),
-                    },
-                    {
                         id: 'ru-log-6',
                         dayNumber: 6,
                         date: new Date(Date.now() - 9 * 86400000).toISOString().split('T')[0],
