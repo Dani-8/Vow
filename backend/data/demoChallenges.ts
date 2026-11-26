@@ -1,10 +1,3 @@
-            {
-                id: 'log-26',
-                dayNumber: 26,
-                date: new Date(Date.now() - 8 * 86400000).toISOString().split('T')[0],
-                status: 'completed',
-                note: 'Setup automated CI/CD pipeline and GitHub action workflows.',
-                timeSpent: '1h 50m',
                 createdAt: new Date(Date.now() - 8 * 86400000).toISOString(),
             },
         ],
