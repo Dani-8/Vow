@@ -1,4 +1,3 @@
-                note: 'First group of 7 core verbs: знать, понимать, делать, говорить.',
                 timeSpent: '30m',
                 createdAt: new Date(Date.now() - 3 * 86400000).toISOString(),
             },
