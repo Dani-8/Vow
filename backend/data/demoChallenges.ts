@@ -1,9 +1,3 @@
-                        id: 'ru-log-6',
-                        dayNumber: 6,
-                        date: new Date(Date.now() - 9 * 86400000).toISOString().split('T')[0],
-                        status: 'completed',
-                        note: 'Cursive script handwriting practice for lowercase letters.',
-                        timeSpent: '35m',
                         createdAt: new Date(Date.now() - 9 * 86400000).toISOString(),
                     },
                     {
