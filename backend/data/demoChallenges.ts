@@ -1,12 +1,3 @@
-                id: 'sprint-ru-phase1',
-                phaseNumber: 1,
-                title: 'Phase 1: Cyrillic Alphabet & Phonetics Mastery',
-                targetDays: 10,
-                startDate: new Date(Date.now() - 14 * 86400000).toISOString(),
-                targetEndDate: new Date(Date.now() - 4 * 86400000).toISOString(),
-                rule: 'Read aloud 15 Cyrillic words daily with audio checking.',
-                status: 'completed',
-                logs: [
                     {
                         id: 'ru-log-1',
                         dayNumber: 1,
