@@ -1,9 +1,3 @@
-                    {
-                        id: 'ru-log-8',
-                        dayNumber: 8,
-                        date: new Date(Date.now() - 7 * 86400000).toISOString().split('T')[0],
-                        status: 'completed',
-                        note: 'Basic greetings, polite formulas and formal vs informal pronouns.',
                         timeSpent: '30m',
                         createdAt: new Date(Date.now() - 7 * 86400000).toISOString(),
                     },
