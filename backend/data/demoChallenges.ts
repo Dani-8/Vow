@@ -1,12 +1,3 @@
-                        date: new Date(Date.now() - 5 * 86400000).toISOString().split('T')[0],
-                        status: 'completed',
-                        note: 'Phase 1 Final Test: 100% accuracy on 50 unseen Cyrillic words!',
-                        timeSpent: '1h 00m',
-                        createdAt: new Date(Date.now() - 5 * 86400000).toISOString(),
-                    },
-                ],
-                retrospective: {
-                    completedAt: new Date(Date.now() - 4 * 86400000).toISOString().split('T')[0],
                     summary: 'Flawlessly learned all 33 Cyrillic letters and can read street signs & menus effortlessly without hesitation!',
                     score: 5,
                     keyLearnings: 'Handwriting the cursive forms accelerated reading speed substantially. Sticking to 10 focused days created amazing momentum.',
