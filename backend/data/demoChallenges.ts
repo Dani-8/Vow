@@ -1,6 +1,3 @@
-import { IChallenge } from '../models/Challenge.js';
-
-export const INITIAL_DEMO_CHALLENGES_SERVER: Partial<IChallenge>[] = [
     {
         id: 'ch-code-ai-100',
         title: '100 Days of Code & AI Engineering',
@@ -11,10 +8,6 @@ export const INITIAL_DEMO_CHALLENGES_SERVER: Partial<IChallenge>[] = [
         targetDays: 100,
         startDate: new Date(Date.now() - 34 * 86400000).toISOString(),
         targetEndDate: new Date(Date.now() + 66 * 86400000).toISOString(),
-        rule: 'Code for at least 1 hour and learn something new in AI or Software Engineering.',
-        tags: ['Discipline', 'Focus', 'AI', 'Coding', 'Growth'],
-        status: 'active',
-        logs: [
             {
                 id: 'log-33',
                 dayNumber: 33,
