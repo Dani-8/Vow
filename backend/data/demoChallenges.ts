@@ -1,8 +1,3 @@
-                    {
-                        id: 'ru-log-1',
-                        dayNumber: 1,
-                        date: new Date(Date.now() - 14 * 86400000).toISOString().split('T')[0],
-                        status: 'completed',
                         note: 'Learned first 10 letters and basic vowels (А, О, У, Э, Ы).',
                         timeSpent: '35m',
                         createdAt: new Date(Date.now() - 14 * 86400000).toISOString(),
