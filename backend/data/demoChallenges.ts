@@ -1,15 +1,3 @@
-        currentSprintId: 'sprint-reading-phase2',
-        sprints: [
-            {
-                id: 'sprint-reading-phase1',
-                phaseNumber: 1,
-                title: 'Phase 1: Deep Work & Systems Foundations',
-                targetDays: 14,
-                startDate: new Date(Date.now() - 32 * 86400000).toISOString(),
-                targetEndDate: new Date(Date.now() - 18 * 86400000).toISOString(),
-                rule: 'Read 25 pages every morning before checking messages or social media.',
-                status: 'completed',
-                logs: Array.from({ length: 14 }).map((_, i) => ({
                     id: `read-p1-log-${i + 1}`,
                     dayNumber: i + 1,
                     date: new Date(Date.now() - (32 - i) * 86400000).toISOString().split('T')[0],
