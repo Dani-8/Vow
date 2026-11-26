@@ -1,10 +1,3 @@
-                dayNumber: 28,
-                date: new Date(Date.now() - 6 * 86400000).toISOString().split('T')[0],
-                status: 'completed',
-                note: 'Optimized PostgreSQL connection pool and query indexing.',
-                timeSpent: '2h 00m',
-                createdAt: new Date(Date.now() - 6 * 86400000).toISOString(),
-            },
             {
                 id: 'log-27',
                 dayNumber: 27,
