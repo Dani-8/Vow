@@ -1,13 +1,4 @@
             {
-                id: 'log-32',
-                dayNumber: 32,
-                date: new Date(Date.now() - 2 * 86400000).toISOString().split('T')[0],
-                status: 'completed',
-                note: 'Dockerized Express microservices and pushed to AWS.',
-                timeSpent: '1h 30m',
-                createdAt: new Date(Date.now() - 2 * 86400000).toISOString(),
-            },
-            {
                 id: 'log-31',
                 dayNumber: 31,
                 date: new Date(Date.now() - 3 * 86400000).toISOString().split('T')[0],
