@@ -1,7 +1,3 @@
-                        note: 'City maps and Moscow metro station name speed reading drill.',
-                        timeSpent: '40m',
-                        createdAt: new Date(Date.now() - 8 * 86400000).toISOString(),
-                    },
                     {
                         id: 'ru-log-8',
                         dayNumber: 8,
