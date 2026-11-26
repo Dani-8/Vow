@@ -1,14 +1,3 @@
-                logs: Array.from({ length: 16 }).map((_, i) => ({
-                    id: `read-p2-log-${i + 1}`,
-                    dayNumber: i + 15,
-                    date: new Date(Date.now() - (17 - i) * 86400000).toISOString().split('T')[0],
-                    status: 'completed' as const,
-                    note: `Day ${i + 15}: Analyzed distributed transactions, consensus protocols & indexing algorithms.`,
-                    timeSpent: '50m',
-                    createdAt: new Date(Date.now() - (17 - i) * 86400000).toISOString(),
-                })),
-                retrospective: {
-                    completedAt: new Date(Date.now() - 2 * 86400000).toISOString().split('T')[0],
                     summary: 'Read all 12 chapters of Designing Data-Intensive Applications! Fully completed the 30-day challenge.',
                     score: 5,
                     keyLearnings: 'Consistent daily reading turned a dense 600-page book into a natural breeze. Ready for hands-on engineering execution next.',
