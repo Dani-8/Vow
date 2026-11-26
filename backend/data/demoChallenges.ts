@@ -1,10 +1,3 @@
-                        createdAt: new Date(Date.now() - 9 * 86400000).toISOString(),
-                    },
-                    {
-                        id: 'ru-log-7',
-                        dayNumber: 7,
-                        date: new Date(Date.now() - 8 * 86400000).toISOString().split('T')[0],
-                        status: 'completed',
                         note: 'City maps and Moscow metro station name speed reading drill.',
                         timeSpent: '40m',
                         createdAt: new Date(Date.now() - 8 * 86400000).toISOString(),
