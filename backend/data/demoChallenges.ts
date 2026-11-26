@@ -1,11 +1,3 @@
-                timeSpent: '30m',
-                createdAt: new Date(Date.now() - 3 * 86400000).toISOString(),
-            },
-            {
-                id: 'ru-main-4',
-                dayNumber: 13,
-                date: new Date(Date.now() - 2 * 86400000).toISOString().split('T')[0],
-                status: 'completed',
                 note: 'Present tense conjugations (-ю, -ешь, -ет).',
                 timeSpent: '45m',
                 createdAt: new Date(Date.now() - 2 * 86400000).toISOString(),
