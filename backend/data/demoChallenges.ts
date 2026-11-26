@@ -1,9 +1,3 @@
-                    summary: 'Flawlessly learned all 33 Cyrillic letters and can read street signs & menus effortlessly without hesitation!',
-                    score: 5,
-                    keyLearnings: 'Handwriting the cursive forms accelerated reading speed substantially. Sticking to 10 focused days created amazing momentum.',
-                },
-            },
-            {
                 id: 'sprint-ru-phase2',
                 phaseNumber: 2,
                 title: 'Phase 2: 100 Core Verbs & Essential Cases',
