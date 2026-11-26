@@ -1,11 +1,3 @@
-                createdAt: new Date(Date.now() - 3 * 86400000).toISOString(),
-            },
-            {
-                id: 'log-30',
-                dayNumber: 30,
-                date: new Date(Date.now() - 4 * 86400000).toISOString().split('T')[0],
-                status: 'rest',
-                note: "Weekend break. Planned next week's learning goals.",
                 timeSpent: '—',
                 createdAt: new Date(Date.now() - 4 * 86400000).toISOString(),
             },
