@@ -1,10 +1,3 @@
-                status: 'completed',
-                note: 'Completed LangChain tutorial and built first agent.',
-                timeSpent: '1h 10m',
-                createdAt: new Date(Date.now() - 5 * 86400000).toISOString(),
-            },
-            {
-                id: 'log-28',
                 dayNumber: 28,
                 date: new Date(Date.now() - 6 * 86400000).toISOString().split('T')[0],
                 status: 'completed',
