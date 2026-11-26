@@ -1,10 +1,3 @@
-                    {
-                        id: 'ru-log-3',
-                        dayNumber: 3,
-                        date: new Date(Date.now() - 12 * 86400000).toISOString().split('T')[0],
-                        status: 'completed',
-                        note: 'Syllable stress rules and phonetic reduction of unstressed О to А.',
-                        timeSpent: '45m',
                         createdAt: new Date(Date.now() - 12 * 86400000).toISOString(),
                     },
                     {
