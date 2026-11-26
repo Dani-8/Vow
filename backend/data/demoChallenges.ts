@@ -1,13 +1,3 @@
-                createdAt: new Date(Date.now() - 8 * 86400000).toISOString(),
-            },
-        ],
-    },
-    {
-        id: 'ch-fitness-60',
-        title: '60 Days Fitness Transformation',
-        description: 'Move daily. Eat clean. Transform honestly.',
-        category: 'fitness',
-        color: 'emerald',
         icon: 'dumbbell',
         targetDays: 60,
         startDate: new Date(Date.now() - 18 * 86400000).toISOString(),
