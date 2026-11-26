@@ -1,10 +1,3 @@
-                dayNumber: 17,
-                date: new Date(Date.now() - 1 * 86400000).toISOString().split('T')[0],
-                status: 'completed',
-                note: 'Upper body hypertrophy + 12,000 steps morning walk.',
-                timeSpent: '55m',
-                createdAt: new Date(Date.now() - 1 * 86400000).toISOString(),
-            },
             {
                 id: 'fit-log-16',
                 dayNumber: 16,
