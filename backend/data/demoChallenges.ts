@@ -1,12 +1,3 @@
-                    summary: 'Read all 12 chapters of Designing Data-Intensive Applications! Fully completed the 30-day challenge.',
-                    score: 5,
-                    keyLearnings: 'Consistent daily reading turned a dense 600-page book into a natural breeze. Ready for hands-on engineering execution next.',
-                },
-            },
-        ],
-        logs: Array.from({ length: 30 }).map((_, i) => ({
-            id: `read-main-log-${i + 1}`,
-            dayNumber: i + 1,
             date: new Date(Date.now() - (32 - i) * 86400000).toISOString().split('T')[0],
             status: 'completed' as const,
             note: `Day ${i + 1}: Deep reading session completed (${i < 14 ? 'Phase 1' : 'Phase 2'}).`,
