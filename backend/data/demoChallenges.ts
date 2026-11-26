@@ -1,11 +1,3 @@
-                        createdAt: new Date(Date.now() - 12 * 86400000).toISOString(),
-                    },
-                    {
-                        id: 'ru-log-4',
-                        dayNumber: 4,
-                        date: new Date(Date.now() - 11 * 86400000).toISOString().split('T')[0],
-                        status: 'completed',
-                        note: 'Read 20 simple food items and restaurant menu vocabulary.',
                         timeSpent: '30m',
                         createdAt: new Date(Date.now() - 11 * 86400000).toISOString(),
                     },
