@@ -1,13 +1,3 @@
-        description: 'Read daily. Think deeper. Grow forever.',
-        category: 'learning',
-        color: 'amber',
-        icon: 'book',
-        targetDays: 30,
-        startDate: new Date(Date.now() - 32 * 86400000).toISOString(),
-        targetEndDate: new Date(Date.now() - 2 * 86400000).toISOString(),
-        rule: 'Read at least 25 pages of non-fiction / technical literature daily and write key reflections.',
-        tags: ['Reading', 'Wisdom', 'Philosophy', 'Focus', 'Completed'],
-        status: 'completed',
         currentSprintId: 'sprint-reading-phase2',
         sprints: [
             {
