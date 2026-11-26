@@ -1,9 +1,3 @@
-        startDate: new Date(Date.now() - 34 * 86400000).toISOString(),
-        targetEndDate: new Date(Date.now() + 66 * 86400000).toISOString(),
-            {
-                id: 'log-33',
-                dayNumber: 33,
-                date: new Date(Date.now() - 1 * 86400000).toISOString().split('T')[0],
                 status: 'completed',
                 note: 'Built RAG pipeline with Gemini API and vector DB.',
                 timeSpent: '1h 45m',
