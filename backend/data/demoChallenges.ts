@@ -1,11 +1,3 @@
-                note: 'Present tense conjugations (-ю, -ешь, -ет).',
-                timeSpent: '45m',
-                createdAt: new Date(Date.now() - 2 * 86400000).toISOString(),
-            },
-            {
-                id: 'ru-main-5',
-                dayNumber: 14,
-                date: new Date(Date.now() - 1 * 86400000).toISOString().split('T')[0],
                 status: 'completed',
                 note: 'Accusative case with verbs of motion & action.',
                 timeSpent: '40m',
