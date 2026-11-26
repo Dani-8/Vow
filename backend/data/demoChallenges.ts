@@ -1,9 +1,3 @@
-                        timeSpent: '30m',
-                        createdAt: new Date(Date.now() - 3 * 86400000).toISOString(),
-                    },
-                    {
-                        id: 'ru-p2-log-2',
-                        dayNumber: 2,
                         date: new Date(Date.now() - 2 * 86400000).toISOString().split('T')[0],
                         status: 'completed',
                         note: 'Present tense 1st conjugation verb endings (-ю, -ешь, -ет, -ем, -ете, -ют).',
