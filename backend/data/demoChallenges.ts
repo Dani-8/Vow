@@ -1,11 +1,3 @@
-                timeSpent: '45m',
-                createdAt: new Date(Date.now() - 2 * 86400000).toISOString(),
-            },
-        ],
-    },
-    {
-        id: 'ch-reading-30',
-        title: '30 Days of Deep Reading',
         description: 'Read daily. Think deeper. Grow forever.',
         category: 'learning',
         color: 'amber',
