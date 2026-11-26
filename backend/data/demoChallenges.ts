@@ -1,8 +1,3 @@
-                status: 'completed',
-                note: 'Built RAG pipeline with Gemini API and vector DB.',
-                timeSpent: '1h 45m',
-                createdAt: new Date(Date.now() - 1 * 86400000).toISOString(),
-            },
             {
                 id: 'log-32',
                 dayNumber: 32,
