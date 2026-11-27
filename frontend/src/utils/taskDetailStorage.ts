@@ -1,27 +1,3 @@
-  const legacyNote = getTaskNote(taskId);
-  if (legacyNote && legacyNote.trim().length > 0) {
-    const migrated: TaskStickyNote[] = [
-      {
-        id: `sn_${Date.now()}`,
-        title: 'Task Overview & Scratchpad',
-        content: legacyNote,
-        color: 'yellow',
-        isPinned: true,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      },
-    ];
-    try {
-      localStorage.setItem(key, JSON.stringify(migrated));
-    } catch {
-      // ignore
-    }
-    return migrated;
-  }
-
-  // Provide a welcoming default starter note for any task so the board is never empty
-  const defaultStarter: TaskStickyNote[] = [
-    {
       id: `sn_${Date.now()}_starter`,
       title: 'Action Item & Milestone Plan',
       content: `- [ ] Define week 1 outcome\n- [ ] Break into 25-minute focus intervals\n\n> "Consistency transforms average effort into mastery."`,
