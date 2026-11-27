@@ -51,3 +51,42 @@ router.post('/signup', async (req: AuthenticatedRequest, res: Response) => {
             plainRecoveryKey: recoveryKey,
             name: name?.trim() || cleanUsername,
         });
+
+        await seedInitialWorkspaceForUser(user._id.toString());
+
+        const token = generateToken(user._id.toString());
+
+        return res.status(201).json({
+            token,
+            recoveryKey, // Returned once on signup for the "Save Your Private Key" modal
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                name: user.name,
+                recoveryKey: user.plainRecoveryKey,
+                createdAt: user.createdAt,
+                hasPinSet: !!user.pinHash,
+            },
+        });
+    } catch (err: any) {
+        console.error('Signup error:', err);
+        return res.status(500).json({ error: 'Failed to create account' });
+    }
+});
+
+// Login (Username + Password)
+router.post('/login', async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        const { username, email, password } = req.body;
+        const identifier = (username || email || '').toLowerCase().trim();
+
+        if (!identifier || !password) {
+            return res.status(400).json({ error: 'Username and password are required' });
+        }
+
+        // Search by username, fallback to email for backwards compatibility
+        let user = await User.findOne({ username: identifier });
+        if (!user && identifier.includes('@')) {
+            user = await User.findOne({ email: identifier });
+        }
