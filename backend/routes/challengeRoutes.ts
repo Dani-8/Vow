@@ -198,3 +198,27 @@ router.post('/:id/log', authenticateToken, async (req: AuthenticatedRequest, res
     }
 });
 
+// Delete a day log
+router.delete('/:id/log/:logId', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        const challenge = await Challenge.findOne({ id: req.params.id, userId: req.userId });
+        if (!challenge) {
+            return res.status(404).json({ error: 'Challenge not found' });
+        }
+
+        const logId = req.params.logId;
+        challenge.logs = challenge.logs.filter((l) => l.id !== logId && String(l.dayNumber) !== logId);
+
+        if (Array.isArray(challenge.sprints)) {
+            challenge.sprints = challenge.sprints.map((s: any) => {
+                if (Array.isArray(s.logs)) {
+                    return {
+                        ...s,
+                        logs: s.logs.filter((l: any) => l.id !== logId && String(l.dayNumber) !== logId),
+                    };
+                }
+                return s;
+            });
+        }
+
+        await challenge.save();
