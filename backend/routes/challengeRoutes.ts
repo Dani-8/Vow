@@ -45,7 +45,7 @@ router.post('/', authenticateToken, async (req: AuthenticatedRequest, res: Respo
             startDate,
             targetEndDate,
             rule,
-           consequenceOfSkipping,
+            consequenceOfSkipping,
             consequencesOfSkipping,
             tags,
             status,
