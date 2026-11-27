@@ -1,25 +1,3 @@
-      size: '1.2 MB',
-      url: 'https://www.unicode.org/charts/PDF/U0400.pdf',
-      uploadedAt: new Date(Date.now() - 86400000 * 4).toISOString(),
-    },
-    {
-      id: 'att_ru_2',
-      name: 'OpenRussian Dictionary & Declensions',
-      type: 'link',
-      url: 'https://en.openrussian.org/',
-      uploadedAt: new Date(Date.now() - 86400000 * 3).toISOString(),
-    },
-    {
-      id: 'att_ru_3',
-      name: 'Grammar_Noun_Cases_Summary.docx',
-      type: 'doc',
-      size: '420 KB',
-      url: '#',
-      uploadedAt: new Date(Date.now() - 86400000).toISOString(),
-    },
-  ],
-  'task_ui_revamp_m3p9q': [
-    {
       id: 'att_ui_1',
       name: 'Figma Design System & Component Library',
       type: 'link',
