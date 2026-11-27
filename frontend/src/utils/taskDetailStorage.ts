@@ -33,3 +33,39 @@ export function getTaskStickyNotes(
 
   return [];
 }
+
+export function saveTaskStickyNotes(taskId: string, notes: TaskStickyNote[]): void {
+  if (!taskId) return;
+  const key = `vow_task_sticky_notes_${taskId}`;
+  try {
+    localStorage.setItem(key, JSON.stringify(notes));
+  } catch (e) {
+    console.error(`Error saving sticky notes for task ${taskId}:`, e);
+  }
+
+  notifyTaskDetailUpdated(taskId, 'note');
+}
+
+export function addTaskStickyNote(
+  taskId: string,
+  noteData: Omit<TaskStickyNote, 'id' | 'createdAt' | 'updatedAt'>
+): TaskStickyNote {
+  const current = getTaskStickyNotes(taskId);
+  const newNote: TaskStickyNote = {
+    ...noteData,
+    id: `sn_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  const updated = [newNote, ...current];
+  saveTaskStickyNotes(taskId, updated);
+
+  addTaskActivity(taskId, {
+    type: 'note_update',
+    message: `Pinned new sticky note: "${newNote.title || 'Untitled Note'}"`,
+    user: 'You',
+  });
+
+  return newNote;
+}
