@@ -1,24 +1,3 @@
-export function getTaskStickyNotes(taskId: string, taskTitle?: string): TaskStickyNote[] {
-  if (!taskId && !taskTitle) return [];
-  const key = `vow_task_sticky_notes_${taskId || 'default'}`;
-  const seedKey = findSeedKey(DEFAULT_TASK_STICKY_NOTES, taskId, taskTitle);
-  
-  // Check if user previously saved custom sticky notes
-  try {
-    const saved = localStorage.getItem(key);
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      // If it only contains the generic starter note or single overview scratchpad but matches a rich curated seed, upgrade it!
-      const isOnlyGenericStarter =
-        Array.isArray(parsed) &&
-        (parsed.length === 0 ||
-          (parsed.length === 1 &&
-            (parsed[0].title === 'Action Item & Milestone Plan' ||
-              parsed[0].title === 'Task Overview & Scratchpad' ||
-              parsed[0].id.includes('starter') ||
-              !parsed[0].content ||
-              parsed[0].content.includes('Define week 1 outcome'))));
-
       if (Array.isArray(parsed) && parsed.length > 0 && !isOnlyGenericStarter) {
         return parsed;
       }
