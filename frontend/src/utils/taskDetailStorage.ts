@@ -1,25 +1,3 @@
-    {
-      id: 'act_ru_4',
-      type: 'comment',
-      message: 'Completed today\'s flashcard set (45 cards). Feeling much more confident with pronunciation!',
-      user: 'Alex Rivera',
-      timestamp: new Date(Date.now() - 3600000 * 4).toISOString(),
-    },
-  ],
-  'task_ai_engineer_a8x4m': [
-    {
-      id: 'act_ai_1',
-      type: 'created',
-      message: 'Created goal "AI Engineering: Production Agents, RAG & LLM Workflows"',
-      user: 'Alex Rivera',
-      timestamp: new Date(Date.now() - 86400000 * 6).toISOString(),
-    },
-    {
-      id: 'act_ai_2',
-      type: 'subtask_complete',
-      message: 'Completed subtask: "Gemini 2.5 API Integration & Structured Schema Outputs"',
-      user: 'Alex Rivera',
-      timestamp: new Date(Date.now() - 86400000 * 3).toISOString(),
     },
     {
       id: 'act_ai_3',
