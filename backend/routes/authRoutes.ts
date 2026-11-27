@@ -161,3 +161,27 @@ router.post('/reset-password', async (req: AuthenticatedRequest, res: Response) 
             return res.status(401).json({ error: 'Invalid recovery key for this username' });
         }
 
+        // Update password
+        user.passwordHash = await bcrypt.hash(newPassword, 10);
+        await user.save();
+
+        const token = generateToken(user._id.toString());
+
+        return res.json({
+            message: 'Password successfully reset',
+            token,
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                name: user.name,
+                recoveryKey: user.plainRecoveryKey,
+                createdAt: user.createdAt,
+                hasPinSet: !!user.pinHash,
+            },
+        });
+    } catch (err: any) {
+        console.error('Password reset error:', err);
+        return res.status(500).json({ error: 'Failed to reset password' });
+    }
+});
