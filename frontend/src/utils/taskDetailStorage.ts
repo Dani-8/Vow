@@ -1,21 +1,3 @@
-      const normKey = key.toLowerCase().replace(/[^a-z0-9]/g, '');
-      if (normalized.includes('russian') || normalized.includes('cyrillic') || normalized.includes('language')) {
-        if (normKey.includes('russian')) return key;
-      }
-      if (normalized.includes('ui') || normalized.includes('revamp') || normalized.includes('design') || normalized.includes('neumorph')) {
-        if (normKey.includes('ui')) return key;
-      }
-      if (normalized.includes('ai') || normalized.includes('llm') || normalized.includes('agent') || normalized.includes('engineer')) {
-        if (normKey.includes('ai')) return key;
-      }
-      if (normalized.includes('mern') || normalized.includes('fullstack') || normalized.includes('stack')) {
-        if (normKey.includes('mern')) return key;
-      }
-    }
-  }
-  return undefined;
-}
-
 export function getTaskStickyNotes(taskId: string, taskTitle?: string): TaskStickyNote[] {
   if (!taskId && !taskTitle) return [];
   const key = `vow_task_sticky_notes_${taskId || 'default'}`;
