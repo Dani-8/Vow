@@ -212,3 +212,25 @@ export function getTaskActivities(taskId: string, _taskTitle?: string): TaskActi
   return [];
 }
 
+export function saveTaskActivities(taskId: string, activities: TaskActivityItem[]): void {
+  if (!taskId) return;
+  const key = `vow_task_activities_${taskId}`;
+  try {
+    localStorage.setItem(key, JSON.stringify(activities));
+  } catch (e) {
+    console.error(`Error saving activities for task ${taskId}:`, e);
+  }
+
+  notifyTaskDetailUpdated(taskId, 'activity');
+}
+
+export function addTaskActivity(
+  taskId: string,
+  activityData: Omit<TaskActivityItem, 'id' | 'timestamp'>
+): TaskActivityItem {
+  const current = getTaskActivities(taskId);
+  const newActivity: TaskActivityItem = {
+    ...activityData,
+    id: `act_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+    timestamp: new Date().toISOString(),
+  };
