@@ -191,3 +191,24 @@ export function deleteTaskAttachment(taskId: string, attachmentId: string): void
     addTaskActivity(taskId, {
       type: 'attachment_add',
       message: `Removed attachment: "${deleted.name}"`,
+      user: 'You',
+    });
+  }
+}
+
+export function getTaskActivities(taskId: string, _taskTitle?: string): TaskActivityItem[] {
+  if (!taskId) return [];
+  const key = `vow_task_activities_${taskId}`;
+  try {
+    const saved = localStorage.getItem(key);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed)) return parsed;
+    }
+  } catch (e) {
+    console.warn(`Error reading activities for task ${taskId}:`, e);
+  }
+
+  return [];
+}
+
