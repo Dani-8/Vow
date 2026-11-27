@@ -490,7 +490,7 @@ router.post('/set-pin', authenticateToken, async (req: AuthenticatedRequest, res
             return res.status(404).json({ error: 'User not found' });
         }
 
-        const pinHash = await bcrypt.hash(pin, 10);
+        const pinHash = await bcrypt.hash(pin, 10);x
         user.pinHash = pinHash;
         await user.save();
 
