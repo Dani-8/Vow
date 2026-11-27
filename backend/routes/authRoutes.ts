@@ -281,3 +281,30 @@ router.post('/set-pin', authenticateToken, async (req: AuthenticatedRequest, res
     }
 });
 
+// Verify Personal Growth Section PIN
+router.post('/verify-pin', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        const { pin } = req.body;
+
+        const user = await User.findById(req.userId);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        if (!user.pinHash) {
+            return res.status(400).json({ error: 'No PIN has been configured yet' });
+        }
+
+        const isMatch = await bcrypt.compare(pin, user.pinHash);
+        if (!isMatch) {
+            return res.status(401).json({ error: 'Incorrect PIN' });
+        }
+
+        return res.json({ success: true, message: 'Private area unlocked' });
+    } catch (err: any) {
+        console.error('Verify PIN error:', err);
+        return res.status(500).json({ error: 'Failed to verify PIN' });
+    }
+});
+
+export default router;
