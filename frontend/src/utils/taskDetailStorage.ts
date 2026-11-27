@@ -1,18 +1,3 @@
-    {
-      id: 'sn_mern_1',
-      title: 'Stack & System Architecture',
-      content: `Scalable Cloud-Native MERN Pipeline:
-• Frontend: React 18 + Vite + Tailwind CSS + Lucide Icons + Motion
-• Backend: Node.js + Express REST API with TypeScript
-• Database: MongoDB Atlas / Firestore with atomic transactions
-• Auth: JWT with HTTP-only cookies and bcrypt password hashing
-• CI/CD: Containerized Docker images deployed on Cloud Run`,
-      color: 'blue',
-      isPinned: true,
-      createdAt: new Date(Date.now() - 86400000 * 6).toISOString(),
-      updatedAt: new Date(Date.now() - 86400000 * 6).toISOString(),
-    },
-    {
       id: 'sn_mern_2',
       title: 'Sprint Action Items',
       content: `- [x] Initialize Express TypeScript backend & CORS headers
