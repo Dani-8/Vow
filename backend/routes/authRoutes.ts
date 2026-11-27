@@ -185,3 +185,49 @@ router.post('/reset-password', async (req: AuthenticatedRequest, res: Response) 
         return res.status(500).json({ error: 'Failed to reset password' });
     }
 });
+
+// Instant Demo Access (clean account without hardcoded demo data)
+router.post('/demo-bypass', async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        let user = await User.findOne({ username: 'demo_user' });
+        if (!user) {
+            const recoveryKey = generateRecoveryKey();
+            const passwordHash = await bcrypt.hash('demo_vow_access', 10);
+            const recoveryKeyHash = await bcrypt.hash(recoveryKey, 10);
+            user = await User.create({
+                username: 'demo_user',
+                email: 'demo_user@vow.user',
+                passwordHash,
+                recoveryKeyHash,
+                plainRecoveryKey: recoveryKey,
+                name: 'Demo User',
+            });
+
+            await seedInitialWorkspaceForUser(user._id.toString());
+        }
+
+        if (!user.plainRecoveryKey) {
+            const newKey = generateRecoveryKey();
+            user.plainRecoveryKey = newKey;
+            user.recoveryKeyHash = await bcrypt.hash(newKey, 10);
+            await user.save();
+        }
+
+        const token = generateToken(user._id.toString());
+        return res.json({
+            token,
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                name: user.name,
+                recoveryKey: user.plainRecoveryKey,
+                createdAt: user.createdAt,
+                hasPinSet: !!user.pinHash,
+            },
+        });
+    } catch (err: any) {
+        console.error('Demo bypass error:', err);
+        return res.status(500).json({ error: 'Demo bypass failed' });
+    }
+});
