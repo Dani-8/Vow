@@ -45,7 +45,7 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
     const [selectedSubTask, setSelectedSubTask] = useState<SubTask | null>(null);
 
     // Detail States (Sticky Notes, Attachments, Activities)
-    const [stickyNotes, setStickyNotes] = useState<TaskStickyNote[]>(() => getTaskStickyNotes(task._id, task.title));
+    const [stickyNotes, setStickyNotes] = useState<TaskStickyNote[]>(() => getTaskStickyNotes(task._id, task.title, task.stickyNotes));
     const [attachments, setAttachments] = useState<TaskAttachment[]>(() => getTaskAttachments(task._id, task.title));
     const [activities, setActivities] = useState<TaskActivityItem[]>(() => getTaskActivities(task._id, task.title));
 
@@ -69,7 +69,7 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
 
     // Sync task detail data when task changes
     useEffect(() => {
-        setStickyNotes(getTaskStickyNotes(task._id, task.title));
+        setStickyNotes(getTaskStickyNotes(task._id, task.title, task.stickyNotes));
         setAttachments(getTaskAttachments(task._id, task.title));
         setActivities(getTaskActivities(task._id, task.title));
     }, [task._id, task.title]);
@@ -79,7 +79,7 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
         const handleDetailUpdate = (e: Event) => {
             const custom = e as CustomEvent<{ taskId: string; updateType: string }>;
             if (custom.detail && (custom.detail.taskId === task._id || !custom.detail.taskId)) {
-                setStickyNotes(getTaskStickyNotes(task._id, task.title));
+                setStickyNotes(getTaskStickyNotes(task._id, task.title, task.stickyNotes));
                 setAttachments(getTaskAttachments(task._id, task.title));
                 setActivities(getTaskActivities(task._id, task.title));
             }
@@ -94,20 +94,20 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
     // Handle sticky note creation
     const handleAddStickyNote = (noteData: Omit<TaskStickyNote, 'id' | 'createdAt' | 'updatedAt'>) => {
         addTaskStickyNote(task._id, noteData);
-        setStickyNotes(getTaskStickyNotes(task._id, task.title));
+        setStickyNotes(getTaskStickyNotes(task._id, task.title, task.stickyNotes));
         setActivities(getTaskActivities(task._id, task.title));
     };
 
     // Handle sticky note update
     const handleUpdateStickyNote = (noteId: string, updates: Partial<Omit<TaskStickyNote, 'id' | 'createdAt'>>) => {
         updateTaskStickyNote(task._id, noteId, updates);
-        setStickyNotes(getTaskStickyNotes(task._id, task.title));
+        setStickyNotes(getTaskStickyNotes(task._id, task.title, task.stickyNotes));
     };
 
     // Handle sticky note deletion
     const handleDeleteStickyNote = (noteId: string) => {
         deleteTaskStickyNote(task._id, noteId);
-        setStickyNotes(getTaskStickyNotes(task._id, task.title));
+        setStickyNotes(getTaskStickyNotes(task._id, task.title, task.stickyNotes));
         setActivities(getTaskActivities(task._id, task.title));
     };
 
@@ -130,7 +130,7 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
         addTaskActivity(task._id, {
             type: 'comment',
             message,
-            user: 'Alex Rivera',
+            user: 'You',
             meta: { category: commentCategory },
         });
         setActivities(getTaskActivities(task._id));
@@ -203,7 +203,7 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
                                         message: willBeCompleted
                                             ? `Completed subtask: "${target.title}"`
                                             : `Reopened subtask: "${target.title}"`,
-                                        user: 'Alex Rivera',
+                                        user: 'You',
                                     });
                                     setActivities(getTaskActivities(task._id));
                                 }
@@ -250,7 +250,7 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
                         addTaskActivity(task._id, {
                             type: 'subtask_add',
                             message: `Imported subtask from sticky notes: "${newSt.title}"`,
-                            user: 'Alex Rivera',
+                            user: 'You',
                         });
                         setActivities(getTaskActivities(task._id));
                     }}
@@ -284,7 +284,7 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
                     addTaskActivity(task._id, {
                         type: 'subtask_add',
                         message: `Added new subtask: "${newSt.title}"`,
-                        user: 'Alex Rivera',
+                        user: 'You',
                     });
                     setActivities(getTaskActivities(task._id));
                 }}
