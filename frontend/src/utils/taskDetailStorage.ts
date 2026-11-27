@@ -1,20 +1,3 @@
-  const current = getTaskStickyNotes(taskId);
-  const newNote: TaskStickyNote = {
-    ...noteData,
-    id: `sn_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
-
-  const updated = [newNote, ...current];
-  saveTaskStickyNotes(taskId, updated);
-
-  addTaskActivity(taskId, {
-    type: 'note_update',
-    message: `Pinned new sticky note: "${newNote.title || 'Untitled Note'}"`,
-    user: 'Alex Rivera',
-  });
-
   return newNote;
 }
 
