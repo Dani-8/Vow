@@ -127,3 +127,37 @@ router.post('/login', async (req: AuthenticatedRequest, res: Response) => {
         return res.status(500).json({ error: 'Failed to log in' });
     }
 });
+
+// Reset Password via Recovery Key
+router.post('/reset-password', async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        const { username, recoveryKey, newPassword } = req.body;
+        const cleanUsername = (username || '').toLowerCase().trim();
+        const cleanKey = (recoveryKey || '').trim().toUpperCase();
+
+        if (!cleanUsername || !cleanKey || !newPassword) {
+            return res.status(400).json({ error: 'Username, recovery key, and new password are required' });
+        }
+
+        if (newPassword.length < 6) {
+            return res.status(400).json({ error: 'New password must be at least 6 characters' });
+        }
+
+        const user = await User.findOne({ username: cleanUsername });
+        if (!user) {
+            return res.status(404).json({ error: 'Account not found with this username' });
+        }
+
+        // Validate recovery key (check hash or direct key match)
+        let keyValid = false;
+        if (user.recoveryKeyHash) {
+            keyValid = await bcrypt.compare(cleanKey, user.recoveryKeyHash);
+        }
+        if (!keyValid && user.plainRecoveryKey) {
+            keyValid = user.plainRecoveryKey.toUpperCase() === cleanKey;
+        }
+
+        if (!keyValid) {
+            return res.status(401).json({ error: 'Invalid recovery key for this username' });
+        }
+
