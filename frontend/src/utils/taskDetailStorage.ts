@@ -1,27 +1,3 @@
-    },
-    {
-      id: 'act_ai_3',
-      type: 'note_update',
-      message: 'Pinned architecture guide: "Core Architecture Pillars"',
-      user: 'Alex Rivera',
-      timestamp: new Date(Date.now() - 86400000 * 2).toISOString(),
-    },
-    {
-      id: 'act_ai_4',
-      type: 'comment',
-      message: 'Successfully verified tool-calling response schemas with zero hallucination rate.',
-      user: 'Alex Rivera',
-      timestamp: new Date(Date.now() - 3600000 * 5).toISOString(),
-    },
-  ],
-  'task_mern_project_m3k9p': [
-    {
-      id: 'act_mern_1',
-      type: 'created',
-      message: 'Created project goal "Full-Stack MERN Project: Scalable App & Cloud Deployment"',
-      user: 'Alex Rivera',
-      timestamp: new Date(Date.now() - 86400000 * 8).toISOString(),
-    },
     {
       id: 'act_mern_2',
       type: 'subtask_complete',
