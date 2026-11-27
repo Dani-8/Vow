@@ -90,3 +90,40 @@ router.post('/login', async (req: AuthenticatedRequest, res: Response) => {
         if (!user && identifier.includes('@')) {
             user = await User.findOne({ email: identifier });
         }
+
+        if (!user) {
+            return res.status(401).json({ error: 'Invalid username or password' });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.passwordHash);
+        if (!isMatch) {
+            return res.status(401).json({ error: 'Invalid username or password' });
+        }
+
+        // If older account had no recovery key, provision one now
+        if (!user.plainRecoveryKey) {
+            const newKey = generateRecoveryKey();
+            user.plainRecoveryKey = newKey;
+            user.recoveryKeyHash = await bcrypt.hash(newKey, 10);
+            await user.save();
+        }
+
+        const token = generateToken(user._id.toString());
+
+        return res.json({
+            token,
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                name: user.name,
+                recoveryKey: user.plainRecoveryKey,
+                createdAt: user.createdAt,
+                hasPinSet: !!user.pinHash,
+            },
+        });
+    } catch (err: any) {
+        console.error('Login error:', err);
+        return res.status(500).json({ error: 'Failed to log in' });
+    }
+});
