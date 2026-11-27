@@ -1,31 +1,3 @@
-  try {
-    const saved = localStorage.getItem(key);
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-    }
-  } catch (e) {
-    console.warn(`Error reading attachments for task ${taskId}:`, e);
-  }
-
-  const seedKey = findSeedKey(DEFAULT_TASK_ATTACHMENTS, taskId, taskTitle);
-  if (seedKey && DEFAULT_TASK_ATTACHMENTS[seedKey]) {
-    try {
-      localStorage.setItem(key, JSON.stringify(DEFAULT_TASK_ATTACHMENTS[seedKey]));
-    } catch {
-      // ignore
-    }
-    return DEFAULT_TASK_ATTACHMENTS[seedKey];
-  }
-
-  return [];
-}
-
-export function saveTaskAttachments(taskId: string, attachments: TaskAttachment[]): void {
-  if (!taskId) return;
-  const key = `vow_task_attachments_${taskId}`;
-  try {
-    localStorage.setItem(key, JSON.stringify(attachments));
   } catch (e) {
     console.error(`Error saving attachments for task ${taskId}:`, e);
   }
