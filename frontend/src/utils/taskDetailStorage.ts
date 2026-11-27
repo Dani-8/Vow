@@ -1,23 +1,3 @@
-
-- [ ] Memorize masculine vs feminine noun endings
-- [ ] Practice 10 prepositions with locative nouns`,
-      color: 'yellow',
-      isPinned: true,
-      createdAt: new Date(Date.now() - 86400000 * 5).toISOString(),
-      updatedAt: new Date(Date.now() - 86400000 * 5).toISOString(),
-    },
-    {
-      id: 'sn_ru_2',
-      title: 'Cyrillic False Friends ⚠️',
-      content: `Be careful with Latin lookalikes:
-• В = V sound
-• Н = N sound
-• Р = R sound (rolled)
-• С = S sound
-• У = OO sound
-• Х = KH sound`,
-      color: 'rose',
-      isPinned: true,
       createdAt: new Date(Date.now() - 86400000 * 4).toISOString(),
       updatedAt: new Date(Date.now() - 86400000 * 3).toISOString(),
     },
