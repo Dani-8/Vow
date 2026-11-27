@@ -1,6 +1,5 @@
 import { Router, Response } from 'express';
 import { Challenge, IChallengeLog } from '../models/Challenge.js';
-import { INITIAL_DEMO_CHALLENGES_SERVER } from '../data/demoChallenges.js';
 import { authenticateToken, AuthenticatedRequest } from '../middleware/auth.js';
 
 const router = Router();
@@ -8,64 +7,7 @@ const router = Router();
 // Get all challenges for the authenticated user
 router.get('/', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
     try {
-        let rawChallenges = await Challenge.find({ userId: req.userId });
-
-        // If user has no challenges yet (e.g. fresh session), auto-seed the demo challenges
-        if (rawChallenges.length === 0 && INITIAL_DEMO_CHALLENGES_SERVER.length > 0) {
-            for (const chData of INITIAL_DEMO_CHALLENGES_SERVER) {
-                await Challenge.create({
-                    ...chData,
-                    userId: req.userId,
-                });
-            }
-            rawChallenges = await Challenge.find({ userId: req.userId });
-        } else {
-            // Update or enrich existing Russian challenge with multi-phase demo sprints if needed
-            const russianDemo = INITIAL_DEMO_CHALLENGES_SERVER.find(
-                (c) => c.id === 'ch-russian-phases' || c.title === 'Learn Conversational Russian'
-            );
-            if (russianDemo) {
-                for (const ch of rawChallenges) {
-                    if (
-                        (ch.id === 'ch-russian-phases' ||
-                            ch.id === 'challenge-russian-mastery-3' ||
-                            ch.title === 'Learn Conversational Russian') &&
-                        (!ch.sprints || ch.sprints.length <= 1)
-                    ) {
-                        ch.sprints = russianDemo.sprints;
-                        ch.currentSprintId = russianDemo.currentSprintId;
-                        ch.targetDays = russianDemo.targetDays;
-                        ch.rule = russianDemo.rule;
-                        ch.logs = russianDemo.logs;
-                        await ch.save();
-                    }
-                }
-            }
-
-            // Also enrich or complete the 30 Days of Deep Reading demo challenge
-            const readingDemo = INITIAL_DEMO_CHALLENGES_SERVER.find(
-                (c) => c.id === 'ch-reading-30' || c.title === '30 Days of Deep Reading'
-            );
-            if (readingDemo) {
-                for (const ch of rawChallenges) {
-                    if (
-                        (ch.id === 'ch-reading-30' ||
-                            ch.title === '30 Days of Deep Reading') &&
-                        (!ch.sprints || ch.sprints.length <= 1 || ch.status !== 'completed')
-                    ) {
-                        ch.sprints = readingDemo.sprints;
-                        ch.currentSprintId = readingDemo.currentSprintId;
-                        ch.targetDays = readingDemo.targetDays;
-                        ch.rule = readingDemo.rule;
-                        ch.logs = readingDemo.logs;
-                        ch.status = 'completed';
-                        ch.tags = readingDemo.tags;
-                        await ch.save();
-                    }
-                }
-            }
-        }
-
+        const rawChallenges = await Challenge.find({ userId: req.userId });
         const challenges = rawChallenges.map((c) => c.toObject());
         return res.json({ challenges });
     } catch (err: any) {
@@ -77,50 +19,9 @@ router.get('/', authenticateToken, async (req: AuthenticatedRequest, res: Respon
 // Get a single challenge by ID
 router.get('/:id', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
     try {
-        let challenge = await Challenge.findOne({ id: req.params.id, userId: req.userId });
+        const challenge = await Challenge.findOne({ id: req.params.id, userId: req.userId });
         if (!challenge) {
             return res.status(404).json({ error: 'Challenge not found' });
-        }
-
-        // Migrate Russian challenge if needed
-        if (
-            (challenge.id === 'ch-russian-phases' ||
-                challenge.id === 'challenge-russian-mastery-3' ||
-                challenge.title === 'Learn Conversational Russian') &&
-            (!challenge.sprints || challenge.sprints.length <= 1)
-        ) {
-            const russianDemo = INITIAL_DEMO_CHALLENGES_SERVER.find(
-                (c) => c.id === 'ch-russian-phases' || c.title === 'Learn Conversational Russian'
-            );
-            if (russianDemo) {
-                challenge.sprints = russianDemo.sprints;
-                challenge.currentSprintId = russianDemo.currentSprintId;
-                challenge.targetDays = russianDemo.targetDays;
-                challenge.rule = russianDemo.rule;
-                challenge.logs = russianDemo.logs;
-                await challenge.save();
-            }
-        }
-
-        // Migrate reading challenge if needed
-        if (
-            (challenge.id === 'ch-reading-30' ||
-                challenge.title === '30 Days of Deep Reading') &&
-            (!challenge.sprints || challenge.sprints.length <= 1 || challenge.status !== 'completed')
-        ) {
-            const readingDemo = INITIAL_DEMO_CHALLENGES_SERVER.find(
-                (c) => c.id === 'ch-reading-30' || c.title === '30 Days of Deep Reading'
-            );
-            if (readingDemo) {
-                challenge.sprints = readingDemo.sprints;
-                challenge.currentSprintId = readingDemo.currentSprintId;
-                challenge.targetDays = readingDemo.targetDays;
-                challenge.rule = readingDemo.rule;
-                challenge.logs = readingDemo.logs;
-                challenge.status = 'completed';
-                challenge.tags = readingDemo.tags;
-                await challenge.save();
-            }
         }
 
         return res.json({ challenge: challenge.toObject() });

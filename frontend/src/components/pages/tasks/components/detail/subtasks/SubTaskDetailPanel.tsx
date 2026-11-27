@@ -104,7 +104,7 @@ export const SubTaskDetailPanel: React.FC<SubTaskDetailPanelProps> = ({
                         <span>Due Date</span>
                     </div>
                     <div className="text-xs font-bold text-[#1a1c35]">
-                        {subTask.dueDate || 'Aug 17, 2026'}
+                        {subTask.dueDate || 'Not set'}
                     </div>
                 </div>
 
@@ -115,7 +115,7 @@ export const SubTaskDetailPanel: React.FC<SubTaskDetailPanelProps> = ({
                         <span>Time Left</span>
                     </div>
                     <div className="text-xs font-bold text-amber-600">
-                        {subTask.timeLeft || 'Today'}
+                        {subTask.timeLeft || subTask.dateLabel || 'Scheduled'}
                     </div>
                 </div>
 
@@ -127,10 +127,10 @@ export const SubTaskDetailPanel: React.FC<SubTaskDetailPanelProps> = ({
                     </div>
                     <div className="flex items-center space-x-2 pt-0.5">
                         <div className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] font-bold">
-                            AR
+                            {(subTask.assignee?.name || 'You').slice(0, 2).toUpperCase()}
                         </div>
                         <span className="text-xs font-bold text-[#1a1c35]">
-                            {subTask.assignee?.name || 'Alex Rivera'}
+                            {subTask.assignee?.name || 'You'}
                         </span>
                     </div>
                 </div>
@@ -142,7 +142,7 @@ export const SubTaskDetailPanel: React.FC<SubTaskDetailPanelProps> = ({
                         <span>Master Streak</span>
                     </div>
                     <div className="text-xs font-bold text-purple-700">
-                        {subTask.masterStreak || '4 Days'}
+                        {subTask.masterStreak || '0 Days'}
                     </div>
                 </div>
             </div>
@@ -153,8 +153,7 @@ export const SubTaskDetailPanel: React.FC<SubTaskDetailPanelProps> = ({
                     Description
                 </label>
                 <p className="text-xs sm:text-sm text-[#54597d] leading-relaxed font-medium">
-                    {subTask.description ||
-                        'Create a detailed milestone timeline for Q3 including key learning, habit building, and review checkpoints.'}
+                    {subTask.description || 'No description added yet.'}
                 </p>
             </div>
 
