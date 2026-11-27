@@ -82,3 +82,41 @@ router.post('/', authenticateToken, async (req: AuthenticatedRequest, res: Respo
             sprints: Array.isArray(sprints) ? sprints : [],
             currentSprintId,
         });
+
+        return res.status(201).json({ challenge: created.toObject() });
+    } catch (err: any) {
+        console.error('Error creating challenge:', err);
+        return res.status(500).json({ error: 'Failed to create challenge' });
+    }
+});
+
+// Update an existing challenge
+router.put('/:id', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        const challenge = await Challenge.findOne({ id: req.params.id, userId: req.userId });
+        if (!challenge) {
+            // Create if doesn't exist
+            const created = await Challenge.create({
+                id: req.params.id,
+                userId: req.userId,
+                ...req.body,
+            });
+            return res.json({ challenge: created.toObject() });
+        }
+
+        if (req.body.title !== undefined) challenge.title = String(req.body.title).trim();
+        if (req.body.description !== undefined) challenge.description = String(req.body.description);
+        if (req.body.category !== undefined) challenge.category = String(req.body.category);
+        if (req.body.color !== undefined) challenge.color = String(req.body.color);
+        if (req.body.icon !== undefined) challenge.icon = String(req.body.icon);
+        if (req.body.targetDays !== undefined) challenge.targetDays = Number(req.body.targetDays);
+        if (req.body.startDate !== undefined) challenge.startDate = String(req.body.startDate);
+        if (req.body.targetEndDate !== undefined) challenge.targetEndDate = String(req.body.targetEndDate);
+        if (req.body.rule !== undefined) challenge.rule = String(req.body.rule);
+        if (req.body.consequencesOfSkipping !== undefined) {
+            challenge.consequencesOfSkipping = Array.isArray(req.body.consequencesOfSkipping) ? req.body.consequencesOfSkipping : [];
+            challenge.consequenceOfSkipping = challenge.consequencesOfSkipping[0] || '';
+        } else if (req.body.consequenceOfSkipping !== undefined) {
+            challenge.consequenceOfSkipping = String(req.body.consequenceOfSkipping);
+            challenge.consequencesOfSkipping = challenge.consequenceOfSkipping ? [challenge.consequenceOfSkipping] : [];
+        }
