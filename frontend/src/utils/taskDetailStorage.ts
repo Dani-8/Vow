@@ -1,23 +1,3 @@
-  }
-
-  return '';
-}
-
-export function saveTaskNote(taskId: string, content: string): void {
-  if (!taskId) return;
-  const key = `vow_task_note_${taskId}`;
-  try {
-    localStorage.setItem(key, content);
-  } catch (e) {
-    console.error(`Error saving note for task ${taskId}:`, e);
-  }
-
-  notifyTaskDetailUpdated(taskId, 'note');
-}
-
-export function getTaskAttachments(taskId: string, taskTitle?: string): TaskAttachment[] {
-  if (!taskId && !taskTitle) return [];
-  const key = `vow_task_attachments_${taskId || 'default'}`;
   try {
     const saved = localStorage.getItem(key);
     if (saved) {
