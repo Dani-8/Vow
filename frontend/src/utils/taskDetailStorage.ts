@@ -1,18 +1,3 @@
-      color: 'green',
-      isPinned: false,
-      createdAt: new Date(Date.now() - 86400000).toISOString(),
-      updatedAt: new Date(Date.now() - 86400000).toISOString(),
-    },
-  ],
-};
-
-// Helper to resolve seed keys flexibly across exact IDs, titles, or task keywords
-function findSeedKey<T>(dict: Record<string, T>, taskIdOrTitle: string, taskTitle?: string): string | undefined {
-  const candidates = [taskIdOrTitle, taskTitle].filter(Boolean) as string[];
-  for (const c of candidates) {
-    if (dict[c]) return c;
-    const normalized = c.toLowerCase().replace(/[^a-z0-9]/g, '');
-    for (const key of Object.keys(dict)) {
       const normKey = key.toLowerCase().replace(/[^a-z0-9]/g, '');
       if (normalized.includes('russian') || normalized.includes('cyrillic') || normalized.includes('language')) {
         if (normKey.includes('russian')) return key;
