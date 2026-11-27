@@ -1,21 +1,3 @@
-      id: `sn_${Date.now()}_starter`,
-      title: 'Action Item & Milestone Plan',
-      content: `- [ ] Define week 1 outcome\n- [ ] Break into 25-minute focus intervals\n\n> "Consistency transforms average effort into mastery."`,
-      color: 'yellow',
-      isPinned: true,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-  ];
-  try {
-    localStorage.setItem(key, JSON.stringify(defaultStarter));
-  } catch {
-    // ignore
-  }
-  return defaultStarter;
-}
-
-export function saveTaskStickyNotes(taskId: string, notes: TaskStickyNote[]): void {
   if (!taskId) return;
   const key = `vow_task_sticky_notes_${taskId}`;
   try {
