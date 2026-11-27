@@ -1,21 +1,3 @@
-      if (Array.isArray(parsed) && parsed.length > 0 && !isOnlyGenericStarter) {
-        return parsed;
-      }
-    }
-  } catch (e) {
-    console.warn(`Error reading sticky notes for task ${taskId}:`, e);
-  }
-
-  if (seedKey && DEFAULT_TASK_STICKY_NOTES[seedKey]) {
-    try {
-      localStorage.setItem(key, JSON.stringify(DEFAULT_TASK_STICKY_NOTES[seedKey]));
-    } catch {
-      // ignore
-    }
-    return DEFAULT_TASK_STICKY_NOTES[seedKey];
-  }
-
-  // If there's an existing single note in legacy storage, migrate it to a sticky note
   const legacyNote = getTaskNote(taskId);
   if (legacyNote && legacyNote.trim().length > 0) {
     const migrated: TaskStickyNote[] = [
