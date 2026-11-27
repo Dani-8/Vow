@@ -255,3 +255,29 @@ router.get('/me', authenticateToken, async (req: AuthenticatedRequest, res: Resp
         return res.status(500).json({ error: 'Server error' });
     }
 });
+
+// Set or Update Personal Growth Section PIN
+router.post('/set-pin', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        const { pin } = req.body;
+
+        if (!pin || typeof pin !== 'string' || pin.length < 4) {
+            return res.status(400).json({ error: 'PIN must be at least 4 digits' });
+        }
+
+        const user = await User.findById(req.userId);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const pinHash = await bcrypt.hash(pin, 10);
+        user.pinHash = pinHash;
+        await user.save();
+
+        return res.json({ message: 'Personal Growth Section PIN successfully set!', hasPinSet: true });
+    } catch (err: any) {
+        console.error('Set PIN error:', err);
+        return res.status(500).json({ error: 'Failed to set PIN' });
+    }
+});
+
