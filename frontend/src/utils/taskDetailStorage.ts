@@ -1,21 +1,3 @@
-  saveTaskStickyNotes(taskId, updated);
-
-  if (deleted) {
-    addTaskActivity(taskId, {
-      type: 'note_update',
-      message: `Removed sticky note: "${deleted.title || 'Note'}"`,
-      user: 'Alex Rivera',
-    });
-  }
-}
-
-// Default initial attachments seed
-const DEFAULT_TASK_ATTACHMENTS: Record<string, TaskAttachment[]> = {
-  'task_russian_mastery_r7u2k': [
-    {
-      id: 'att_ru_1',
-      name: 'Russian_Cyrillic_CheatSheet.pdf',
-      type: 'pdf',
       size: '1.2 MB',
       url: 'https://www.unicode.org/charts/PDF/U0400.pdf',
       uploadedAt: new Date(Date.now() - 86400000 * 4).toISOString(),
