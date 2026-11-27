@@ -67,8 +67,7 @@ export const AddSubTaskModal: React.FC<AddSubTaskModalProps> = ({
                 status: 'pending',
                 priority,
                 description: description.trim(),
-                assignee: { name: 'Alex Rivera', email: 'demo@vow.app' },
-                masterStreak: '4 Days',
+                assignee: { name: 'You', email: '' },
             });
         }
 
