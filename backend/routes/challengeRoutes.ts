@@ -120,3 +120,25 @@ router.put('/:id', authenticateToken, async (req: AuthenticatedRequest, res: Res
             challenge.consequenceOfSkipping = String(req.body.consequenceOfSkipping);
             challenge.consequencesOfSkipping = challenge.consequenceOfSkipping ? [challenge.consequenceOfSkipping] : [];
         }
+        if (Array.isArray(req.body.tags)) challenge.tags = req.body.tags;
+        if (req.body.status !== undefined) challenge.status = req.body.status;
+        if (Array.isArray(req.body.logs)) challenge.logs = req.body.logs;
+        if (Array.isArray(req.body.sprints)) challenge.sprints = req.body.sprints;
+        if (req.body.currentSprintId !== undefined) challenge.currentSprintId = req.body.currentSprintId;
+
+        await challenge.save();
+        return res.json({ challenge: challenge.toObject() });
+    } catch (err: any) {
+        console.error('Error updating challenge:', err);
+        return res.status(500).json({ error: 'Failed to update challenge' });
+    }
+});
+
+// Add or update a day log in a challenge
+router.post('/:id/log', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        const challenge = await Challenge.findOne({ id: req.params.id, userId: req.userId });
+        if (!challenge) {
+            return res.status(404).json({ error: 'Challenge not found' });
+        }
+
