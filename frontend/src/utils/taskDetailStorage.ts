@@ -145,3 +145,26 @@ export function getTaskAttachments(taskId: string, _taskTitle?: string): TaskAtt
 
   return [];
 }
+
+export function saveTaskAttachments(taskId: string, attachments: TaskAttachment[]): void {
+  if (!taskId) return;
+  const key = `vow_task_attachments_${taskId}`;
+  try {
+    localStorage.setItem(key, JSON.stringify(attachments));
+  } catch (e) {
+    console.error(`Error saving attachments for task ${taskId}:`, e);
+  }
+
+  notifyTaskDetailUpdated(taskId, 'attachments');
+}
+
+export function addTaskAttachment(
+  taskId: string,
+  attachmentData: Omit<TaskAttachment, 'id' | 'uploadedAt'>
+): TaskAttachment {
+  const current = getTaskAttachments(taskId);
+  const newAttachment: TaskAttachment = {
+    ...attachmentData,
+    id: `att_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+    uploadedAt: new Date().toISOString(),
+  };
