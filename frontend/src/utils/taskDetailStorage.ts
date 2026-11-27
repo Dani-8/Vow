@@ -1,26 +1,3 @@
-  'task_ai_engineer_a8x4m': [
-    {
-      id: 'att_ai_1',
-      name: 'Google GenAI TypeScript SDK Docs',
-      type: 'link',
-      url: 'https://github.com/google-gemini/deprecations',
-      uploadedAt: new Date(Date.now() - 86400000 * 5).toISOString(),
-    },
-    {
-      id: 'att_ai_2',
-      name: 'Agent_Architecture_Whitepaper.pdf',
-      type: 'pdf',
-      size: '3.4 MB',
-      url: '#',
-      uploadedAt: new Date(Date.now() - 86400000 * 3).toISOString(),
-    },
-    {
-      id: 'att_ai_3',
-      name: 'RAG_Vector_Search_Benchmark.docx',
-      type: 'doc',
-      size: '510 KB',
-      url: '#',
-      uploadedAt: new Date(Date.now() - 86400000).toISOString(),
     },
   ],
   'task_mern_project_m3k9p': [
