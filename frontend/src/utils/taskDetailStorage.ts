@@ -1,14 +1,3 @@
-import { TaskAttachment, TaskActivityItem, TaskStickyNote } from '../types';
-
-export const TASK_DETAIL_UPDATED_EVENT = 'vow_task_detail_updated';
-
-// Default initial sticky notes seed
-const DEFAULT_TASK_STICKY_NOTES: Record<string, TaskStickyNote[]> = {
-  'task_russian_mastery_r7u2k': [
-    {
-      id: 'sn_ru_1',
-      title: 'Grammar Pillar & Rules',
-      content: `Master Prepositional case endings first (*о ком? о чём?*), then Accusative for direct objects.
 
 - [ ] Memorize masculine vs feminine noun endings
 - [ ] Practice 10 prepositions with locative nouns`,
