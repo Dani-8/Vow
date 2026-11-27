@@ -15,3 +15,34 @@ router.get('/', authenticateToken, async (req: AuthenticatedRequest, res: Respon
         return res.status(500).json({ error: 'Failed to fetch challenges' });
     }
 });
+
+// Get a single challenge by ID
+router.get('/:id', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        const challenge = await Challenge.findOne({ id: req.params.id, userId: req.userId });
+        if (!challenge) {
+            return res.status(404).json({ error: 'Challenge not found' });
+        }
+
+        return res.json({ challenge: challenge.toObject() });
+    } catch (err: any) {
+        console.error('Error fetching challenge:', err);
+        return res.status(500).json({ error: 'Failed to fetch challenge' });
+    }
+});
+
+// Create a new challenge
+router.post('/', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        const {
+            id,
+            title,
+            description,
+            category,
+            color,
+            icon,
+            targetDays,
+            startDate,
+            targetEndDate,
+            rule,
+   
