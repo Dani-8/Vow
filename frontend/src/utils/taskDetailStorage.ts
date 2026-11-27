@@ -1,26 +1,3 @@
-    id: `att_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
-    uploadedAt: new Date().toISOString(),
-  };
-
-  const updated = [newAttachment, ...current];
-  saveTaskAttachments(taskId, updated);
-
-  // Auto record activity
-  addTaskActivity(taskId, {
-    type: 'attachment_add',
-    message: `Added attachment: "${newAttachment.name}"`,
-    user: 'Alex Rivera',
-  });
-
-  return newAttachment;
-}
-
-export function deleteTaskAttachment(taskId: string, attachmentId: string): void {
-  const current = getTaskAttachments(taskId);
-  const deleted = current.find((a) => a.id === attachmentId);
-  const updated = current.filter((a) => a.id !== attachmentId);
-  saveTaskAttachments(taskId, updated);
-
   if (deleted) {
     addTaskActivity(taskId, {
       type: 'attachment_add',
