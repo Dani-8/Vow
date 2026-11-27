@@ -1,17 +1,3 @@
-  } catch (e) {
-    console.error(`Error saving attachments for task ${taskId}:`, e);
-  }
-
-  notifyTaskDetailUpdated(taskId, 'attachments');
-}
-
-export function addTaskAttachment(
-  taskId: string,
-  attachmentData: Omit<TaskAttachment, 'id' | 'uploadedAt'>
-): TaskAttachment {
-  const current = getTaskAttachments(taskId);
-  const newAttachment: TaskAttachment = {
-    ...attachmentData,
     id: `att_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
     uploadedAt: new Date().toISOString(),
   };
