@@ -1,17 +1,3 @@
-      title: 'Action Items Checklist',
-      content: `- [ ] Audit primary action buttons for unified 2:1 padding ratio
-- [ ] Ensure WCAG AA contrast on slate text`,
-      color: 'yellow',
-      isPinned: false,
-      createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-      updatedAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-    },
-  ],
-
-  'task_ai_engineer_a8x4m': [
-    {
-      id: 'sn_ai_1',
-      title: 'Core Architecture Pillars',
       content: `Production Agent & RAG System Design:
 • Model Layer: Gemini 2.5 Flash / Pro via @google/genai SDK
 • Agent Loop: Tool-call dispatch with strict JSON schema validation
