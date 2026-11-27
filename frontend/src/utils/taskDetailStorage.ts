@@ -1,28 +1,3 @@
-  if (deleted) {
-    addTaskActivity(taskId, {
-      type: 'attachment_add',
-      message: `Removed attachment: "${deleted.name}"`,
-      user: 'Alex Rivera',
-    });
-  }
-}
-
-export function getTaskActivities(taskId: string, taskTitle?: string): TaskActivityItem[] {
-  if (!taskId && !taskTitle) return [];
-  const key = `vow_task_activities_${taskId || 'default'}`;
-  try {
-    const saved = localStorage.getItem(key);
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-    }
-  } catch (e) {
-    console.warn(`Error reading activities for task ${taskId}:`, e);
-  }
-
-  const seedKey = findSeedKey(DEFAULT_TASK_ACTIVITIES, taskId, taskTitle);
-  if (seedKey && DEFAULT_TASK_ACTIVITIES[seedKey]) {
-    try {
       localStorage.setItem(key, JSON.stringify(DEFAULT_TASK_ACTIVITIES[seedKey]));
     } catch {
       // ignore
