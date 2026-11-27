@@ -142,3 +142,28 @@ router.post('/:id/log', authenticateToken, async (req: AuthenticatedRequest, res
             return res.status(404).json({ error: 'Challenge not found' });
         }
 
+        const { dayNumber, date, status, note, timeSpent, imageUrl, sprintId } = req.body;
+        const targetDay = Number(dayNumber) || 1;
+        const logDate = date || new Date().toISOString().split('T')[0];
+        const logStatus = status || 'completed';
+
+        const existingIndex = challenge.logs.findIndex((l) => Number(l.dayNumber) === targetDay);
+
+        const newLog: IChallengeLog = {
+            id: existingIndex >= 0 ? challenge.logs[existingIndex].id : `log_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
+            dayNumber: targetDay,
+            date: logDate,
+            status: logStatus,
+            note: note || '',
+            timeSpent: timeSpent || '',
+            imageUrl: imageUrl || '',
+            createdAt: existingIndex >= 0 ? challenge.logs[existingIndex].createdAt : new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+        };
+
+        if (existingIndex >= 0) {
+            challenge.logs[existingIndex] = newLog;
+        } else {
+            challenge.logs.unshift(newLog);
+        }
+
