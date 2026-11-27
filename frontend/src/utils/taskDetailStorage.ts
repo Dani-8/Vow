@@ -1,18 +1,3 @@
-      createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-      updatedAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-    },
-    {
-      id: 'sn_ru_4',
-      title: 'Audio Resources & Podcasts',
-      content: `1. Russian with Max (Slow Russian)
-2. Comprehensible Russian with Inhabitant
-3. In Russian From Afar`,
-      color: 'blue',
-      isPinned: false,
-      createdAt: new Date(Date.now() - 86400000).toISOString(),
-      updatedAt: new Date(Date.now() - 86400000).toISOString(),
-    },
-  ],
 
   'task_ui_revamp_m3p9q': [
     {
