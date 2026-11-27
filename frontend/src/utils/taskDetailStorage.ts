@@ -1,15 +1,3 @@
-      isPinned: true,
-      createdAt: new Date(Date.now() - 86400000 * 4).toISOString(),
-      updatedAt: new Date(Date.now() - 86400000 * 3).toISOString(),
-    },
-    {
-      id: 'sn_ai_3',
-      title: 'Prompt Engineering Rules',
-      content: `Key System Instruction Best Practices:
-1. Always specify output format in unambiguous JSON schemas.
-2. Provide few-shot examples for edge cases.
-3. Keep system instructions deterministic and objective.
-
 > "A well-crafted prompt reduces hallucination rates by over 80%."`,
       color: 'blue',
       isPinned: false,
