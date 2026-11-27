@@ -116,3 +116,32 @@ export function getTaskNote(taskId: string): string {
   }
 
   return '';
+}
+
+export function saveTaskNote(taskId: string, content: string): void {
+  if (!taskId) return;
+  const key = `vow_task_note_${taskId}`;
+  try {
+    localStorage.setItem(key, content);
+  } catch (e) {
+    console.error(`Error saving note for task ${taskId}:`, e);
+  }
+
+  notifyTaskDetailUpdated(taskId, 'note');
+}
+
+export function getTaskAttachments(taskId: string, _taskTitle?: string): TaskAttachment[] {
+  if (!taskId) return [];
+  const key = `vow_task_attachments_${taskId}`;
+  try {
+    const saved = localStorage.getItem(key);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed)) return parsed;
+    }
+  } catch (e) {
+    console.warn(`Error reading attachments for task ${taskId}:`, e);
+  }
+
+  return [];
+}
