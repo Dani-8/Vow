@@ -1,18 +1,3 @@
-  if (!taskId) return;
-  const key = `vow_task_sticky_notes_${taskId}`;
-  try {
-    localStorage.setItem(key, JSON.stringify(notes));
-  } catch (e) {
-    console.error(`Error saving sticky notes for task ${taskId}:`, e);
-  }
-
-  notifyTaskDetailUpdated(taskId, 'note');
-}
-
-export function addTaskStickyNote(
-  taskId: string,
-  noteData: Omit<TaskStickyNote, 'id' | 'createdAt' | 'updatedAt'>
-): TaskStickyNote {
   const current = getTaskStickyNotes(taskId);
   const newNote: TaskStickyNote = {
     ...noteData,
