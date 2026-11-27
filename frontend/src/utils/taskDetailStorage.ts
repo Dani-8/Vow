@@ -95,3 +95,24 @@ export function deleteTaskStickyNote(taskId: string, noteId: string): void {
   const deleted = current.find((n) => n.id === noteId);
   const updated = current.filter((n) => n.id !== noteId);
   saveTaskStickyNotes(taskId, updated);
+
+  if (deleted) {
+    addTaskActivity(taskId, {
+      type: 'note_update',
+      message: `Removed sticky note: "${deleted.title || 'Note'}"`,
+      user: 'You',
+    });
+  }
+}
+
+export function getTaskNote(taskId: string): string {
+  if (!taskId) return '';
+  const key = `vow_task_note_${taskId}`;
+  try {
+    const saved = localStorage.getItem(key);
+    if (saved !== null) return saved;
+  } catch (e) {
+    console.warn(`Error reading note for task ${taskId}:`, e);
+  }
+
+  return '';
