@@ -69,3 +69,29 @@ export function addTaskStickyNote(
 
   return newNote;
 }
+
+export function updateTaskStickyNote(
+  taskId: string,
+  noteId: string,
+  updates: Partial<Omit<TaskStickyNote, 'id' | 'createdAt'>>
+): void {
+  const current = getTaskStickyNotes(taskId);
+  const updated = current.map((n) => {
+    if (n.id === noteId) {
+      return {
+        ...n,
+        ...updates,
+        updatedAt: new Date().toISOString(),
+      };
+    }
+    return n;
+  });
+
+  saveTaskStickyNotes(taskId, updated);
+}
+
+export function deleteTaskStickyNote(taskId: string, noteId: string): void {
+  const current = getTaskStickyNotes(taskId);
+  const deleted = current.find((n) => n.id === noteId);
+  const updated = current.filter((n) => n.id !== noteId);
+  saveTaskStickyNotes(taskId, updated);
