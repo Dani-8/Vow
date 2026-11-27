@@ -1,18 +1,3 @@
-
-  'task_ui_revamp_m3p9q': [
-    {
-      id: 'sn_ui_1',
-      title: 'Elevation Tokens & Shadows',
-      content: `Standardize neumorphic bevels across all cards and modal sheets:
-- Outer shadows: rgba(163, 177, 198, 0.6)
-- Inner highlights: rgba(255, 255, 255, 0.8)`,
-      color: 'purple',
-      isPinned: true,
-      createdAt: new Date(Date.now() - 86400000 * 3).toISOString(),
-      updatedAt: new Date(Date.now() - 86400000 * 3).toISOString(),
-    },
-    {
-      id: 'sn_ui_2',
       title: 'Action Items Checklist',
       content: `- [ ] Audit primary action buttons for unified 2:1 padding ratio
 - [ ] Ensure WCAG AA contrast on slate text`,
