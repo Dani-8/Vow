@@ -1,18 +1,3 @@
-• Rate limit auth endpoints (15 req/min per IP)
-• Sanitize all incoming payload inputs to prevent injection
-• Set SameSite=Lax and Secure flags on auth cookies
-• Never log tokens or secrets to container output logs`,
-      color: 'rose',
-      isPinned: false,
-      createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-      updatedAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-    },
-    {
-      id: 'sn_mern_4',
-      title: 'Performance Targets',
-      content: `• Lighthouse Score: 95+ across Performance & Accessibility
-• API Response Time: < 120ms for P95 endpoints
-• Zero client-side bundle hydration bottlenecks`,
       color: 'green',
       isPinned: false,
       createdAt: new Date(Date.now() - 86400000).toISOString(),
