@@ -1,18 +1,3 @@
-      id: 'att_ui_1',
-      name: 'Figma Design System & Component Library',
-      type: 'link',
-      url: 'https://www.figma.com',
-      uploadedAt: new Date(Date.now() - 86400000 * 5).toISOString(),
-    },
-    {
-      id: 'att_ui_2',
-      name: 'Design_Tokens_Specification.pdf',
-      type: 'pdf',
-      size: '2.8 MB',
-      url: '#',
-      uploadedAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-    },
-  ],
   'task_ai_engineer_a8x4m': [
     {
       id: 'att_ai_1',
