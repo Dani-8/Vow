@@ -1,24 +1,3 @@
-> "A well-crafted prompt reduces hallucination rates by over 80%."`,
-      color: 'blue',
-      isPinned: false,
-      createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-      updatedAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-    },
-    {
-      id: 'sn_ai_4',
-      title: 'Evaluation Metrics & Benchmarks',
-      content: `Target SLA & Quality Thresholds:
-• First token latency: < 650ms
-• Hallucination rate: < 1.5%
-• Context window utilization: Max 60% per turn to prevent token spill`,
-      color: 'green',
-      isPinned: false,
-      createdAt: new Date(Date.now() - 86400000).toISOString(),
-      updatedAt: new Date(Date.now() - 86400000).toISOString(),
-    },
-  ],
-
-  'task_mern_project_m3k9p': [
     {
       id: 'sn_mern_1',
       title: 'Stack & System Architecture',
