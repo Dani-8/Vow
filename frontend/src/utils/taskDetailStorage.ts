@@ -1,27 +1,3 @@
-// Default initial activity logs seed
-const DEFAULT_TASK_ACTIVITIES: Record<string, TaskActivityItem[]> = {
-  'task_russian_mastery_r7u2k': [
-    {
-      id: 'act_ru_1',
-      type: 'created',
-      message: 'Created task "Russian Language Learning: Daily Fluency & Grammar Path"',
-      user: 'Alex Rivera',
-      timestamp: new Date(Date.now() - 86400000 * 10).toISOString(),
-    },
-    {
-      id: 'act_ru_2',
-      type: 'subtask_complete',
-      message: 'Completed subtask: "Cyrillic Alphabet & Phonetic Pronunciation Drills"',
-      user: 'Alex Rivera',
-      timestamp: new Date(Date.now() - 86400000 * 2).toISOString(),
-    },
-    {
-      id: 'act_ru_3',
-      type: 'attachment_add',
-      message: 'Attached reference link: "OpenRussian Dictionary & Declensions"',
-      user: 'Alex Rivera',
-      timestamp: new Date(Date.now() - 86400000).toISOString(),
-    },
     {
       id: 'act_ru_4',
       type: 'comment',
