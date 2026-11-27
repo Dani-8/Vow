@@ -1,32 +1,3 @@
-    },
-  ],
-  'task_mern_project_m3k9p': [
-    {
-      id: 'att_mern_1',
-      name: 'Express & RESTful API Blueprint Specs',
-      type: 'link',
-      url: 'https://expressjs.com/',
-      uploadedAt: new Date(Date.now() - 86400000 * 6).toISOString(),
-    },
-    {
-      id: 'att_mern_2',
-      name: 'Database_Schema_ERD_Diagram.pdf',
-      type: 'pdf',
-      size: '1.9 MB',
-      url: '#',
-      uploadedAt: new Date(Date.now() - 86400000 * 4).toISOString(),
-    },
-    {
-      id: 'att_mern_3',
-      name: 'Cloud_Run_Container_Setup.docx',
-      type: 'doc',
-      size: '380 KB',
-      url: '#',
-      uploadedAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-    },
-  ],
-};
-
 // Default initial activity logs seed
 const DEFAULT_TASK_ACTIVITIES: Record<string, TaskActivityItem[]> = {
   'task_russian_mastery_r7u2k': [
