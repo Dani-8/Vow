@@ -1,19 +1,3 @@
-      id: 'sn_mern_2',
-      title: 'Sprint Action Items',
-      content: `- [x] Initialize Express TypeScript backend & CORS headers
-- [x] Create database indexing schema for fast indexed lookups
-- [ ] Connect optimistic UI state updates in React frontend
-- [ ] Add integration test suite with Supertest
-- [ ] Run container build audit & minify bundle sizes`,
-      color: 'yellow',
-      isPinned: true,
-      createdAt: new Date(Date.now() - 86400000 * 4).toISOString(),
-      updatedAt: new Date(Date.now() - 86400000 * 3).toISOString(),
-    },
-    {
-      id: 'sn_mern_3',
-      title: 'Security & Auth Checklist',
-      content: `Hardening measures for production:
 • Rate limit auth endpoints (15 req/min per IP)
 • Sanitize all incoming payload inputs to prevent injection
 • Set SameSite=Lax and Secure flags on auth cookies
