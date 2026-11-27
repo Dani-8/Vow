@@ -45,4 +45,40 @@ router.post('/', authenticateToken, async (req: AuthenticatedRequest, res: Respo
             startDate,
             targetEndDate,
             rule,
-   
+           consequenceOfSkipping,
+            consequencesOfSkipping,
+            tags,
+            status,
+            logs,
+            sprints,
+            currentSprintId,
+        } = req.body;
+
+        if (!title || typeof title !== 'string') {
+            return res.status(400).json({ error: 'Challenge title is required' });
+        }
+
+        const consequences = Array.isArray(consequencesOfSkipping)
+            ? consequencesOfSkipping
+            : (consequenceOfSkipping ? [consequenceOfSkipping] : []);
+
+        const created = await Challenge.create({
+            id,
+            userId: req.userId,
+            title: title.trim(),
+            description: description || '',
+            category: category || 'engineering',
+            color: color || 'purple',
+            icon: icon || 'target',
+            targetDays: Number(targetDays) || 30,
+            startDate: startDate || new Date().toISOString(),
+            targetEndDate,
+            rule: rule || '',
+            consequenceOfSkipping: consequenceOfSkipping || (consequences[0] || ''),
+            consequencesOfSkipping: consequences,
+            tags: Array.isArray(tags) ? tags : [],
+            status: status || 'active',
+            logs: Array.isArray(logs) ? logs : [],
+            sprints: Array.isArray(sprints) ? sprints : [],
+            currentSprintId,
+        });
