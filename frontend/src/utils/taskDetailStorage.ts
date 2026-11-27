@@ -1,14 +1,3 @@
-      createdAt: new Date(Date.now() - 86400000 * 4).toISOString(),
-      updatedAt: new Date(Date.now() - 86400000 * 3).toISOString(),
-    },
-    {
-      id: 'sn_ru_3',
-      title: 'Daily Vocab Goal',
-      content: `Target: 20 new Anki flashcards every morning before breakfast.
-
-> "Consistent 25-minute practice beats 3-hour weekly cramming."`,
-      color: 'green',
-      isPinned: false,
       createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
       updatedAt: new Date(Date.now() - 86400000 * 2).toISOString(),
     },
