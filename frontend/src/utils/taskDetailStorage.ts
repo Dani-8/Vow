@@ -1,35 +1,3 @@
-    {
-      id: 'act_mern_2',
-      type: 'subtask_complete',
-      message: 'Completed subtask: "Express RESTful API Architecture & JWT Auth Middleware"',
-      user: 'Alex Rivera',
-      timestamp: new Date(Date.now() - 86400000 * 5).toISOString(),
-    },
-    {
-      id: 'act_mern_3',
-      type: 'subtask_complete',
-      message: 'Completed subtask: "Database Schema Models, Indexing & Validation"',
-      user: 'Alex Rivera',
-      timestamp: new Date(Date.now() - 86400000 * 3).toISOString(),
-    },
-    {
-      id: 'act_mern_4',
-      type: 'comment',
-      message: 'Frontend components modularized cleanly. Ready to connect real-time reactive streams.',
-      user: 'Alex Rivera',
-      timestamp: new Date(Date.now() - 3600000 * 2).toISOString(),
-    },
-  ],
-};
-
-export function getTaskNote(taskId: string): string {
-  if (!taskId) return '';
-  const key = `vow_task_note_${taskId}`;
-  try {
-    const saved = localStorage.getItem(key);
-    if (saved !== null) return saved;
-  } catch (e) {
-    console.warn(`Error reading note for task ${taskId}:`, e);
   }
 
   return '';
