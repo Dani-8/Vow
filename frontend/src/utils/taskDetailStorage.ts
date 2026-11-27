@@ -1,21 +1,3 @@
-      content: `Production Agent & RAG System Design:
-• Model Layer: Gemini 2.5 Flash / Pro via @google/genai SDK
-• Agent Loop: Tool-call dispatch with strict JSON schema validation
-• Grounding: Vector similarity retrieval with cosine distance thresholding
-• Safety & Guardrails: Rate limiting and multi-turn context compaction`,
-      color: 'purple',
-      isPinned: true,
-      createdAt: new Date(Date.now() - 86400000 * 5).toISOString(),
-      updatedAt: new Date(Date.now() - 86400000 * 5).toISOString(),
-    },
-    {
-      id: 'sn_ai_2',
-      title: 'Action Items & Milestones',
-      content: `- [x] Setup @google/genai TypeScript SDK client
-- [x] Configure server-side API proxy route for key protection
-- [ ] Benchmark RAG retrieval latency with Top-K = 5
-- [ ] Implement token count monitor & exponential backoff retry`,
-      color: 'yellow',
       isPinned: true,
       createdAt: new Date(Date.now() - 86400000 * 4).toISOString(),
       updatedAt: new Date(Date.now() - 86400000 * 3).toISOString(),
