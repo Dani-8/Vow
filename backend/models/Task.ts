@@ -90,3 +90,32 @@ export class TaskInstance implements ITask {
         this.createdAt = data.createdAt || new Date().toISOString();
         this.updatedAt = data.updatedAt || new Date().toISOString();
     }
+
+    async save() {
+        if (!this._id) {
+            throw new Error('Task ID missing for save');
+        }
+        this.updatedAt = new Date().toISOString();
+
+        const payload = {
+            userId: String(this.userId),
+            title: this.title,
+            description: this.description || '',
+            consequenceOfSkipping: this.consequenceOfSkipping || (this.consequencesOfSkipping && this.consequencesOfSkipping[0]) || '',
+            consequencesOfSkipping: this.consequencesOfSkipping || [],
+            tags: this.tags || [],
+            startTime: this.startTime ? new Date(this.startTime).toISOString() : null,
+            endTime: this.endTime ? new Date(this.endTime).toISOString() : null,
+            status: this.status,
+            priority: this.priority || 'Medium',
+            isPrivate: this.isPrivate,
+            isHabit: this.isHabit,
+            isSample: !!this.isSample,
+            currentStreak: this.currentStreak,
+            bestStreak: this.bestStreak,
+            lastCompletedDate: this.lastCompletedDate ? new Date(this.lastCompletedDate).toISOString() : null,
+            completionHistory: this.completionHistory.map((d) => new Date(d).toISOString()),
+            subTasks: this.subTasks || [],
+            stickyNotes: this.stickyNotes || [],
+            updatedAt: this.updatedAt,
+        };
