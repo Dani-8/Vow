@@ -128,3 +128,19 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                             />
                         </div>
                     )}
+
+                    <div>
+                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
+                            Username *
+                        </label>
+                        <input
+                            type="text"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            placeholder="your_username"
+                            className="w-full px-4 py-2.5 rounded-xl neu-input text-sm font-medium"
+                            required
+                        />
+                    </div>
+
+                    <div>
