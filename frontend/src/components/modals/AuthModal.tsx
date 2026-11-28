@@ -97,12 +97,3 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                         onClick={() => setMode('login')}
                         className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${mode === 'login' ? 'neu-button text-indigo-600 font-bold bg-white' : 'text-slate-500'
                             }`}
-                    >
-                        Sign In
-                    </button>
-                    <button
-                        onClick={() => setMode('signup')}
-                        className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${mode === 'signup' ? 'neu-button text-indigo-600 font-bold bg-white' : 'text-slate-500'
-                            }`}
-                    >
-                        Create Account
