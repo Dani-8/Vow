@@ -324,3 +324,27 @@ export const Challenge = {
         return new ChallengeInstance(challengeObj);
     },
 
+    async deleteOne(filter: { _id?: string; id?: string; userId?: string }): Promise<void> {
+        const idToDelete = filter._id || filter.id;
+        if (!idToDelete) return;
+
+        if (isFirestoreActive()) {
+            try {
+                const db = getFirebaseDb();
+                if (db) {
+                    const docRef = doc(db, 'challenges', idToDelete);
+                    const snap = await getDoc(docRef);
+                    if (snap.exists()) {
+                        await deleteDoc(docRef);
+                    } else {
+                        const q = query(collection(db, 'challenges'), where('id', '==', idToDelete));
+                        const qSnap = await getDocs(q);
+                        for (const d of qSnap.docs) {
+                            await deleteDoc(doc(db, 'challenges', d.id));
+                        }
+                    }
+                }
+            } catch (e) {
+                // Memory fallback
+            }
+        }
