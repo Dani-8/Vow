@@ -67,3 +67,24 @@ export class ChallengeInstance implements IChallenge {
     consequencesOfSkipping?: string[];
     tags: string[];
     status: 'active' | 'completed' | 'paused';
+    logs: IChallengeLog[];
+    sprints?: any[];
+    currentSprintId?: string;
+    isSample?: boolean;
+    createdAt?: string;
+    updatedAt?: string;
+
+    constructor(data: any) {
+        this._id = data._id || data.id || `ch_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
+        this.id = data.id || this._id;
+        this.userId = String(data.userId || '');
+        this.title = data.title || 'Untitled Challenge';
+        this.description = data.description || '';
+        this.category = data.category || 'engineering';
+        this.color = data.color || 'purple';
+        this.icon = data.icon || 'target';
+        this.targetDays = Number(data.targetDays) || 30;
+        this.startDate = data.startDate || new Date().toISOString();
+        this.targetEndDate = data.targetEndDate || new Date(Date.now() + this.targetDays * 86400000).toISOString();
+        this.rule = data.rule || '';
+        this.consequenceOfSkipping = data.consequenceOfSkipping || '';
