@@ -248,3 +248,15 @@ export const Task = {
             }
             return results;
         }
+
+        const now = new Date().toISOString();
+        const consequences = Array.isArray(data.consequencesOfSkipping)
+            ? data.consequencesOfSkipping
+            : (data.consequenceOfSkipping ? [data.consequenceOfSkipping] : []);
+
+        const payload = {
+            userId: String(data.userId || ''),
+            title: data.title || '',
+            description: data.description || '',
+            consequenceOfSkipping: data.consequenceOfSkipping || (consequences[0] || ''),
+            consequencesOfSkipping: consequences,
