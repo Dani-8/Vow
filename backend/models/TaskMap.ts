@@ -29,3 +29,17 @@ export interface ITaskMapConnection {
     relationship: string;
     isCritical?: boolean;
 }
+
+export interface ITaskMap {
+    _id: string;
+    id?: string;
+    userId: string;
+    name: string;
+    description: string;
+    category?: string;
+    icon?: string;
+    color: string;
+    isPrimary?: boolean;
+    isSample?: boolean;
+    nodes: ITaskMapNode[];
+    connections: ITaskMapConnection[];
