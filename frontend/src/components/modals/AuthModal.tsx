@@ -36,15 +36,3 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
             }
         } catch (err: any) {
             setError(err.message || 'Authentication failed');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleDemoLogin = async () => {
-        try {
-            setLoading(true);
-            setError(null);
-            setEmail('demo@vow.app');
-            setPassword('demopass');
-            const res = await api.login('demo@vow.app', 'demopass');
