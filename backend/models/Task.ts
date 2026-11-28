@@ -204,3 +204,25 @@ export const Task = {
         results.sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
         return results;
     },
+
+    async findOne(filter: { _id?: string; userId?: string; title?: string; isHabit?: boolean }) {
+        if (filter._id) {
+            if (isFirestoreActive()) {
+                try {
+                    const db = getFirebaseDb();
+                    if (db) {
+                        const docRef = doc(db, 'tasks', filter._id);
+                        const snap = await getDoc(docRef);
+                        if (snap.exists()) {
+                            const data = snap.data();
+                            if (!filter.userId || String(data.userId) === String(filter.userId)) {
+                                const obj = new TaskInstance({ ...data, _id: snap.id });
+                                inMemoryTasks.set(obj._id, obj.toObject());
+                                return obj;
+                            }
+                        }
+                    }
+                } catch (e) {
+                    // Memory fallback
+                }
+            }
