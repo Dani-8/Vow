@@ -106,3 +106,25 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                         Create Account
                     </button>
                 </div>
+
+                {error && (
+                    <div className="mb-4 p-3 rounded-xl bg-rose-100 border border-rose-200 text-rose-700 text-xs font-semibold">
+                        {error}
+                    </div>
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    {mode === 'signup' && (
+                        <div>
+                            <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
+                                Display Name
+                            </label>
+                            <input
+                                type="text"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                placeholder="Your Name"
+                                className="w-full px-4 py-2.5 rounded-xl neu-input text-sm font-medium"
+                            />
+                        </div>
+                    )}
