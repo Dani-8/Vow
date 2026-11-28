@@ -221,3 +221,13 @@ export const TaskMap = {
             const found = await this.findById(searchId!);
             if (found) {
                 if (!filter.userId || String(found.userId) === String(filter.userId)) {
+                    return found;
+                }
+            }
+            return null;
+        }
+
+        const maps = await this.find(filter);
+        return maps.length > 0 ? maps[0] : null;
+    },
+
