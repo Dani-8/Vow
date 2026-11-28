@@ -101,3 +101,29 @@ export class ChallengeInstance implements IChallenge {
         this.updatedAt = data.updatedAt || new Date().toISOString();
     }
 
+    toObject(): IChallenge {
+        return {
+            _id: this._id,
+            id: this.id || this._id,
+            userId: this.userId,
+            title: this.title,
+            description: this.description,
+            category: this.category,
+            color: this.color,
+            icon: this.icon,
+            targetDays: this.targetDays,
+            startDate: this.startDate,
+            targetEndDate: this.targetEndDate,
+            rule: this.rule,
+            consequenceOfSkipping: this.consequenceOfSkipping,
+            consequencesOfSkipping: this.consequencesOfSkipping,
+            tags: this.tags,
+            status: this.status,
+            logs: this.logs,
+            sprints: this.sprints,
+            currentSprintId: this.currentSprintId,
+            isSample: this.isSample,
+            createdAt: this.createdAt,
+            updatedAt: this.updatedAt,
+        };
+    }
