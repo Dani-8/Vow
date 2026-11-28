@@ -88,3 +88,16 @@ export class ChallengeInstance implements IChallenge {
         this.targetEndDate = data.targetEndDate || new Date(Date.now() + this.targetDays * 86400000).toISOString();
         this.rule = data.rule || '';
         this.consequenceOfSkipping = data.consequenceOfSkipping || '';
+        this.consequencesOfSkipping = Array.isArray(data.consequencesOfSkipping)
+            ? data.consequencesOfSkipping
+            : (data.consequenceOfSkipping ? [data.consequenceOfSkipping] : []);
+        this.tags = Array.isArray(data.tags) ? data.tags : [];
+        this.status = data.status || 'active';
+        this.logs = Array.isArray(data.logs) ? data.logs : [];
+        this.sprints = Array.isArray(data.sprints) ? data.sprints : [];
+        this.currentSprintId = data.currentSprintId || (this.sprints.length > 0 ? this.sprints[0].id : undefined);
+        this.isSample = !!data.isSample;
+        this.createdAt = data.createdAt || new Date().toISOString();
+        this.updatedAt = data.updatedAt || new Date().toISOString();
+    }
+
