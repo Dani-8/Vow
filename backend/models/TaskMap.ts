@@ -244,3 +244,20 @@ export const TaskMap = {
             color: data.color || 'purple',
             isPrimary: !!data.isPrimary,
             isSample: !!data.isSample,
+            nodes: Array.isArray(data.nodes) ? data.nodes : [],
+            connections: Array.isArray(data.connections) ? data.connections : [],
+            createdAt: now,
+            updatedAt: now,
+        };
+
+        let newId = explicitId || payload.id;
+        if (isFirestoreActive()) {
+            try {
+                const db = getFirebaseDb();
+                if (db) {
+                    const mapsRef = collection(db, 'task_maps');
+                    const docRef = await addDoc(mapsRef, payload);
+                    newId = docRef.id;
+                }
+            } catch (e) {
+                // Memory store fallback
