@@ -138,3 +138,15 @@ export class TaskMapInstance implements ITaskMap {
 export const TaskMap = {
     async find(filter: { userId?: string }): Promise<TaskMapInstance[]> {
         const results: TaskMapInstance[] = [];
+
+        if (isFirestoreActive()) {
+            try {
+                const db = getFirebaseDb();
+                if (db) {
+                    const mapsRef = collection(db, 'task_maps');
+                    let q;
+                    if (filter.userId) {
+                        q = query(mapsRef, where('userId', '==', String(filter.userId)));
+                    } else {
+                        q = query(mapsRef);
+                    }
