@@ -279,3 +279,22 @@ export const Task = {
             createdAt: now,
             updatedAt: now,
         };
+
+        let newId = data._id || ('task_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5));
+        if (isFirestoreActive()) {
+            try {
+                const db = getFirebaseDb();
+                if (db) {
+                    const tasksRef = collection(db, 'tasks');
+                    const docRef = await addDoc(tasksRef, payload);
+                    newId = data._id || docRef.id;
+                }
+            } catch (e) {
+                // Memory store fallback
+            }
+        }
+
+        const taskObj = { ...payload, _id: newId };
+        inMemoryTasks.set(newId, taskObj);
+        return new TaskInstance(taskObj);
+    },
