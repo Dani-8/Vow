@@ -49,3 +49,17 @@ export interface ITaskMap {
 
 const inMemoryTaskMaps: Map<string, any> = new Map();
 
+export class TaskMapInstance implements ITaskMap {
+    _id: string;
+    id?: string;
+    userId: string;
+    name: string;
+    description: string;
+    category?: string;
+    icon?: string;
+    color: string;
+    isPrimary?: boolean;
+    isSample?: boolean;
+    nodes: ITaskMapNode[];
+    connections: ITaskMapConnection[];
+    createdAt?: string;
