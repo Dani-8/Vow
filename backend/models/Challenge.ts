@@ -127,3 +127,21 @@ export class ChallengeInstance implements IChallenge {
             updatedAt: this.updatedAt,
         };
     }
+
+    async save() {
+        this.updatedAt = new Date().toISOString();
+        const payload = {
+            id: this.id || this._id,
+            userId: this.userId,
+            title: this.title,
+            description: this.description,
+            category: this.category,
+            color: this.color,
+            icon: this.icon,
+            targetDays: this.targetDays,
+            startDate: this.startDate,
+            targetEndDate: this.targetEndDate,
+            rule: this.rule,
+            consequenceOfSkipping: this.consequenceOfSkipping || (this.consequencesOfSkipping && this.consequencesOfSkipping[0]) || '',
+            consequencesOfSkipping: this.consequencesOfSkipping || [],
+ 
