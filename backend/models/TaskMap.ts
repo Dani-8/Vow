@@ -261,3 +261,16 @@ export const TaskMap = {
                 }
             } catch (e) {
                 // Memory store fallback
+            }
+        }
+
+        const mapObj = { ...payload, _id: newId, id: payload.id || newId };
+        inMemoryTaskMaps.set(newId, mapObj);
+        return new TaskMapInstance(mapObj);
+    },
+
+    async deleteOne(filter: { _id?: string; id?: string; userId?: string }): Promise<void> {
+        const idToDelete = filter._id || filter.id;
+        if (!idToDelete) return;
+
+        if (isFirestoreActive()) {
