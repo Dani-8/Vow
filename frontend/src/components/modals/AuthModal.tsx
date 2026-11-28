@@ -18,3 +18,19 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
     const [error, setError] = useState<string | null>(null);
 
     if (!isOpen) return null;
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setError(null);
+
+        try {
+            setLoading(true);
+            if (mode === 'login') {
+                const res = await api.login(username, password);
+                onSuccessAuth(res.user);
+                onClose();
+            } else {
+                const res = await api.signup(username, password, name);
+                onSuccessAuth({ ...res.user, recoveryKey: res.recoveryKey });
+                onClose();
+            }
