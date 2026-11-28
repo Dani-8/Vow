@@ -98,3 +98,16 @@ export class TaskMapInstance implements ITaskMap {
             connections: this.connections,
             createdAt: this.createdAt,
             updatedAt: this.updatedAt,
+        };
+    }
+
+    async save(): Promise<TaskMapInstance> {
+        this.updatedAt = new Date().toISOString();
+        const payload = {
+            userId: this.userId,
+            name: this.name,
+            description: this.description,
+            category: this.category || '',
+            icon: this.icon || '',
+            color: this.color,
+            isPrimary: this.isPrimary,
