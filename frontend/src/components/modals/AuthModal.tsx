@@ -75,13 +75,3 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                     <p className="text-xs text-[#717699] max-w-xs mt-1 font-medium">
                         JWT Authenticated task manager & personal growth tracker
                     </p>
-                </div>
-
-                <div className="mb-6 neu-inset p-3.5 rounded-2xl flex items-center justify-between">
-                    <div>
-                        <span className="text-xs font-bold text-slate-800 block">Instant Access</span>
-                        <span className="text-[11px] text-slate-500">Includes pre-seeded streaks & PIN vault (PIN: 1234)</span>
-                    </div>
-                    <button
-                        onClick={handleDemoLogin}
-                        disabled={loading}
