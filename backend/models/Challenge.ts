@@ -304,3 +304,18 @@ export const Challenge = {
             createdAt: now,
             updatedAt: now,
         };
+
+        let newId = explicitId || payload.id;
+        if (isFirestoreActive()) {
+            try {
+                const db = getFirebaseDb();
+                if (db) {
+                    const challengesRef = collection(db, 'challenges');
+                    const docRef = await addDoc(challengesRef, payload);
+                    newId = docRef.id;
+                }
+            } catch (e) {
+                // Memory fallback
+            }
+        }
+
