@@ -226,3 +226,25 @@ export const Task = {
                     // Memory fallback
                 }
             }
+            const mem = inMemoryTasks.get(filter._id);
+            if (mem) {
+                if (!filter.userId || String(mem.userId) === String(filter.userId)) {
+                    return new TaskInstance(mem);
+                }
+            }
+            return null;
+        }
+
+        const tasks = await this.find(filter);
+        return tasks.length > 0 ? tasks[0] : null;
+    },
+
+    async create(data: Partial<ITask> | Partial<ITask>[]): Promise<any> {
+        if (Array.isArray(data)) {
+            const results: TaskInstance[] = [];
+            for (const item of data) {
+                const created = await this.create(item);
+                results.push(created);
+            }
+            return results;
+        }
