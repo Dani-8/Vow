@@ -253,3 +253,19 @@ export const Challenge = {
         }
         return null;
     },
+
+    async findOne(filter: { _id?: string; id?: string; userId?: string }): Promise<ChallengeInstance | null> {
+        if (filter._id || filter.id) {
+            const searchId = filter._id || filter.id;
+            const found = await this.findById(searchId!);
+            if (found) {
+                if (!filter.userId || String(found.userId) === String(filter.userId)) {
+                    return found;
+                }
+            }
+            return null;
+        }
+
+        const challenges = await this.find(filter);
+        return challenges.length > 0 ? challenges[0] : null;
+    },
