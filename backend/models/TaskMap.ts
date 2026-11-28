@@ -150,3 +150,16 @@ export const TaskMap = {
                     } else {
                         q = query(mapsRef);
                     }
+                    const snap = await getDocs(q);
+                    snap.forEach((d) => {
+                        const data = d.data();
+                        const obj = new TaskMapInstance({ ...data, _id: d.id, id: data.id || d.id });
+                        results.push(obj);
+                    });
+                    return results;
+                }
+            } catch (e) {
+                console.warn('Firestore task_maps query failed, using memory store fallback:', e);
+            }
+        }
+
