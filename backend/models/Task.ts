@@ -119,3 +119,25 @@ export class TaskInstance implements ITask {
             stickyNotes: this.stickyNotes || [],
             updatedAt: this.updatedAt,
         };
+
+        if (isFirestoreActive()) {
+            try {
+                const db = getFirebaseDb();
+                if (db) {
+                    const taskRef = doc(db, 'tasks', this._id);
+                    await updateDoc(taskRef, payload);
+                }
+            } catch (e) {
+                // Memory store fallback
+            }
+        }
+
+        inMemoryTasks.set(this._id, this.toObject());
+        return this;
+    }
+
+    toObject() {
+        return {
+            _id: this._id,
+            userId: this.userId,
+            title: this.title,
