@@ -22,13 +22,16 @@ export interface ITask {
     startTime?: Date | string | null;
     endTime?: Date | string | null;
     status: 'todo' | 'in_progress' | 'completed';
+    priority?: 'High' | 'Medium' | 'Low';
     isPrivate: boolean;
     isHabit: boolean;
+    isSample?: boolean;
     currentStreak: number;
     bestStreak: number;
     lastCompletedDate?: Date | string | null;
     completionHistory: (Date | string)[];
     subTasks?: any[];
+    stickyNotes?: any[];
     createdAt?: string;
     updatedAt?: string;
 }
@@ -46,13 +49,16 @@ export class TaskInstance implements ITask {
     startTime?: Date | string | null;
     endTime?: Date | string | null;
     status: 'todo' | 'in_progress' | 'completed';
+    priority?: 'High' | 'Medium' | 'Low';
     isPrivate: boolean;
     isHabit: boolean;
+    isSample?: boolean;
     currentStreak: number;
     bestStreak: number;
     lastCompletedDate?: Date | string | null;
     completionHistory: (Date | string)[];
     subTasks?: any[];
+    stickyNotes?: any[];
     createdAt?: string;
     updatedAt?: string;
 
@@ -69,8 +75,10 @@ export class TaskInstance implements ITask {
         this.startTime = data.startTime ? new Date(data.startTime) : null;
         this.endTime = data.endTime ? new Date(data.endTime) : null;
         this.status = data.status || 'todo';
+        this.priority = data.priority || 'Medium';
         this.isPrivate = !!data.isPrivate;
         this.isHabit = !!data.isHabit;
+        this.isSample = !!data.isSample;
         this.currentStreak = Number(data.currentStreak || 0);
         this.bestStreak = Number(data.bestStreak || 0);
         this.lastCompletedDate = data.lastCompletedDate ? new Date(data.lastCompletedDate) : null;
@@ -78,6 +86,7 @@ export class TaskInstance implements ITask {
             ? data.completionHistory.map((d: any) => new Date(d))
             : [];
         this.subTasks = Array.isArray(data.subTasks) ? data.subTasks : [];
+        this.stickyNotes = Array.isArray(data.stickyNotes) ? data.stickyNotes : [];
         this.createdAt = data.createdAt || new Date().toISOString();
         this.updatedAt = data.updatedAt || new Date().toISOString();
     }
@@ -98,13 +107,16 @@ export class TaskInstance implements ITask {
             startTime: this.startTime ? new Date(this.startTime).toISOString() : null,
             endTime: this.endTime ? new Date(this.endTime).toISOString() : null,
             status: this.status,
+            priority: this.priority || 'Medium',
             isPrivate: this.isPrivate,
             isHabit: this.isHabit,
+            isSample: !!this.isSample,
             currentStreak: this.currentStreak,
             bestStreak: this.bestStreak,
             lastCompletedDate: this.lastCompletedDate ? new Date(this.lastCompletedDate).toISOString() : null,
             completionHistory: this.completionHistory.map((d) => new Date(d).toISOString()),
             subTasks: this.subTasks || [],
+            stickyNotes: this.stickyNotes || [],
             updatedAt: this.updatedAt,
         };
 
@@ -136,13 +148,16 @@ export class TaskInstance implements ITask {
             startTime: this.startTime ? new Date(this.startTime).toISOString() : null,
             endTime: this.endTime ? new Date(this.endTime).toISOString() : null,
             status: this.status,
+            priority: this.priority || 'Medium',
             isPrivate: this.isPrivate,
             isHabit: this.isHabit,
+            isSample: !!this.isSample,
             currentStreak: this.currentStreak,
             bestStreak: this.bestStreak,
             lastCompletedDate: this.lastCompletedDate ? new Date(this.lastCompletedDate).toISOString() : null,
             completionHistory: this.completionHistory.map((d) => new Date(d).toISOString()),
             subTasks: this.subTasks || [],
+            stickyNotes: this.stickyNotes || [],
             createdAt: this.createdAt,
             updatedAt: this.updatedAt,
         };
@@ -249,8 +264,10 @@ export const Task = {
             startTime: data.startTime ? new Date(data.startTime).toISOString() : null,
             endTime: data.endTime ? new Date(data.endTime).toISOString() : null,
             status: data.status || 'todo',
+            priority: data.priority || 'Medium',
             isPrivate: !!data.isPrivate,
             isHabit: !!data.isHabit,
+            isSample: !!data.isSample,
             currentStreak: Number(data.currentStreak || 0),
             bestStreak: Number(data.bestStreak || 0),
             lastCompletedDate: data.lastCompletedDate ? new Date(data.lastCompletedDate).toISOString() : null,
@@ -258,6 +275,7 @@ export const Task = {
                 ? data.completionHistory.map((d: any) => new Date(d).toISOString())
                 : [],
             subTasks: Array.isArray(data.subTasks) ? data.subTasks : [],
+            stickyNotes: Array.isArray(data.stickyNotes) ? data.stickyNotes : [],
             createdAt: now,
             updatedAt: now,
         };

@@ -43,6 +43,7 @@ export interface IChallenge {
     logs: IChallengeLog[];
     sprints?: any[];
     currentSprintId?: string;
+    isSample?: boolean;
     createdAt?: string;
     updatedAt?: string;
 }
@@ -69,6 +70,7 @@ export class ChallengeInstance implements IChallenge {
     logs: IChallengeLog[];
     sprints?: any[];
     currentSprintId?: string;
+    isSample?: boolean;
     createdAt?: string;
     updatedAt?: string;
 
@@ -94,6 +96,7 @@ export class ChallengeInstance implements IChallenge {
         this.logs = Array.isArray(data.logs) ? data.logs : [];
         this.sprints = Array.isArray(data.sprints) ? data.sprints : [];
         this.currentSprintId = data.currentSprintId || (this.sprints.length > 0 ? this.sprints[0].id : undefined);
+        this.isSample = !!data.isSample;
         this.createdAt = data.createdAt || new Date().toISOString();
         this.updatedAt = data.updatedAt || new Date().toISOString();
     }
@@ -119,6 +122,7 @@ export class ChallengeInstance implements IChallenge {
             logs: this.logs,
             sprints: this.sprints,
             currentSprintId: this.currentSprintId,
+            isSample: this.isSample,
             createdAt: this.createdAt,
             updatedAt: this.updatedAt,
         };
@@ -145,6 +149,7 @@ export class ChallengeInstance implements IChallenge {
             logs: this.logs,
             sprints: this.sprints || [],
             currentSprintId: this.currentSprintId,
+            isSample: !!this.isSample,
             createdAt: this.createdAt,
             updatedAt: this.updatedAt,
         };
@@ -222,6 +227,15 @@ export const Challenge = {
                         inMemoryChallenges.set(obj._id, obj.toObject());
                         return obj;
                     }
+                    const q = query(collection(db, 'challenges'), where('id', '==', id));
+                    const qSnap = await getDocs(q);
+                    if (!qSnap.empty) {
+                        const firstDoc = qSnap.docs[0];
+                        const data = firstDoc.data();
+                        const obj = new ChallengeInstance({ ...data, _id: firstDoc.id, id: data.id || firstDoc.id });
+                        inMemoryChallenges.set(obj._id, obj.toObject());
+                        return obj;
+                    }
                 }
             } catch (e) {
                 // Memory fallback
@@ -286,6 +300,7 @@ export const Challenge = {
             logs: Array.isArray(data.logs) ? data.logs : [],
             sprints: Array.isArray(data.sprints) ? data.sprints : [],
             currentSprintId: data.currentSprintId || undefined,
+            isSample: !!data.isSample,
             createdAt: now,
             updatedAt: now,
         };
@@ -318,7 +333,16 @@ export const Challenge = {
                 const db = getFirebaseDb();
                 if (db) {
                     const docRef = doc(db, 'challenges', idToDelete);
-                    await deleteDoc(docRef);
+                    const snap = await getDoc(docRef);
+                    if (snap.exists()) {
+                        await deleteDoc(docRef);
+                    } else {
+                        const q = query(collection(db, 'challenges'), where('id', '==', idToDelete));
+                        const qSnap = await getDocs(q);
+                        for (const d of qSnap.docs) {
+                            await deleteDoc(doc(db, 'challenges', d.id));
+                        }
+                    }
                 }
             } catch (e) {
                 // Memory fallback
