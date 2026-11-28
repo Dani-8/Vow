@@ -5,20 +5,3 @@ import { User } from '../../types';
 
 interface AuthModalProps {
     isOpen: boolean;
-    onClose: () => void;
-    onSuccessAuth: (user: User) => void;
-}
-
-export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccessAuth }) => {
-    const [mode, setMode] = useState<'login' | 'signup'>('login');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [name, setName] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-
-    if (!isOpen) return null;
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setError(null);
