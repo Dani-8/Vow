@@ -200,3 +200,15 @@ export const Challenge = {
                 console.warn('Firestore challenges query failed, using memory store fallback:', e);
             }
         }
+
+        // Fallback to in-memory
+        for (const [, val] of inMemoryChallenges) {
+            if (!filter.userId || String(val.userId) === String(filter.userId)) {
+                if (!filter.status || val.status === filter.status) {
+                    results.push(new ChallengeInstance(val));
+                }
+            }
+        }
+
+        return results;
+    },
