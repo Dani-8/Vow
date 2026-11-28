@@ -76,3 +76,15 @@ export class TaskMapInstance implements ITaskMap {
         this.color = data.color || 'purple';
         this.isPrimary = !!data.isPrimary;
         this.isSample = !!data.isSample;
+        this.nodes = Array.isArray(data.nodes) ? data.nodes : [];
+        this.connections = Array.isArray(data.connections) ? data.connections : [];
+        this.createdAt = data.createdAt || new Date().toISOString();
+        this.updatedAt = data.updatedAt || new Date().toISOString();
+    }
+
+    toObject(): ITaskMap {
+        return {
+            _id: this._id,
+            id: this.id || this._id,
+            userId: this.userId,
+            name: this.name,
