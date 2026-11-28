@@ -48,17 +48,3 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
             setEmail('demo@vow.app');
             setPassword('demopass');
             const res = await api.login('demo@vow.app', 'demopass');
-            onSuccessAuth(res.user);
-            onClose();
-        } catch (err: any) {
-            setError(err.message || 'Demo login failed');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
-            <div className="neu-card w-full max-w-md p-6 bg-[#E0E5EC] relative animate-in fade-in zoom-in-95 duration-200">
-                <button
-                    onClick={onClose}
