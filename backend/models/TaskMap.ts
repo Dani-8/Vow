@@ -231,3 +231,16 @@ export const TaskMap = {
         return maps.length > 0 ? maps[0] : null;
     },
 
+    async create(data: Partial<ITaskMap>): Promise<TaskMapInstance> {
+        const now = new Date().toISOString();
+        const explicitId = data.id || data._id;
+        const payload = {
+            id: explicitId || `map_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+            userId: String(data.userId || ''),
+            name: data.name || 'Untitled Map',
+            description: data.description || '',
+            category: data.category || '',
+            icon: data.icon || '',
+            color: data.color || 'purple',
+            isPrimary: !!data.isPrimary,
+            isSample: !!data.isSample,
