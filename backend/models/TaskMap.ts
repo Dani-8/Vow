@@ -63,3 +63,16 @@ export class TaskMapInstance implements ITaskMap {
     nodes: ITaskMapNode[];
     connections: ITaskMapConnection[];
     createdAt?: string;
+    updatedAt?: string;
+
+    constructor(data: any) {
+        this._id = data._id || data.id || '';
+        this.id = data.id || this._id;
+        this.userId = String(data.userId || '');
+        this.name = data.name || '';
+        this.description = data.description || '';
+        this.category = data.category || '';
+        this.icon = data.icon || '';
+        this.color = data.color || 'purple';
+        this.isPrimary = !!data.isPrimary;
+        this.isSample = !!data.isSample;
