@@ -348,3 +348,12 @@ export const Challenge = {
                 // Memory fallback
             }
         }
+
+        inMemoryChallenges.delete(idToDelete);
+        for (const [k, v] of inMemoryChallenges) {
+            if (v.id === idToDelete || v._id === idToDelete) {
+                inMemoryChallenges.delete(k);
+            }
+        }
+    },
+};
