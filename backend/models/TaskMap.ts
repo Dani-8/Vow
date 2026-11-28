@@ -190,3 +190,19 @@ export const TaskMap = {
                     const q = query(collection(db, 'task_maps'), where('id', '==', id));
                     const qSnap = await getDocs(q);
                     if (!qSnap.empty) {
+                        const firstDoc = qSnap.docs[0];
+                        const data = firstDoc.data();
+                        const obj = new TaskMapInstance({ ...data, _id: firstDoc.id, id: data.id || firstDoc.id });
+                        inMemoryTaskMaps.set(obj._id, obj.toObject());
+                        return obj;
+                    }
+                }
+            } catch (e) {
+                // Memory fallback
+            }
+        }
+
+        const mem = inMemoryTaskMaps.get(id);
+        if (mem) {
+            return new TaskMapInstance(mem);
+        }
