@@ -36,8 +36,11 @@ export interface ITaskMap {
     userId: string;
     name: string;
     description: string;
+    category?: string;
+    icon?: string;
     color: string;
     isPrimary?: boolean;
+    isSample?: boolean;
     nodes: ITaskMapNode[];
     connections: ITaskMapConnection[];
     createdAt?: string;
@@ -52,8 +55,11 @@ export class TaskMapInstance implements ITaskMap {
     userId: string;
     name: string;
     description: string;
+    category?: string;
+    icon?: string;
     color: string;
     isPrimary?: boolean;
+    isSample?: boolean;
     nodes: ITaskMapNode[];
     connections: ITaskMapConnection[];
     createdAt?: string;
@@ -65,8 +71,11 @@ export class TaskMapInstance implements ITaskMap {
         this.userId = String(data.userId || '');
         this.name = data.name || '';
         this.description = data.description || '';
+        this.category = data.category || '';
+        this.icon = data.icon || '';
         this.color = data.color || 'purple';
         this.isPrimary = !!data.isPrimary;
+        this.isSample = !!data.isSample;
         this.nodes = Array.isArray(data.nodes) ? data.nodes : [];
         this.connections = Array.isArray(data.connections) ? data.connections : [];
         this.createdAt = data.createdAt || new Date().toISOString();
@@ -80,8 +89,11 @@ export class TaskMapInstance implements ITaskMap {
             userId: this.userId,
             name: this.name,
             description: this.description,
+            category: this.category,
+            icon: this.icon,
             color: this.color,
             isPrimary: this.isPrimary,
+            isSample: this.isSample,
             nodes: this.nodes,
             connections: this.connections,
             createdAt: this.createdAt,
@@ -95,8 +107,11 @@ export class TaskMapInstance implements ITaskMap {
             userId: this.userId,
             name: this.name,
             description: this.description,
+            category: this.category || '',
+            icon: this.icon || '',
             color: this.color,
             isPrimary: this.isPrimary,
+            isSample: !!this.isSample,
             nodes: this.nodes,
             connections: this.connections,
             createdAt: this.createdAt,
@@ -172,6 +187,15 @@ export const TaskMap = {
                         inMemoryTaskMaps.set(obj._id, obj.toObject());
                         return obj;
                     }
+                    const q = query(collection(db, 'task_maps'), where('id', '==', id));
+                    const qSnap = await getDocs(q);
+                    if (!qSnap.empty) {
+                        const firstDoc = qSnap.docs[0];
+                        const data = firstDoc.data();
+                        const obj = new TaskMapInstance({ ...data, _id: firstDoc.id, id: data.id || firstDoc.id });
+                        inMemoryTaskMaps.set(obj._id, obj.toObject());
+                        return obj;
+                    }
                 }
             } catch (e) {
                 // Memory fallback
@@ -215,8 +239,11 @@ export const TaskMap = {
             userId: String(data.userId || ''),
             name: data.name || 'Untitled Map',
             description: data.description || '',
+            category: data.category || '',
+            icon: data.icon || '',
             color: data.color || 'purple',
             isPrimary: !!data.isPrimary,
+            isSample: !!data.isSample,
             nodes: Array.isArray(data.nodes) ? data.nodes : [],
             connections: Array.isArray(data.connections) ? data.connections : [],
             createdAt: now,
@@ -251,7 +278,16 @@ export const TaskMap = {
                 const db = getFirebaseDb();
                 if (db) {
                     const docRef = doc(db, 'task_maps', idToDelete);
-                    await deleteDoc(docRef);
+                    const snap = await getDoc(docRef);
+                    if (snap.exists()) {
+                        await deleteDoc(docRef);
+                    } else {
+                        const q = query(collection(db, 'task_maps'), where('id', '==', idToDelete));
+                        const qSnap = await getDocs(q);
+                        for (const d of qSnap.docs) {
+                            await deleteDoc(doc(db, 'task_maps', d.id));
+                        }
+                    }
                 }
             } catch (e) {
                 // Memory fallback
