@@ -260,3 +260,22 @@ export const Task = {
             description: data.description || '',
             consequenceOfSkipping: data.consequenceOfSkipping || (consequences[0] || ''),
             consequencesOfSkipping: consequences,
+            tags: Array.isArray(data.tags) ? data.tags : [],
+            startTime: data.startTime ? new Date(data.startTime).toISOString() : null,
+            endTime: data.endTime ? new Date(data.endTime).toISOString() : null,
+            status: data.status || 'todo',
+            priority: data.priority || 'Medium',
+            isPrivate: !!data.isPrivate,
+            isHabit: !!data.isHabit,
+            isSample: !!data.isSample,
+            currentStreak: Number(data.currentStreak || 0),
+            bestStreak: Number(data.bestStreak || 0),
+            lastCompletedDate: data.lastCompletedDate ? new Date(data.lastCompletedDate).toISOString() : null,
+            completionHistory: Array.isArray(data.completionHistory)
+                ? data.completionHistory.map((d: any) => new Date(d).toISOString())
+                : [],
+            subTasks: Array.isArray(data.subTasks) ? data.subTasks : [],
+            stickyNotes: Array.isArray(data.stickyNotes) ? data.stickyNotes : [],
+            createdAt: now,
+            updatedAt: now,
+        };
