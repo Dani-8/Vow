@@ -289,3 +289,16 @@ export const TaskMap = {
                         }
                     }
                 }
+            } catch (e) {
+                // Memory fallback
+            }
+        }
+
+        inMemoryTaskMaps.delete(idToDelete);
+        for (const [k, v] of inMemoryTaskMaps) {
+            if (v.id === idToDelete || v._id === idToDelete) {
+                inMemoryTaskMaps.delete(k);
+            }
+        }
+    },
+};
