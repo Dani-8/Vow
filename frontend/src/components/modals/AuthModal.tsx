@@ -62,16 +62,3 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
             <div className="neu-card w-full max-w-md p-6 bg-[#E0E5EC] relative animate-in fade-in zoom-in-95 duration-200">
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 p-2 rounded-xl neu-button text-[#717699] hover:text-[#1a1c35]"
-                >
-                    <X className="w-5 h-5" />
-                </button>
-
-                <div className="flex flex-col items-center text-center mb-6">
-                    <div className="w-14 h-14 rounded-2xl neu-button flex items-center justify-center bg-[#6D5DFC] text-white shadow-lg mb-3">
-                        <Flame className="w-8 h-8 text-indigo-100 animate-pulse" />
-                    </div>
-                    <h2 className="text-2xl font-extrabold text-[#1a1c35]">Welcome to Vow</h2>
-                    <p className="text-xs text-[#717699] max-w-xs mt-1 font-medium">
-                        JWT Authenticated task manager & personal growth tracker
-                    </p>
