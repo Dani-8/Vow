@@ -22,3 +22,28 @@ export interface IChallengeLog {
     createdAt: string;
     updatedAt?: string;
 }
+
+export interface IChallenge {
+    _id: string;
+    id?: string;
+    userId: string;
+    title: string;
+    description: string;
+    category: string;
+    color: string;
+    icon?: string;
+    targetDays: number;
+    startDate: string;
+    targetEndDate: string;
+    rule?: string;
+    consequenceOfSkipping?: string;
+    consequencesOfSkipping?: string[];
+    tags: string[];
+    status: 'active' | 'completed' | 'paused';
+    logs: IChallengeLog[];
+    sprints?: any[];
+    currentSprintId?: string;
+    isSample?: boolean;
+    createdAt?: string;
+    updatedAt?: string;
+}
