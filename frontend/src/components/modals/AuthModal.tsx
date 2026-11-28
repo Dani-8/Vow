@@ -85,15 +85,3 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                     <button
                         onClick={handleDemoLogin}
                         disabled={loading}
-                        className="neu-button px-3.5 py-1.5 rounded-xl text-xs font-bold text-indigo-700 hover:bg-white flex items-center space-x-1 shrink-0"
-                    >
-                        <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
-                        <span>Try Demo</span>
-                    </button>
-                </div>
-
-                <div className="flex neu-inset p-1 rounded-xl mb-6">
-                    <button
-                        onClick={() => setMode('login')}
-                        className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${mode === 'login' ? 'neu-button text-indigo-600 font-bold bg-white' : 'text-slate-500'
-                            }`}
