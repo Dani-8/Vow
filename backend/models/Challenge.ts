@@ -319,3 +319,8 @@ export const Challenge = {
             }
         }
 
+        const challengeObj = { ...payload, _id: newId, id: payload.id || newId };
+        inMemoryChallenges.set(newId, challengeObj);
+        return new ChallengeInstance(challengeObj);
+    },
+
