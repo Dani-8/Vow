@@ -242,3 +242,14 @@ export const Challenge = {
             }
         }
 
+        const mem = inMemoryChallenges.get(id);
+        if (mem) {
+            return new ChallengeInstance(mem);
+        }
+        for (const [, val] of inMemoryChallenges) {
+            if (val.id === id || val._id === id) {
+                return new ChallengeInstance(val);
+            }
+        }
+        return null;
+    },
