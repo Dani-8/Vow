@@ -144,4 +144,24 @@ export class ChallengeInstance implements IChallenge {
             rule: this.rule,
             consequenceOfSkipping: this.consequenceOfSkipping || (this.consequencesOfSkipping && this.consequencesOfSkipping[0]) || '',
             consequencesOfSkipping: this.consequencesOfSkipping || [],
- 
+            tags: this.tags,
+            status: this.status,
+            logs: this.logs,
+            sprints: this.sprints || [],
+            currentSprintId: this.currentSprintId,
+            isSample: !!this.isSample,
+            createdAt: this.createdAt,
+            updatedAt: this.updatedAt,
+        };
+
+        if (isFirestoreActive()) {
+            try {
+                const db = getFirebaseDb();
+                if (db && this._id) {
+                    const docRef = doc(db, 'challenges', this._id);
+                    await updateDoc(docRef, payload);
+                }
+            } catch (e) {
+                console.warn('Challenge Firestore save fallback to memory:', e);
+            }
+        }
