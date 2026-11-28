@@ -121,11 +121,3 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                             <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
                                 Your Name
                             </label>
-                            <input
-                                type="text"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                                placeholder="Alex Rivera"
-                                className="w-full px-4 py-2.5 rounded-xl neu-input text-sm font-medium"
-                            />
-                        </div>
