@@ -178,3 +178,15 @@ export const TaskMap = {
         if (isFirestoreActive()) {
             try {
                 const db = getFirebaseDb();
+                if (db) {
+                    const docRef = doc(db, 'task_maps', id);
+                    const snap = await getDoc(docRef);
+                    if (snap.exists()) {
+                        const data = snap.data();
+                        const obj = new TaskMapInstance({ ...data, _id: snap.id, id: data.id || snap.id });
+                        inMemoryTaskMaps.set(obj._id, obj.toObject());
+                        return obj;
+                    }
+                    const q = query(collection(db, 'task_maps'), where('id', '==', id));
+                    const qSnap = await getDocs(q);
+                    if (!qSnap.empty) {
