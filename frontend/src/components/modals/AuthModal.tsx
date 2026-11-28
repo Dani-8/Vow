@@ -34,3 +34,19 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                 onSuccessAuth({ ...res.user, recoveryKey: res.recoveryKey });
                 onClose();
             }
+        } catch (err: any) {
+            setError(err.message || 'Authentication failed');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleDemoLogin = async () => {
+        try {
+            setLoading(true);
+            setError(null);
+            const res = await api.demoBypass();
+            onSuccessAuth(res.user);
+            onClose();
+        } catch (err: any) {
+            setError(err.message || 'Instant access failed');
