@@ -298,3 +298,21 @@ export const Task = {
         inMemoryTasks.set(newId, taskObj);
         return new TaskInstance(taskObj);
     },
+
+    async deleteOne(filter: { _id: string }) {
+        if (!filter._id) return;
+        if (isFirestoreActive()) {
+            try {
+                const db = getFirebaseDb();
+                if (db) {
+                    const docRef = doc(db, 'tasks', filter._id);
+                    await deleteDoc(docRef);
+                }
+            } catch (e) {
+                // Memory fallback
+            }
+        }
+        inMemoryTasks.delete(filter._id);
+    },
+};
+
