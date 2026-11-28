@@ -11,7 +11,7 @@ interface AuthModalProps {
 
 export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccessAuth }) => {
     const [mode, setMode] = useState<'login' | 'signup'>('login');
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
     const [loading, setLoading] = useState(false);
@@ -26,12 +26,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
         try {
             setLoading(true);
             if (mode === 'login') {
-                const res = await api.login(email, password);
+                const res = await api.login(username, password);
                 onSuccessAuth(res.user);
                 onClose();
             } else {
-                const res = await api.signup(email, password, name);
-                onSuccessAuth(res.user);
+                const res = await api.signup(username, password, name);
+                onSuccessAuth({ ...res.user, recoveryKey: res.recoveryKey });
                 onClose();
             }
         } catch (err: any) {
@@ -45,13 +45,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
         try {
             setLoading(true);
             setError(null);
-            setEmail('demo@vow.app');
-            setPassword('demopass');
-            const res = await api.login('demo@vow.app', 'demopass');
+            const res = await api.demoBypass();
             onSuccessAuth(res.user);
             onClose();
         } catch (err: any) {
-            setError(err.message || 'Demo login failed');
+            setError(err.message || 'Instant access failed');
         } finally {
             setLoading(false);
         }
@@ -73,14 +71,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                     </div>
                     <h2 className="text-2xl font-extrabold text-[#1a1c35]">Welcome to Vow</h2>
                     <p className="text-xs text-[#717699] max-w-xs mt-1 font-medium">
-                        JWT Authenticated task manager & personal growth tracker
+                        Private username-based task & personal growth workspace
                     </p>
                 </div>
 
                 <div className="mb-6 neu-inset p-3.5 rounded-2xl flex items-center justify-between">
                     <div>
                         <span className="text-xs font-bold text-slate-800 block">Instant Access</span>
-                        <span className="text-[11px] text-slate-500">Includes pre-seeded streaks & PIN vault (PIN: 1234)</span>
+                        <span className="text-[11px] text-slate-500">Enter with a temporary guest session</span>
                     </div>
                     <button
                         onClick={handleDemoLogin}
@@ -88,7 +86,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                         className="neu-button px-3.5 py-1.5 rounded-xl text-xs font-bold text-indigo-700 hover:bg-white flex items-center space-x-1 shrink-0"
                     >
                         <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
-                        <span>Try Demo</span>
+                        <span>Quick Enter</span>
                     </button>
                 </div>
 
@@ -119,13 +117,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                     {mode === 'signup' && (
                         <div>
                             <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
-                                Your Name
+                                Display Name
                             </label>
                             <input
                                 type="text"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                placeholder="Alex Rivera"
+                                placeholder="Your Name"
                                 className="w-full px-4 py-2.5 rounded-xl neu-input text-sm font-medium"
                             />
                         </div>
@@ -133,13 +131,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
 
                     <div>
                         <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
-                            Email Address *
+                            Username *
                         </label>
                         <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder="alex@vow.app"
+                            type="text"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            placeholder="your_username"
                             className="w-full px-4 py-2.5 rounded-xl neu-input text-sm font-medium"
                             required
                         />
