@@ -22,3 +22,10 @@ export interface ITaskMapNode {
     customProgress?: number;
 }
 
+export interface ITaskMapConnection {
+    id: string;
+    fromNodeId: string;
+    toNodeId: string;
+    relationship: string;
+    isCritical?: boolean;
+}
