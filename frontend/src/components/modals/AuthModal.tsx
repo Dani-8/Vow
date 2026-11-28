@@ -69,3 +69,20 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                     <div className="w-14 h-14 rounded-2xl neu-button flex items-center justify-center bg-[#6D5DFC] text-white shadow-lg mb-3">
                         <Flame className="w-8 h-8 text-indigo-100 animate-pulse" />
                     </div>
+                    <h2 className="text-2xl font-extrabold text-[#1a1c35]">Welcome to Vow</h2>
+                    <p className="text-xs text-[#717699] max-w-xs mt-1 font-medium">
+                        Private username-based task & personal growth workspace
+                    </p>
+                </div>
+
+                <div className="mb-6 neu-inset p-3.5 rounded-2xl flex items-center justify-between">
+                    <div>
+                        <span className="text-xs font-bold text-slate-800 block">Instant Access</span>
+                        <span className="text-[11px] text-slate-500">Enter with a temporary guest session</span>
+                    </div>
+                    <button
+                        onClick={handleDemoLogin}
+                        disabled={loading}
+                        className="neu-button px-3.5 py-1.5 rounded-xl text-xs font-bold text-indigo-700 hover:bg-white flex items-center space-x-1 shrink-0"
+                    >
+                        <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
