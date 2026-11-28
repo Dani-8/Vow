@@ -212,3 +212,17 @@ export const Challenge = {
 
         return results;
     },
+
+    async findById(id: string): Promise<ChallengeInstance | null> {
+        if (!id) return null;
+        if (isFirestoreActive()) {
+            try {
+                const db = getFirebaseDb();
+                if (db) {
+                    const docRef = doc(db, 'challenges', id);
+                    const snap = await getDoc(docRef);
+                    if (snap.exists()) {
+                        const data = snap.data();
+                        const obj = new ChallengeInstance({ ...data, _id: snap.id, id: data.id || snap.id });
+                        inMemoryChallenges.set(obj._id, obj.toObject());
+                        return obj;
