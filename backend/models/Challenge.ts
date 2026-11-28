@@ -226,3 +226,19 @@ export const Challenge = {
                         const obj = new ChallengeInstance({ ...data, _id: snap.id, id: data.id || snap.id });
                         inMemoryChallenges.set(obj._id, obj.toObject());
                         return obj;
+                    }
+                    const q = query(collection(db, 'challenges'), where('id', '==', id));
+                    const qSnap = await getDocs(q);
+                    if (!qSnap.empty) {
+                        const firstDoc = qSnap.docs[0];
+                        const data = firstDoc.data();
+                        const obj = new ChallengeInstance({ ...data, _id: firstDoc.id, id: data.id || firstDoc.id });
+                        inMemoryChallenges.set(obj._id, obj.toObject());
+                        return obj;
+                    }
+                }
+            } catch (e) {
+                // Memory fallback
+            }
+        }
+
