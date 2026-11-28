@@ -184,3 +184,23 @@ export const Task = {
                         inMemoryTasks.set(obj._id, obj.toObject());
                         results.push(obj);
                     });
+
+                    results.sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
+                    return results;
+                }
+            } catch (e) {
+                // Memory fallback
+            }
+        }
+
+        // Memory fallback
+        let filtered = Array.from(inMemoryTasks.values());
+        if (filter.userId) filtered = filtered.filter((t) => String(t.userId) === String(filter.userId));
+        if (filter.isPrivate !== undefined) filtered = filtered.filter((t) => !!t.isPrivate === filter.isPrivate);
+        if (filter.isHabit !== undefined) filtered = filtered.filter((t) => !!t.isHabit === filter.isHabit);
+        if (filter.title !== undefined) filtered = filtered.filter((t) => t.title === filter.title);
+
+        const results = filtered.map((t) => new TaskInstance(t));
+        results.sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
+        return results;
+    },
