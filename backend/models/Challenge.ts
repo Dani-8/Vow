@@ -165,3 +165,12 @@ export class ChallengeInstance implements IChallenge {
                 console.warn('Challenge Firestore save fallback to memory:', e);
             }
         }
+
+        inMemoryChallenges.set(this._id, { ...payload, _id: this._id, id: this.id });
+        return this;
+    }
+}
+
+export const Challenge = {
+    async find(filter: { userId?: string; status?: string }): Promise<ChallengeInstance[]> {
+        c
