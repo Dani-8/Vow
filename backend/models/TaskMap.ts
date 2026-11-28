@@ -128,3 +128,13 @@ export class TaskMapInstance implements ITaskMap {
             } catch (e) {
                 console.warn('TaskMap Firestore save fallback to memory:', e);
             }
+        }
+
+        inMemoryTaskMaps.set(this._id, { ...payload, _id: this._id, id: this.id });
+        return this;
+    }
+}
+
+export const TaskMap = {
+    async find(filter: { userId?: string }): Promise<TaskMapInstance[]> {
+        const results: TaskMapInstance[] = [];
