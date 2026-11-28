@@ -129,17 +129,3 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                                 className="w-full px-4 py-2.5 rounded-xl neu-input text-sm font-medium"
                             />
                         </div>
-                    )}
-
-                    <div>
-                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
-                            Email Address *
-                        </label>
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder="alex@vow.app"
-                            className="w-full px-4 py-2.5 rounded-xl neu-input text-sm font-medium"
-                            required
-                        />
