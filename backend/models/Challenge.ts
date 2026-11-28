@@ -173,4 +173,30 @@ export class ChallengeInstance implements IChallenge {
 
 export const Challenge = {
     async find(filter: { userId?: string; status?: string }): Promise<ChallengeInstance[]> {
-        c
+        const results: ChallengeInstance[] = [];
+
+        if (isFirestoreActive()) {
+            try {
+                const db = getFirebaseDb();
+                if (db) {
+                    const challengesRef = collection(db, 'challenges');
+                    let q;
+                    if (filter.userId) {
+                        q = query(challengesRef, where('userId', '==', String(filter.userId)));
+                    } else {
+                        q = query(challengesRef);
+                    }
+                    const snap = await getDocs(q);
+                    snap.forEach((d) => {
+                        const data = d.data();
+                        const obj = new ChallengeInstance({ ...data, _id: d.id, id: data.id || d.id });
+                        if (!filter.status || obj.status === filter.status) {
+                            results.push(obj);
+                        }
+                    });
+                    return results;
+                }
+            } catch (e) {
+                console.warn('Firestore challenges query failed, using memory store fallback:', e);
+            }
+        }
