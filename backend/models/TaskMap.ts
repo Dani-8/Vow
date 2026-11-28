@@ -111,3 +111,20 @@ export class TaskMapInstance implements ITaskMap {
             icon: this.icon || '',
             color: this.color,
             isPrimary: this.isPrimary,
+            isSample: !!this.isSample,
+            nodes: this.nodes,
+            connections: this.connections,
+            createdAt: this.createdAt,
+            updatedAt: this.updatedAt,
+        };
+
+        if (isFirestoreActive()) {
+            try {
+                const db = getFirebaseDb();
+                if (db && this._id) {
+                    const docRef = doc(db, 'task_maps', this._id);
+                    await updateDoc(docRef, payload);
+                }
+            } catch (e) {
+                console.warn('TaskMap Firestore save fallback to memory:', e);
+            }
