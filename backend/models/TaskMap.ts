@@ -163,3 +163,18 @@ export const TaskMap = {
             }
         }
 
+        // Fallback to in-memory map
+        for (const [, val] of inMemoryTaskMaps) {
+            if (!filter.userId || String(val.userId) === String(filter.userId)) {
+                results.push(new TaskMapInstance(val));
+            }
+        }
+
+        return results;
+    },
+
+    async findById(id: string): Promise<TaskMapInstance | null> {
+        if (!id) return null;
+        if (isFirestoreActive()) {
+            try {
+                const db = getFirebaseDb();
