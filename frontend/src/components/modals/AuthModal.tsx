@@ -144,3 +144,31 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                     </div>
 
                     <div>
+                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
+                            Password *
+                        </label>
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder="••••••••"
+                            className="w-full px-4 py-2.5 rounded-xl neu-input text-sm font-medium"
+                            required
+                        />
+                    </div>
+
+                    <div className="pt-2">
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full py-3 rounded-xl neu-button-primary font-bold text-sm flex items-center justify-center space-x-2 shadow-md disabled:opacity-50"
+                        >
+                            {mode === 'login' ? <LogIn className="w-4 h-4" /> : <UserPlus className="w-4 h-4" />}
+                            <span>{loading ? 'Processing...' : mode === 'login' ? 'Sign In to Vow' : 'Register Account'}</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+};
