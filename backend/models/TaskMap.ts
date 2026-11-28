@@ -274,3 +274,18 @@ export const TaskMap = {
         if (!idToDelete) return;
 
         if (isFirestoreActive()) {
+            try {
+                const db = getFirebaseDb();
+                if (db) {
+                    const docRef = doc(db, 'task_maps', idToDelete);
+                    const snap = await getDoc(docRef);
+                    if (snap.exists()) {
+                        await deleteDoc(docRef);
+                    } else {
+                        const q = query(collection(db, 'task_maps'), where('id', '==', idToDelete));
+                        const qSnap = await getDocs(q);
+                        for (const d of qSnap.docs) {
+                            await deleteDoc(doc(db, 'task_maps', d.id));
+                        }
+                    }
+                }
