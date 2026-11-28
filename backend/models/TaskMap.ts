@@ -43,3 +43,9 @@ export interface ITaskMap {
     isSample?: boolean;
     nodes: ITaskMapNode[];
     connections: ITaskMapConnection[];
+    createdAt?: string;
+    updatedAt?: string;
+}
+
+const inMemoryTaskMaps: Map<string, any> = new Map();
+
