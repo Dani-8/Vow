@@ -206,3 +206,18 @@ export const TaskMap = {
         if (mem) {
             return new TaskMapInstance(mem);
         }
+        // Also check by id property
+        for (const [, val] of inMemoryTaskMaps) {
+            if (val.id === id || val._id === id) {
+                return new TaskMapInstance(val);
+            }
+        }
+        return null;
+    },
+
+    async findOne(filter: { _id?: string; id?: string; userId?: string }): Promise<TaskMapInstance | null> {
+        if (filter._id || filter.id) {
+            const searchId = filter._id || filter.id;
+            const found = await this.findById(searchId!);
+            if (found) {
+                if (!filter.userId || String(found.userId) === String(filter.userId)) {
