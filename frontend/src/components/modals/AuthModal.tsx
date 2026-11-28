@@ -116,8 +116,3 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    {mode === 'signup' && (
-                        <div>
-                            <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
-                                Your Name
-                            </label>
