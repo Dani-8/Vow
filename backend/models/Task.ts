@@ -163,3 +163,24 @@ export class TaskInstance implements ITask {
         };
     }
 }
+
+export const Task = {
+    async find(filter: { userId?: string; isPrivate?: boolean; isHabit?: boolean; title?: string }) {
+        if (isFirestoreActive()) {
+            try {
+                const db = getFirebaseDb();
+                if (db) {
+                    const qConstraints: any[] = [];
+                    if (filter.userId) qConstraints.push(where('userId', '==', String(filter.userId)));
+                    if (filter.isPrivate !== undefined) qConstraints.push(where('isPrivate', '==', filter.isPrivate));
+                    if (filter.isHabit !== undefined) qConstraints.push(where('isHabit', '==', filter.isHabit));
+                    if (filter.title !== undefined) qConstraints.push(where('title', '==', filter.title));
+
+                    const q = query(collection(db, 'tasks'), ...qConstraints);
+                    const snap = await getDocs(q);
+                    const results: TaskInstance[] = [];
+                    snap.forEach((docSnap) => {
+                        const obj = new TaskInstance({ ...docSnap.data(), _id: docSnap.id });
+                        inMemoryTasks.set(obj._id, obj.toObject());
+                        results.push(obj);
+                    });
